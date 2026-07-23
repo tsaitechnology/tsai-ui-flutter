@@ -2,7 +2,7 @@
 
 Tsai UI uses a tag-driven GitHub Actions release:
 
-1. `Start release` is started manually with a version.
+1. `Start release` is started manually with a version increment.
 2. It updates package metadata and generates release notes from Git history.
 3. After all quality gates pass, it atomically pushes the release commit and
    `v<version>`.
@@ -11,8 +11,8 @@ Tsai UI uses a tag-driven GitHub Actions release:
 5. The same tag automatically starts `Deploy documentation and example`, which
    deploys the tagged documentation and web catalog to GitHub Pages.
 
-The workflow keeps the package version, changelog heading, installation
-examples, example lockfile, workflow input, and Git tag aligned.
+The workflow keeps the calculated package version, changelog heading,
+installation examples, example lockfile, and Git tag aligned.
 
 Only `Start release` supports manual dispatch and starts the complete release
 pipeline. Package publication and Pages deployment have no manual trigger and
@@ -59,7 +59,7 @@ be uploaded manually.
 
 1. Commit and push the release-ready version to `main`.
 2. Run **Actions > Start release > Run workflow**.
-3. Enter the exact version from `pubspec.yaml`, without `v`.
+3. Select the required `patch`, `minor`, or `major` increment.
 4. Wait for all checks and tag creation.
 5. Check out the immutable tagged revision locally:
 
@@ -89,10 +89,10 @@ After the first version appears on pub.dev:
    - **Require GitHub Actions environment:** enabled.
    - Environment name: `pub.dev`.
 
-`Start release` uses `workflow_dispatch` to accept the next version and run the
-release gates before pushing its tag. The separate publishing and Pages
-workflows are triggered by that tag push, so pub.dev should authorize push
-events rather than direct manual publication events.
+`Start release` uses `workflow_dispatch` to accept the version increment and
+run the release gates before pushing its calculated tag. The separate
+publishing and Pages workflows are triggered by that tag push, so pub.dev
+should authorize push events rather than direct manual publication events.
 
 The first package upload cannot target a verified publisher directly. Publish
 with an authorized Google Account, then transfer it.
@@ -100,13 +100,13 @@ with an authorized Google Account, then transfer it.
 ## Later releases
 
 1. Commit finished code and tests, then push them to `main`.
-2. Run **Start release** with the new version, without `v`.
+2. Run **Start release** and select `patch`, `minor`, or `major`.
 3. Approve the `pub.dev` environment deployment when GitHub requests it.
 
 Do not manually edit `version`, `CHANGELOG.md`, installation version examples,
 or `example/pubspec.lock`. The workflow:
 
-1. verifies that the requested stable version is greater than the current one;
+1. calculates the next stable version from the selected increment;
 2. reads every commit since the latest `v<version>` tag;
 3. updates `pubspec.yaml`, README installation examples, and dependency state;
 4. generates a dated `CHANGELOG.md` section with commit links;

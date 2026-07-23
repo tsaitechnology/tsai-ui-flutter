@@ -4,10 +4,12 @@ import 'package:yaml/yaml.dart';
 
 void main(List<String> arguments) {
   if (arguments.length != 1) {
-    _fail('Usage: dart run tool/prepare_release.dart <major.minor.patch>');
+    _fail(
+      'Usage: dart run tool/prepare_release.dart '
+      '<major|minor|patch|major.minor.patch>',
+    );
   }
 
-  final requestedVersion = _Version.parse(arguments.single);
   final pubspecFile = File('pubspec.yaml');
   final pubspecSource = pubspecFile.readAsStringSync();
   final pubspec = loadYaml(pubspecSource);
@@ -16,6 +18,10 @@ void main(List<String> arguments) {
   }
 
   final currentVersion = _Version.parse(pubspec['version'] as String? ?? '');
+  final requestedVersion = _Version.resolve(
+    arguments.single,
+    current: currentVersion,
+  );
   if (requestedVersion <= currentVersion) {
     _fail(
       'The requested version $requestedVersion must be greater than '
@@ -42,10 +48,11 @@ void main(List<String> arguments) {
   );
   _updateInstallationVersions(currentVersion, requestedVersion);
 
-  stdout.writeln(
+  stderr.writeln(
     'Prepared $requestedVersion from ${changes.length} commits after '
     '$previousTag.',
   );
+  stdout.writeln(requestedVersion);
 }
 
 String _latestReleaseTag() {
@@ -229,6 +236,14 @@ final class _Change {
 
 final class _Version implements Comparable<_Version> {
   const _Version(this.major, this.minor, this.patch);
+
+  factory _Version.resolve(String source, {required _Version current}) =>
+      switch (source) {
+        'major' => _Version(current.major + 1, 0, 0),
+        'minor' => _Version(current.major, current.minor + 1, 0),
+        'patch' => _Version(current.major, current.minor, current.patch + 1),
+        _ => _Version.parse(source),
+      };
 
   factory _Version.parse(String source) {
     final match = RegExp(r'^(\d+)\.(\d+)\.(\d+)$').firstMatch(source);

@@ -3,10 +3,15 @@ name: Start release
 on:
   workflow_dispatch:
     inputs:
-      version:
-        description: New version to create, without the v prefix
+      bump:
+        description: Version increment
         required: true
-        type: string
+        default: patch
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
 
 permissions:
   contents: read
@@ -76,12 +81,13 @@ jobs:
 
       - name: Prepare version and changelog
         env:
-          VERSION: ${{ inputs.version }}
-        run: dart run tool/prepare_release.dart "${VERSION}"
+          BUMP: ${{ inputs.bump }}
+        run: |
+          version="$(dart run tool/prepare_release.dart "${BUMP}")"
+          echo "VERSION=${version}" >> "${GITHUB_ENV}"
+          echo "Prepared version ${version}."
 
       - name: Ensure release tag does not exist
-        env:
-          VERSION: ${{ inputs.version }}
         run: |
           if git rev-parse --verify --quiet "refs/tags/v${VERSION}"; then
             echo "Tag v${VERSION} already exists." >&2
@@ -92,13 +98,9 @@ jobs:
         run: flutter pub get
 
       - name: Validate release metadata
-        env:
-          VERSION: ${{ inputs.version }}
         run: dart run tool/validate_release.dart "${VERSION}"
 
       - name: Create release commit
-        env:
-          VERSION: ${{ inputs.version }}
         run: |
           git diff --check
           git config user.name "github-actions[bot]"
@@ -163,7 +165,6 @@ jobs:
       - name: Create and push release commit and tag
         env:
           RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN }}
-          VERSION: ${{ inputs.version }}
         run: |
           git tag --annotate "v${VERSION}" --message "Release ${VERSION}"
           git push --atomic \
