@@ -1,18 +1,14 @@
 # Installation
 
-## Git dependency
+## Pub.dev
 
-Until the package is published to pub.dev, add the Git repository to your
-application:
+Add Tsai UI to your application:
 
 ```yaml
 dependencies:
   flutter:
     sdk: flutter
-  tsai_ui:
-    git:
-      url: https://github.com/tsaitechnology/tsai-ui-flutter.git
-      ref: main
+  tsai_ui: ^0.1.0
 ```
 
 Then resolve dependencies:
@@ -21,8 +17,11 @@ Then resolve dependencies:
 flutter pub get
 ```
 
-For reproducible production builds, replace `main` with a release tag or commit
-SHA.
+Alternatively, let Flutter update `pubspec.yaml`:
+
+```bash
+flutter pub add tsai_ui
+```
 
 ## Local development
 

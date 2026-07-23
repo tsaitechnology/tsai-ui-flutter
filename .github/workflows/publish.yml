@@ -1,0 +1,57 @@
+name: Publish to pub.dev
+
+on:
+  push:
+    tags:
+      - "v[0-9]+.[0-9]+.[0-9]+"
+
+jobs:
+  package-status:
+    runs-on: ubuntu-latest
+    outputs:
+      exists: ${{ steps.lookup.outputs.exists }}
+    steps:
+      - name: Check whether the package already exists
+        id: lookup
+        run: |
+          status="$(
+            curl \
+              --silent \
+              --show-error \
+              --output /dev/null \
+              --write-out "%{http_code}" \
+              https://pub.dev/api/packages/tsai_ui
+          )"
+          case "${status}" in
+            200)
+              echo "exists=true" >> "${GITHUB_OUTPUT}"
+              ;;
+            404)
+              echo "exists=false" >> "${GITHUB_OUTPUT}"
+              ;;
+            *)
+              echo "Unexpected pub.dev response: HTTP ${status}" >&2
+              exit 1
+              ;;
+          esac
+
+  publish:
+    needs: package-status
+    if: needs.package-status.outputs.exists == 'true'
+    permissions:
+      id-token: write
+    uses: dart-lang/setup-dart/.github/workflows/publish.yml@v1
+    with:
+      environment: pub.dev
+
+  first-release:
+    needs: package-status
+    if: needs.package-status.outputs.exists == 'false'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Explain first publication
+        run: >-
+          echo
+          "tsai_ui does not exist on pub.dev yet.
+          Publish this tagged revision once with 'flutter pub publish',
+          then configure automated publishing for future tags."

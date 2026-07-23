@@ -1,0 +1,26 @@
+# Repository-only documentation and publishing infrastructure
+/.github/
+/.agents/
+/doc/
+/docs/
+/mkdocs.yml
+/requirements-docs.txt
+/skills-lock.json
+/tool/
+
+# Local and generated output
+/.dart_tool/
+/.idea/
+/.vscode/
+/build/
+/coverage/
+*.iml
+
+# Local environment and credentials
+.env
+.env.*
+!.env.example
+*.jks
+*.keystore
+key.properties
+local.properties

@@ -1,0 +1,121 @@
+name: Prepare pub.dev release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Version from pubspec.yaml, without the v prefix
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pub-release
+  cancel-in-progress: false
+
+jobs:
+  validate-and-tag:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out main
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Check release credentials
+        env:
+          RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+        run: |
+          if [ -z "${RELEASE_TOKEN}" ]; then
+            echo "Repository secret RELEASE_TOKEN is not configured." >&2
+            exit 1
+          fi
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: 3.44.4
+          cache: true
+
+      - name: Resolve package dependencies
+        run: flutter pub get
+
+      - name: Validate release metadata
+        env:
+          VERSION: ${{ inputs.version }}
+        run: dart run tool/validate_release.dart "${VERSION}"
+
+      - name: Ensure release tag does not exist
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          if git rev-parse --verify --quiet "refs/tags/v${VERSION}"; then
+            echo "Tag v${VERSION} already exists." >&2
+            exit 1
+          fi
+
+      - name: Check formatting
+        run: >-
+          dart format
+          --output=none
+          --set-exit-if-changed
+          lib
+          test
+          tool
+          example/lib
+          example/test
+
+      - name: Analyze package
+        run: flutter analyze
+
+      - name: Test package
+        run: flutter test
+
+      - name: Analyze example
+        working-directory: example
+        run: flutter analyze
+
+      - name: Test example
+        working-directory: example
+        run: flutter test
+
+      - name: Build example web application
+        working-directory: example
+        run: flutter build web --release
+
+      - name: Validate generated API documentation
+        run: dart doc --output build/api-doc
+
+      - name: Validate publish archive
+        run: flutter pub publish --dry-run
+
+      - name: Install package analyzer
+        run: dart pub global activate pana
+
+      - name: Score package
+        run: |
+          flutter_root="$(
+            flutter --version --machine |
+              python3 -c \
+                'import json, sys; print(json.load(sys.stdin)["flutterRoot"])'
+          )"
+          dart pub global run pana \
+            --flutter-sdk "${flutter_root}" \
+            --exit-code-threshold 0 \
+            .
+
+      - name: Create and push release tag
+        env:
+          RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+          VERSION: ${{ inputs.version }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag --annotate "v${VERSION}" --message "Release ${VERSION}"
+          git push \
+            "https://x-access-token:${RELEASE_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" \
+            "v${VERSION}"

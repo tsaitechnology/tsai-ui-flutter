@@ -1,10 +1,16 @@
 name: tsai_ui
 description: Enterprise Flutter UI components backed by the Tsai design system.
-version: 0.0.1
-publish_to: none
-homepage: https://penpot.tsai
+version: 0.1.0
+homepage: https://tsaitechnology.github.io/tsai-ui-flutter/
+documentation: https://tsaitechnology.github.io/tsai-ui-flutter/
 repository: https://github.com/tsaitechnology/tsai-ui-flutter
 issue_tracker: https://github.com/tsaitechnology/tsai-ui-flutter/issues
+topics:
+  - components
+  - design-system
+  - flutter
+  - ui
+  - widgets
 
 environment:
   sdk: ^3.12.2
@@ -20,6 +26,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
+  yaml: ^3.1.3
 
 flutter:
   uses-material-design: true

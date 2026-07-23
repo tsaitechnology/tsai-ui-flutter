@@ -31,17 +31,19 @@ the [Penpot Design System](https://penpot.tsai/#/workspace?team-id=94d08ab2-b712
 
 ## Installation
 
-Until the package is published to pub.dev, add the Git repository:
+Add the package from pub.dev:
 
 ```yaml
 dependencies:
-  tsai_ui:
-    git:
-      url: https://github.com/tsaitechnology/tsai-ui-flutter.git
-      ref: main
+  tsai_ui: ^0.1.0
 ```
 
-For reproducible builds, use a release tag or commit SHA instead of `main`.
+Or run:
+
+```bash
+flutter pub add tsai_ui
+```
+
 Complete installation and theming instructions are in the
 [public documentation](https://tsaitechnology.github.io/tsai-ui-flutter/installation/).
 
@@ -130,6 +132,7 @@ Architecture and delivery plans:
 - [Public API inventory](doc/API_INVENTORY.md)
 - [Development, testing, docs, and deployment plan](doc/DEVELOPMENT_PLAN.md)
 - [Penpot synchronization](doc/PENPOT_SYNC.md)
+- [Publishing and release automation](doc/PUBLISHING.md)
 
 ## Local development
 
@@ -139,9 +142,6 @@ flutter analyze
 flutter test
 cd example && flutter run -d chrome
 ```
-
-The package remains private through `publish_to: none`. Remove that setting
-only as part of an intentional package release.
 
 ## License
 

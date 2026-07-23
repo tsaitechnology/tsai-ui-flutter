@@ -1,4 +1,4 @@
-## Unreleased
+## 0.1.0 - 2026-07-23
 
 - Added public Markdown documentation with one page and live example link per
   widget, plus installation, theming, accessibility, and license guidance.
@@ -16,9 +16,6 @@
   a dedicated playground page for every component.
 - Aligned catalog variant boards and list examples with Penpot, and expanded
   playgrounds to edit component properties above a live preview.
-
-## 0.0.1
-
 - Added typed light and dark design token sets sourced from Penpot.
 - Added theme installation helpers and bundled typography.
 - Added primary, secondary, outline, and ghost buttons in two sizes.
