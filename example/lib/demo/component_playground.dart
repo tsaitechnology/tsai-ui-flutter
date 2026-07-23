@@ -14,50 +14,75 @@ class ComponentPlayground extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tokens = TsaiThemeTokens.of(context);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const TsaiHeading('Playground', size: TsaiHeadingSize.small),
-        SizedBox(height: tokens.spacing.space16),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            for (var index = 0; index < controls.length; index++) ...[
-              controls[index],
-              if (index < controls.length - 1)
-                SizedBox(height: tokens.spacing.space16),
-            ],
-          ],
+    return Container(
+      key: const ValueKey<String>('component-playground'),
+      width: double.infinity,
+      clipBehavior: Clip.antiAlias,
+      decoration: BoxDecoration(
+        color: tokens.colors.surface,
+        border: Border.all(
+          color: tokens.colors.borderSubtle,
+          width: tokens.borders.hairline,
         ),
-        SizedBox(height: tokens.spacing.space24),
-        Text(
-          'Preview',
-          style: tokens.typography.captionMediumRegular.copyWith(
-            color: tokens.colors.contentSecondary,
+        borderRadius: BorderRadius.circular(tokens.radii.medium),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            child: TsaiHeading('Playground', size: TsaiHeadingSize.small),
           ),
-        ),
-        SizedBox(height: tokens.spacing.space8),
-        Container(
-          key: const ValueKey<String>('component-playground-preview'),
-          width: double.infinity,
-          constraints: const BoxConstraints(minHeight: 144),
-          padding: EdgeInsets.all(tokens.spacing.space24),
-          alignment: AlignmentDirectional.centerStart,
-          decoration: BoxDecoration(
-            color: tokens.colors.surfaceRaised,
-            border: Border.symmetric(
-              horizontal: BorderSide(color: tokens.colors.borderSubtle),
+          Container(
+            key: const ValueKey<String>('component-playground-controls'),
+            width: double.infinity,
+            padding: const EdgeInsets.fromLTRB(16, 4, 16, 16),
+            child: Wrap(
+              key: const ValueKey<String>('component-playground-controls-wrap'),
+              spacing: 12,
+              runSpacing: 12,
+              children: controls,
             ),
           ),
-          child: LayoutBuilder(
-            builder: (context, constraints) => SizedBox(
-              width: constraints.maxWidth.clamp(0, 360),
-              child: preview,
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
+            decoration: BoxDecoration(
+              color: tokens.colors.surfaceRaised,
+              border: Border(
+                top: BorderSide(
+                  color: tokens.colors.borderSubtle,
+                  width: tokens.borders.hairline,
+                ),
+              ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Preview',
+                  style: tokens.typography.captionMediumRegular.copyWith(
+                    color: tokens.colors.contentSecondary,
+                  ),
+                ),
+                SizedBox(height: tokens.spacing.space8),
+                Container(
+                  key: const ValueKey<String>('component-playground-preview'),
+                  width: double.infinity,
+                  constraints: const BoxConstraints(minHeight: 96),
+                  alignment: AlignmentDirectional.centerStart,
+                  child: LayoutBuilder(
+                    builder: (context, constraints) => SizedBox(
+                      width: constraints.maxWidth.clamp(0, 360),
+                      child: preview,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
-        ),
-        SizedBox(height: tokens.spacing.space32),
-      ],
+        ],
+      ),
     );
   }
 }
@@ -67,7 +92,7 @@ class PlaygroundField extends StatelessWidget {
     required this.label,
     required this.child,
     super.key,
-    this.width = 220,
+    this.width = 200,
   });
 
   final String label;
@@ -88,7 +113,7 @@ class PlaygroundField extends StatelessWidget {
               color: tokens.colors.contentSecondary,
             ),
           ),
-          SizedBox(height: tokens.spacing.space4),
+          SizedBox(height: tokens.spacing.space2),
           child,
         ],
       ),
@@ -196,7 +221,7 @@ class PlaygroundRadioGroup<T> extends StatelessWidget {
     required this.options,
     required this.onChanged,
     super.key,
-    this.width = 220,
+    this.width = 200,
   });
 
   final String label;
@@ -212,8 +237,9 @@ class PlaygroundRadioGroup<T> extends StatelessWidget {
       label: label,
       width: width,
       child: Wrap(
-        spacing: tokens.spacing.space16,
-        runSpacing: tokens.spacing.space8,
+        key: const ValueKey<String>('playground-radio-options'),
+        spacing: tokens.spacing.space8,
+        runSpacing: 0,
         children: [
           for (final option in options)
             TsaiRadio<T>(

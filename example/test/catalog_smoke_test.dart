@@ -165,9 +165,10 @@ void main() {
       scrollable: find.byType(Scrollable),
     );
     final multilineLabel = find.text(
-      'I agree to the Terms of Service\nand acknowledge the Privacy Policy',
+      'I agree to the Terms of Service and acknowledge the Privacy Policy',
     );
     expect(tester.getSize(multilineLabel).height, greaterThan(20));
+    expect(tester.getSize(multilineLabel).height, lessThan(40));
 
     await _scrollToPlayground(tester);
     expect(
@@ -223,7 +224,7 @@ void main() {
     );
     await tester.pump();
     expect(
-      find.descendant(of: field, matching: find.text('Option')),
+      find.descendant(of: field, matching: find.text('Label')),
       findsOneWidget,
     );
   });
@@ -255,10 +256,24 @@ void main() {
     expect(find.byType(SegmentedButton<int>), findsNothing);
     expect(find.byType(TsaiOtpInput), findsWidgets);
 
-    await tester.tap(find.text('6'));
+    final six = find.byWidgetPredicate(
+      (widget) => widget is TsaiRadio<int> && widget.value == 6,
+    );
+    await tester.ensureVisible(six);
+    await tester.pumpAndSettle();
+    await tester.tap(six);
     await tester.pump();
     expect(
-      tester.widget<TsaiOtpInput>(find.byType(TsaiOtpInput).first).length,
+      tester
+          .widget<TsaiOtpInput>(
+            find.descendant(
+              of: find.byKey(
+                const ValueKey<String>('component-playground-preview'),
+              ),
+              matching: find.byType(TsaiOtpInput),
+            ),
+          )
+          .length,
       6,
     );
   });
@@ -276,10 +291,24 @@ void main() {
     expect(find.byType(SegmentedButton<int>), findsNothing);
     expect(find.byType(TsaiPinInput), findsWidgets);
 
-    await tester.tap(find.text('6'));
+    final six = find.byWidgetPredicate(
+      (widget) => widget is TsaiRadio<int> && widget.value == 6,
+    );
+    await tester.ensureVisible(six);
+    await tester.pumpAndSettle();
+    await tester.tap(six);
     await tester.pump();
     expect(
-      tester.widget<TsaiPinInput>(find.byType(TsaiPinInput).first).length,
+      tester
+          .widget<TsaiPinInput>(
+            find.descendant(
+              of: find.byKey(
+                const ValueKey<String>('component-playground-preview'),
+              ),
+              matching: find.byType(TsaiPinInput),
+            ),
+          )
+          .length,
       6,
     );
   });

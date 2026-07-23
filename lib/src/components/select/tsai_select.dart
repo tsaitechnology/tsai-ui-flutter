@@ -58,8 +58,8 @@ class TsaiSelect<T> extends StatefulWidget {
     required this.value,
     required this.onChanged,
     super.key,
-    this.label,
-    this.placeholder = 'Select',
+    this.placeholder,
+    this.labeledPlaceholder = true,
     this.description,
     this.errorText,
     this.showClearButton = true,
@@ -82,11 +82,14 @@ class TsaiSelect<T> extends StatefulWidget {
   /// Called with a selected value or null when cleared.
   final ValueChanged<T?>? onChanged;
 
-  /// Label displayed above the current value inside the field.
-  final String? label;
+  /// Text displayed as a placeholder and, when [labeledPlaceholder] is true,
+  /// as a floating label while a value is selected.
+  final String? placeholder;
 
-  /// Text displayed while [value] is null.
-  final String placeholder;
+  /// Whether [placeholder] floats above a selected value.
+  ///
+  /// When false, the placeholder and selected value remain vertically centered.
+  final bool labeledPlaceholder;
 
   /// Supporting text displayed below the field.
   final String? description;
@@ -267,63 +270,20 @@ class _TsaiSelectState<T> extends State<TsaiSelect<T>> {
       decoration: BoxDecoration(
         color: _enabled ? colors.surface : colors.surfaceRaised,
         borderRadius: BorderRadius.circular(tokens.radii.medium),
-        border: Border.all(
-          color: borderColor,
-          width: _focused || _open ? 2 : tokens.borders.hairline,
-        ),
+        border: Border.all(color: borderColor, width: tokens.borders.hairline),
       ),
       child: Row(
         children: [
           Expanded(
-            child: Column(
-              key: const ValueKey<String>('tsai-select-content'),
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (widget.label != null) ...[
-                  Text(
-                    widget.label!,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: tokens.typography.captionMediumRegular.copyWith(
-                      color: !_enabled
-                          ? colors.contentTertiary
-                          : hasError
-                          ? colors.negative
-                          : colors.contentSecondary,
-                    ),
-                  ),
-                  SizedBox(height: tokens.spacing.space2),
-                ],
-                Row(
-                  key: const ValueKey<String>('tsai-select-value-row'),
-                  children: [
-                    if (selected?.leading != null) ...[
-                      SizedBox.square(
-                        dimension: 20,
-                        child: FittedBox(
-                          fit: BoxFit.scaleDown,
-                          child: selected!.leading!,
-                        ),
-                      ),
-                      SizedBox(width: tokens.spacing.space8),
-                    ],
-                    Expanded(
-                      child: Text(
-                        selected?.label ?? widget.placeholder,
-                        key: const ValueKey<String>('tsai-select-value'),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: tokens.typography.bodyLarge.copyWith(
-                          color: !_enabled || selected == null
-                              ? colors.contentTertiary
-                              : colors.contentPrimary,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
+            child: _SelectContent(
+              placeholder: widget.placeholder,
+              selected: selected,
+              floating:
+                  widget.labeledPlaceholder &&
+                  widget.placeholder != null &&
+                  selected != null,
+              enabled: _enabled,
+              hasError: hasError,
             ),
           ),
           if (selected != null && widget.showClearButton && _enabled)
@@ -356,7 +316,7 @@ class _TsaiSelectState<T> extends State<TsaiSelect<T>> {
       button: true,
       enabled: _enabled,
       expanded: _open,
-      label: widget.semanticLabel ?? widget.label,
+      label: widget.semanticLabel ?? widget.placeholder,
       value: selected?.label ?? widget.placeholder,
       onTap: _enabled ? _activate : null,
       excludeSemantics: true,
@@ -648,6 +608,110 @@ class _TsaiSelectState<T> extends State<TsaiSelect<T>> {
   }
 }
 
+class _SelectContent<T> extends StatelessWidget {
+  const _SelectContent({
+    required this.placeholder,
+    required this.selected,
+    required this.floating,
+    required this.enabled,
+    required this.hasError,
+  });
+
+  final String? placeholder;
+  final TsaiSelectOption<T>? selected;
+  final bool floating;
+  final bool enabled;
+  final bool hasError;
+
+  @override
+  Widget build(BuildContext context) {
+    final tokens = TsaiThemeTokens.of(context);
+    final colors = tokens.colors;
+    final duration = _placeholderDuration(context, tokens);
+    return Stack(
+      key: const ValueKey<String>('tsai-select-content'),
+      fit: StackFit.expand,
+      children: [
+        if (placeholder != null)
+          IgnorePointer(
+            child: AnimatedOpacity(
+              duration: duration,
+              opacity: selected == null || floating ? 1 : 0,
+              child: AnimatedAlign(
+                key: const ValueKey<String>('tsai-select-placeholder-position'),
+                duration: duration,
+                curve: Curves.easeInOutCubic,
+                alignment: floating
+                    ? const AlignmentDirectional(-1, -0.45)
+                    : AlignmentDirectional.centerStart,
+                child: AnimatedDefaultTextStyle(
+                  key: const ValueKey<String>('tsai-select-placeholder'),
+                  duration: duration,
+                  curve: Curves.easeInOutCubic,
+                  style:
+                      (floating
+                              ? tokens.typography.captionMediumRegular
+                              : tokens.typography.bodyLarge)
+                          .copyWith(
+                            color: !enabled
+                                ? colors.contentTertiary
+                                : hasError && floating
+                                ? colors.negative
+                                : floating
+                                ? colors.contentSecondary
+                                : colors.contentTertiary,
+                          ),
+                  child: Text(
+                    placeholder!,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        if (selected != null)
+          AnimatedAlign(
+            key: const ValueKey<String>('tsai-select-value-position'),
+            duration: duration,
+            curve: Curves.easeInOutCubic,
+            alignment: floating
+                ? const AlignmentDirectional(-1, 0.45)
+                : AlignmentDirectional.centerStart,
+            child: Row(
+              key: const ValueKey<String>('tsai-select-value-row'),
+              children: [
+                if (selected?.leading != null) ...[
+                  SizedBox.square(
+                    dimension: 20,
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: selected!.leading!,
+                    ),
+                  ),
+                  SizedBox(width: tokens.spacing.space8),
+                ],
+                Expanded(
+                  child: Text(
+                    selected!.label,
+                    key: const ValueKey<String>('tsai-select-value'),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: tokens.typography.bodyLarge.copyWith(
+                      color: enabled
+                          ? colors.contentPrimary
+                          : colors.contentTertiary,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+      ],
+    );
+  }
+}
+
 class _SelectIconButton extends StatelessWidget {
   const _SelectIconButton({
     required this.tooltip,
@@ -677,3 +741,8 @@ Duration _duration(BuildContext context, TsaiThemeTokens tokens) =>
     MediaQuery.disableAnimationsOf(context)
     ? Duration.zero
     : tokens.motion.interaction;
+
+Duration _placeholderDuration(BuildContext context, TsaiThemeTokens tokens) =>
+    MediaQuery.disableAnimationsOf(context)
+    ? Duration.zero
+    : tokens.motion.interaction * 1.5;

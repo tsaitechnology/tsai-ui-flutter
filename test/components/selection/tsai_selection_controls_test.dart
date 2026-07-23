@@ -224,6 +224,20 @@ void main() {
     await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
     semantics.dispose();
   });
+
+  testWidgets('uses bounded width for a two-line label', (tester) async {
+    const label =
+        'I agree to the Terms of Service and acknowledge the Privacy Policy';
+    await _pump(
+      tester,
+      child: const SizedBox(
+        width: 600,
+        child: TsaiCheckbox(value: false, label: label, onChanged: _noopBool),
+      ),
+    );
+
+    expect(tester.getSize(find.text(label)).height, 32);
+  });
 }
 
 AnimatedContainer _box(WidgetTester tester) => tester.widget<AnimatedContainer>(
@@ -232,6 +246,8 @@ AnimatedContainer _box(WidgetTester tester) => tester.widget<AnimatedContainer>(
 
 BoxDecoration _boxDecoration(WidgetTester tester) =>
     _box(tester).decoration! as BoxDecoration;
+
+void _noopBool(bool? value) {}
 
 Future<void> _pump(
   WidgetTester tester, {

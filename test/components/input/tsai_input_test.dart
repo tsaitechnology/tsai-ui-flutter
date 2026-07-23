@@ -15,8 +15,7 @@ void main() {
         child: SizedBox(
           width: 320,
           child: TsaiInput(
-            label: 'Label',
-            hintText: 'Value',
+            placeholder: 'Label',
             description: 'Description',
             autofocus: true,
             onChanged: changes.add,
@@ -133,7 +132,7 @@ void main() {
         child: const SizedBox(
           width: 320,
           child: TsaiInput(
-            label: 'Email',
+            placeholder: 'Email',
             description: 'Description',
             errorText: 'Invalid email',
           ),
@@ -170,6 +169,97 @@ void main() {
       expect(find.bySemanticsLabel('Account password'), findsOneWidget);
       expect(find.byType(EditableText), findsOneWidget);
       semantics.dispose();
+    });
+
+    testWidgets('animates placeholder between centered and labeled positions', (
+      tester,
+    ) async {
+      final focusNode = FocusNode();
+      addTearDown(focusNode.dispose);
+      await _pump(
+        tester,
+        child: SizedBox(
+          width: 320,
+          child: TsaiInput(focusNode: focusNode, placeholder: 'Email'),
+        ),
+      );
+
+      expect(
+        _alignment(tester, 'tsai-input-placeholder-position'),
+        AlignmentDirectional.centerStart,
+      );
+      expect(
+        _alignment(tester, 'tsai-input-value-position'),
+        AlignmentDirectional.centerStart,
+      );
+      expect(
+        tester
+            .widget<AnimatedAlign>(
+              find.byKey(const ValueKey('tsai-input-placeholder-position')),
+            )
+            .duration,
+        const Duration(milliseconds: 210),
+      );
+      expect(_inputBorder(tester).top.width, 1);
+
+      final field = find.byKey(const ValueKey('tsai-input-field'));
+      await tester.tapAt(tester.getTopLeft(field) + const Offset(8, 8));
+      await tester.pumpAndSettle();
+
+      expect(focusNode.hasFocus, isTrue);
+      expect(
+        _alignment(tester, 'tsai-input-placeholder-position'),
+        const AlignmentDirectional(-1, -0.45),
+      );
+      expect(
+        _alignment(tester, 'tsai-input-value-position'),
+        const AlignmentDirectional(-1, 0.45),
+      );
+      expect(_inputBorder(tester).top.width, 1);
+    });
+
+    testWidgets('keeps value centered when labeledPlaceholder is false', (
+      tester,
+    ) async {
+      await _pump(
+        tester,
+        child: const SizedBox(
+          width: 320,
+          child: TsaiInput(placeholder: 'Search', labeledPlaceholder: false),
+        ),
+      );
+
+      await tester.enterText(
+        find.byKey(const ValueKey('tsai-input-editable')),
+        'Query',
+      );
+      await tester.pumpAndSettle();
+
+      expect(
+        _alignment(tester, 'tsai-input-value-position'),
+        AlignmentDirectional.centerStart,
+      );
+      final opacity = tester.widget<AnimatedOpacity>(
+        find.ancestor(
+          of: find.byKey(const ValueKey('tsai-input-placeholder')),
+          matching: find.byType(AnimatedOpacity),
+        ),
+      );
+      expect(opacity.opacity, 0);
+    });
+
+    testWidgets('has no placeholder layer when placeholder is omitted', (
+      tester,
+    ) async {
+      await _pump(
+        tester,
+        child: const SizedBox(width: 320, child: TsaiInput()),
+      );
+
+      expect(
+        find.byKey(const ValueKey('tsai-input-placeholder')),
+        findsNothing,
+      );
     });
   });
 
@@ -402,11 +492,42 @@ void main() {
       expect(find.byType(EditableText), findsNWidgets(2));
       semantics.dispose();
     });
+
+    testWidgets('focuses the national number from the field label area', (
+      tester,
+    ) async {
+      final national = FocusNode();
+      addTearDown(national.dispose);
+      await _pump(
+        tester,
+        child: SizedBox(width: 320, child: TsaiPhoneInput(focusNode: national)),
+      );
+
+      final field = find.byKey(const ValueKey('tsai-input-field'));
+      await tester.tapAt(tester.getTopLeft(field) + const Offset(8, 8));
+      await tester.pump();
+
+      expect(national.hasFocus, isTrue);
+    });
   });
 }
 
 TextField _editable(WidgetTester tester) =>
     tester.widget<TextField>(find.byKey(const ValueKey('tsai-input-editable')));
+
+AlignmentGeometry _alignment(WidgetTester tester, String key) =>
+    tester.widget<AnimatedAlign>(find.byKey(ValueKey<String>(key))).alignment;
+
+Border _inputBorder(WidgetTester tester) {
+  final decoration =
+      tester
+              .widget<AnimatedContainer>(
+                find.byKey(const ValueKey('tsai-input-field')),
+              )
+              .decoration
+          as BoxDecoration;
+  return decoration.border! as Border;
+}
 
 Future<void> _pump(WidgetTester tester, {required Widget child}) =>
     tester.pumpWidget(

@@ -14,8 +14,8 @@ class TsaiInput extends StatefulWidget {
     this.controller,
     this.initialValue,
     this.focusNode,
-    this.label,
-    this.hintText,
+    this.placeholder,
+    this.labeledPlaceholder = true,
     this.description,
     this.errorText,
     this.enabled = true,
@@ -50,11 +50,14 @@ class TsaiInput extends StatefulWidget {
   /// Optional caller-owned focus node.
   final FocusNode? focusNode;
 
-  /// Label displayed above the value inside the field.
-  final String? label;
+  /// Text displayed as a placeholder and, when [labeledPlaceholder] is true,
+  /// as a floating label while the field is focused or has a value.
+  final String? placeholder;
 
-  /// Placeholder displayed while the field is empty.
-  final String? hintText;
+  /// Whether [placeholder] floats above the editable value.
+  ///
+  /// When false, the placeholder and entered value remain vertically centered.
+  final bool labeledPlaceholder;
 
   /// Supporting text displayed below the field.
   final String? description;
@@ -203,7 +206,7 @@ class _TsaiInputState extends State<TsaiInput> {
         child: Semantics(
           container: true,
           explicitChildNodes: true,
-          label: widget.semanticLabel ?? widget.label,
+          label: widget.semanticLabel ?? widget.placeholder,
           child: _TsaiInputFrame(
             focused: _focused,
             hovered: _hovered,
@@ -211,6 +214,7 @@ class _TsaiInputState extends State<TsaiInput> {
             hasError: widget.errorText != null,
             description: widget.description,
             errorText: widget.errorText,
+            onFieldTap: widget.enabled ? _focusNode.requestFocus : null,
             actions: [
               if (_controller.text.isNotEmpty &&
                   widget.showClearButton &&
@@ -229,8 +233,15 @@ class _TsaiInputState extends State<TsaiInput> {
                   onPressed: widget.enabled ? _toggleObscured : null,
                 ),
             ],
-            content: _InputContent(
-              label: widget.label,
+            content: _AnimatedInputContent(
+              placeholder: widget.placeholder,
+              placeholderVisible:
+                  _controller.text.isEmpty ||
+                  (widget.labeledPlaceholder && widget.placeholder != null),
+              floating:
+                  widget.labeledPlaceholder &&
+                  widget.placeholder != null &&
+                  (_focused || _controller.text.isNotEmpty),
               labelColor: _labelColor(tokens),
               child: SizedBox(
                 height: 20,
@@ -260,12 +271,7 @@ class _TsaiInputState extends State<TsaiInput> {
                         ? colors.contentPrimary
                         : colors.contentTertiary,
                   ),
-                  decoration: InputDecoration.collapsed(
-                    hintText: widget.hintText,
-                    hintStyle: tokens.typography.bodyLarge.copyWith(
-                      color: colors.contentTertiary,
-                    ),
-                  ),
+                  decoration: const InputDecoration.collapsed(hintText: ''),
                   onChanged: widget.onChanged,
                   onSubmitted: widget.onSubmitted,
                   onEditingComplete: widget.onEditingComplete,
@@ -645,6 +651,7 @@ class _TsaiPhoneInputState extends State<TsaiPhoneInput> {
             hasError: widget.errorText != null,
             description: widget.description,
             errorText: widget.errorText,
+            onFieldTap: widget.enabled ? _focusNode.requestFocus : null,
             actions: [
               if (_controller.text.isNotEmpty &&
                   widget.showClearButton &&
@@ -841,6 +848,7 @@ class _TsaiInputFrame extends StatelessWidget {
     required this.hasError,
     required this.description,
     required this.errorText,
+    required this.onFieldTap,
   });
 
   final Widget content;
@@ -851,6 +859,7 @@ class _TsaiInputFrame extends StatelessWidget {
   final bool hasError;
   final String? description;
   final String? errorText;
+  final VoidCallback? onFieldTap;
 
   @override
   Widget build(BuildContext context) {
@@ -868,32 +877,36 @@ class _TsaiInputFrame extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        AnimatedContainer(
-          key: const ValueKey<String>('tsai-input-field'),
-          duration: _duration(context, tokens),
-          height: 56,
-          padding: EdgeInsetsDirectional.only(
-            start: tokens.spacing.space16,
-            end: tokens.spacing.space8,
-          ),
-          decoration: BoxDecoration(
-            color: enabled ? colors.surface : colors.surfaceRaised,
-            borderRadius: BorderRadius.circular(tokens.radii.medium),
-            border: Border.all(
-              color: borderColor,
-              width: focused ? 2 : tokens.borders.hairline,
+        GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: onFieldTap,
+          child: AnimatedContainer(
+            key: const ValueKey<String>('tsai-input-field'),
+            duration: _duration(context, tokens),
+            height: 56,
+            padding: EdgeInsetsDirectional.only(
+              start: tokens.spacing.space16,
+              end: tokens.spacing.space8,
             ),
-          ),
-          child: Row(
-            children: [
-              Expanded(child: content),
-              if (actions.isNotEmpty)
-                Row(
-                  key: const ValueKey<String>('tsai-input-actions'),
-                  mainAxisSize: MainAxisSize.min,
-                  children: actions,
-                ),
-            ],
+            decoration: BoxDecoration(
+              color: enabled ? colors.surface : colors.surfaceRaised,
+              borderRadius: BorderRadius.circular(tokens.radii.medium),
+              border: Border.all(
+                color: borderColor,
+                width: tokens.borders.hairline,
+              ),
+            ),
+            child: Row(
+              children: [
+                Expanded(child: content),
+                if (actions.isNotEmpty)
+                  Row(
+                    key: const ValueKey<String>('tsai-input-actions'),
+                    mainAxisSize: MainAxisSize.min,
+                    children: actions,
+                  ),
+              ],
+            ),
           ),
         ),
         if (description != null || errorText != null) ...[
@@ -911,6 +924,77 @@ class _TsaiInputFrame extends StatelessWidget {
             ),
           ),
         ],
+      ],
+    );
+  }
+}
+
+class _AnimatedInputContent extends StatelessWidget {
+  const _AnimatedInputContent({
+    required this.placeholder,
+    required this.placeholderVisible,
+    required this.floating,
+    required this.labelColor,
+    required this.child,
+  });
+
+  final String? placeholder;
+  final bool placeholderVisible;
+  final bool floating;
+  final Color labelColor;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final tokens = TsaiThemeTokens.of(context);
+    final duration = _placeholderDuration(context, tokens);
+    return Stack(
+      key: const ValueKey<String>('tsai-input-content'),
+      fit: StackFit.expand,
+      children: [
+        AnimatedAlign(
+          key: const ValueKey<String>('tsai-input-value-position'),
+          duration: duration,
+          curve: Curves.easeInOutCubic,
+          alignment: floating
+              ? const AlignmentDirectional(-1, 0.45)
+              : AlignmentDirectional.centerStart,
+          child: child,
+        ),
+        if (placeholder != null)
+          IgnorePointer(
+            child: AnimatedOpacity(
+              duration: duration,
+              opacity: placeholderVisible ? 1 : 0,
+              child: AnimatedAlign(
+                key: const ValueKey<String>('tsai-input-placeholder-position'),
+                duration: duration,
+                curve: Curves.easeInOutCubic,
+                alignment: floating
+                    ? const AlignmentDirectional(-1, -0.45)
+                    : AlignmentDirectional.centerStart,
+                child: AnimatedDefaultTextStyle(
+                  key: const ValueKey<String>('tsai-input-placeholder'),
+                  duration: duration,
+                  curve: Curves.easeInOutCubic,
+                  style:
+                      (floating
+                              ? tokens.typography.captionMediumRegular
+                              : tokens.typography.bodyLarge)
+                          .copyWith(
+                            color: floating
+                                ? labelColor
+                                : tokens.colors.contentTertiary,
+                          ),
+                  child: Text(
+                    placeholder!,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ),
+            ),
+          ),
       ],
     );
   }
@@ -986,3 +1070,8 @@ Duration _duration(BuildContext context, TsaiThemeTokens tokens) =>
     MediaQuery.disableAnimationsOf(context)
     ? Duration.zero
     : tokens.motion.interaction;
+
+Duration _placeholderDuration(BuildContext context, TsaiThemeTokens tokens) =>
+    MediaQuery.disableAnimationsOf(context)
+    ? Duration.zero
+    : tokens.motion.interaction * 1.5;

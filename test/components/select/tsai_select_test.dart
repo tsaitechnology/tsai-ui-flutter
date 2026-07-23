@@ -20,8 +20,7 @@ void main() {
         child: TsaiSelect<String>(
           options: options,
           value: null,
-          label: 'Country',
-          placeholder: 'Option',
+          placeholder: 'Country',
           description: 'Description',
           onChanged: _noop,
         ),
@@ -31,7 +30,7 @@ void main() {
     expect(find.byKey(const ValueKey('tsai-select-layout')), findsOneWidget);
     expect(find.byKey(const ValueKey('tsai-select-field')), findsOneWidget);
     expect(find.byKey(const ValueKey('tsai-select-content')), findsOneWidget);
-    expect(find.byKey(const ValueKey('tsai-select-value-row')), findsOneWidget);
+    expect(find.byKey(const ValueKey('tsai-select-value-row')), findsNothing);
     expect(
       find.byKey(const ValueKey('tsai-select-description')),
       findsOneWidget,
@@ -41,7 +40,6 @@ void main() {
       const Size(320, 56),
     );
     expect(find.text('Country'), findsOneWidget);
-    expect(find.text('Option'), findsOneWidget);
   });
 
   testWidgets('opens, selects, closes, and reports each event', (tester) async {
@@ -56,7 +54,7 @@ void main() {
           child: TsaiSelect<String>(
             options: options,
             value: selected,
-            label: 'Country',
+            placeholder: 'Country',
             onOpen: () => opens++,
             onClose: () => closes++,
             onChanged: (value) => setState(() => selected = value),
@@ -94,7 +92,7 @@ void main() {
         child: TsaiSelect<String>(
           options: options,
           value: null,
-          label: 'Disabled',
+          placeholder: 'Disabled',
           onChanged: null,
         ),
       ),
@@ -132,7 +130,7 @@ void main() {
           options: options,
           value: null,
           autofocus: true,
-          label: 'Country',
+          placeholder: 'Country',
           onFocusChange: focusEvents.add,
           onChanged: _noop,
         ),
@@ -212,7 +210,7 @@ void main() {
         child: TsaiSelect<String>(
           options: options,
           value: 'uy',
-          label: 'Country',
+          placeholder: 'Country',
           description: 'Ignored',
           errorText: 'Required',
           onChanged: _noop,
@@ -245,7 +243,7 @@ void main() {
         child: TsaiSelect<String>(
           options: options,
           value: null,
-          label: 'Country',
+          placeholder: 'Country',
           semanticLabel: 'Country selector',
           onChanged: _noop,
         ),
@@ -258,9 +256,114 @@ void main() {
     expect(find.bySemanticsLabel('Country selector'), findsOneWidget);
     semantics.dispose();
   });
+
+  testWidgets('moves placeholder above a selected value', (tester) async {
+    String? selected;
+    await _pump(
+      tester,
+      child: StatefulBuilder(
+        builder: (context, setState) => SizedBox(
+          width: 320,
+          child: TsaiSelect<String>(
+            options: options,
+            value: selected,
+            placeholder: 'Country',
+            onChanged: (value) => setState(() => selected = value),
+          ),
+        ),
+      ),
+    );
+
+    expect(
+      _alignment(tester, 'tsai-select-placeholder-position'),
+      AlignmentDirectional.centerStart,
+    );
+    expect(
+      tester
+          .widget<AnimatedAlign>(
+            find.byKey(const ValueKey('tsai-select-placeholder-position')),
+          )
+          .duration,
+      const Duration(milliseconds: 210),
+    );
+    expect(_selectBorder(tester).top.width, 1);
+
+    final field = find.byKey(const ValueKey('tsai-select-field'));
+    await tester.tapAt(tester.getTopLeft(field) + const Offset(8, 8));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Uruguay'));
+    await tester.pumpAndSettle();
+
+    expect(selected, 'uy');
+    expect(
+      _alignment(tester, 'tsai-select-placeholder-position'),
+      const AlignmentDirectional(-1, -0.45),
+    );
+    expect(
+      _alignment(tester, 'tsai-select-value-position'),
+      const AlignmentDirectional(-1, 0.45),
+    );
+    expect(_selectBorder(tester).top.width, 1);
+  });
+
+  testWidgets('keeps selected value centered without a labeled placeholder', (
+    tester,
+  ) async {
+    await _pump(
+      tester,
+      child: const SizedBox(
+        width: 320,
+        child: TsaiSelect<String>(
+          options: options,
+          value: 'uy',
+          placeholder: 'Country',
+          labeledPlaceholder: false,
+          onChanged: _noop,
+        ),
+      ),
+    );
+
+    expect(
+      _alignment(tester, 'tsai-select-value-position'),
+      AlignmentDirectional.centerStart,
+    );
+  });
+
+  testWidgets('renders an empty field when placeholder and value are null', (
+    tester,
+  ) async {
+    await _pump(
+      tester,
+      child: const SizedBox(
+        width: 320,
+        child: TsaiSelect<String>(
+          options: options,
+          value: null,
+          onChanged: _noop,
+        ),
+      ),
+    );
+
+    expect(find.byKey(const ValueKey('tsai-select-placeholder')), findsNothing);
+    expect(find.byKey(const ValueKey('tsai-select-value')), findsNothing);
+  });
 }
 
 void _noop(String? value) {}
+
+AlignmentGeometry _alignment(WidgetTester tester, String key) =>
+    tester.widget<AnimatedAlign>(find.byKey(ValueKey<String>(key))).alignment;
+
+Border _selectBorder(WidgetTester tester) {
+  final decoration =
+      tester
+              .widget<AnimatedContainer>(
+                find.byKey(const ValueKey('tsai-select-field')),
+              )
+              .decoration
+          as BoxDecoration;
+  return decoration.border! as Border;
+}
 
 Future<void> _pump(WidgetTester tester, {required Widget child}) =>
     tester.pumpWidget(

@@ -424,25 +424,29 @@ class _TsaiSelectionControlState extends State<_TsaiSelectionControl> {
             description: widget.description,
             enabled: widget.enabled,
           );
-    final row = Row(
-      key: const ValueKey<String>('tsai-selection-row'),
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: widget.labelPosition == TsaiControlLabelPosition.right
-          ? [
-              control,
-              if (content != null) ...[
-                SizedBox(width: tokens.spacing.space8),
-                Flexible(child: content),
+    final row = LayoutBuilder(
+      builder: (context, constraints) => Row(
+        key: const ValueKey<String>('tsai-selection-row'),
+        mainAxisSize: constraints.hasBoundedWidth
+            ? MainAxisSize.max
+            : MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: widget.labelPosition == TsaiControlLabelPosition.right
+            ? [
+                control,
+                if (content != null) ...[
+                  SizedBox(width: tokens.spacing.space8),
+                  Flexible(child: content),
+                ],
+              ]
+            : [
+                if (content != null) ...[
+                  Flexible(child: content),
+                  SizedBox(width: tokens.spacing.space8),
+                ],
+                control,
               ],
-            ]
-          : [
-              if (content != null) ...[
-                Flexible(child: content),
-                SizedBox(width: tokens.spacing.space8),
-              ],
-              control,
-            ],
+      ),
     );
     return Semantics(
       container: true,

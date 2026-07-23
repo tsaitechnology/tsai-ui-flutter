@@ -13,8 +13,7 @@ class InputDemo extends StatefulWidget {
 
 class _InputDemoState extends State<InputDemo> {
   final _controller = TextEditingController(text: 'Value');
-  String _label = 'Label';
-  String _hint = 'Value';
+  String _placeholder = 'Label';
   String _description = 'Description';
   String _errorText = '';
   String _semanticLabel = '';
@@ -24,6 +23,7 @@ class _InputDemoState extends State<InputDemo> {
   bool _showVisibility = false;
   bool _clear = true;
   bool _autofocus = false;
+  bool _labeledPlaceholder = true;
   bool _digitsOnly = false;
   int _maxLength = 32;
   String _autofillHint = 'none';
@@ -49,14 +49,9 @@ class _InputDemoState extends State<InputDemo> {
           onChanged: (_) => setState(() {}),
         ),
         _TextProperty(
-          label: 'label',
-          value: _label,
-          onChanged: (value) => setState(() => _label = value),
-        ),
-        _TextProperty(
-          label: 'hintText',
-          value: _hint,
-          onChanged: (value) => setState(() => _hint = value),
+          label: 'placeholder',
+          value: _placeholder,
+          onChanged: (value) => setState(() => _placeholder = value),
         ),
         _TextProperty(
           label: 'description',
@@ -122,6 +117,11 @@ class _InputDemoState extends State<InputDemo> {
           ),
         ),
         _Toggle(
+          label: 'labeledPlaceholder',
+          value: _labeledPlaceholder,
+          onChanged: (value) => setState(() => _labeledPlaceholder = value),
+        ),
+        _Toggle(
           label: 'enabled',
           value: _enabled,
           onChanged: (value) => setState(() => _enabled = value),
@@ -160,8 +160,8 @@ class _InputDemoState extends State<InputDemo> {
       ],
       preview: TsaiInput(
         controller: _controller,
-        label: _emptyToNull(_label),
-        hintText: _emptyToNull(_hint),
+        placeholder: _emptyToNull(_placeholder),
+        labeledPlaceholder: _labeledPlaceholder,
         description: _emptyToNull(_description),
         errorText: _emptyToNull(_errorText),
         semanticLabel: _emptyToNull(_semanticLabel),
@@ -204,42 +204,42 @@ class _InputDemoState extends State<InputDemo> {
           child: Column(
             children: [
               const TsaiInput(
-                label: 'Label',
-                hintText: 'Value',
+                placeholder: 'Label',
                 description: 'Description',
                 showVisibilityButton: true,
               ),
               _gap26,
               const TsaiInput(
-                label: 'Label',
-                hintText: 'Value',
+                placeholder: 'Label',
+                labeledPlaceholder: false,
                 description: 'Description',
                 showVisibilityButton: true,
               ),
               _gap26,
               const TsaiInput(
-                label: 'Label',
+                placeholder: 'Label',
                 initialValue: 'Value',
                 description: 'Description',
                 showVisibilityButton: true,
               ),
               _gap26,
               const TsaiInput(
-                label: 'Label',
+                placeholder: 'Label',
+                labeledPlaceholder: false,
                 initialValue: 'Value',
                 description: 'Description',
                 showVisibilityButton: true,
               ),
               _gap26,
               const TsaiInput(
-                label: 'Label',
+                placeholder: 'Label',
                 initialValue: 'Value',
                 errorText: 'Description',
                 showVisibilityButton: true,
               ),
               _gap26,
               const TsaiInput(
-                label: 'Label',
+                placeholder: 'Label',
                 initialValue: 'Value',
                 description: 'Description',
                 enabled: false,

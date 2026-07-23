@@ -150,18 +150,18 @@ class _CheckboxDemoState extends State<CheckboxDemo> {
       ),
       PenpotExample(
         title: 'Checkbox Multiline (example)',
-        child: SizedBox(
-          width: 320,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 600),
           child: Column(
             children: [
               _listCheckbox(
                 true,
-                'I agree to the Terms of Service\nand acknowledge the Privacy Policy',
+                'I agree to the Terms of Service and acknowledge the Privacy Policy',
               ),
               _gap24,
               _listCheckbox(
                 false,
-                'Send me product updates and offers\nby email',
+                'Send me product updates and offers by email',
               ),
             ],
           ),
@@ -208,10 +208,7 @@ class _CheckboxDemoState extends State<CheckboxDemo> {
       label: label,
       onChanged: (_) {},
     );
-    if (label.contains('\n')) {
-      return SizedBox(width: 320, child: checkbox);
-    }
-    return _penpotControl(checkbox);
+    return label.length > 30 ? checkbox : _penpotControl(checkbox);
   }
 }
 
@@ -346,30 +343,24 @@ class _RadioDemoState extends State<RadioDemo> {
       ),
       PenpotExample(
         title: 'Radio Multiline (example)',
-        child: SizedBox(
-          width: 320,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 600),
           child: Column(
             children: [
-              _penpotControl(
-                TsaiRadio<String>(
-                  value: 'standard',
-                  groupValue: 'standard',
-                  label:
-                      'Standard delivery (3-5 business days), free for orders over \$100',
-                  onChanged: (_) {},
-                ),
-                height: 34,
+              TsaiRadio<String>(
+                value: 'standard',
+                groupValue: 'standard',
+                label:
+                    'Standard delivery (3-5 business days), free for orders over \$100',
+                onChanged: (_) {},
               ),
               _gap24,
-              _penpotControl(
-                TsaiRadio<String>(
-                  value: 'express',
-                  groupValue: 'standard',
-                  label:
-                      'Express delivery (1-2 business days) with real-time courier tracking',
-                  onChanged: (_) {},
-                ),
-                height: 34,
+              TsaiRadio<String>(
+                value: 'express',
+                groupValue: 'standard',
+                label:
+                    'Express delivery (1-2 business days) with real-time courier tracking',
+                onChanged: (_) {},
               ),
             ],
           ),
@@ -520,24 +511,23 @@ class _SwitchDemoState extends State<SwitchDemo> {
       ),
       PenpotExample(
         title: 'Switch Multiline (example)',
-        child: SizedBox(
-          width: 320,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 600),
           child: Column(
             children: [
-              _listSwitch(
-                false,
-                'Notify me about new sign-ins from unknown devices and locations',
+              TsaiSwitch(
+                value: false,
+                label:
+                    'Notify me about new sign-ins from unknown devices and locations',
+                onChanged: (_) {},
               ),
               _gap24,
-              _penpotControl(
-                TsaiSwitch(
-                  value: false,
-                  label:
-                      'Automatically top up the card balance when it drops below \$50',
-                  labelPosition: TsaiControlLabelPosition.left,
-                  onChanged: (_) {},
-                ),
-                height: 34,
+              TsaiSwitch(
+                value: false,
+                label:
+                    'Automatically top up the card balance when it drops below \$50',
+                labelPosition: TsaiControlLabelPosition.left,
+                onChanged: (_) {},
               ),
             ],
           ),

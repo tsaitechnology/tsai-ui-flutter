@@ -39,8 +39,7 @@ class _QuickStartExampleState extends State<QuickStartExample> {
                 ),
                 const SizedBox(height: 32),
                 const TsaiInput(
-                  label: 'Work email',
-                  hintText: 'you@company.com',
+                  placeholder: 'Work email',
                   keyboardType: TextInputType.emailAddress,
                   autofillHints: [AutofillHints.email],
                 ),

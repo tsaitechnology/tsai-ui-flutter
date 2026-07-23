@@ -81,7 +81,8 @@ TsaiCheckbox(
 );
 
 TsaiInput(
-  label: 'Password',
+  placeholder: 'Password',
+  labeledPlaceholder: true,
   obscureText: true,
   onChanged: (value) {},
 );

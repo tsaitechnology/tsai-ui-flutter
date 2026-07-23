@@ -20,8 +20,7 @@ class _SelectDemoState extends State<SelectDemo> {
   String _firstOption = 'Option';
   String _secondOption = 'Second option';
   String _thirdOption = 'Disabled option';
-  String _label = 'Label';
-  String _placeholder = 'Option';
+  String _placeholder = 'Label';
   String _description = 'Description';
   String _errorText = '';
   String _semanticLabel = '';
@@ -30,6 +29,7 @@ class _SelectDemoState extends State<SelectDemo> {
   bool _showLeading = false;
   bool _thirdOptionEnabled = false;
   bool _autofocus = false;
+  bool _labeledPlaceholder = true;
   double _menuMaxHeight = 320;
   TsaiSelectPresentation _presentation = TsaiSelectPresentation.adaptive;
   String _event = 'No events';
@@ -84,11 +84,6 @@ class _SelectDemoState extends State<SelectDemo> {
         ),
         ComponentPlayground(
           controls: [
-            _TextProperty(
-              label: 'label',
-              value: _label,
-              onChanged: (value) => setState(() => _label = value),
-            ),
             _TextProperty(
               label: 'placeholder',
               value: _placeholder,
@@ -159,6 +154,11 @@ class _SelectDemoState extends State<SelectDemo> {
               ),
             ),
             _Toggle(
+              label: 'labeledPlaceholder',
+              value: _labeledPlaceholder,
+              onChanged: (value) => setState(() => _labeledPlaceholder = value),
+            ),
+            _Toggle(
               label: 'enabled',
               value: _enabled,
               onChanged: (value) => setState(() => _enabled = value),
@@ -188,8 +188,8 @@ class _SelectDemoState extends State<SelectDemo> {
           preview: TsaiSelect<String>(
             options: _options,
             value: _value,
-            label: _emptyToNull(_label),
-            placeholder: _placeholder,
+            placeholder: _emptyToNull(_placeholder),
+            labeledPlaceholder: _labeledPlaceholder,
             description: _emptyToNull(_description),
             errorText: _emptyToNull(_errorText),
             semanticLabel: _emptyToNull(_semanticLabel),
@@ -242,8 +242,7 @@ class _SelectVariantState extends State<_SelectVariant> {
   Widget build(BuildContext context) => TsaiSelect<String>(
     options: _SelectDemoState._penpotOptions,
     value: _value,
-    label: 'Label',
-    placeholder: 'Option',
+    placeholder: 'Label',
     description: 'Description',
     errorText: widget.error ? 'Description' : null,
     onChanged: widget.enabled
