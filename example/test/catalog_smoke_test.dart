@@ -8,8 +8,41 @@ import 'package:tsai_ui_example/features/select/select_demo.dart';
 import 'package:tsai_ui_example/features/selection_controls/selection_controls_demo.dart';
 import 'package:tsai_ui_example/features/typography/typography_demo.dart';
 import 'package:tsai_ui_example/features/typography/typography_widget_demo_screen.dart';
+import 'package:tsai_ui_example/main.dart';
 
 void main() {
+  testWidgets('renders the pub.dev quick start and opens the catalog', (
+    tester,
+  ) async {
+    await tester.pumpWidget(const CatalogApp(home: QuickStartExample()));
+
+    expect(find.text('Create your workspace'), findsOneWidget);
+    expect(find.byType(TsaiInput), findsOneWidget);
+    expect(find.byType(TsaiCheckbox), findsOneWidget);
+
+    final createButton = tester.widget<TsaiButton>(
+      find.widgetWithText(TsaiButton, 'Create workspace'),
+    );
+    expect(createButton.onPressed, isNull);
+
+    await tester.tap(find.byType(TsaiCheckbox));
+    await tester.pump();
+    expect(
+      tester
+          .widget<TsaiButton>(
+            find.widgetWithText(TsaiButton, 'Create workspace'),
+          )
+          .onPressed,
+      isNotNull,
+    );
+
+    await tester.tap(find.text('Browse the component catalog'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 400));
+    expect(find.text('Buttons'), findsOneWidget);
+    expect(find.text('Default'), findsOneWidget);
+  });
+
   testWidgets('navigates full entity screens and switches theme', (
     tester,
   ) async {

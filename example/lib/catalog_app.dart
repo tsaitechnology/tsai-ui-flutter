@@ -10,9 +10,10 @@ import 'features/typography/typography_demo_screen.dart';
 import 'features/typography/typography_widget_demo_screen.dart';
 
 class CatalogApp extends StatefulWidget {
-  const CatalogApp({super.key, this.initialRoute});
+  const CatalogApp({super.key, this.initialRoute, this.home});
 
   final String? initialRoute;
+  final Widget? home;
 
   @override
   State<CatalogApp> createState() => _CatalogAppState();
@@ -30,10 +31,12 @@ class _CatalogAppState extends State<CatalogApp> {
     themeMode: _themeMode,
     initialRoute: widget.initialRoute,
     routes: {
-      '/': (context) => TypographyDemoScreen(
-        themeMode: _themeMode,
-        onThemeModeChanged: _setThemeMode,
-      ),
+      '/': (context) =>
+          widget.home ??
+          TypographyDemoScreen(
+            themeMode: _themeMode,
+            onThemeModeChanged: _setThemeMode,
+          ),
       '/buttons': (context) => ButtonDemoScreen(
         themeMode: _themeMode,
         onThemeModeChanged: _setThemeMode,
