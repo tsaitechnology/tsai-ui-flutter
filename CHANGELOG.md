@@ -1,3 +1,12 @@
+## 0.1.2 - 2026-07-23
+
+### Maintenance
+
+- deploy pages only for releases ([4aa7fdf](https://github.com/tsaitechnology/tsai-ui-flutter/commit/4aa7fdfab22113ebc163c55edd6d95a01e4d805e))
+- rename release entry workflow ([0f1c25d](https://github.com/tsaitechnology/tsai-ui-flutter/commit/0f1c25d4e19539ed2c8e041896fa886f9681deef))
+- select semantic version increment ([b9ecf26](https://github.com/tsaitechnology/tsai-ui-flutter/commit/b9ecf2666c2abb0c505e3937de1c4981815a2932))
+- use Tsai controls in playgrounds ([dbc953c](https://github.com/tsaitechnology/tsai-ui-flutter/commit/dbc953c61cf795e01e2e38b26338ba6bf52ab70c))
+
 ## 0.1.1 - 2026-07-23
 
 ### Features
