@@ -697,20 +697,12 @@ class _TextProperty extends StatelessWidget {
   final ValueChanged<String> onChanged;
 
   @override
-  Widget build(BuildContext context) {
-    final tokens = TsaiThemeTokens.of(context);
-    return PlaygroundField(
-      label: label,
-      child: TextFormField(
-        initialValue: controller == null ? value : null,
-        controller: controller,
-        style: tokens.typography.bodyLarge.copyWith(
-          color: tokens.colors.contentPrimary,
-        ),
-        onChanged: onChanged,
-      ),
-    );
-  }
+  Widget build(BuildContext context) => PlaygroundTextControl(
+    label: label,
+    value: value,
+    controller: controller,
+    onChanged: onChanged,
+  );
 }
 
 class _EnumProperty<T> extends StatelessWidget {
@@ -728,26 +720,13 @@ class _EnumProperty<T> extends StatelessWidget {
   final ValueChanged<T> onChanged;
 
   @override
-  Widget build(BuildContext context) {
-    final tokens = TsaiThemeTokens.of(context);
-    return PlaygroundField(
-      label: label,
-      child: DropdownButtonFormField<T>(
-        initialValue: value,
-        isExpanded: true,
-        style: tokens.typography.bodyLarge.copyWith(
-          color: tokens.colors.contentPrimary,
-        ),
-        items: [
-          for (var index = 0; index < values.length; index++)
-            DropdownMenuItem(value: values[index], child: Text(labels[index])),
-        ],
-        onChanged: (value) {
-          if (value != null) onChanged(value);
-        },
-      ),
-    );
-  }
+  Widget build(BuildContext context) => PlaygroundSelectControl<T>(
+    label: label,
+    value: value,
+    values: values,
+    labels: labels,
+    onChanged: onChanged,
+  );
 }
 
 class _Toggle extends StatelessWidget {
@@ -761,14 +740,8 @@ class _Toggle extends StatelessWidget {
   final ValueChanged<bool> onChanged;
 
   @override
-  Widget build(BuildContext context) => PlaygroundField(
-    label: label,
-    width: 150,
-    child: Align(
-      alignment: AlignmentDirectional.centerStart,
-      child: Switch(value: value, onChanged: onChanged),
-    ),
-  );
+  Widget build(BuildContext context) =>
+      PlaygroundToggleControl(label: label, value: value, onChanged: onChanged);
 }
 
 class _LengthProperty extends StatelessWidget {
@@ -777,16 +750,11 @@ class _LengthProperty extends StatelessWidget {
   final ValueChanged<int> onChanged;
 
   @override
-  Widget build(BuildContext context) => PlaygroundField(
+  Widget build(BuildContext context) => PlaygroundRadioGroup<int>(
     label: 'length',
-    child: SegmentedButton<int>(
-      segments: const [
-        ButtonSegment(value: 4, label: Text('4')),
-        ButtonSegment(value: 6, label: Text('6')),
-      ],
-      selected: {value},
-      onSelectionChanged: (selection) => onChanged(selection.first),
-    ),
+    value: value,
+    options: const [(4, '4'), (6, '6')],
+    onChanged: onChanged,
   );
 }
 
@@ -806,8 +774,16 @@ class _StatusToggles extends StatelessWidget {
   Widget build(BuildContext context) => Row(
     mainAxisSize: MainAxisSize.min,
     children: [
-      _Toggle(label: 'isError', value: error, onChanged: onError),
-      _Toggle(label: 'isSuccess', value: success, onChanged: onSuccess),
+      PlaygroundToggleControl(
+        label: 'isError',
+        value: error,
+        onChanged: onError,
+      ),
+      PlaygroundToggleControl(
+        label: 'isSuccess',
+        value: success,
+        onChanged: onSuccess,
+      ),
     ],
   );
 }
@@ -817,13 +793,8 @@ class _EventProperty extends StatelessWidget {
   final String value;
 
   @override
-  Widget build(BuildContext context) => PlaygroundField(
-    label: 'Last callback',
-    child: InputDecorator(
-      decoration: const InputDecoration(border: OutlineInputBorder()),
-      child: Text(value, maxLines: 1, overflow: TextOverflow.ellipsis),
-    ),
-  );
+  Widget build(BuildContext context) =>
+      PlaygroundOutput(label: 'Last callback', value: value);
 }
 
 const _gap24 = SizedBox(height: 24);

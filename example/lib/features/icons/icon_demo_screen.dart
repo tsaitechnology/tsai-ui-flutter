@@ -115,17 +115,11 @@ class _IconPlaygroundState extends State<_IconPlayground> {
             onChanged: (value) => setState(() => _size = value),
           ),
         ),
-        PlaygroundField(
+        PlaygroundRadioGroup<bool>(
           label: 'color',
-          child: SegmentedButton<bool>(
-            segments: const [
-              ButtonSegment(value: false, label: Text('Inherited')),
-              ButtonSegment(value: true, label: Text('Accent')),
-            ],
-            selected: {_useAccent},
-            onSelectionChanged: (value) =>
-                setState(() => _useAccent = value.single),
-          ),
+          value: _useAccent,
+          options: const [(false, 'Inherited'), (true, 'Accent')],
+          onChanged: (value) => setState(() => _useAccent = value),
         ),
       ],
       preview: TsaiIcon(

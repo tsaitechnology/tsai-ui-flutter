@@ -60,67 +60,62 @@ class _ButtonDemoState extends State<ButtonDemo> {
         sliver: SliverToBoxAdapter(
           child: ComponentPlayground(
             controls: [
-              _TextProperty(
+              PlaygroundTextControl(
                 label: 'label',
                 value: _label,
                 onChanged: (value) => setState(() => _label = value),
               ),
-              _TextProperty(
+              PlaygroundTextControl(
                 label: 'semanticLabel',
                 value: _semanticLabel,
                 onChanged: (value) => setState(() => _semanticLabel = value),
               ),
-              _TextProperty(
+              PlaygroundTextControl(
                 label: 'loadingSemanticLabel',
                 value: _loadingSemanticLabel,
                 onChanged: (value) =>
                     setState(() => _loadingSemanticLabel = value),
               ),
-              _EnumProperty<TsaiButtonVariant>(
+              PlaygroundSelectControl<TsaiButtonVariant>(
                 label: 'variant',
                 value: _variant,
                 values: TsaiButtonVariant.values,
                 onChanged: (value) => setState(() => _variant = value),
               ),
-              _EnumProperty<TsaiButtonSize>(
+              PlaygroundSelectControl<TsaiButtonSize>(
                 label: 'size',
                 value: _size,
                 values: TsaiButtonSize.values,
                 onChanged: (value) => setState(() => _size = value),
               ),
-              _Toggle(
+              PlaygroundToggleControl(
                 label: 'enabled',
                 value: _enabled,
                 onChanged: (value) => setState(() => _enabled = value),
               ),
-              _Toggle(
+              PlaygroundToggleControl(
                 label: 'leadingIcon',
                 value: _showIcon,
                 onChanged: (value) => setState(() => _showIcon = value),
               ),
-              _Toggle(
+              PlaygroundToggleControl(
                 label: 'isLoading',
                 value: _isLoading,
                 onChanged: (value) => setState(() => _isLoading = value),
               ),
-              _Toggle(
+              PlaygroundToggleControl(
                 label: 'isExpanded',
                 value: _isExpanded,
                 onChanged: (value) => setState(() => _isExpanded = value),
               ),
-              _Toggle(
+              PlaygroundToggleControl(
                 label: 'autofocus',
                 value: _autofocus,
                 onChanged: (value) => setState(() => _autofocus = value),
               ),
-              PlaygroundField(
+              PlaygroundOutput(
                 label: 'onPressed',
-                child: InputDecorator(
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                  ),
-                  child: Text('Called $_pressCount times'),
-                ),
+                value: 'Called $_pressCount times',
               ),
             ],
             preview: TsaiButton(
@@ -241,91 +236,6 @@ class _VariantSample extends StatelessWidget {
       ),
     );
   }
-}
-
-class _TextProperty extends StatelessWidget {
-  const _TextProperty({
-    required this.label,
-    required this.value,
-    required this.onChanged,
-  });
-
-  final String label;
-  final String value;
-  final ValueChanged<String> onChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    final tokens = TsaiThemeTokens.of(context);
-    return PlaygroundField(
-      label: label,
-      child: TextFormField(
-        initialValue: value,
-        style: tokens.typography.bodyLarge.copyWith(
-          color: tokens.colors.contentPrimary,
-        ),
-        onChanged: onChanged,
-      ),
-    );
-  }
-}
-
-class _EnumProperty<T extends Enum> extends StatelessWidget {
-  const _EnumProperty({
-    required this.label,
-    required this.value,
-    required this.values,
-    required this.onChanged,
-  });
-
-  final String label;
-  final T value;
-  final List<T> values;
-  final ValueChanged<T> onChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    final tokens = TsaiThemeTokens.of(context);
-    return PlaygroundField(
-      label: label,
-      child: DropdownButtonFormField<T>(
-        initialValue: value,
-        isExpanded: true,
-        style: tokens.typography.bodyLarge.copyWith(
-          color: tokens.colors.contentPrimary,
-        ),
-        items: [
-          for (final item in values)
-            DropdownMenuItem(value: item, child: Text(item.name)),
-        ],
-        onChanged: (value) {
-          if (value != null) onChanged(value);
-        },
-      ),
-    );
-  }
-}
-
-class _Toggle extends StatelessWidget {
-  const _Toggle({
-    required this.label,
-    required this.value,
-    required this.onChanged,
-  });
-
-  final String label;
-  final bool value;
-  final ValueChanged<bool> onChanged;
-
-  @override
-  Widget build(BuildContext context) => PlaygroundField(
-    label: label,
-    width: 150,
-    child: Align(
-      alignment: AlignmentDirectional.centerStart,
-      child: Switch(value: value, onChanged: onChanged),
-    ),
-  );
 }
 
 String? _emptyToNull(String value) => value.isEmpty ? null : value;

@@ -175,9 +175,13 @@ void main() {
       findsOneWidget,
     );
     expect(find.byType(TsaiCheckbox), findsWidgets);
-    expect(find.byType(TsaiRadio<String>), findsNothing);
+    expect(find.byType(TsaiRadio<String>), findsNWidgets(3));
+    expect(find.byType(SegmentedButton<String>), findsNothing);
 
-    await tester.enterText(find.byType(TextFormField).first, 'Runtime label');
+    await tester.enterText(
+      find.byKey(const ValueKey<String>('tsai-input-editable')).first,
+      'Runtime label',
+    );
     await tester.pump();
     expect(find.text('Runtime label'), findsWidgets);
   });
@@ -244,10 +248,11 @@ void main() {
     await _pumpEmbedded(tester, child: const OtpInputDemo());
 
     await _scrollToPlayground(tester);
-    final control = tester.widget<SegmentedButton<int>>(
-      find.byType(SegmentedButton<int>),
-    );
-    expect(control.segments.map((segment) => segment.value), [4, 6]);
+    final controls = tester
+        .widgetList<TsaiRadio<int>>(find.byType(TsaiRadio<int>))
+        .toList();
+    expect(controls.map((control) => control.value), [4, 6]);
+    expect(find.byType(SegmentedButton<int>), findsNothing);
     expect(find.byType(TsaiOtpInput), findsWidgets);
 
     await tester.tap(find.text('6'));
@@ -264,10 +269,11 @@ void main() {
     await _pumpEmbedded(tester, child: const PinInputDemo());
 
     await _scrollToPlayground(tester);
-    final control = tester.widget<SegmentedButton<int>>(
-      find.byType(SegmentedButton<int>),
-    );
-    expect(control.segments.map((segment) => segment.value), [4, 6]);
+    final controls = tester
+        .widgetList<TsaiRadio<int>>(find.byType(TsaiRadio<int>))
+        .toList();
+    expect(controls.map((control) => control.value), [4, 6]);
+    expect(find.byType(SegmentedButton<int>), findsNothing);
     expect(find.byType(TsaiPinInput), findsWidgets);
 
     await tester.tap(find.text('6'));

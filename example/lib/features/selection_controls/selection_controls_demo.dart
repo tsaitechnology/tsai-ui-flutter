@@ -46,25 +46,24 @@ class _CheckboxDemoState extends State<CheckboxDemo> {
           value: _position,
           onChanged: (value) => setState(() => _position = value),
         ),
-        PlaygroundField(
+        PlaygroundRadioGroup<String>(
           label: 'value',
-          child: SegmentedButton<String>(
-            showSelectedIcon: false,
-            segments: const [
-              ButtonSegment(value: 'false', label: Text('False')),
-              ButtonSegment(value: 'true', label: Text('True')),
-              ButtonSegment(value: 'null', label: Text('Null')),
-            ],
-            selected: {_value?.toString() ?? 'null'},
-            onSelectionChanged: (selection) => setState(() {
-              _value = switch (selection.first) {
-                'true' => true,
-                'false' => false,
-                _ => null,
-              };
-              if (_value == null) _tristate = true;
-            }),
-          ),
+          value: _value?.toString() ?? 'null',
+          options: const [
+            ('false', 'False'),
+            ('true', 'True'),
+            ('null', 'Null'),
+          ],
+          onChanged: (value) => setState(() {
+            _value = switch (value) {
+              'true' => true,
+              'false' => false,
+              _ => null,
+            };
+            if (_value == null) {
+              _tristate = true;
+            }
+          }),
         ),
         _Toggle(
           label: 'enabled',
@@ -609,19 +608,8 @@ class _TextProperty extends StatelessWidget {
   final ValueChanged<String> onChanged;
 
   @override
-  Widget build(BuildContext context) {
-    final tokens = TsaiThemeTokens.of(context);
-    return PlaygroundField(
-      label: label,
-      child: TextFormField(
-        initialValue: value,
-        style: tokens.typography.bodyLarge.copyWith(
-          color: tokens.colors.contentPrimary,
-        ),
-        onChanged: onChanged,
-      ),
-    );
-  }
+  Widget build(BuildContext context) =>
+      PlaygroundTextControl(label: label, value: value, onChanged: onChanged);
 }
 
 class _Toggle extends StatelessWidget {
@@ -635,13 +623,11 @@ class _Toggle extends StatelessWidget {
   final ValueChanged<bool> onChanged;
 
   @override
-  Widget build(BuildContext context) => PlaygroundField(
+  Widget build(BuildContext context) => PlaygroundToggleControl(
     label: label,
     width: 140,
-    child: Align(
-      alignment: AlignmentDirectional.centerStart,
-      child: Switch(value: value, onChanged: onChanged),
-    ),
+    value: value,
+    onChanged: onChanged,
   );
 }
 
@@ -651,23 +637,16 @@ class _LabelPosition extends StatelessWidget {
   final ValueChanged<TsaiControlLabelPosition> onChanged;
 
   @override
-  Widget build(BuildContext context) => PlaygroundField(
-    label: 'labelPosition',
-    child: SegmentedButton<TsaiControlLabelPosition>(
-      segments: const [
-        ButtonSegment(
-          value: TsaiControlLabelPosition.left,
-          label: Text('Left'),
-        ),
-        ButtonSegment(
-          value: TsaiControlLabelPosition.right,
-          label: Text('Right'),
-        ),
-      ],
-      selected: {value},
-      onSelectionChanged: (selection) => onChanged(selection.first),
-    ),
-  );
+  Widget build(BuildContext context) =>
+      PlaygroundRadioGroup<TsaiControlLabelPosition>(
+        label: 'labelPosition',
+        value: value,
+        options: const [
+          (TsaiControlLabelPosition.left, 'Left'),
+          (TsaiControlLabelPosition.right, 'Right'),
+        ],
+        onChanged: onChanged,
+      );
 }
 
 class _EventProperty extends StatelessWidget {
@@ -675,13 +654,8 @@ class _EventProperty extends StatelessWidget {
   final String value;
 
   @override
-  Widget build(BuildContext context) => PlaygroundField(
-    label: 'Last callback',
-    child: InputDecorator(
-      decoration: const InputDecoration(border: OutlineInputBorder()),
-      child: Text(value, maxLines: 1, overflow: TextOverflow.ellipsis),
-    ),
-  );
+  Widget build(BuildContext context) =>
+      PlaygroundOutput(label: 'Last callback', value: value);
 }
 
 const _gap16 = SizedBox(height: 16);

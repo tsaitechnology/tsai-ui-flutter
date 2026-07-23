@@ -124,53 +124,28 @@ class _SelectDemoState extends State<SelectDemo> {
               value: _thirdOption,
               onChanged: (value) => setState(() => _thirdOption = value),
             ),
-            PlaygroundField(
+            PlaygroundRadioGroup<String>(
               label: 'value',
-              child: DropdownButtonFormField<String?>(
-                initialValue: _value,
-                isExpanded: true,
-                style: tokens.typography.bodyLarge.copyWith(
-                  color: tokens.colors.contentPrimary,
-                ),
-                items: const [
-                  DropdownMenuItem(value: null, child: Text('null')),
-                  DropdownMenuItem(value: 'option', child: Text('Option')),
-                  DropdownMenuItem(
-                    value: 'second',
-                    child: Text('Second option'),
-                  ),
-                ],
-                onChanged: (value) => setState(() => _value = value),
-              ),
+              value: _value ?? 'null',
+              options: const [
+                ('null', 'null'),
+                ('option', 'Option'),
+                ('second', 'Second option'),
+              ],
+              onChanged: (value) =>
+                  setState(() => _value = value == 'null' ? null : value),
             ),
-            PlaygroundField(
+            PlaygroundSelectControl<TsaiSelectPresentation>(
               label: 'presentation',
-              child: DropdownButtonFormField<TsaiSelectPresentation>(
-                initialValue: _presentation,
-                isExpanded: true,
-                style: tokens.typography.bodyLarge.copyWith(
-                  color: tokens.colors.contentPrimary,
-                ),
-                items: const [
-                  DropdownMenuItem(
-                    value: TsaiSelectPresentation.adaptive,
-                    child: Text('Adaptive'),
-                  ),
-                  DropdownMenuItem(
-                    value: TsaiSelectPresentation.menu,
-                    child: Text('Menu'),
-                  ),
-                  DropdownMenuItem(
-                    value: TsaiSelectPresentation.bottomSheet,
-                    child: Text('Bottom sheet'),
-                  ),
-                  DropdownMenuItem(
-                    value: TsaiSelectPresentation.cupertinoPicker,
-                    child: Text('Cupertino picker'),
-                  ),
-                ],
-                onChanged: (value) => setState(() => _presentation = value!),
-              ),
+              value: _presentation,
+              values: TsaiSelectPresentation.values,
+              labels: const [
+                'Adaptive',
+                'Menu',
+                'Bottom sheet',
+                'Cupertino picker',
+              ],
+              onChanged: (value) => setState(() => _presentation = value),
             ),
             PlaygroundField(
               label: 'menuMaxHeight',
@@ -288,19 +263,8 @@ class _TextProperty extends StatelessWidget {
   final ValueChanged<String> onChanged;
 
   @override
-  Widget build(BuildContext context) {
-    final tokens = TsaiThemeTokens.of(context);
-    return PlaygroundField(
-      label: label,
-      child: TextFormField(
-        initialValue: value,
-        style: tokens.typography.bodyLarge.copyWith(
-          color: tokens.colors.contentPrimary,
-        ),
-        onChanged: onChanged,
-      ),
-    );
-  }
+  Widget build(BuildContext context) =>
+      PlaygroundTextControl(label: label, value: value, onChanged: onChanged);
 }
 
 class _Toggle extends StatelessWidget {
@@ -314,13 +278,11 @@ class _Toggle extends StatelessWidget {
   final ValueChanged<bool> onChanged;
 
   @override
-  Widget build(BuildContext context) => PlaygroundField(
+  Widget build(BuildContext context) => PlaygroundToggleControl(
     label: label,
     width: 160,
-    child: Align(
-      alignment: AlignmentDirectional.centerStart,
-      child: Switch(value: value, onChanged: onChanged),
-    ),
+    value: value,
+    onChanged: onChanged,
   );
 }
 
@@ -329,13 +291,8 @@ class _EventProperty extends StatelessWidget {
   final String value;
 
   @override
-  Widget build(BuildContext context) => PlaygroundField(
-    label: 'Last callback',
-    child: InputDecorator(
-      decoration: const InputDecoration(border: OutlineInputBorder()),
-      child: Text(value, maxLines: 1, overflow: TextOverflow.ellipsis),
-    ),
-  );
+  Widget build(BuildContext context) =>
+      PlaygroundOutput(label: 'Last callback', value: value);
 }
 
 const _gap26 = SizedBox(height: 26);

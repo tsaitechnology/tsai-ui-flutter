@@ -260,35 +260,35 @@ class _TypographyPlaygroundState extends State<_TypographyPlayground> {
     };
     return ComponentPlayground(
       controls: [
-        _TextProperty(
+        PlaygroundTextControl(
           label: 'data',
           value: _data,
           onChanged: (value) => setState(() => _data = value),
         ),
-        _TextProperty(
+        PlaygroundTextControl(
           label: 'semanticsLabel',
           value: _semanticsLabel,
           onChanged: (value) => setState(() => _semanticsLabel = value),
         ),
-        _EnumProperty<_TypographyRole>(
+        PlaygroundSelectControl<_TypographyRole>(
           label: 'role',
           value: _role,
           values: _TypographyRole.values,
           onChanged: (value) => setState(() => _role = value),
         ),
-        _EnumProperty<_TypographyColor>(
+        PlaygroundSelectControl<_TypographyColor>(
           label: 'color',
           value: _color,
           values: _TypographyColor.values,
           onChanged: (value) => setState(() => _color = value),
         ),
-        _EnumProperty<TextAlign>(
+        PlaygroundSelectControl<TextAlign>(
           label: 'textAlign',
           value: _textAlign,
           values: const [TextAlign.start, TextAlign.center, TextAlign.end],
           onChanged: (value) => setState(() => _textAlign = value),
         ),
-        _EnumProperty<TextOverflow>(
+        PlaygroundSelectControl<TextOverflow>(
           label: 'overflow',
           value: _overflow,
           values: TextOverflow.values,
@@ -314,7 +314,7 @@ class _TypographyPlaygroundState extends State<_TypographyPlayground> {
             onChanged: (value) => setState(() => _textScale = value),
           ),
         ),
-        _Toggle(
+        PlaygroundToggleControl(
           label: 'softWrap',
           value: _softWrap,
           onChanged: (value) => setState(() => _softWrap = value),
@@ -568,91 +568,6 @@ class _TypographyPlaygroundState extends State<_TypographyPlayground> {
       ),
     };
   }
-}
-
-class _TextProperty extends StatelessWidget {
-  const _TextProperty({
-    required this.label,
-    required this.value,
-    required this.onChanged,
-  });
-
-  final String label;
-  final String value;
-  final ValueChanged<String> onChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    final tokens = TsaiThemeTokens.of(context);
-    return PlaygroundField(
-      label: label,
-      child: TextFormField(
-        initialValue: value,
-        style: tokens.typography.bodyLarge.copyWith(
-          color: tokens.colors.contentPrimary,
-        ),
-        onChanged: onChanged,
-      ),
-    );
-  }
-}
-
-class _EnumProperty<T extends Enum> extends StatelessWidget {
-  const _EnumProperty({
-    required this.label,
-    required this.value,
-    required this.values,
-    required this.onChanged,
-  });
-
-  final String label;
-  final T value;
-  final List<T> values;
-  final ValueChanged<T> onChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    final tokens = TsaiThemeTokens.of(context);
-    return PlaygroundField(
-      label: label,
-      child: DropdownButtonFormField<T>(
-        initialValue: value,
-        isExpanded: true,
-        style: tokens.typography.bodyLarge.copyWith(
-          color: tokens.colors.contentPrimary,
-        ),
-        items: [
-          for (final item in values)
-            DropdownMenuItem(value: item, child: Text(item.name)),
-        ],
-        onChanged: (value) {
-          if (value != null) onChanged(value);
-        },
-      ),
-    );
-  }
-}
-
-class _Toggle extends StatelessWidget {
-  const _Toggle({
-    required this.label,
-    required this.value,
-    required this.onChanged,
-  });
-
-  final String label;
-  final bool value;
-  final ValueChanged<bool> onChanged;
-
-  @override
-  Widget build(BuildContext context) => PlaygroundField(
-    label: label,
-    width: 150,
-    child: Align(
-      alignment: AlignmentDirectional.centerStart,
-      child: Switch(value: value, onChanged: onChanged),
-    ),
-  );
 }
 
 String? _emptyToNull(String value) => value.isEmpty ? null : value;

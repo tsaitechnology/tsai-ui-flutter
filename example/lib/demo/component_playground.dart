@@ -96,6 +96,160 @@ class PlaygroundField extends StatelessWidget {
   }
 }
 
+class PlaygroundTextControl extends StatelessWidget {
+  const PlaygroundTextControl({
+    required this.label,
+    required this.onChanged,
+    super.key,
+    this.value,
+    this.controller,
+  }) : assert(value == null || controller == null);
+
+  final String label;
+  final String? value;
+  final TextEditingController? controller;
+  final ValueChanged<String> onChanged;
+
+  @override
+  Widget build(BuildContext context) => PlaygroundField(
+    label: label,
+    child: TsaiInput(
+      controller: controller,
+      initialValue: controller == null ? value : null,
+      showClearButton: false,
+      onChanged: onChanged,
+    ),
+  );
+}
+
+class PlaygroundSelectControl<T> extends StatelessWidget {
+  const PlaygroundSelectControl({
+    required this.label,
+    required this.value,
+    required this.values,
+    required this.onChanged,
+    super.key,
+    this.labels,
+  }) : assert(labels == null || labels.length == values.length);
+
+  final String label;
+  final T value;
+  final List<T> values;
+  final List<String>? labels;
+  final ValueChanged<T> onChanged;
+
+  @override
+  Widget build(BuildContext context) => PlaygroundField(
+    label: label,
+    child: TsaiSelect<T>(
+      value: value,
+      options: [
+        for (var index = 0; index < values.length; index++)
+          TsaiSelectOption<T>(
+            value: values[index],
+            label: labels?[index] ?? _defaultLabel(values[index]),
+          ),
+      ],
+      showClearButton: false,
+      presentation: TsaiSelectPresentation.menu,
+      onChanged: (value) {
+        if (value != null) {
+          onChanged(value);
+        }
+      },
+    ),
+  );
+
+  static String _defaultLabel(Object? value) =>
+      value is Enum ? value.name : '$value';
+}
+
+class PlaygroundToggleControl extends StatelessWidget {
+  const PlaygroundToggleControl({
+    required this.label,
+    required this.value,
+    required this.onChanged,
+    super.key,
+    this.width = 150,
+  });
+
+  final String label;
+  final bool value;
+  final ValueChanged<bool> onChanged;
+  final double width;
+
+  @override
+  Widget build(BuildContext context) => PlaygroundField(
+    label: label,
+    width: width,
+    child: Align(
+      alignment: AlignmentDirectional.centerStart,
+      child: TsaiSwitch(value: value, onChanged: onChanged),
+    ),
+  );
+}
+
+class PlaygroundRadioGroup<T> extends StatelessWidget {
+  const PlaygroundRadioGroup({
+    required this.label,
+    required this.value,
+    required this.options,
+    required this.onChanged,
+    super.key,
+    this.width = 220,
+  });
+
+  final String label;
+  final T value;
+  final List<(T, String)> options;
+  final ValueChanged<T> onChanged;
+  final double width;
+
+  @override
+  Widget build(BuildContext context) {
+    final tokens = TsaiThemeTokens.of(context);
+    return PlaygroundField(
+      label: label,
+      width: width,
+      child: Wrap(
+        spacing: tokens.spacing.space16,
+        runSpacing: tokens.spacing.space8,
+        children: [
+          for (final option in options)
+            TsaiRadio<T>(
+              value: option.$1,
+              groupValue: value,
+              label: option.$2,
+              onChanged: (value) {
+                if (value != null) {
+                  onChanged(value);
+                }
+              },
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class PlaygroundOutput extends StatelessWidget {
+  const PlaygroundOutput({required this.label, required this.value, super.key});
+
+  final String label;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) => PlaygroundField(
+    label: label,
+    child: TsaiInput(
+      key: ValueKey<String>(value),
+      initialValue: value,
+      readOnly: true,
+      showClearButton: false,
+    ),
+  );
+}
+
 class PenpotBoard extends StatelessWidget {
   const PenpotBoard({
     required this.child,
