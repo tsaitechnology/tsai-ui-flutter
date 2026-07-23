@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -115,6 +116,82 @@ void main() {
         closeTo(tester.getCenter(find.byType(TextButton)).dx, 0.01),
       );
     }
+  });
+
+  testWidgets('smoothly transitions the background color on hover', (
+    tester,
+  ) async {
+    const backgroundKey = ValueKey<String>('tsai-button-animated-background');
+    await _pump(
+      tester,
+      child: TsaiButton(label: 'Button', onPressed: () {}),
+    );
+    final buttonFinder = find.byType(TextButton);
+    final initialSize = tester.getSize(buttonFinder);
+    final initialColor = _animatedBackgroundColor(tester, backgroundKey);
+
+    final mouse = await tester.createGesture(kind: PointerDeviceKind.mouse);
+    addTearDown(mouse.removePointer);
+    await mouse.addPointer();
+    await mouse.moveTo(tester.getCenter(buttonFinder));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 70));
+
+    final midColor = _animatedBackgroundColor(tester, backgroundKey);
+    final hoveredColor = TsaiThemeTokens.dark.colors.actionPrimaryPressed;
+    expect(midColor, isNot(initialColor));
+    expect(midColor, isNot(hoveredColor));
+    expect(tester.getSize(buttonFinder), initialSize);
+
+    await tester.pump(const Duration(milliseconds: 70));
+    expect(_animatedBackgroundColor(tester, backgroundKey), hoveredColor);
+  });
+
+  testWidgets('disables interaction transitions when animations are disabled', (
+    tester,
+  ) async {
+    final theme = TsaiTheme.dark(
+      base: ThemeData(
+        extensions: const [
+          TsaiButtonTheme(
+            primary: ButtonStyle(animationDuration: Duration(seconds: 1)),
+          ),
+        ],
+      ),
+    );
+    await _pump(
+      tester,
+      theme: theme,
+      disableAnimations: true,
+      child: TsaiButton(label: 'Button', onPressed: () {}),
+    );
+
+    final button = tester.widget<TextButton>(find.byType(TextButton));
+    expect(button.style!.animationDuration, Duration.zero);
+  });
+
+  testWidgets('animates component-theme background overrides', (tester) async {
+    const overrideColor = Color(0xFF00A884);
+    final theme = TsaiTheme.dark(
+      base: ThemeData(
+        extensions: const [
+          TsaiButtonTheme(
+            primary: ButtonStyle(
+              backgroundColor: WidgetStatePropertyAll(overrideColor),
+            ),
+          ),
+        ],
+      ),
+    );
+    const backgroundKey = ValueKey<String>('tsai-button-animated-background');
+
+    await _pump(
+      tester,
+      theme: theme,
+      child: TsaiButton(label: 'Button', onPressed: () {}),
+    );
+
+    expect(_animatedBackgroundColor(tester, backgroundKey), overrideColor);
   });
 
   testWidgets('spinner animates without changing button width', (tester) async {
@@ -248,9 +325,30 @@ Future<void> _pump(
   WidgetTester tester, {
   required Widget child,
   ThemeData? theme,
+  bool disableAnimations = false,
 }) => tester.pumpWidget(
   MaterialApp(
     theme: theme ?? TsaiTheme.dark(),
-    home: Scaffold(body: Center(child: child)),
+    home: MediaQuery(
+      data: MediaQueryData(disableAnimations: disableAnimations),
+      child: Scaffold(body: Center(child: child)),
+    ),
   ),
 );
+
+Color? _animatedBackgroundColor(
+  WidgetTester tester,
+  ValueKey<String> backgroundKey,
+) {
+  final decoration =
+      tester
+              .widget<DecoratedBox>(
+                find.descendant(
+                  of: find.byKey(backgroundKey),
+                  matching: find.byType(DecoratedBox),
+                ),
+              )
+              .decoration
+          as ShapeDecoration;
+  return decoration.color;
+}

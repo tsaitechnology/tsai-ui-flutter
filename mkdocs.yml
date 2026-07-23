@@ -1,0 +1,70 @@
+site_name: Tsai UI
+site_description: Public documentation for the Tsai Flutter UI library.
+site_url: https://tsaitechnology.github.io/tsai-ui-flutter/
+repo_url: https://github.com/tsaitechnology/tsai-ui-flutter
+repo_name: tsaitechnology/tsai-ui-flutter
+copyright: Copyright &copy; 2026 Tsai
+
+theme:
+  name: material
+  language: en
+  features:
+    - content.code.copy
+    - navigation.footer
+    - navigation.indexes
+    - navigation.sections
+    - navigation.top
+    - search.highlight
+    - search.suggest
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: teal
+      accent: deep orange
+      toggle:
+        icon: material/weather-night
+        name: Use dark theme
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: teal
+      accent: amber
+      toggle:
+        icon: material/weather-sunny
+        name: Use light theme
+
+markdown_extensions:
+  - attr_list
+  - admonition
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.superfences
+  - toc:
+      permalink: true
+
+nav:
+  - Overview: index.md
+  - Installation: installation.md
+  - Theming: theming.md
+  - Widgets:
+      - Overview: widgets/index.md
+      - TsaiButton: widgets/tsai-button.md
+      - TsaiCheckbox: widgets/tsai-checkbox.md
+      - TsaiRadio: widgets/tsai-radio.md
+      - TsaiSwitch: widgets/tsai-switch.md
+      - TsaiSelect: widgets/tsai-select.md
+      - TsaiInput: widgets/tsai-input.md
+      - TsaiPhoneInput: widgets/tsai-phone-input.md
+      - TsaiOtpInput: widgets/tsai-otp-input.md
+      - TsaiPinInput: widgets/tsai-pin-input.md
+      - TsaiHeading: widgets/tsai-heading.md
+      - TsaiBody: widgets/tsai-body.md
+      - TsaiButtonText: widgets/tsai-button-text.md
+      - TsaiCaption: widgets/tsai-caption.md
+      - TsaiMonoHeading: widgets/tsai-mono-heading.md
+      - TsaiMonoBody: widgets/tsai-mono-body.md
+      - TsaiMonoCaption: widgets/tsai-mono-caption.md
+      - TsaiIcon: widgets/tsai-icon.md
+  - License: license.md
+
+strict: true

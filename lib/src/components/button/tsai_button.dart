@@ -89,7 +89,16 @@ class TsaiButton extends StatelessWidget {
     final tokens = TsaiThemeTokens.of(context);
     final theme = TsaiButtonTheme.of(context);
     final enabled = onPressed != null && !isLoading;
-    final style = _style(tokens).merge(_override(theme));
+    final disableAnimations = MediaQuery.disableAnimationsOf(context);
+    final animationDuration = disableAnimations
+        ? Duration.zero
+        : tokens.motion.interaction;
+    final defaults = _style(tokens, animationDuration);
+    var style = _override(theme)?.merge(defaults) ?? defaults;
+    if (disableAnimations) {
+      style = style.copyWith(animationDuration: Duration.zero);
+    }
+    style = _withAnimatedBackground(style);
     final content = _ButtonContent(
       label: label,
       leadingIcon: leadingIcon,
@@ -121,7 +130,7 @@ class TsaiButton extends StatelessWidget {
     );
   }
 
-  ButtonStyle _style(TsaiThemeTokens tokens) {
+  ButtonStyle _style(TsaiThemeTokens tokens, Duration animationDuration) {
     final colors = tokens.colors;
     final isLarge = size == TsaiButtonSize.large;
     final height = isLarge ? 56.0 : 40.0;
@@ -135,7 +144,7 @@ class TsaiButton extends StatelessWidget {
         : tokens.typography.buttonMedium;
 
     return ButtonStyle(
-      animationDuration: const Duration(milliseconds: 120),
+      animationDuration: animationDuration,
       backgroundColor: WidgetStateProperty.resolveWith(
         (states) => _backgroundColor(states, colors),
       ),
@@ -159,6 +168,24 @@ class TsaiButton extends StatelessWidget {
         (states) => _borderSide(states, colors, tokens.borders.hairline),
       ),
       splashFactory: NoSplash.splashFactory,
+    );
+  }
+
+  ButtonStyle _withAnimatedBackground(ButtonStyle style) {
+    if (style.backgroundBuilder != null) {
+      return style;
+    }
+    final backgroundColor = style.backgroundColor;
+    final shape = style.shape;
+    final duration = style.animationDuration ?? Duration.zero;
+    return style.copyWith(
+      backgroundColor: const WidgetStatePropertyAll(Colors.transparent),
+      backgroundBuilder: (context, states, child) => _AnimatedButtonBackground(
+        color: backgroundColor?.resolve(states) ?? Colors.transparent,
+        shape: shape?.resolve(states) ?? const RoundedRectangleBorder(),
+        duration: duration,
+        child: child,
+      ),
     );
   }
 
@@ -224,6 +251,29 @@ class TsaiButton extends StatelessWidget {
     TsaiButtonVariant.outline => theme.outline,
     TsaiButtonVariant.ghost => theme.ghost,
   };
+}
+
+class _AnimatedButtonBackground extends StatelessWidget {
+  const _AnimatedButtonBackground({
+    required this.color,
+    required this.shape,
+    required this.duration,
+    required this.child,
+  });
+
+  final Color color;
+  final OutlinedBorder shape;
+  final Duration duration;
+  final Widget? child;
+
+  @override
+  Widget build(BuildContext context) => AnimatedContainer(
+    key: const ValueKey<String>('tsai-button-animated-background'),
+    duration: duration,
+    curve: Curves.easeOut,
+    decoration: ShapeDecoration(color: color, shape: shape),
+    child: child,
+  );
 }
 
 class _ButtonContent extends StatelessWidget {

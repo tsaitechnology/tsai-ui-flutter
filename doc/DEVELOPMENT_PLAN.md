@@ -8,6 +8,7 @@ Status: implemented.
 - Transfer the four Penpot token sets into typed Dart tokens.
 - Install light/dark tokens through `ThemeExtension`.
 - Bundle typography assets and expose Lucide through an opt-in entrypoint.
+- Expose every typography role through constrained category widgets.
 - Implement Button variants, sizes, disabled/loading and interactive states.
 - Add first unit, widget, keyboard, and accessibility tests.
 

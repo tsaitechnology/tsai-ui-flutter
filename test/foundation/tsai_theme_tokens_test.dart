@@ -33,6 +33,7 @@ void main() {
       expect(light.spacing.space80, dark.spacing.space80);
       expect(light.radii.pill, dark.radii.pill);
       expect(light.borders.hairline, dark.borders.hairline);
+      expect(light.motion.interaction, dark.motion.interaction);
       expect(
         light.typography.buttonLarge.fontSize,
         dark.typography.buttonLarge.fontSize,
@@ -49,6 +50,7 @@ void main() {
       expect(result.radii, same(source.radii));
       expect(result.borders, same(source.borders));
       expect(result.shadows, same(source.shadows));
+      expect(result.motion, same(source.motion));
     });
 
     test('lerp preserves endpoints and interpolates values', () {
@@ -60,6 +62,10 @@ void main() {
       expect(
         light.lerp(dark, 0.5).colors.canvas,
         Color.lerp(light.colors.canvas, dark.colors.canvas, 0.5),
+      );
+      expect(
+        light.lerp(dark, 0.5).motion.interaction,
+        const Duration(milliseconds: 140),
       );
     });
   });

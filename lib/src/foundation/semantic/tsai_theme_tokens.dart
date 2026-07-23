@@ -14,6 +14,7 @@ final class TsaiThemeTokens extends ThemeExtension<TsaiThemeTokens> {
     required this.radii,
     required this.borders,
     required this.shadows,
+    required this.motion,
   });
 
   /// Canonical light token set sourced from Penpot.
@@ -68,6 +69,9 @@ final class TsaiThemeTokens extends ThemeExtension<TsaiThemeTokens> {
   /// Semantic elevation effects.
   final TsaiShadowTokens shadows;
 
+  /// Semantic interaction durations.
+  final TsaiMotionTokens motion;
+
   /// Returns the nearest installed Tsai tokens.
   ///
   /// Throws a [FlutterError] when [TsaiThemeTokens] is not installed.
@@ -94,6 +98,7 @@ final class TsaiThemeTokens extends ThemeExtension<TsaiThemeTokens> {
     TsaiRadiusTokens? radii,
     TsaiBorderTokens? borders,
     TsaiShadowTokens? shadows,
+    TsaiMotionTokens? motion,
   }) => TsaiThemeTokens._(
     colors: colors ?? this.colors,
     typography: typography ?? this.typography,
@@ -101,6 +106,7 @@ final class TsaiThemeTokens extends ThemeExtension<TsaiThemeTokens> {
     radii: radii ?? this.radii,
     borders: borders ?? this.borders,
     shadows: shadows ?? this.shadows,
+    motion: motion ?? this.motion,
   );
 
   @override
@@ -118,6 +124,7 @@ final class TsaiThemeTokens extends ThemeExtension<TsaiThemeTokens> {
       radii: radii.lerp(other.radii, t),
       borders: borders.lerp(other.borders, t),
       shadows: shadows.lerp(other.shadows, t),
+      motion: motion.lerp(other.motion, t),
     );
   }
 
@@ -154,6 +161,7 @@ final class TsaiThemeTokens extends ThemeExtension<TsaiThemeTokens> {
     radii: TsaiRadiusTokens.standard,
     borders: const TsaiBorderTokens(hairline: 1),
     shadows: shadows,
+    motion: TsaiMotionTokens.standard,
   );
 }
 
@@ -714,5 +722,31 @@ final class TsaiShadowTokens {
   TsaiShadowTokens lerp(TsaiShadowTokens other, double t) => TsaiShadowTokens(
     soft: BoxShadow.lerp(soft, other.soft, t)!,
     accentGlow: BoxShadow.lerp(accentGlow, other.accentGlow, t)!,
+  );
+}
+
+/// Semantic motion durations shared by interactive components.
+@immutable
+final class TsaiMotionTokens {
+  /// Creates a complete set of semantic motion durations.
+  const TsaiMotionTokens({required this.interaction});
+
+  /// Default duration for hover, focus, and control-state transitions.
+  final Duration interaction;
+
+  /// Canonical interaction motion.
+  static const standard = TsaiMotionTokens(
+    interaction: Duration(milliseconds: 140),
+  );
+
+  /// Interpolates between two motion token sets.
+  TsaiMotionTokens lerp(TsaiMotionTokens other, double t) => TsaiMotionTokens(
+    interaction: Duration(
+      microseconds: lerpDouble(
+        interaction.inMicroseconds,
+        other.interaction.inMicroseconds,
+        t,
+      )!.round(),
+    ),
   );
 }

@@ -41,6 +41,18 @@ component theme override
 Instance-level visual overrides are intentionally limited. This protects
 design-system consistency while preserving composition slots for content.
 
+Selection, select, and input components preserve the container hierarchy from
+their Penpot main instances. Shared behavior remains private: selection
+controls share focus and activation handling, Input and Input Phone share the
+field/content/action frame, and OTP/PIN share a native editable overlay. These
+helpers do not cross component ownership boundaries through public APIs.
+
+Typography is exposed through category widgets rather than raw style lookup in
+application code. Required size and weight enums only represent combinations
+that exist in Penpot. Widgets resolve the active typography and content-color
+tokens, while allowing a semantic color override and standard text layout and
+accessibility behavior.
+
 ## Theming
 
 `TsaiThemeTokens` is a `ThemeExtension`. `TsaiTheme.light()` and
