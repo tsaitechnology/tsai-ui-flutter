@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: Version from pubspec.yaml, without the v prefix
+        description: New version to create, without the v prefix
         required: true
         type: string
 
@@ -74,10 +74,10 @@ jobs:
       - name: Resolve package dependencies
         run: flutter pub get
 
-      - name: Validate release metadata
+      - name: Prepare version and changelog
         env:
           VERSION: ${{ inputs.version }}
-        run: dart run tool/validate_release.dart "${VERSION}"
+        run: dart run tool/prepare_release.dart "${VERSION}"
 
       - name: Ensure release tag does not exist
         env:
@@ -87,6 +87,28 @@ jobs:
             echo "Tag v${VERSION} already exists." >&2
             exit 1
           fi
+
+      - name: Update generated dependency state
+        run: flutter pub get
+
+      - name: Validate release metadata
+        env:
+          VERSION: ${{ inputs.version }}
+        run: dart run tool/validate_release.dart "${VERSION}"
+
+      - name: Create release commit
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          git diff --check
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add --all
+          git diff --cached --quiet && {
+            echo "Release preparation did not create any changes." >&2
+            exit 1
+          }
+          git commit --message "chore: release ${VERSION}"
 
       - name: Check formatting
         run: >-
@@ -138,14 +160,13 @@ jobs:
             --exit-code-threshold 0 \
             .
 
-      - name: Create and push release tag
+      - name: Create and push release commit and tag
         env:
           RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN }}
           VERSION: ${{ inputs.version }}
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git tag --annotate "v${VERSION}" --message "Release ${VERSION}"
-          git push \
+          git push --atomic \
             "https://x-access-token:${RELEASE_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" \
+            "HEAD:main" \
             "v${VERSION}"

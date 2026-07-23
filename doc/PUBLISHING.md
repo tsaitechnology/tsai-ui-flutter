@@ -3,10 +3,13 @@
 Tsai UI uses a two-stage GitHub Actions release:
 
 1. `Prepare pub.dev release` is started manually with a version.
-2. After all quality gates pass, it pushes `v<version>`.
-3. The tag starts `Publish to pub.dev`, which publishes through pub.dev OIDC.
+2. It updates package metadata and generates release notes from Git history.
+3. After all quality gates pass, it atomically pushes the release commit and
+   `v<version>`.
+4. The tag starts `Publish to pub.dev`, which publishes through pub.dev OIDC.
 
-The package version, changelog heading, workflow input, and Git tag must match.
+The workflow keeps the package version, changelog heading, installation
+examples, example lockfile, workflow input, and Git tag aligned.
 
 ## One-time GitHub setup
 
@@ -89,12 +92,42 @@ with an authorized Google Account, then transfer it.
 
 ## Later releases
 
-1. Update `version` in `pubspec.yaml`.
-2. Add the matching version heading and release notes to `CHANGELOG.md`.
-3. Commit and push the release to `main`.
-4. Run **Prepare pub.dev release** with that version.
+1. Commit finished code and tests, then push them to `main`.
+2. Run **Prepare pub.dev release** with the new version, without `v`.
+3. Approve the `pub.dev` environment deployment when GitHub requests it.
 
-The workflow runs formatting, analysis, tests, the example web build, API
-documentation generation, publish dry-run, and pana. It only pushes the tag
-when every gate passes. The tag-triggered workflow then publishes through OIDC;
-no pub.dev credential is stored in GitHub.
+Do not manually edit `version`, `CHANGELOG.md`, installation version examples,
+or `example/pubspec.lock`. The workflow:
+
+1. verifies that the requested stable version is greater than the current one;
+2. reads every commit since the latest `v<version>` tag;
+3. updates `pubspec.yaml`, README installation examples, and dependency state;
+4. generates a dated `CHANGELOG.md` section with commit links;
+5. creates a `chore: release <version>` commit;
+6. runs formatting, analysis, tests, the example web build, API documentation
+   generation, publish dry-run, and pana;
+7. atomically pushes the release commit and tag;
+8. publishes the tag through OIDC.
+
+Use Conventional Commit subjects to produce structured release notes:
+
+```text
+feat: add date picker
+fix(select): preserve focus after clearing
+docs: explain theme overrides
+deps: update flutter_lucide
+feat!: replace deprecated button variant
+```
+
+`feat`, `fix`, `docs`, and `deps` are grouped into their own changelog sections.
+`!` or a `BREAKING CHANGE:` footer creates a Breaking Changes section. Other
+commit subjects remain visible under Maintenance.
+
+For the current pre-1.0 lifecycle:
+
+- compatible fixes and additions increment the patch, for example `0.1.0` to
+  `0.1.1`;
+- breaking public API or behavior increments the minor, for example `0.1.x` to
+  `0.2.0`.
+
+No pub.dev credential is stored in GitHub.
