@@ -1,0 +1,39 @@
+# Operating systems and editors
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*.iml
+*.ipr
+*.iws
+.idea/
+.vscode/
+
+# Dart and Flutter
+/.dart_tool/
+/.packages
+/.pub/
+/.pub-cache/
+/.flutter-plugins
+/.flutter-plugins-dependencies
+/build/
+/coverage/
+/doc/api/
+
+# A reusable package does not commit its root lockfile. The example app does.
+/pubspec.lock
+
+# Local tooling
+/.buildlog/
+/.history/
+/migrate_working_dir/
+/skills-lock.json
+
+# Local environment and credentials
+.env
+.env.*
+!.env.example
+*.jks
+*.keystore
+key.properties
+local.properties

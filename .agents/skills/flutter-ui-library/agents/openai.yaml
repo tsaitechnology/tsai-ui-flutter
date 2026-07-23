@@ -1,0 +1,4 @@
+interface:
+  display_name: "Flutter UI Library"
+  short_description: "Architect reusable enterprise Flutter UI packages"
+  default_prompt: "Use $flutter-ui-library to design or review a reusable Flutter component library."

@@ -1,0 +1,31 @@
+name: tsai_ui
+description: Enterprise Flutter UI components backed by the Tsai design system.
+version: 0.0.1
+publish_to: none
+homepage: https://penpot.tsai
+repository: https://github.com/tsaitechnology/tsai-ui-flutter
+issue_tracker: https://github.com/tsaitechnology/tsai-ui-flutter/issues
+
+environment:
+  sdk: ^3.12.2
+  flutter: ">=3.44.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_lucide: ^1.11.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
+  fonts:
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/Inter.ttf
+    - family: JetBrains Mono
+      fonts:
+        - asset: assets/fonts/JetBrainsMono.ttf
