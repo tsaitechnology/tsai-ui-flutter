@@ -24,6 +24,19 @@ Store it in the repository as an Actions secret named `RELEASE_TOKEN`.
 The token is necessary because tags pushed with the default `GITHUB_TOKEN` do
 not trigger another workflow. Rotate the token before it expires.
 
+The release workflow disables the credential persisted by `actions/checkout`
+before pushing the tag. The displayed `git config user.name` controls the tag
+author only; GitHub authentication must resolve to the owner of
+`RELEASE_TOKEN`, not `github-actions[bot]`. The workflow checks repository push
+permission through the GitHub API before starting the release gates.
+
+If the token check returns HTTP 403, verify that:
+
+- the token resource owner is the `tsaitechnology` organization;
+- `tsai-ui-flutter` is included in its repository access;
+- `Contents` is set to `Read and write`;
+- the organization has approved the token and any required SSO authorization.
+
 ### Deployment environment
 
 Create a GitHub Actions environment named `pub.dev`. Add required reviewers to
