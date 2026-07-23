@@ -73,7 +73,16 @@ After the first version appears on pub.dev:
 2. In **Admin > Automated publishing**, select GitHub Actions.
 3. Set repository to `tsaitechnology/tsai-ui-flutter`.
 4. Set tag pattern to `v{{version}}`.
-5. Require the GitHub Actions environment `pub.dev`.
+5. Configure the event and environment options:
+   - **Enable publishing from push events:** enabled.
+   - **Enable publishing from workflow_dispatch events:** disabled.
+   - **Require GitHub Actions environment:** enabled.
+   - Environment name: `pub.dev`.
+
+`Prepare pub.dev release` uses `workflow_dispatch` only to validate the version
+and push its tag. The separate publishing workflow is triggered by that tag
+push, so pub.dev should authorize push events rather than direct manual
+publication events.
 
 The first package upload cannot target a verified publisher directly. Publish
 with an authorized Google Account, then transfer it.
