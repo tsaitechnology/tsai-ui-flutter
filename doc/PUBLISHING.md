@@ -1,15 +1,22 @@
 # Publishing
 
-Tsai UI uses a two-stage GitHub Actions release:
+Tsai UI uses a tag-driven GitHub Actions release:
 
 1. `Prepare pub.dev release` is started manually with a version.
 2. It updates package metadata and generates release notes from Git history.
 3. After all quality gates pass, it atomically pushes the release commit and
    `v<version>`.
-4. The tag starts `Publish to pub.dev`, which publishes through pub.dev OIDC.
+4. The tag automatically starts `Publish to pub.dev`, which publishes through
+   pub.dev OIDC.
+5. The same tag automatically starts `Deploy documentation and example`, which
+   deploys the tagged documentation and web catalog to GitHub Pages.
 
 The workflow keeps the package version, changelog heading, installation
 examples, example lockfile, workflow input, and Git tag aligned.
+
+Only `Prepare pub.dev release` supports manual dispatch. Package publication
+and Pages deployment have no manual trigger and do not run on ordinary pushes
+to `main`.
 
 ## One-time GitHub setup
 
@@ -83,9 +90,9 @@ After the first version appears on pub.dev:
    - Environment name: `pub.dev`.
 
 `Prepare pub.dev release` uses `workflow_dispatch` only to validate the version
-and push its tag. The separate publishing workflow is triggered by that tag
-push, so pub.dev should authorize push events rather than direct manual
-publication events.
+and push its tag. The separate publishing and Pages workflows are triggered by
+that tag push, so pub.dev should authorize push events rather than direct
+manual publication events.
 
 The first package upload cannot target a verified publisher directly. Publish
 with an authorized Google Account, then transfer it.
@@ -107,7 +114,9 @@ or `example/pubspec.lock`. The workflow:
 6. runs formatting, analysis, tests, the example web build, API documentation
    generation, publish dry-run, and pana;
 7. atomically pushes the release commit and tag;
-8. publishes the tag through OIDC.
+8. publishes the tag through OIDC;
+9. deploys the documentation and example built from the same tag to GitHub
+   Pages.
 
 Use Conventional Commit subjects to produce structured release notes:
 
