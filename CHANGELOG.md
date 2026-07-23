@@ -1,3 +1,17 @@
+## 0.1.1 - 2026-07-23
+
+### Features
+
+- automate release metadata ([bcfb0f0](https://github.com/tsaitechnology/tsai-ui-flutter/commit/bcfb0f03ebddddfd2054eed4aa2616262efd5aa3))
+
+### Documentation
+
+- expand pub.dev example ([eae5351](https://github.com/tsaitechnology/tsai-ui-flutter/commit/eae5351525c401b295e95b861cd0dde7ab15f734))
+
+### Maintenance
+
+- Clarify pub.dev event configuration ([edb19f0](https://github.com/tsaitechnology/tsai-ui-flutter/commit/edb19f0904b4c801066ca966d902dcede16047fd))
+
 ## 0.1.0 - 2026-07-23
 
 - Added public Markdown documentation with one page and live example link per
