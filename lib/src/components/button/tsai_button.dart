@@ -196,7 +196,7 @@ class TsaiButton extends StatelessWidget {
         TsaiButtonVariant.primary ||
         TsaiButtonVariant.secondary => colors.surfaceRaised,
         TsaiButtonVariant.outline ||
-        TsaiButtonVariant.ghost => Colors.transparent,
+        TsaiButtonVariant.ghost => colors.surface.withValues(alpha: 0),
       };
     }
     if (states.contains(WidgetState.disabled)) {
@@ -204,7 +204,7 @@ class TsaiButton extends StatelessWidget {
         TsaiButtonVariant.primary ||
         TsaiButtonVariant.secondary => colors.surfaceRaised,
         TsaiButtonVariant.outline ||
-        TsaiButtonVariant.ghost => Colors.transparent,
+        TsaiButtonVariant.ghost => colors.surface.withValues(alpha: 0),
       };
     }
     final active =
@@ -215,8 +215,8 @@ class TsaiButton extends StatelessWidget {
         active ? colors.actionPrimaryPressed : colors.actionPrimary,
       TsaiButtonVariant.secondary =>
         active ? colors.surfaceAccentPressed : colors.surfaceAccent,
-      TsaiButtonVariant.outline ||
-      TsaiButtonVariant.ghost => active ? colors.surface : Colors.transparent,
+      TsaiButtonVariant.outline || TsaiButtonVariant.ghost =>
+        active ? colors.surface : colors.surface.withValues(alpha: 0),
     };
   }
 

@@ -151,6 +151,50 @@ void main() {
     expect(_animatedBackgroundColor(tester, backgroundKey), hoveredColor);
   });
 
+  testWidgets('outline and ghost hover animate only surface opacity', (
+    tester,
+  ) async {
+    const backgroundKey = ValueKey<String>('tsai-button-animated-background');
+    for (final theme in [TsaiTheme.light(), TsaiTheme.dark()]) {
+      final surface = theme.extension<TsaiThemeTokens>()!.colors.surface;
+      for (final variant in [
+        TsaiButtonVariant.outline,
+        TsaiButtonVariant.ghost,
+      ]) {
+        await _pump(
+          tester,
+          theme: theme,
+          child: TsaiButton(
+            key: UniqueKey(),
+            label: 'Button',
+            variant: variant,
+            onPressed: () {},
+          ),
+        );
+        await tester.pumpAndSettle();
+
+        expect(
+          _animatedBackgroundColor(tester, backgroundKey),
+          surface.withValues(alpha: 0),
+        );
+
+        final mouse = await tester.createGesture(kind: PointerDeviceKind.mouse);
+        await mouse.addPointer();
+        await mouse.moveTo(tester.getCenter(find.byType(TextButton)));
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 70));
+
+        final midColor = _animatedBackgroundColor(tester, backgroundKey)!;
+        expect(midColor.a, greaterThan(0));
+        expect(midColor.a, lessThan(surface.a));
+        expect(midColor.r, closeTo(surface.r, 0.001));
+        expect(midColor.g, closeTo(surface.g, 0.001));
+        expect(midColor.b, closeTo(surface.b, 0.001));
+        await mouse.removePointer();
+      }
+    }
+  });
+
   testWidgets('disables interaction transitions when animations are disabled', (
     tester,
   ) async {

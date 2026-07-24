@@ -20,6 +20,11 @@
   `TsaiSelectOption.icon` property.
 - Added a country Select example with emoji flags.
 
+### Fixed
+
+- Removed the intermediate dark/light color flash from outline and ghost
+  button hover transitions.
+
 ## 0.1.3 - 2026-07-23
 
 ### Features
