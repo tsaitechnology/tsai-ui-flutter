@@ -1,3 +1,9 @@
+## 0.1.4 - 2026-07-24
+
+### Features
+
+- extend icons and refine form controls ([add643b](https://github.com/tsaitechnology/tsai-ui-flutter/commit/add643b6bd2f5bbe41158833098ca7400689f3fb))
+
 ## Unreleased
 
 ### Changed
