@@ -30,10 +30,14 @@ void main() {
       final dark = TsaiThemeTokens.dark;
 
       expect(light.runtimeType, dark.runtimeType);
+      expect(light.spacing.space12, 12);
+      expect(light.spacing.space12, dark.spacing.space12);
       expect(light.spacing.space80, dark.spacing.space80);
       expect(light.radii.pill, dark.radii.pill);
       expect(light.borders.hairline, dark.borders.hairline);
       expect(light.motion.interaction, dark.motion.interaction);
+      expect(light.motion.progressIndicator, dark.motion.progressIndicator);
+      expect(light.motion.transitionCurve, Curves.easeInOutCubic);
       expect(
         light.typography.buttonLarge.fontSize,
         dark.typography.buttonLarge.fontSize,
@@ -66,6 +70,10 @@ void main() {
       expect(
         light.lerp(dark, 0.5).motion.interaction,
         const Duration(milliseconds: 140),
+      );
+      expect(
+        light.lerp(dark, 0.5).motion.progressIndicator,
+        const Duration(milliseconds: 850),
       );
     });
   });

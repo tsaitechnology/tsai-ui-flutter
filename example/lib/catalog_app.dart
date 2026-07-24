@@ -4,6 +4,7 @@ import 'package:tsai_ui/tsai_ui.dart';
 import 'features/buttons/button_demo_screen.dart';
 import 'features/icons/icon_demo_screen.dart';
 import 'features/inputs/input_demo_screen.dart';
+import 'features/links/link_demo_screen.dart';
 import 'features/select/select_demo_screen.dart';
 import 'features/selection_controls/selection_controls_demo_screen.dart';
 import 'features/typography/typography_demo_screen.dart';
@@ -42,6 +43,10 @@ class _CatalogAppState extends State<CatalogApp> {
         onThemeModeChanged: _setThemeMode,
       ),
       '/buttons': (context) => ButtonDemoScreen(
+        themeMode: _themeMode,
+        onThemeModeChanged: _setThemeMode,
+      ),
+      '/links': (context) => LinkDemoScreen(
         themeMode: _themeMode,
         onThemeModeChanged: _setThemeMode,
       ),

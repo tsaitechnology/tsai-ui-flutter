@@ -19,6 +19,9 @@ lib/
     inputs/
       input_demo.dart                    # Separate Input, Phone, OTP, and PIN demos
       input_demo_screen.dart
+    links/
+      link_demo.dart                     # Embeddable Link demo
+      link_demo_screen.dart              # Full-page composition
     select/
       select_demo.dart                   # Embeddable Select demo
       select_demo_screen.dart
@@ -66,6 +69,7 @@ Render one full entity page by opening its route:
 ```text
 /          Typography
 /#/buttons Buttons on Flutter web
+/#/links Links
 /#/icons Icons
 /#/checkbox Checkbox
 /#/radio Radio

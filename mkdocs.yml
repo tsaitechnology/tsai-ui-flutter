@@ -49,6 +49,7 @@ nav:
   - Widgets:
       - Overview: widgets/index.md
       - TsaiButton: widgets/tsai-button.md
+      - TsaiLink: widgets/tsai-link.md
       - TsaiCheckbox: widgets/tsai-checkbox.md
       - TsaiRadio: widgets/tsai-radio.md
       - TsaiSwitch: widgets/tsai-switch.md

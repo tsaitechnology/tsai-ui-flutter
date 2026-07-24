@@ -24,6 +24,7 @@ class TsaiInput extends StatefulWidget {
     this.obscureText = false,
     this.showVisibilityButton = false,
     this.showClearButton = true,
+    this.trailingAction,
     this.autofocus = false,
     this.keyboardType,
     this.textInputAction,
@@ -78,13 +79,16 @@ class TsaiInput extends StatefulWidget {
   final bool obscureText;
 
   /// Whether to show an action that toggles value visibility.
-  ///
-  /// This is false by default. [obscureText] also enables the action for
-  /// backwards-compatible password input behavior.
   final bool showVisibilityButton;
 
   /// Whether a non-empty editable value shows a clear action.
   final bool showClearButton;
+
+  /// Optional action displayed at the trailing edge inside the field.
+  ///
+  /// The Penpot composition uses a medium `TsaiButton`, whose 40-pixel visual
+  /// height fits the field with 8 pixels above and below it.
+  final Widget? trailingAction;
 
   /// Whether the input requests focus initially.
   final bool autofocus;
@@ -226,7 +230,7 @@ class _TsaiInputState extends State<TsaiInput> {
                   tooltip: 'Clear',
                   onPressed: _clear,
                 ),
-              if (widget.obscureText || widget.showVisibilityButton)
+              if (widget.showVisibilityButton)
                 _InputAction(
                   key: const ValueKey<String>('tsai-input-visibility'),
                   icon: TsaiIcon(
@@ -235,6 +239,11 @@ class _TsaiInputState extends State<TsaiInput> {
                   ),
                   tooltip: _obscured ? 'Show value' : 'Hide value',
                   onPressed: widget.enabled ? _toggleObscured : null,
+                ),
+              if (widget.trailingAction case final action?)
+                KeyedSubtree(
+                  key: const ValueKey<String>('tsai-input-trailing-action'),
+                  child: action,
                 ),
             ],
             content: _AnimatedInputContent(
@@ -935,8 +944,14 @@ class _TsaiInputFrame extends StatelessWidget {
               duration: _duration(context, tokens),
               height: 56,
               padding: EdgeInsetsDirectional.only(
-                start: tokens.spacing.space16,
-                end: tokens.spacing.space8,
+                start: math.max(
+                  0,
+                  tokens.spacing.space16 - tokens.borders.hairline,
+                ),
+                end: math.max(
+                  0,
+                  tokens.spacing.space8 - tokens.borders.hairline,
+                ),
               ),
               decoration: BoxDecoration(
                 color: enabled ? colors.surface : colors.surfaceRaised,
@@ -1006,7 +1021,7 @@ class _AnimatedInputContent extends StatelessWidget {
         AnimatedAlign(
           key: const ValueKey<String>('tsai-input-value-position'),
           duration: duration,
-          curve: Curves.easeInOutCubic,
+          curve: tokens.motion.transitionCurve,
           alignment: floating
               ? const AlignmentDirectional(-1, 0.45)
               : AlignmentDirectional.centerStart,
@@ -1020,14 +1035,14 @@ class _AnimatedInputContent extends StatelessWidget {
               child: AnimatedAlign(
                 key: const ValueKey<String>('tsai-input-placeholder-position'),
                 duration: duration,
-                curve: Curves.easeInOutCubic,
+                curve: tokens.motion.transitionCurve,
                 alignment: floating
                     ? const AlignmentDirectional(-1, -0.45)
                     : AlignmentDirectional.centerStart,
                 child: AnimatedDefaultTextStyle(
                   key: const ValueKey<String>('tsai-input-placeholder'),
                   duration: duration,
-                  curve: Curves.easeInOutCubic,
+                  curve: tokens.motion.transitionCurve,
                   style:
                       (floating
                               ? tokens.typography.captionMediumRegular

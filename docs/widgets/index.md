@@ -6,6 +6,7 @@ its live Flutter web example.
 ## Actions and selection
 
 - [TsaiButton](tsai-button.md)
+- [TsaiLink](tsai-link.md)
 - [TsaiCheckbox](tsai-checkbox.md)
 - [TsaiRadio](tsai-radio.md)
 - [TsaiSwitch](tsai-switch.md)

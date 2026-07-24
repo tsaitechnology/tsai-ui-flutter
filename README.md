@@ -6,30 +6,7 @@ the [Penpot Design System](https://penpot.tsai/#/workspace?team-id=94d08ab2-b712
 [Public documentation](https://tsaitechnology.github.io/tsai-ui-flutter/) ·
 [Interactive example](https://tsaitechnology.github.io/tsai-ui-flutter/example/)
 
-## Current status
-
-- A single publishable `tsai_ui` package.
-- Complete light and dark colors, typography, spacing, radii, borders, and
-  shadows transferred from Penpot.
-- Strongly typed semantic tokens exposed through `TsaiThemeTokens`.
-- Seven typography widgets covering all 20 valid Inter and JetBrains Mono
-  roles.
-- 32 button combinations: four variants, four states, and two sizes.
-- Buttons with or without an icon, smooth hover transitions, and an animated
-  loading indicator.
-- Controlled Checkbox, Radio, and Switch components with error, disabled,
-  keyboard, focus, and accessible interaction states.
-- Generic adaptive Select with a web/desktop menu, Android bottom sheet, iOS
-  picker, composed option icons, clear action, keyboard navigation, and
-  open/close events.
-- Text, password, phone, OTP, and PIN inputs. Password visibility is opt-in and
-  independently configurable from the initial obscured state. Phone formatting
-  preserves cursor intent while inserting and deleting mask separators; OTP
-  and PIN expose completion callbacks and configurable sequence lengths.
-- A `TsaiIcon` adapter for Lucide, emoji, and custom widget sources, with opt-in
-  access to the complete Lucide icon catalog.
-- Android, iOS, and web example application for interactive documentation.
-- Unit, widget, keyboard, icon, and accessibility tests.
+The library is being prepared for its stable `1.0.0` release.
 
 ## Installation
 
@@ -82,11 +59,21 @@ TsaiCheckbox(
   onChanged: (value) => setState(() => accepted = value!),
 );
 
+TsaiLink(
+  label: 'View details',
+  trailingIcon: const TsaiIcon(LucideIcons.chevron_right, size: 16),
+  onPressed: () {},
+);
+
 TsaiInput(
-  placeholder: 'Password',
-  labeledPlaceholder: true,
-  obscureText: true,
-  onChanged: (value) {},
+  placeholder: 'Promo code',
+  showClearButton: false,
+  trailingAction: TsaiButton(
+    label: 'Apply',
+    size: TsaiButtonSize.medium,
+    variant: TsaiButtonVariant.secondary,
+    onPressed: () {},
+  ),
 );
 
 TsaiOtpInput(
@@ -96,10 +83,10 @@ TsaiOtpInput(
 );
 ```
 
-Components consume semantic tokens only. The reference palette and Penpot
-identifiers are not part of the public API. Typography widgets require valid
-size and weight combinations, so consumers do not construct `TextStyle`
-instances for design-system text.
+Component colors, typography, spacing, radii, borders, shadows, and motion
+consume semantic tokens. Fixed component geometry remains private until Penpot
+defines corresponding sizing tokens. Reference palette values and Penpot
+identifiers are not part of the public API.
 
 ## Structure
 
@@ -115,6 +102,7 @@ lib/
     components/
       button/
       input/
+      link/
       select/
       selection/
       typography/
@@ -126,14 +114,15 @@ test/
   foundation/
   components/
   icons/
-doc/
+docs/                    # Public documentation site
+doc/                     # Architecture and engineering records
 ```
 
-Architecture and delivery plans:
+Project documentation:
 
 - [Architecture](doc/ARCHITECTURE.md)
 - [Public API inventory](doc/API_INVENTORY.md)
-- [Development, testing, docs, and deployment plan](doc/DEVELOPMENT_PLAN.md)
+- [Development and release readiness](doc/DEVELOPMENT_PLAN.md)
 - [Penpot synchronization](doc/PENPOT_SYNC.md)
 - [Publishing and release automation](doc/PUBLISHING.md)
 
@@ -143,6 +132,7 @@ Architecture and delivery plans:
 flutter pub get
 flutter analyze
 flutter test
+(cd example && flutter test)
 cd example && flutter run -d chrome
 ```
 

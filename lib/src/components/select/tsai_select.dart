@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' as math;
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -118,7 +119,7 @@ class TsaiSelect<T> extends StatefulWidget {
   /// Called after the menu closes.
   final VoidCallback? onClose;
 
-  /// Optional accessibility label replacing [label].
+  /// Optional accessibility label replacing [placeholder].
   final String? semanticLabel;
 
   /// Maximum menu height before it scrolls.
@@ -277,8 +278,8 @@ class _TsaiSelectState<T> extends State<TsaiSelect<T>> {
       duration: _duration(context, tokens),
       height: 56,
       padding: EdgeInsetsDirectional.only(
-        start: tokens.spacing.space16,
-        end: tokens.spacing.space8,
+        start: math.max(0, tokens.spacing.space16 - tokens.borders.hairline),
+        end: math.max(0, tokens.spacing.space8 - tokens.borders.hairline),
       ),
       decoration: BoxDecoration(
         color: _enabled ? colors.surface : colors.surfaceRaised,
@@ -664,14 +665,14 @@ class _SelectContent<T> extends StatelessWidget {
               child: AnimatedAlign(
                 key: const ValueKey<String>('tsai-select-placeholder-position'),
                 duration: duration,
-                curve: Curves.easeInOutCubic,
+                curve: tokens.motion.transitionCurve,
                 alignment: floating
                     ? const AlignmentDirectional(-1, -0.45)
                     : AlignmentDirectional.centerStart,
                 child: AnimatedDefaultTextStyle(
                   key: const ValueKey<String>('tsai-select-placeholder'),
                   duration: duration,
-                  curve: Curves.easeInOutCubic,
+                  curve: tokens.motion.transitionCurve,
                   style:
                       (floating
                               ? tokens.typography.captionMediumRegular
@@ -698,12 +699,12 @@ class _SelectContent<T> extends StatelessWidget {
           AnimatedOpacity(
             key: const ValueKey<String>('tsai-select-value-opacity'),
             duration: duration,
-            curve: Curves.easeOutCubic,
+            curve: tokens.motion.revealCurve,
             opacity: revealSelectedValue ? 1 : 0,
             child: AnimatedAlign(
               key: const ValueKey<String>('tsai-select-value-position'),
               duration: duration,
-              curve: Curves.easeInOutCubic,
+              curve: tokens.motion.transitionCurve,
               alignment: floating
                   ? const AlignmentDirectional(-1, 0.45)
                   : AlignmentDirectional.centerStart,

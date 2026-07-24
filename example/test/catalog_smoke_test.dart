@@ -4,6 +4,7 @@ import 'package:tsai_ui/tsai_ui.dart';
 import 'package:tsai_ui_example/catalog_app.dart';
 import 'package:tsai_ui_example/features/buttons/button_demo.dart';
 import 'package:tsai_ui_example/features/inputs/input_demo.dart';
+import 'package:tsai_ui_example/features/links/link_demo.dart';
 import 'package:tsai_ui_example/features/select/select_demo.dart';
 import 'package:tsai_ui_example/features/selection_controls/selection_controls_demo.dart';
 import 'package:tsai_ui_example/features/typography/typography_demo.dart';
@@ -162,6 +163,16 @@ void main() {
       find.byKey(const ValueKey<String>('component-playground-preview')),
       findsOneWidget,
     );
+  });
+
+  testWidgets('renders the link demo without the catalog window', (
+    tester,
+  ) async {
+    await _pumpEmbedded(tester, child: const LinkDemo());
+
+    expect(find.byType(TsaiLink), findsWidgets);
+    expect(find.text('Default'), findsOneWidget);
+    expect(find.text('Disabled'), findsOneWidget);
   });
 
   testWidgets('renders the checkbox demo with a playground', (tester) async {
@@ -334,7 +345,9 @@ Future<void> _scrollToPlayground(WidgetTester tester) async {
 Future<void> _pumpEmbedded(WidgetTester tester, {required Widget child}) =>
     tester.pumpWidget(
       MaterialApp(
-        theme: TsaiTheme.dark(),
+        theme: TsaiTheme.dark(
+          base: ThemeData(splashFactory: NoSplash.splashFactory),
+        ),
         home: Scaffold(body: child),
       ),
     );

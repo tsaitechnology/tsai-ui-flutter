@@ -8,17 +8,23 @@ file-id: ab506819-5bcf-801f-8008-4e8f605cef78
 library: Design System
 ```
 
-Initial snapshot read on 2026-07-23:
+Latest snapshot read on 2026-07-24:
 
 - sets: `dark`, `light`, `typography`, `spacing`;
 - color roles: 22 per theme;
 - typography roles: 20;
-- spacing values: 10;
+- spacing values: 11, including `spacing.12 = 12`;
 - button axes: state, type, size;
 - button matrix: 4 × 4 × 2 = 32 variants.
 - icon/loader slot: 16 × 16, with a 12-pixel loader path and 1.5 stroke;
 - icon-to-text gap: 8 pixels for L and 4 pixels for M;
 - loading replaces the icon in the same slot without changing button width.
+- M button: 40 pixels high, `radius.md`, 12-pixel start and 16-pixel end
+  padding.
+- Link states: Default, Active, Disabled; 32-pixel visual height, 14/500 label,
+  optional 16-pixel icons, and a 4-pixel content gap.
+- Input + Button example: an M Secondary button is placed inside the 56-pixel
+  input field with an 8-pixel trailing inset.
 
 ## Sync workflow
 

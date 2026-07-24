@@ -1,13 +1,22 @@
-## 0.1.4 - 2026-07-24
-
-### Features
-
-- extend icons and refine form controls ([add643b](https://github.com/tsaitechnology/tsai-ui-flutter/commit/add643b6bd2f5bbe41158833098ca7400689f3fb))
-
 ## Unreleased
+
+### Added
+
+- Added the Penpot `spacing.12` token, the `TsaiLink` component, and
+  `TsaiInput.trailingAction`.
 
 ### Changed
 
+- Aligned medium button padding and input/select field insets with Penpot.
+- Moved progress duration and component easing curves into
+  `TsaiMotionTokens`.
+- Made the complete spacing and motion token schemas required, without
+  compatibility defaults.
+- Made `TsaiInput.showVisibilityButton` the only control that adds the
+  visibility action; `obscureText` now controls only the initial text state.
+- Removed the unused `cupertino_icons` dependency.
+- Updated architecture, release-readiness, and widget documentation for the
+  current public API.
 - Removed the animated country-code width from `TsaiPhoneInput`; the editable
   now takes its measured width in the same layout pass.
 - Split the full `TsaiPhoneInput` field hit area at the country divider, so
@@ -24,6 +33,12 @@
 
 - Removed the intermediate dark/light color flash from outline and ghost
   button hover transitions.
+
+## 0.1.4 - 2026-07-24
+
+### Features
+
+- extend icons and refine form controls ([add643b](https://github.com/tsaitechnology/tsai-ui-flutter/commit/add643b6bd2f5bbe41158833098ca7400689f3fb))
 
 ## 0.1.3 - 2026-07-23
 

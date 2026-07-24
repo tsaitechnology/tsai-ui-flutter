@@ -52,32 +52,7 @@ If the token check returns HTTP 403, verify that:
 Create a GitHub Actions environment named `pub.dev`. Add required reviewers to
 protect publication.
 
-## First publication
-
-pub.dev does not allow automation to create a package. The first version must
-be uploaded manually.
-
-1. Commit and push the release-ready version to `main`.
-2. Run **Actions > Start release > Run workflow**.
-3. Select the required `patch`, `minor`, or `major` increment.
-4. Wait for all checks and tag creation.
-5. Check out the immutable tagged revision locally:
-
-   ```bash
-   git fetch --tags
-   git switch --detach v0.1.0
-   flutter pub publish
-   git switch main
-   ```
-
-6. Complete the browser authentication and confirm the archive.
-
-For the first tag, `Publish to pub.dev` detects that the package does not exist
-and skips OIDC publication with an explanatory message.
-
 ## Publisher and OIDC setup
-
-After the first version appears on pub.dev:
 
 1. Transfer `tsai_ui` to the verified publisher from the package Admin page.
 2. In **Admin > Automated publishing**, select GitHub Actions.
@@ -94,10 +69,7 @@ run the release gates before pushing its calculated tag. The separate
 publishing and Pages workflows are triggered by that tag push, so pub.dev
 should authorize push events rather than direct manual publication events.
 
-The first package upload cannot target a verified publisher directly. Publish
-with an authorized Google Account, then transfer it.
-
-## Later releases
+## Release process
 
 1. Commit finished code and tests, then push them to `main`.
 2. Run **Start release** and select `patch`, `minor`, or `major`.
@@ -125,7 +97,7 @@ feat: add date picker
 fix(select): preserve focus after clearing
 docs: explain theme overrides
 deps: update flutter_lucide
-feat!: replace deprecated button variant
+refactor(button): replace button variants
 ```
 
 `feat`, `fix`, `docs`, and `deps` are grouped into their own changelog sections.
@@ -134,9 +106,12 @@ commit subjects remain visible under Maintenance.
 
 For the current pre-1.0 lifecycle:
 
-- compatible fixes and additions increment the patch, for example `0.1.0` to
-  `0.1.1`;
-- breaking public API or behavior increments the minor, for example `0.1.x` to
-  `0.2.0`.
+- backward compatibility is not maintained because the package has no
+  consumers;
+- deprecated aliases, migration shims, and legacy behavior are not retained;
+- releases increment the version according to project milestones rather than
+  compatibility impact.
+
+Semantic-versioning compatibility begins with `1.0.0`.
 
 No pub.dev credential is stored in GitHub.

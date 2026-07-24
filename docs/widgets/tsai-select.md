@@ -7,8 +7,7 @@ web/desktop, a bottom sheet on Android, and a Cupertino picker on iOS.
 
 ```dart
 TsaiSelect<String>(
-  label: 'Region',
-  placeholder: 'Choose a region',
+  placeholder: 'Region',
   value: region,
   options: const [
     TsaiSelectOption(

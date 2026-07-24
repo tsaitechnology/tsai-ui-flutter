@@ -47,6 +47,18 @@ void main() {
       tester.getSize(find.byKey(const ValueKey('tsai-select-field'))),
       const Size(320, 56),
     );
+    final field = tester.getRect(
+      find.byKey(const ValueKey('tsai-select-field')),
+    );
+    expect(tester.getTopLeft(find.text('Country')).dx - field.left, 16);
+    final chevronSlot = find.ancestor(
+      of: find.byKey(const ValueKey('tsai-select-chevron')),
+      matching: find.byWidgetPredicate(
+        (widget) =>
+            widget is SizedBox && widget.width == 32 && widget.height == 32,
+      ),
+    );
+    expect(field.right - tester.getRect(chevronSlot).right, 8);
     expect(find.text('Country'), findsOneWidget);
   });
 

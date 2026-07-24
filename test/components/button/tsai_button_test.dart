@@ -58,7 +58,7 @@ void main() {
     expect(button.style!.minimumSize!.resolve({}), const Size(0, 40));
     expect(
       button.style!.padding!.resolve({}),
-      const EdgeInsetsDirectional.only(start: 16, end: 20),
+      const EdgeInsetsDirectional.only(start: 12, end: 16),
     );
     expect(button.style!.textStyle!.resolve({})!.fontSize, 14);
   });
@@ -268,6 +268,10 @@ void main() {
     );
     final loadingWidth = tester.getSize(find.byKey(buttonKey)).width;
     final spinner = tester.widget<RotationTransition>(find.byKey(spinnerKey));
+    expect(
+      (spinner.turns as AnimationController).duration,
+      TsaiThemeTokens.dark.motion.progressIndicator,
+    );
     final initialTurn = spinner.turns.value;
 
     await tester.pump(const Duration(milliseconds: 212));

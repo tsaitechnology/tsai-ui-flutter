@@ -27,8 +27,8 @@ enforce parity.
 
 - Reference tokens are private values transferred directly from Penpot.
 - Semantic tokens are public, intent-based roles.
-- Component defaults are resolved by the component; global overrides use
-  `TsaiButtonTheme`.
+- Component defaults are resolved by the component; global button overrides
+  use `TsaiButtonTheme`.
 
 Resolution order:
 
@@ -40,6 +40,19 @@ component theme override
 
 Instance-level visual overrides are intentionally limited. This protects
 design-system consistency while preserving composition slots for content.
+
+Penpot currently defines tokens for color, typography, spacing, radius, border
+width, shadow, and font family. Values from those domains must come from
+`TsaiThemeTokens` or be an explicit mathematical derivative, such as a
+two-hairline focus border. Fixed component geometry such as control height,
+icon slot, OTP cell, switch track, touch target, and spinner path remains a
+private component specification because Penpot does not expose sizing tokens
+for it. Reusing a spacing token for an unrelated glyph or control size is
+forbidden even when the numeric values happen to match.
+
+Transparent paint used to suppress native overlays and platform semantic
+colors used by adaptive Cupertino surfaces are rendering behavior, not
+design-system palette values.
 
 Selection, select, and input components preserve the container hierarchy from
 their Penpot main instances. Shared behavior remains private: selection
@@ -59,20 +72,27 @@ accessibility behavior.
 `TsaiTheme.dark()` install the tokens and a matching `ColorScheme` while
 preserving unrelated consumer-owned theme extensions.
 
-Components never branch on `Brightness` and never contain hard-coded colors.
+Components never branch on `Brightness` and never contain product palette
+values outside the private reference-token layer.
 
 ## Dependencies
 
 - Flutter SDK provides rendering, interaction, semantics, and theming.
-- `flutter_lucide` is the only runtime dependency. It is isolated behind the
-  opt-in `tsai_icons.dart` entrypoint, and its types do not appear in
-  `TsaiButton` signatures.
+- `flutter_lucide` is the only non-SDK runtime dependency. Components use it
+  internally for canonical glyphs, while the complete catalog is re-exported
+  only through the opt-in `tsai_icons.dart` entrypoint. Third-party types do
+  not appear in component signatures.
 
 Inter and JetBrains Mono are bundled as package fonts with their OFL license
 files, keeping mobile and web rendering independent from network font loading.
 
 ## Compatibility
 
-Version `0.0.1` is pre-stable. After `1.0.0`, every export is a semantic
-versioning commitment. Adding required token fields, changing button defaults,
-or removing enum values is a breaking change.
+The package is pre-stable and has no consumers. Until `1.0.0`, design quality
+and a coherent final API take priority over backward compatibility. Do not add
+deprecated aliases, compatibility defaults, migration shims, or preserve
+obsolete behavior. Remove superseded APIs and implementations directly.
+
+Starting with `1.0.0`, every export becomes a semantic-versioning commitment.
+Adding required token fields, changing defaults, or removing enum values then
+requires a major release.

@@ -71,16 +71,8 @@ void main() {
           ),
         ),
       );
-      expect(
-        find.byKey(const ValueKey('tsai-input-visibility')),
-        findsOneWidget,
-      );
+      expect(find.byKey(const ValueKey('tsai-input-visibility')), findsNothing);
       expect(_editable(tester).obscureText, isTrue);
-
-      await tester.tap(find.byTooltip('Show value'));
-      await tester.pump();
-      expect(_editable(tester).obscureText, isFalse);
-      expect(obscureChanges, [false]);
 
       await _pump(
         tester,
@@ -88,16 +80,17 @@ void main() {
           width: 320,
           child: TsaiInput(
             initialValue: 'secret',
+            obscureText: true,
             showVisibilityButton: true,
             onObscureChanged: obscureChanges.add,
           ),
         ),
       );
-      expect(_editable(tester).obscureText, isFalse);
-      await tester.tap(find.byTooltip('Hide value'));
-      await tester.pump();
       expect(_editable(tester).obscureText, isTrue);
-      expect(obscureChanges, [false, true]);
+      await tester.tap(find.byTooltip('Show value'));
+      await tester.pump();
+      expect(_editable(tester).obscureText, isFalse);
+      expect(obscureChanges, [false]);
     });
 
     testWidgets('clear action emits empty value and callback', (tester) async {
@@ -122,6 +115,42 @@ void main() {
       expect(controller.text, isEmpty);
       expect(changes, ['']);
       expect(clears, 1);
+    });
+
+    testWidgets('composes a medium button inside the trailing field edge', (
+      tester,
+    ) async {
+      var applies = 0;
+      await _pump(
+        tester,
+        child: SizedBox(
+          width: 320,
+          child: TsaiInput(
+            placeholder: 'Promo code',
+            showClearButton: false,
+            trailingAction: TsaiButton(
+              label: 'Apply',
+              size: TsaiButtonSize.medium,
+              variant: TsaiButtonVariant.secondary,
+              onPressed: () => applies++,
+            ),
+          ),
+        ),
+      );
+
+      final field = tester.getRect(
+        find.byKey(const ValueKey('tsai-input-field')),
+      );
+      final actionBackground = tester.getRect(
+        find.byKey(const ValueKey<String>('tsai-button-animated-background')),
+      );
+      expect(actionBackground.height, 40);
+      expect(actionBackground.top - field.top, 8);
+      expect(field.right - actionBackground.right, 8);
+
+      await tester.tap(find.text('Apply'));
+      await tester.pump();
+      expect(applies, 1);
     });
 
     testWidgets('error state replaces description and uses error border', (

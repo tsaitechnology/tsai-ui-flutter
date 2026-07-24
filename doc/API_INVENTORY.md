@@ -12,9 +12,9 @@ Optional icon import:
 import 'package:tsai_ui/tsai_icons.dart';
 ```
 
-## Stable candidates
+## Public surface
 
-| Declaration | Purpose | Compatibility |
+| Declaration | Purpose | Exposure |
 | --- | --- | --- |
 | `TsaiTheme` | Installs light/dark themes | Public |
 | `TsaiThemeTokens` | Complete semantic schema | Public |
@@ -24,7 +24,7 @@ import 'package:tsai_ui/tsai_icons.dart';
 | `TsaiRadiusTokens` | Radius scale | Public |
 | `TsaiBorderTokens` | Border widths | Public |
 | `TsaiShadowTokens` | Theme-aware shadows | Public |
-| `TsaiMotionTokens` | Semantic interaction durations | Public |
+| `TsaiMotionTokens` | Semantic durations and easing curves | Public |
 | `TsaiText` | Sealed base for typography widgets | Public |
 | `TsaiHeading` | Four Inter heading roles | Public |
 | `TsaiBody` | Four Inter body roles | Public |
@@ -38,6 +38,7 @@ import 'package:tsai_ui/tsai_icons.dart';
 | `TsaiButtonVariant` | Primary/secondary/outline/ghost | Public |
 | `TsaiButtonSize` | Medium/large | Public |
 | `TsaiButtonTheme` | Global Flutter-native overrides | Public |
+| `TsaiLink` | Compact inline action with optional leading/trailing icons | Public |
 | `TsaiCheckbox` | Controlled checkbox with tristate and error support | Public |
 | `TsaiRadio<T>` | Controlled generic radio button | Public |
 | `TsaiSwitch` | Controlled boolean switch | Public |
@@ -56,23 +57,13 @@ import 'package:tsai_ui/tsai_icons.dart';
 ## Internal
 
 - Penpot token names and reference values;
+- fixed component geometry not represented by Penpot tokens;
 - button state resolver;
 - button content and progress layout;
+- link state resolver and content layout;
 - input field/content/action frames;
 - code-input editable overlay and state resolver;
-- example catalog implementation;
-- design synchronization scripts to be added later.
+- example catalog implementation.
 
 No generated Penpot model, router, state-management API, or application service
 is exported.
-
-## Pending compatibility impact
-
-- `TsaiIcon(IconData)` remains source compatible.
-- `TsaiIcon.emoji` and `TsaiIcon.custom` are additive public constructors.
-- `TsaiButton.leadingIcon` is narrowed from `Widget?` to `TsaiIcon?`.
-- `TsaiSelectOption.leading` is replaced by `TsaiSelectOption.icon` with type
-  `TsaiIcon?`.
-
-The icon-slot changes are breaking and require a minor release while the
-package is on the `0.x` version line.

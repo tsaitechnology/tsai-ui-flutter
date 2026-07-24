@@ -249,6 +249,22 @@ class _InputDemoState extends State<InputDemo> {
           ),
         ),
       ),
+      PenpotExample(
+        title: 'Input + Button',
+        child: PenpotBoard(
+          width: 380,
+          child: TsaiInput(
+            placeholder: 'Promo code',
+            showClearButton: false,
+            trailingAction: TsaiButton(
+              label: 'Apply',
+              size: TsaiButtonSize.medium,
+              variant: TsaiButtonVariant.secondary,
+              onPressed: () {},
+            ),
+          ),
+        ),
+      ),
     ],
   );
 }

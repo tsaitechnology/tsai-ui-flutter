@@ -5,6 +5,7 @@ import 'package:tsai_ui/tsai_ui.dart';
 enum ComponentDemoSection {
   typography(label: 'Typography', route: '/typography'),
   buttons(label: 'Buttons', route: '/buttons'),
+  links(label: 'Links', route: '/links'),
   icons(label: 'Icons', route: '/icons'),
   checkbox(label: 'Checkbox', route: '/checkbox'),
   radio(label: 'Radio', route: '/radio'),
@@ -60,6 +61,7 @@ class _ComponentDemoWindowState extends State<ComponentDemoWindow> {
           actions: [
             IconButton(
               tooltip: dark ? 'Use light theme' : 'Use dark theme',
+              style: const ButtonStyle(splashFactory: NoSplash.splashFactory),
               onPressed: () => widget.onThemeModeChanged(
                 dark ? ThemeMode.light : ThemeMode.dark,
               ),
@@ -89,6 +91,7 @@ class _ComponentDemoWindowState extends State<ComponentDemoWindow> {
       return TabBar(
         isScrollable: true,
         tabAlignment: TabAlignment.start,
+        splashFactory: NoSplash.splashFactory,
         labelPadding: const EdgeInsets.symmetric(horizontal: 12),
         dividerColor: tokens.colors.borderSubtle,
         onTap: (index) =>

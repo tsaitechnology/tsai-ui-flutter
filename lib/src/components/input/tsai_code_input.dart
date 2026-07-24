@@ -346,7 +346,9 @@ class _TsaiCodeInputState extends State<_TsaiCodeInput> {
                     tokens,
                     active: _focused && index == activeIndex,
                   ),
-                  width: _focused && index == activeIndex ? 2 : 1,
+                  width: _focused && index == activeIndex
+                      ? tokens.borders.hairline * 2
+                      : tokens.borders.hairline,
                 ),
               ),
               child: index < value.length

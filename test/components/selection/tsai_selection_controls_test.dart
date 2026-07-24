@@ -120,6 +120,14 @@ void main() {
     );
     expect(
       tester
+          .widget<AnimatedContainer>(
+            find.byKey(const ValueKey('tsai-switch-track')),
+          )
+          .padding,
+      EdgeInsets.all(TsaiThemeTokens.dark.spacing.space2),
+    );
+    expect(
+      tester
           .widget<AnimatedAlign>(
             find.ancestor(
               of: find.byKey(const ValueKey('tsai-switch-thumb')),

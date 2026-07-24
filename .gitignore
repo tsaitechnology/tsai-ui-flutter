@@ -19,6 +19,7 @@ Thumbs.db
 /build/
 /coverage/
 /doc/api/
+/site/
 
 # A reusable package does not commit its root lockfile. The example app does.
 /pubspec.lock

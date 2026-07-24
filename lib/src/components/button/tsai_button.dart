@@ -137,8 +137,8 @@ class TsaiButton extends StatelessWidget {
     final height = isLarge ? 56.0 : 40.0;
     final radius = isLarge ? tokens.radii.large : tokens.radii.medium;
     final padding = EdgeInsetsDirectional.only(
-      start: isLarge ? tokens.spacing.space20 : tokens.spacing.space16,
-      end: isLarge ? tokens.spacing.space24 : tokens.spacing.space20,
+      start: isLarge ? tokens.spacing.space20 : tokens.spacing.space12,
+      end: isLarge ? tokens.spacing.space24 : tokens.spacing.space16,
     );
     final textStyle = isLarge
         ? tokens.typography.buttonLarge
@@ -271,7 +271,7 @@ class _AnimatedButtonBackground extends StatelessWidget {
   Widget build(BuildContext context) => AnimatedContainer(
     key: const ValueKey<String>('tsai-button-animated-background'),
     duration: duration,
-    curve: Curves.easeOut,
+    curve: TsaiThemeTokens.of(context).motion.interactionCurve,
     decoration: ShapeDecoration(color: color, shape: shape),
     child: child,
   );
@@ -302,7 +302,9 @@ class _ButtonContent extends StatelessWidget {
         ? _TsaiSpinner(
             color:
                 IconTheme.of(context).color ??
-                DefaultTextStyle.of(context).style.color,
+                DefaultTextStyle.of(context).style.color ??
+                TsaiThemeTokens.of(context).colors.contentPrimary,
+            duration: TsaiThemeTokens.of(context).motion.progressIndicator,
             semanticLabel: loadingSemanticLabel,
           )
         : leadingIcon;
@@ -332,9 +334,14 @@ class _ButtonContent extends StatelessWidget {
 }
 
 class _TsaiSpinner extends StatefulWidget {
-  const _TsaiSpinner({required this.color, required this.semanticLabel});
+  const _TsaiSpinner({
+    required this.color,
+    required this.duration,
+    required this.semanticLabel,
+  });
 
-  final Color? color;
+  final Color color;
+  final Duration duration;
   final String? semanticLabel;
 
   @override
@@ -345,8 +352,16 @@ class _TsaiSpinnerState extends State<_TsaiSpinner>
     with SingleTickerProviderStateMixin {
   late final AnimationController _controller = AnimationController(
     vsync: this,
-    duration: const Duration(milliseconds: 850),
+    duration: widget.duration,
   )..repeat();
+
+  @override
+  void didUpdateWidget(covariant _TsaiSpinner oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.duration != widget.duration) {
+      _controller.duration = widget.duration;
+    }
+  }
 
   @override
   void dispose() {
@@ -362,9 +377,7 @@ class _TsaiSpinnerState extends State<_TsaiSpinner>
       turns: _controller,
       child: CustomPaint(
         size: const Size.square(16),
-        painter: _SpinnerPainter(
-          color: widget.color ?? const Color(0xFFFFFFFF),
-        ),
+        painter: _SpinnerPainter(color: widget.color),
       ),
     ),
   );

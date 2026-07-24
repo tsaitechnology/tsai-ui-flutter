@@ -109,11 +109,16 @@ class TsaiCheckbox extends StatelessWidget {
             borderRadius: BorderRadius.circular(tokens.radii.small),
             border: active && enabled
                 ? focused
-                      ? Border.all(color: border, width: 2)
+                      ? Border.all(
+                          color: border,
+                          width: tokens.borders.hairline * 2,
+                        )
                       : null
                 : Border.all(
                     color: border,
-                    width: focused ? 2 : tokens.borders.hairline,
+                    width: focused
+                        ? tokens.borders.hairline * 2
+                        : tokens.borders.hairline,
                   ),
           ),
           alignment: Alignment.center,
@@ -245,7 +250,9 @@ class TsaiRadio<T> extends StatelessWidget {
               ? null
               : Border.all(
                   color: border,
-                  width: focused ? 2 : tokens.borders.hairline,
+                  width: focused
+                      ? tokens.borders.hairline * 2
+                      : tokens.borders.hairline,
                 ),
         ),
         alignment: Alignment.center,
@@ -340,7 +347,7 @@ class TsaiSwitch extends StatelessWidget {
         duration: _duration(context, tokens),
         width: 36,
         height: 20,
-        padding: const EdgeInsets.all(2),
+        padding: EdgeInsets.all(tokens.spacing.space2),
         decoration: BoxDecoration(
           color: background,
           borderRadius: BorderRadius.circular(tokens.radii.pill),
@@ -348,12 +355,14 @@ class TsaiSwitch extends StatelessWidget {
               ? null
               : Border.all(
                   color: border,
-                  width: focused ? 2 : tokens.borders.hairline,
+                  width: focused
+                      ? tokens.borders.hairline * 2
+                      : tokens.borders.hairline,
                 ),
         ),
         child: AnimatedAlign(
           duration: _duration(context, tokens),
-          curve: Curves.easeOut,
+          curve: tokens.motion.interactionCurve,
           alignment: value
               ? AlignmentDirectional.centerEnd
               : AlignmentDirectional.centerStart,

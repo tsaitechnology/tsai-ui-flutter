@@ -577,6 +577,7 @@ final class TsaiSpacingTokens {
     required this.space2,
     required this.space4,
     required this.space8,
+    required this.space12,
     required this.space16,
     required this.space20,
     required this.space24,
@@ -591,6 +592,7 @@ final class TsaiSpacingTokens {
     space2: 2,
     space4: 4,
     space8: 8,
+    space12: 12,
     space16: 16,
     space20: 20,
     space24: 24,
@@ -608,6 +610,9 @@ final class TsaiSpacingTokens {
 
   /// Eight pixels.
   final double space8;
+
+  /// Twelve pixels.
+  final double space12;
 
   /// Sixteen pixels.
   final double space16;
@@ -636,6 +641,7 @@ final class TsaiSpacingTokens {
         space2: lerpDouble(space2, other.space2, t)!,
         space4: lerpDouble(space4, other.space4, t)!,
         space8: lerpDouble(space8, other.space8, t)!,
+        space12: lerpDouble(space12, other.space12, t)!,
         space16: lerpDouble(space16, other.space16, t)!,
         space20: lerpDouble(space20, other.space20, t)!,
         space24: lerpDouble(space24, other.space24, t)!,
@@ -725,18 +731,40 @@ final class TsaiShadowTokens {
   );
 }
 
-/// Semantic motion durations shared by interactive components.
+/// Semantic motion shared by interactive components.
 @immutable
 final class TsaiMotionTokens {
-  /// Creates a complete set of semantic motion durations.
-  const TsaiMotionTokens({required this.interaction});
+  /// Creates a complete set of semantic motion values.
+  const TsaiMotionTokens({
+    required this.interaction,
+    required this.progressIndicator,
+    required this.interactionCurve,
+    required this.transitionCurve,
+    required this.revealCurve,
+  });
 
   /// Default duration for hover, focus, and control-state transitions.
   final Duration interaction;
 
+  /// Duration of one progress-indicator rotation.
+  final Duration progressIndicator;
+
+  /// Standard state-change easing.
+  final Curve interactionCurve;
+
+  /// Easing for content moving between stable positions.
+  final Curve transitionCurve;
+
+  /// Easing for content entering or becoming visible.
+  final Curve revealCurve;
+
   /// Canonical interaction motion.
   static const standard = TsaiMotionTokens(
     interaction: Duration(milliseconds: 140),
+    progressIndicator: Duration(milliseconds: 850),
+    interactionCurve: Curves.easeOut,
+    transitionCurve: Curves.easeInOutCubic,
+    revealCurve: Curves.easeOutCubic,
   );
 
   /// Interpolates between two motion token sets.
@@ -748,5 +776,15 @@ final class TsaiMotionTokens {
         t,
       )!.round(),
     ),
+    progressIndicator: Duration(
+      microseconds: lerpDouble(
+        progressIndicator.inMicroseconds,
+        other.progressIndicator.inMicroseconds,
+        t,
+      )!.round(),
+    ),
+    interactionCurve: t < 0.5 ? interactionCurve : other.interactionCurve,
+    transitionCurve: t < 0.5 ? transitionCurve : other.transitionCurve,
+    revealCurve: t < 0.5 ? revealCurve : other.revealCurve,
   );
 }
