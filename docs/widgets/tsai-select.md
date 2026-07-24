@@ -11,8 +11,16 @@ TsaiSelect<String>(
   placeholder: 'Choose a region',
   value: region,
   options: const [
-    TsaiSelectOption(value: 'uy', label: 'Uruguay'),
-    TsaiSelectOption(value: 'br', label: 'Brazil'),
+    TsaiSelectOption(
+      value: 'uy',
+      label: 'Uruguay',
+      icon: TsaiIcon.emoji('🇺🇾', size: 20),
+    ),
+    TsaiSelectOption(
+      value: 'br',
+      label: 'Brazil',
+      icon: TsaiIcon.emoji('🇧🇷', size: 20),
+    ),
   ],
   onChanged: (value) => setState(() => region = value),
 )
@@ -20,4 +28,6 @@ TsaiSelect<String>(
 
 Set `onChanged` to `null` to disable the select. Use `errorText` instead of
 `description` for validation feedback. `presentation` can force a platform
-presentation when adaptive behavior is not appropriate.
+presentation when adaptive behavior is not appropriate. Each option accepts an
+optional `TsaiIcon`, so the same slot supports Lucide, emoji, SVG, and PNG
+sources without exposing icon rendering properties through the select API.

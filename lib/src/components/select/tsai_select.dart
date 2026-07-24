@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_lucide/flutter_lucide.dart';
 
 import '../../foundation/semantic/tsai_theme_tokens.dart';
+import '../../icons/tsai_icon.dart';
 
 /// Presentation used when a [TsaiSelect] opens.
 enum TsaiSelectPresentation {
@@ -30,7 +31,7 @@ final class TsaiSelectOption<T> {
   const TsaiSelectOption({
     required this.value,
     required this.label,
-    this.leading,
+    this.icon,
     this.enabled = true,
   });
 
@@ -40,8 +41,8 @@ final class TsaiSelectOption<T> {
   /// Visible option label.
   final String label;
 
-  /// Optional leading content, such as a flag or icon.
-  final Widget? leading;
+  /// Optional leading icon.
+  final TsaiIcon? icon;
 
   /// Whether this option can be selected.
   final bool enabled;
@@ -136,6 +137,7 @@ class _TsaiSelectState<T> extends State<TsaiSelect<T>> {
   bool _focused = false;
   bool _hovered = false;
   bool _open = false;
+  bool _revealSelectedValue = true;
 
   FocusNode get _focusNode =>
       widget.focusNode ?? (_internalFocusNode ??= FocusNode());
@@ -168,6 +170,17 @@ class _TsaiSelectState<T> extends State<TsaiSelect<T>> {
   @override
   void didUpdateWidget(covariant TsaiSelect<T> oldWidget) {
     super.didUpdateWidget(oldWidget);
+    if (oldWidget.value == null && widget.value != null) {
+      _revealSelectedValue = false;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted || widget.value == null) {
+          return;
+        }
+        setState(() => _revealSelectedValue = true);
+      });
+    } else {
+      _revealSelectedValue = true;
+    }
     if (oldWidget.focusNode != widget.focusNode && widget.focusNode != null) {
       _internalFocusNode?.dispose();
       _internalFocusNode = null;
@@ -282,6 +295,7 @@ class _TsaiSelectState<T> extends State<TsaiSelect<T>> {
                   widget.labeledPlaceholder &&
                   widget.placeholder != null &&
                   selected != null,
+              revealSelectedValue: _revealSelectedValue,
               enabled: _enabled,
               hasError: hasError,
             ),
@@ -290,7 +304,7 @@ class _TsaiSelectState<T> extends State<TsaiSelect<T>> {
             _SelectIconButton(
               key: const ValueKey<String>('tsai-select-clear'),
               tooltip: 'Clear selection',
-              icon: LucideIcons.x,
+              icon: const TsaiIcon(LucideIcons.x, size: 16),
               color: colors.iconSecondary,
               onPressed: _clear,
             ),
@@ -300,7 +314,7 @@ class _TsaiSelectState<T> extends State<TsaiSelect<T>> {
               child: AnimatedRotation(
                 duration: _duration(context, tokens),
                 turns: _open ? 0.5 : 0,
-                child: Icon(
+                child: TsaiIcon(
                   LucideIcons.chevron_down,
                   key: const ValueKey<String>('tsai-select-chevron'),
                   size: 20,
@@ -363,12 +377,7 @@ class _TsaiSelectState<T> extends State<TsaiSelect<T>> {
     return MenuItemButton(
       key: ValueKey<Object?>((TsaiSelect<T>, option.value)),
       onPressed: option.enabled ? () => _select(option.value) : null,
-      leadingIcon: option.leading == null
-          ? null
-          : SizedBox.square(
-              dimension: 20,
-              child: FittedBox(fit: BoxFit.scaleDown, child: option.leading),
-            ),
+      leadingIcon: option.icon,
       trailingIcon: selected
           ? Icon(
               LucideIcons.check,
@@ -447,7 +456,7 @@ class _TsaiSelectState<T> extends State<TsaiSelect<T>> {
                 for (final option in widget.options)
                   ListTile(
                     enabled: option.enabled,
-                    leading: option.leading,
+                    leading: option.icon,
                     title: Text(
                       option.label,
                       style: tokens.typography.bodyLarge.copyWith(
@@ -545,16 +554,29 @@ class _TsaiSelectState<T> extends State<TsaiSelect<T>> {
                                 children: [
                                   for (final option in widget.options)
                                     Center(
-                                      child: Text(
-                                        option.label,
-                                        style: tokens.typography.bodyLarge
-                                            .copyWith(
-                                              color: option.enabled
-                                                  ? tokens.colors.contentPrimary
-                                                  : tokens
-                                                        .colors
-                                                        .contentTertiary,
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          if (option.icon != null) ...[
+                                            option.icon!,
+                                            SizedBox(
+                                              width: tokens.spacing.space8,
                                             ),
+                                          ],
+                                          Text(
+                                            option.label,
+                                            style: tokens.typography.bodyLarge
+                                                .copyWith(
+                                                  color: option.enabled
+                                                      ? tokens
+                                                            .colors
+                                                            .contentPrimary
+                                                      : tokens
+                                                            .colors
+                                                            .contentTertiary,
+                                                ),
+                                          ),
+                                        ],
                                       ),
                                     ),
                                 ],
@@ -613,6 +635,7 @@ class _SelectContent<T> extends StatelessWidget {
     required this.placeholder,
     required this.selected,
     required this.floating,
+    required this.revealSelectedValue,
     required this.enabled,
     required this.hasError,
   });
@@ -620,6 +643,7 @@ class _SelectContent<T> extends StatelessWidget {
   final String? placeholder;
   final TsaiSelectOption<T>? selected;
   final bool floating;
+  final bool revealSelectedValue;
   final bool enabled;
   final bool hasError;
 
@@ -671,40 +695,40 @@ class _SelectContent<T> extends StatelessWidget {
             ),
           ),
         if (selected != null)
-          AnimatedAlign(
-            key: const ValueKey<String>('tsai-select-value-position'),
+          AnimatedOpacity(
+            key: const ValueKey<String>('tsai-select-value-opacity'),
             duration: duration,
-            curve: Curves.easeInOutCubic,
-            alignment: floating
-                ? const AlignmentDirectional(-1, 0.45)
-                : AlignmentDirectional.centerStart,
-            child: Row(
-              key: const ValueKey<String>('tsai-select-value-row'),
-              children: [
-                if (selected?.leading != null) ...[
-                  SizedBox.square(
-                    dimension: 20,
-                    child: FittedBox(
-                      fit: BoxFit.scaleDown,
-                      child: selected!.leading!,
+            curve: Curves.easeOutCubic,
+            opacity: revealSelectedValue ? 1 : 0,
+            child: AnimatedAlign(
+              key: const ValueKey<String>('tsai-select-value-position'),
+              duration: duration,
+              curve: Curves.easeInOutCubic,
+              alignment: floating
+                  ? const AlignmentDirectional(-1, 0.45)
+                  : AlignmentDirectional.centerStart,
+              child: Row(
+                key: const ValueKey<String>('tsai-select-value-row'),
+                children: [
+                  if (selected?.icon != null) ...[
+                    selected!.icon!,
+                    SizedBox(width: tokens.spacing.space8),
+                  ],
+                  Expanded(
+                    child: Text(
+                      selected!.label,
+                      key: const ValueKey<String>('tsai-select-value'),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: tokens.typography.bodyLarge.copyWith(
+                        color: enabled
+                            ? colors.contentPrimary
+                            : colors.contentTertiary,
+                      ),
                     ),
                   ),
-                  SizedBox(width: tokens.spacing.space8),
                 ],
-                Expanded(
-                  child: Text(
-                    selected!.label,
-                    key: const ValueKey<String>('tsai-select-value'),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: tokens.typography.bodyLarge.copyWith(
-                      color: enabled
-                          ? colors.contentPrimary
-                          : colors.contentTertiary,
-                    ),
-                  ),
-                ),
-              ],
+              ),
             ),
           ),
       ],
@@ -722,7 +746,7 @@ class _SelectIconButton extends StatelessWidget {
   });
 
   final String tooltip;
-  final IconData icon;
+  final TsaiIcon icon;
   final Color color;
   final VoidCallback onPressed;
 
@@ -730,7 +754,10 @@ class _SelectIconButton extends StatelessWidget {
   Widget build(BuildContext context) => IconButton(
     tooltip: tooltip,
     onPressed: onPressed,
-    icon: Icon(icon, size: 16, color: color),
+    icon: IconTheme.merge(
+      data: IconThemeData(color: color),
+      child: icon,
+    ),
     padding: EdgeInsets.zero,
     constraints: const BoxConstraints.tightFor(width: 32, height: 32),
     splashRadius: 16,

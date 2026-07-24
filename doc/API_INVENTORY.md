@@ -43,14 +43,14 @@ import 'package:tsai_ui/tsai_icons.dart';
 | `TsaiSwitch` | Controlled boolean switch | Public |
 | `TsaiControlLabelPosition` | Label placement for selection controls | Public |
 | `TsaiSelect<T>` | Controlled generic adaptive select | Public |
-| `TsaiSelectOption<T>` | Immutable select option | Public |
+| `TsaiSelectOption<T>` | Immutable select option with an optional composed `TsaiIcon` | Public |
 | `TsaiSelectPresentation` | Adaptive/menu/Android/iOS presentation policy | Public |
 | `TsaiInput` | Text and opt-in password/visibility input | Public |
 | `TsaiPhoneInput` | Country-code and masked national-number input | Public |
 | `TsaiPhoneInputFormatter` | Cursor-aware phone mask formatter | Public |
 | `TsaiOtpInput` | Cell-based one-time-password input | Public |
 | `TsaiPinInput` | Dot-based PIN input | Public |
-| `TsaiIcon` | Stable icon sizing/color adapter | Public |
+| `TsaiIcon` | Stable IconData, emoji, and custom-widget sizing/color adapter | Public |
 | `LucideIcons` | Opt-in icon catalog re-export | External contract |
 
 ## Internal
@@ -65,3 +65,14 @@ import 'package:tsai_ui/tsai_icons.dart';
 
 No generated Penpot model, router, state-management API, or application service
 is exported.
+
+## Pending compatibility impact
+
+- `TsaiIcon(IconData)` remains source compatible.
+- `TsaiIcon.emoji` and `TsaiIcon.custom` are additive public constructors.
+- `TsaiButton.leadingIcon` is narrowed from `Widget?` to `TsaiIcon?`.
+- `TsaiSelectOption.leading` is replaced by `TsaiSelectOption.icon` with type
+  `TsaiIcon?`.
+
+The icon-slot changes are breaking and require a minor release while the
+package is on the `0.x` version line.

@@ -3,7 +3,7 @@ import 'package:tsai_ui/tsai_icons.dart';
 import 'package:tsai_ui/tsai_ui.dart';
 
 enum ComponentDemoSection {
-  typography(label: 'Typography', route: '/'),
+  typography(label: 'Typography', route: '/typography'),
   buttons(label: 'Buttons', route: '/buttons'),
   icons(label: 'Icons', route: '/icons'),
   checkbox(label: 'Checkbox', route: '/checkbox'),

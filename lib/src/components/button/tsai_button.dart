@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 import '../../foundation/semantic/tsai_theme_tokens.dart';
+import '../../icons/tsai_icon.dart';
 import 'tsai_button_theme.dart';
 
 /// Visual variants defined by the Penpot button component.
@@ -64,7 +65,7 @@ class TsaiButton extends StatelessWidget {
   final TsaiButtonSize size;
 
   /// Optional leading icon, normally a 16-pixel [TsaiIcon].
-  final Widget? leadingIcon;
+  final TsaiIcon? leadingIcon;
 
   /// Whether the action is in progress and cannot be activated.
   final bool isLoading;
@@ -288,7 +289,7 @@ class _ButtonContent extends StatelessWidget {
   });
 
   final String label;
-  final Widget? leadingIcon;
+  final TsaiIcon? leadingIcon;
   final bool isLoading;
   final double layoutGap;
   final double textStartMargin;

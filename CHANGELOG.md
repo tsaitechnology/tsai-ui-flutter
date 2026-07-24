@@ -1,3 +1,19 @@
+## Unreleased
+
+### Changed
+
+- Removed the animated country-code width from `TsaiPhoneInput`; the editable
+  now takes its measured width in the same layout pass.
+- Split the full `TsaiPhoneInput` field hit area at the country divider, so
+  taps on the left focus the country code and taps on the right focus the
+  national number.
+- Added `TsaiIcon.emoji` and `TsaiIcon.custom` for flags, SVG, PNG, and other
+  custom widget sources.
+- Changed reusable icon slots to accept composed `TsaiIcon` widgets.
+- Replaced `TsaiSelectOption.leading` with the typed
+  `TsaiSelectOption.icon` property.
+- Added a country Select example with emoji flags.
+
 ## 0.1.3 - 2026-07-23
 
 ### Features

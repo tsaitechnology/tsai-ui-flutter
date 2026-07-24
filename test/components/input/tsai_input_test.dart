@@ -417,6 +417,29 @@ void main() {
       expect(country.text, '54');
     });
 
+    testWidgets(
+      'updates country-code width without an intermediate animation',
+      (tester) async {
+        await _pump(
+          tester,
+          child: const SizedBox(width: 320, child: TsaiPhoneInput()),
+        );
+        const widthKey = ValueKey<String>('tsai-phone-country-width');
+        final initialWidth = tester.getSize(find.byKey(widthKey)).width;
+
+        await tester.enterText(
+          find.byKey(const ValueKey('tsai-phone-country-editable')),
+          '598',
+        );
+        await tester.pump();
+        final updatedWidth = tester.getSize(find.byKey(widthKey)).width;
+
+        expect(updatedWidth, greaterThan(initialWidth));
+        await tester.pump(const Duration(milliseconds: 100));
+        expect(tester.getSize(find.byKey(widthKey)).width, updatedWidth);
+      },
+    );
+
     testWidgets('uses the national number as its only tab stop', (
       tester,
     ) async {
@@ -470,9 +493,10 @@ void main() {
         find.byKey(const ValueKey('tsai-phone-country-editable')),
       );
       expect(countryField.focusNode!.hasFocus, isTrue);
+      expect(countryField.controller!.selection.isCollapsed, isTrue);
       expect(
-        countryField.controller!.selection,
-        TextSelection.collapsed(offset: countryField.controller!.text.length),
+        countryField.controller!.selection.extentOffset,
+        countryField.controller!.text.length,
       );
     });
 
@@ -493,22 +517,105 @@ void main() {
       semantics.dispose();
     });
 
-    testWidgets('focuses the national number from the field label area', (
-      tester,
-    ) async {
-      final national = FocusNode();
-      addTearDown(national.dispose);
-      await _pump(
+    final hitCases =
+        <
+          ({
+            String name,
+            bool country,
+            Offset Function(Rect field, Rect divider) point,
+          })
+        >[
+          (
+            name: 'leftmost pixel',
+            country: true,
+            point: (field, divider) =>
+                Offset(field.left + 0.5, field.top + 0.5),
+          ),
+          (
+            name: 'left edge inset',
+            country: true,
+            point: (field, divider) =>
+                Offset(field.left + 2.5, field.center.dy),
+          ),
+          (
+            name: 'left area center',
+            country: true,
+            point: (field, divider) =>
+                Offset((field.left + divider.left) / 2, field.center.dy),
+          ),
+          (
+            name: 'before divider',
+            country: true,
+            point: (field, divider) =>
+                Offset(divider.left - 0.5, field.center.dy),
+          ),
+          (
+            name: 'after divider',
+            country: false,
+            point: (field, divider) =>
+                Offset(divider.right + 0.5, field.center.dy),
+          ),
+          (
+            name: 'right area center',
+            country: false,
+            point: (field, divider) =>
+                Offset((divider.right + field.right) / 2, field.top + 2.5),
+          ),
+          (
+            name: 'right edge inset',
+            country: false,
+            point: (field, divider) =>
+                Offset(field.right - 2.5, field.bottom - 2.5),
+          ),
+          (
+            name: 'rightmost pixel',
+            country: false,
+            point: (field, divider) =>
+                Offset(field.right - 0.5, field.center.dy),
+          ),
+        ];
+    for (final hitCase in hitCases) {
+      testWidgets('keeps phone focus after repeated taps at ${hitCase.name}', (
         tester,
-        child: SizedBox(width: 320, child: TsaiPhoneInput(focusNode: national)),
-      );
+      ) async {
+        final national = FocusNode();
+        addTearDown(national.dispose);
+        await _pump(
+          tester,
+          child: SizedBox(
+            width: 320,
+            child: TsaiPhoneInput(focusNode: national),
+          ),
+        );
 
-      final field = find.byKey(const ValueKey('tsai-input-field'));
-      await tester.tapAt(tester.getTopLeft(field) + const Offset(8, 8));
-      await tester.pump();
+        final fieldRect = tester.getRect(
+          find.byKey(const ValueKey('tsai-input-field')),
+        );
+        final dividerRect = tester.getRect(
+          find.byKey(const ValueKey('tsai-phone-divider')),
+        );
+        final countryField = tester.widget<TextField>(
+          find.byKey(const ValueKey('tsai-phone-country-editable')),
+        );
+        final point = hitCase.point(fieldRect, dividerRect);
 
-      expect(national.hasFocus, isTrue);
-    });
+        for (var tap = 1; tap <= 2; tap++) {
+          await tester.tapAt(point);
+          await tester.pump();
+
+          expect(
+            countryField.focusNode!.hasFocus,
+            hitCase.country,
+            reason: 'country focus after tap $tap at $point',
+          );
+          expect(
+            national.hasFocus,
+            !hitCase.country,
+            reason: 'national focus after tap $tap at $point',
+          );
+        }
+      });
+    }
   });
 }
 

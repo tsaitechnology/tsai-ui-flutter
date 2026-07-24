@@ -33,7 +33,7 @@ void main() {
       child: TsaiButton(
         label: 'Button',
         onPressed: () {},
-        leadingIcon: const SizedBox.square(dimension: 16),
+        leadingIcon: const TsaiIcon.custom(SizedBox.shrink(), size: 16),
       ),
     );
 
@@ -78,7 +78,11 @@ void main() {
           label: 'Button',
           size: size,
           isLoading: loading,
-          leadingIcon: const SizedBox.square(key: leadingKey, dimension: 16),
+          leadingIcon: const TsaiIcon.custom(
+            SizedBox.shrink(),
+            key: leadingKey,
+            size: 16,
+          ),
           onPressed: () {},
         ),
       );
@@ -202,7 +206,7 @@ void main() {
       child: TsaiButton(
         key: buttonKey,
         label: 'Button',
-        leadingIcon: const SizedBox.square(dimension: 16),
+        leadingIcon: const TsaiIcon.custom(SizedBox.shrink(), size: 16),
         onPressed: () {},
       ),
     );
@@ -214,7 +218,7 @@ void main() {
         key: buttonKey,
         label: 'Button',
         isLoading: true,
-        leadingIcon: const SizedBox.square(dimension: 16),
+        leadingIcon: const TsaiIcon.custom(SizedBox.shrink(), size: 16),
         onPressed: () {},
       ),
     );

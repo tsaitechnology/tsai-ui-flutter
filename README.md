@@ -20,12 +20,14 @@ the [Penpot Design System](https://penpot.tsai/#/workspace?team-id=94d08ab2-b712
 - Controlled Checkbox, Radio, and Switch components with error, disabled,
   keyboard, focus, and accessible interaction states.
 - Generic adaptive Select with a web/desktop menu, Android bottom sheet, iOS
-  picker, clear action, keyboard navigation, and open/close events.
+  picker, composed option icons, clear action, keyboard navigation, and
+  open/close events.
 - Text, password, phone, OTP, and PIN inputs. Password visibility is opt-in and
   independently configurable from the initial obscured state. Phone formatting
   preserves cursor intent while inserting and deleting mask separators; OTP
   and PIN expose completion callbacks and configurable sequence lengths.
-- A `TsaiIcon` adapter and opt-in access to the complete Lucide icon catalog.
+- A `TsaiIcon` adapter for Lucide, emoji, and custom widget sources, with opt-in
+  access to the complete Lucide icon catalog.
 - Android, iOS, and web example application for interactive documentation.
 - Unit, widget, keyboard, icon, and accessibility tests.
 

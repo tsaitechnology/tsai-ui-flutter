@@ -41,6 +41,14 @@ void main() {
     await tester.pump(const Duration(milliseconds: 400));
     expect(find.text('Buttons'), findsOneWidget);
     expect(find.text('Default'), findsOneWidget);
+
+    tester.widget<TabBar>(find.byType(TabBar)).onTap!(0);
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 400));
+    expect(
+      find.byKey(const ValueKey<String>('typography-demo')),
+      findsOneWidget,
+    );
   });
 
   testWidgets('navigates full entity screens and switches theme', (

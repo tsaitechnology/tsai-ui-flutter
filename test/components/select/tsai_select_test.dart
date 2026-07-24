@@ -5,8 +5,16 @@ import 'package:tsai_ui/tsai_ui.dart';
 
 void main() {
   const options = [
-    TsaiSelectOption(value: 'uy', label: 'Uruguay', leading: Text('UY')),
-    TsaiSelectOption(value: 'ar', label: 'Argentina', leading: Text('AR')),
+    TsaiSelectOption(
+      value: 'uy',
+      label: 'Uruguay',
+      icon: TsaiIcon.emoji('🇺🇾', size: 20),
+    ),
+    TsaiSelectOption(
+      value: 'ar',
+      label: 'Argentina',
+      icon: TsaiIcon.emoji('🇦🇷', size: 20),
+    ),
     TsaiSelectOption(value: 'br', label: 'Brazil', enabled: false),
   ];
 
@@ -202,7 +210,7 @@ void main() {
     expect(selected, 'uy');
   });
 
-  testWidgets('renders error and selected leading content', (tester) async {
+  testWidgets('renders error and selected icon', (tester) async {
     await _pump(
       tester,
       child: const SizedBox(
@@ -220,7 +228,7 @@ void main() {
 
     expect(find.text('Required'), findsOneWidget);
     expect(find.text('Ignored'), findsNothing);
-    expect(find.text('UY'), findsOneWidget);
+    expect(find.text('🇺🇾'), findsOneWidget);
     final decoration =
         tester
                 .widget<AnimatedContainer>(
@@ -306,6 +314,41 @@ void main() {
     expect(_selectBorder(tester).top.width, 1);
   });
 
+  testWidgets('fades in only the first selected value', (tester) async {
+    String? selected;
+    late StateSetter update;
+    await _pump(
+      tester,
+      child: StatefulBuilder(
+        builder: (context, setState) {
+          update = setState;
+          return SizedBox(
+            width: 320,
+            child: TsaiSelect<String>(
+              options: options,
+              value: selected,
+              placeholder: 'Country',
+              onChanged: (value) => setState(() => selected = value),
+            ),
+          );
+        },
+      ),
+    );
+
+    update(() => selected = 'uy');
+    await tester.pump();
+    expect(_valueOpacity(tester).opacity, 0);
+
+    await tester.pump();
+    expect(_valueOpacity(tester).opacity, 1);
+    await tester.pump(const Duration(milliseconds: 210));
+
+    update(() => selected = 'ar');
+    await tester.pump();
+    expect(find.text('Argentina'), findsOneWidget);
+    expect(_valueOpacity(tester).opacity, 1);
+  });
+
   testWidgets('keeps selected value centered without a labeled placeholder', (
     tester,
   ) async {
@@ -353,6 +396,11 @@ void _noop(String? value) {}
 
 AlignmentGeometry _alignment(WidgetTester tester, String key) =>
     tester.widget<AnimatedAlign>(find.byKey(ValueKey<String>(key))).alignment;
+
+AnimatedOpacity _valueOpacity(WidgetTester tester) =>
+    tester.widget<AnimatedOpacity>(
+      find.byKey(const ValueKey<String>('tsai-select-value-opacity')),
+    );
 
 Border _selectBorder(WidgetTester tester) {
   final decoration =

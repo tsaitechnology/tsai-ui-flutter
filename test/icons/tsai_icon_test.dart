@@ -21,4 +21,32 @@ void main() {
     expect(find.byType(TsaiIcon), findsNWidgets(3));
     expect(find.byType(Icon), findsNWidgets(3));
   });
+
+  testWidgets('renders emoji and custom widgets in the same stable slot', (
+    tester,
+  ) async {
+    const customKey = ValueKey<String>('custom-icon');
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: Row(
+          children: [
+            TsaiIcon.emoji('🇺🇾', size: 20, semanticLabel: 'Uruguay'),
+            TsaiIcon.custom(
+              ColoredBox(key: customKey, color: Colors.green),
+              size: 20,
+              semanticLabel: 'Custom asset',
+            ),
+          ],
+        ),
+      ),
+    );
+
+    expect(find.text('🇺🇾'), findsOneWidget);
+    expect(find.byKey(customKey), findsOneWidget);
+    expect(find.bySemanticsLabel('Uruguay'), findsOneWidget);
+    expect(find.bySemanticsLabel('Custom asset'), findsOneWidget);
+    for (final icon in find.byType(TsaiIcon).evaluate()) {
+      expect(tester.getSize(find.byWidget(icon.widget)), const Size.square(20));
+    }
+  });
 }

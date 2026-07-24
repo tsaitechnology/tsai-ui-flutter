@@ -15,8 +15,31 @@ class _SelectDemoState extends State<SelectDemo> {
     TsaiSelectOption(value: 'option', label: 'Option'),
     TsaiSelectOption(value: 'second', label: 'Second option'),
   ];
+  static const _countryOptions = [
+    TsaiSelectOption(
+      value: 'us',
+      label: 'United States',
+      icon: TsaiIcon.emoji('🇺🇸', size: 20),
+    ),
+    TsaiSelectOption(
+      value: 'uy',
+      label: 'Uruguay',
+      icon: TsaiIcon.emoji('🇺🇾', size: 20),
+    ),
+    TsaiSelectOption(
+      value: 'br',
+      label: 'Brazil',
+      icon: TsaiIcon.emoji('🇧🇷', size: 20),
+    ),
+    TsaiSelectOption(
+      value: 'ar',
+      label: 'Argentina',
+      icon: TsaiIcon.emoji('🇦🇷', size: 20),
+    ),
+  ];
 
   String? _value;
+  String? _country = 'us';
   String _firstOption = 'Option';
   String _secondOption = 'Second option';
   String _thirdOption = 'Disabled option';
@@ -26,7 +49,7 @@ class _SelectDemoState extends State<SelectDemo> {
   String _semanticLabel = '';
   bool _enabled = true;
   bool _showClear = true;
-  bool _showLeading = false;
+  bool _showIcons = false;
   bool _thirdOptionEnabled = false;
   bool _autofocus = false;
   bool _labeledPlaceholder = true;
@@ -38,17 +61,17 @@ class _SelectDemoState extends State<SelectDemo> {
     TsaiSelectOption(
       value: 'option',
       label: _firstOption,
-      leading: _showLeading ? const Text('01') : null,
+      icon: _showIcons ? const TsaiIcon.emoji('🇺🇸', size: 20) : null,
     ),
     TsaiSelectOption(
       value: 'second',
       label: _secondOption,
-      leading: _showLeading ? const Text('02') : null,
+      icon: _showIcons ? const TsaiIcon.emoji('🇺🇾', size: 20) : null,
     ),
     TsaiSelectOption(
       value: 'disabled',
       label: _thirdOption,
-      leading: _showLeading ? const Text('03') : null,
+      icon: _showIcons ? const TsaiIcon.emoji('🇧🇷', size: 20) : null,
       enabled: _thirdOptionEnabled,
     ),
   ];
@@ -79,6 +102,20 @@ class _SelectDemoState extends State<SelectDemo> {
                 _gap26,
                 _variant(value: 'option', enabled: false),
               ],
+            ),
+          ),
+        ),
+        SizedBox(height: tokens.spacing.space24),
+        PenpotExample(
+          title: 'Country select',
+          child: PenpotBoard(
+            width: 380,
+            padding: const EdgeInsets.all(28),
+            child: TsaiSelect<String>(
+              options: _countryOptions,
+              value: _country,
+              placeholder: 'Country',
+              onChanged: (value) => setState(() => _country = value),
             ),
           ),
         ),
@@ -169,9 +206,9 @@ class _SelectDemoState extends State<SelectDemo> {
               onChanged: (value) => setState(() => _showClear = value),
             ),
             _Toggle(
-              label: 'option.leading',
-              value: _showLeading,
-              onChanged: (value) => setState(() => _showLeading = value),
+              label: 'option.icon',
+              value: _showIcons,
+              onChanged: (value) => setState(() => _showIcons = value),
             ),
             _Toggle(
               label: 'options[2].enabled',

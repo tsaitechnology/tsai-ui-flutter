@@ -37,6 +37,10 @@ class _CatalogAppState extends State<CatalogApp> {
             themeMode: _themeMode,
             onThemeModeChanged: _setThemeMode,
           ),
+      '/typography': (context) => TypographyDemoScreen(
+        themeMode: _themeMode,
+        onThemeModeChanged: _setThemeMode,
+      ),
       '/buttons': (context) => ButtonDemoScreen(
         themeMode: _themeMode,
         onThemeModeChanged: _setThemeMode,

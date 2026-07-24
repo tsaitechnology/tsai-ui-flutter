@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_lucide/flutter_lucide.dart';
 
 import '../../foundation/semantic/tsai_theme_tokens.dart';
+import '../../icons/tsai_icon.dart';
 
 /// A text input matching the Penpot Input component.
 class TsaiInput extends StatefulWidget {
@@ -221,14 +222,17 @@ class _TsaiInputState extends State<TsaiInput> {
                   editable)
                 _InputAction(
                   key: const ValueKey<String>('tsai-input-clear'),
-                  icon: LucideIcons.x,
+                  icon: const TsaiIcon(LucideIcons.x, size: 16),
                   tooltip: 'Clear',
                   onPressed: _clear,
                 ),
               if (widget.obscureText || widget.showVisibilityButton)
                 _InputAction(
                   key: const ValueKey<String>('tsai-input-visibility'),
-                  icon: _obscured ? LucideIcons.eye_off : LucideIcons.eye,
+                  icon: TsaiIcon(
+                    _obscured ? LucideIcons.eye_off : LucideIcons.eye,
+                    size: 16,
+                  ),
                   tooltip: _obscured ? 'Show value' : 'Hide value',
                   onPressed: widget.enabled ? _toggleObscured : null,
                 ),
@@ -552,6 +556,8 @@ class _TsaiPhoneInputState extends State<TsaiPhoneInput> {
     debugLabel: 'TsaiPhoneInput country code',
     skipTraversal: true,
   );
+  final GlobalKey _dividerKey = GlobalKey(debugLabel: 'TsaiPhoneInput divider');
+  final Object _tapRegionGroupId = Object();
   late TsaiPhoneInputFormatter _formatter = TsaiPhoneInputFormatter(
     mask: widget.mask,
   );
@@ -628,6 +634,11 @@ class _TsaiPhoneInputState extends State<TsaiPhoneInput> {
     final colors = tokens.colors;
     final editable = widget.enabled && !widget.readOnly;
     final placeholder = widget.mask.replaceAll('#', '0');
+    final countryCodeWidth = _textWidth(
+      context,
+      _countryController.text,
+      tokens.typography.bodyLarge,
+    );
     return MouseRegion(
       onEnter: (_) => setState(() => _hovered = true),
       onExit: (_) => setState(() => _hovered = false),
@@ -644,65 +655,115 @@ class _TsaiPhoneInputState extends State<TsaiPhoneInput> {
           container: true,
           explicitChildNodes: true,
           label: widget.semanticLabel ?? widget.label,
-          child: _TsaiInputFrame(
-            focused: _focused,
-            hovered: _hovered,
-            enabled: widget.enabled,
-            hasError: widget.errorText != null,
-            description: widget.description,
-            errorText: widget.errorText,
-            onFieldTap: widget.enabled ? _focusNode.requestFocus : null,
-            actions: [
-              if (_controller.text.isNotEmpty &&
-                  widget.showClearButton &&
-                  editable)
-                _InputAction(
-                  key: const ValueKey<String>('tsai-phone-clear'),
-                  icon: LucideIcons.x,
-                  tooltip: 'Clear phone number',
-                  onPressed: _clear,
-                ),
-            ],
-            content: _InputContent(
-              label: widget.label,
-              labelColor: _labelColor(tokens),
-              child: SizedBox(
-                height: 20,
-                child: Row(
-                  key: const ValueKey<String>('tsai-phone-row'),
-                  children: [
-                    Row(
-                      key: const ValueKey<String>('tsai-phone-country'),
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          '+',
-                          style: tokens.typography.bodyLarge.copyWith(
-                            color: widget.enabled
-                                ? colors.contentPrimary
-                                : colors.contentTertiary,
+          child: TextFieldTapRegion(
+            groupId: _tapRegionGroupId,
+            child: _TsaiInputFrame(
+              focused: _focused,
+              hovered: _hovered,
+              enabled: widget.enabled,
+              hasError: widget.errorText != null,
+              description: widget.description,
+              errorText: widget.errorText,
+              onFieldTap: null,
+              onFieldPointerDown: widget.enabled
+                  ? _handleFieldPointerDown
+                  : null,
+              actions: [
+                if (_controller.text.isNotEmpty &&
+                    widget.showClearButton &&
+                    editable)
+                  _InputAction(
+                    key: const ValueKey<String>('tsai-phone-clear'),
+                    icon: const TsaiIcon(LucideIcons.x, size: 16),
+                    tooltip: 'Clear phone number',
+                    onPressed: _clear,
+                  ),
+              ],
+              content: _InputContent(
+                label: widget.label,
+                labelColor: _labelColor(tokens),
+                child: SizedBox(
+                  height: 20,
+                  child: Row(
+                    key: const ValueKey<String>('tsai-phone-row'),
+                    children: [
+                      Row(
+                        key: const ValueKey<String>('tsai-phone-country'),
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            '+',
+                            style: tokens.typography.bodyLarge.copyWith(
+                              color: widget.enabled
+                                  ? colors.contentPrimary
+                                  : colors.contentTertiary,
+                            ),
                           ),
+                          SizedBox(
+                            key: const ValueKey<String>(
+                              'tsai-phone-country-width',
+                            ),
+                            width: countryCodeWidth,
+                            height: 20,
+                            child: TextField(
+                              key: const ValueKey<String>(
+                                'tsai-phone-country-editable',
+                              ),
+                              groupId: _tapRegionGroupId,
+                              controller: _countryController,
+                              focusNode: _countryFocusNode,
+                              enabled: widget.enabled,
+                              readOnly: widget.readOnly,
+                              keyboardType: TextInputType.phone,
+                              inputFormatters: [
+                                FilteringTextInputFormatter.digitsOnly,
+                                LengthLimitingTextInputFormatter(4),
+                              ],
+                              maxLines: 1,
+                              cursorHeight: 20,
+                              cursorColor: colors.actionPrimarySoft,
+                              style: tokens.typography.bodyLarge.copyWith(
+                                color: widget.enabled
+                                    ? colors.contentPrimary
+                                    : colors.contentTertiary,
+                              ),
+                              decoration: const InputDecoration.collapsed(
+                                hintText: '',
+                              ),
+                              onChanged: widget.onCountryCodeChanged,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(width: tokens.spacing.space8),
+                      KeyedSubtree(
+                        key: const ValueKey<String>('tsai-phone-divider'),
+                        child: Container(
+                          key: _dividerKey,
+                          width: tokens.borders.hairline,
+                          height: 16,
+                          color: colors.borderSubtle,
                         ),
-                        AnimatedContainer(
-                          duration: _duration(context, tokens),
-                          width: math.max(
-                            10,
-                            _countryController.text.length * 10,
-                          ),
-                          height: 20,
+                      ),
+                      SizedBox(width: tokens.spacing.space8),
+                      Expanded(
+                        child: Focus(
+                          canRequestFocus: false,
+                          onKeyEvent: _handleNationalKeyEvent,
                           child: TextField(
                             key: const ValueKey<String>(
-                              'tsai-phone-country-editable',
+                              'tsai-phone-value-editable',
                             ),
-                            controller: _countryController,
-                            focusNode: _countryFocusNode,
+                            groupId: _tapRegionGroupId,
+                            controller: _controller,
+                            focusNode: _focusNode,
                             enabled: widget.enabled,
                             readOnly: widget.readOnly,
+                            autofocus: widget.autofocus,
                             keyboardType: TextInputType.phone,
-                            inputFormatters: [
-                              FilteringTextInputFormatter.digitsOnly,
-                              LengthLimitingTextInputFormatter(4),
-                            ],
+                            textInputAction: widget.textInputAction,
+                            inputFormatters: [_formatter],
+                            autofillHints: widget.autofillHints,
                             maxLines: 1,
                             cursorHeight: 20,
                             cursorColor: colors.actionPrimarySoft,
@@ -711,59 +772,19 @@ class _TsaiPhoneInputState extends State<TsaiPhoneInput> {
                                   ? colors.contentPrimary
                                   : colors.contentTertiary,
                             ),
-                            decoration: const InputDecoration.collapsed(
-                              hintText: '',
+                            decoration: InputDecoration.collapsed(
+                              hintText: placeholder,
+                              hintStyle: tokens.typography.bodyLarge.copyWith(
+                                color: colors.contentTertiary,
+                              ),
                             ),
-                            onChanged: widget.onCountryCodeChanged,
+                            onChanged: _handlePhoneChanged,
+                            onSubmitted: widget.onSubmitted,
                           ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(width: tokens.spacing.space8),
-                    Container(
-                      key: const ValueKey<String>('tsai-phone-divider'),
-                      width: tokens.borders.hairline,
-                      height: 16,
-                      color: colors.borderSubtle,
-                    ),
-                    SizedBox(width: tokens.spacing.space8),
-                    Expanded(
-                      child: Focus(
-                        canRequestFocus: false,
-                        onKeyEvent: _handleNationalKeyEvent,
-                        child: TextField(
-                          key: const ValueKey<String>(
-                            'tsai-phone-value-editable',
-                          ),
-                          controller: _controller,
-                          focusNode: _focusNode,
-                          enabled: widget.enabled,
-                          readOnly: widget.readOnly,
-                          autofocus: widget.autofocus,
-                          keyboardType: TextInputType.phone,
-                          textInputAction: widget.textInputAction,
-                          inputFormatters: [_formatter],
-                          autofillHints: widget.autofillHints,
-                          maxLines: 1,
-                          cursorHeight: 20,
-                          cursorColor: colors.actionPrimarySoft,
-                          style: tokens.typography.bodyLarge.copyWith(
-                            color: widget.enabled
-                                ? colors.contentPrimary
-                                : colors.contentTertiary,
-                          ),
-                          decoration: InputDecoration.collapsed(
-                            hintText: placeholder,
-                            hintStyle: tokens.typography.bodyLarge.copyWith(
-                              color: colors.contentTertiary,
-                            ),
-                          ),
-                          onChanged: _handlePhoneChanged,
-                          onSubmitted: widget.onSubmitted,
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -781,6 +802,33 @@ class _TsaiPhoneInputState extends State<TsaiPhoneInput> {
       return tokens.colors.negative;
     }
     return tokens.colors.contentSecondary;
+  }
+
+  void _focusCountryCode() {
+    _countryController.selection = TextSelection.collapsed(
+      offset: _countryController.text.length,
+    );
+    _countryFocusNode.requestFocus();
+  }
+
+  void _handleFieldPointerDown(PointerDownEvent event) {
+    final dividerBox =
+        _dividerKey.currentContext?.findRenderObject() as RenderBox?;
+    if (dividerBox == null || !dividerBox.hasSize) {
+      return;
+    }
+    final dividerCenter = dividerBox.localToGlobal(
+      Offset(dividerBox.size.width / 2, dividerBox.size.height / 2),
+    );
+    final countryTapped = switch (Directionality.of(context)) {
+      TextDirection.ltr => event.position.dx < dividerCenter.dx,
+      TextDirection.rtl => event.position.dx > dividerCenter.dx,
+    };
+    if (countryTapped) {
+      _focusCountryCode();
+    } else {
+      _focusNode.requestFocus();
+    }
   }
 
   void _normalizeController() {
@@ -822,10 +870,7 @@ class _TsaiPhoneInputState extends State<TsaiPhoneInput> {
         _controller.selection.extentOffset != 0) {
       return KeyEventResult.ignored;
     }
-    _countryController.selection = TextSelection.collapsed(
-      offset: _countryController.text.length,
-    );
-    _countryFocusNode.requestFocus();
+    _focusCountryCode();
     return KeyEventResult.handled;
   }
 
@@ -849,6 +894,7 @@ class _TsaiInputFrame extends StatelessWidget {
     required this.description,
     required this.errorText,
     required this.onFieldTap,
+    this.onFieldPointerDown,
   });
 
   final Widget content;
@@ -860,6 +906,7 @@ class _TsaiInputFrame extends StatelessWidget {
   final String? description;
   final String? errorText;
   final VoidCallback? onFieldTap;
+  final PointerDownEventListener? onFieldPointerDown;
 
   @override
   Widget build(BuildContext context) {
@@ -877,35 +924,39 @@ class _TsaiInputFrame extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        GestureDetector(
+        Listener(
           behavior: HitTestBehavior.opaque,
-          onTap: onFieldTap,
-          child: AnimatedContainer(
-            key: const ValueKey<String>('tsai-input-field'),
-            duration: _duration(context, tokens),
-            height: 56,
-            padding: EdgeInsetsDirectional.only(
-              start: tokens.spacing.space16,
-              end: tokens.spacing.space8,
-            ),
-            decoration: BoxDecoration(
-              color: enabled ? colors.surface : colors.surfaceRaised,
-              borderRadius: BorderRadius.circular(tokens.radii.medium),
-              border: Border.all(
-                color: borderColor,
-                width: tokens.borders.hairline,
+          onPointerDown: onFieldPointerDown,
+          child: GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: onFieldTap,
+            child: AnimatedContainer(
+              key: const ValueKey<String>('tsai-input-field'),
+              duration: _duration(context, tokens),
+              height: 56,
+              padding: EdgeInsetsDirectional.only(
+                start: tokens.spacing.space16,
+                end: tokens.spacing.space8,
               ),
-            ),
-            child: Row(
-              children: [
-                Expanded(child: content),
-                if (actions.isNotEmpty)
-                  Row(
-                    key: const ValueKey<String>('tsai-input-actions'),
-                    mainAxisSize: MainAxisSize.min,
-                    children: actions,
-                  ),
-              ],
+              decoration: BoxDecoration(
+                color: enabled ? colors.surface : colors.surfaceRaised,
+                borderRadius: BorderRadius.circular(tokens.radii.medium),
+                border: Border.all(
+                  color: borderColor,
+                  width: tokens.borders.hairline,
+                ),
+              ),
+              child: Row(
+                children: [
+                  Expanded(child: content),
+                  if (actions.isNotEmpty)
+                    Row(
+                      key: const ValueKey<String>('tsai-input-actions'),
+                      mainAxisSize: MainAxisSize.min,
+                      children: actions,
+                    ),
+                ],
+              ),
             ),
           ),
         ),
@@ -1044,7 +1095,7 @@ class _InputAction extends StatelessWidget {
     super.key,
   });
 
-  final IconData icon;
+  final TsaiIcon icon;
   final String tooltip;
   final VoidCallback? onPressed;
 
@@ -1057,10 +1108,11 @@ class _InputAction extends StatelessWidget {
       padding: EdgeInsets.zero,
       constraints: const BoxConstraints.tightFor(width: 32, height: 32),
       splashRadius: 16,
-      icon: Icon(
-        icon,
-        size: 16,
-        color: onPressed == null ? colors.iconTertiary : colors.iconSecondary,
+      icon: IconTheme.merge(
+        data: IconThemeData(
+          color: onPressed == null ? colors.iconTertiary : colors.iconSecondary,
+        ),
+        child: icon,
       ),
     );
   }
@@ -1075,3 +1127,25 @@ Duration _placeholderDuration(BuildContext context, TsaiThemeTokens tokens) =>
     MediaQuery.disableAnimationsOf(context)
     ? Duration.zero
     : tokens.motion.interaction * 1.5;
+
+double _textWidth(BuildContext context, String value, TextStyle style) {
+  return math.max(
+    10,
+    _paintedTextWidth(
+          context,
+          value.isEmpty ? '0' : value,
+          style,
+        ).ceilToDouble() +
+        2,
+  );
+}
+
+double _paintedTextWidth(BuildContext context, String value, TextStyle style) {
+  final painter = TextPainter(
+    text: TextSpan(text: value, style: style),
+    maxLines: 1,
+    textDirection: Directionality.of(context),
+    textScaler: MediaQuery.textScalerOf(context),
+  )..layout();
+  return painter.width;
+}
