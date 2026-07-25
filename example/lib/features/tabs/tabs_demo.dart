@@ -199,29 +199,26 @@ class _ScenarioHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tokens = TsaiThemeTokens.of(context);
-    return ColoredBox(
-      color: tokens.colors.surfaceRaised,
-      child: Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: tokens.spacing.space24,
-          vertical: compact ? tokens.spacing.space16 : tokens.spacing.space32,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            TsaiTextHeading(title, size: TsaiHeadingSize.medium),
-            SizedBox(height: tokens.spacing.space8),
-            ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 640),
-              child: TsaiTextBody(
-                description,
-                size: TsaiBodySize.medium,
-                weight: TsaiTextWeight.regular,
-                color: tokens.colors.contentSecondary,
-              ),
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        horizontal: tokens.spacing.space24,
+        vertical: compact ? tokens.spacing.space16 : tokens.spacing.space32,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          TsaiTextHeading(title, size: TsaiHeadingSize.medium),
+          SizedBox(height: tokens.spacing.space8),
+          ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 640),
+            child: TsaiTextBody(
+              description,
+              size: TsaiBodySize.medium,
+              weight: TsaiTextWeight.regular,
+              color: tokens.colors.contentSecondary,
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
