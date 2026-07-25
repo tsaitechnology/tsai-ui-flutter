@@ -1,3 +1,14 @@
+## 0.2.0 - 2026-07-25
+
+### Features
+
+- add link component and align design tokens ([2d55a5a](https://github.com/tsaitechnology/tsai-ui-flutter/commit/2d55a5a439ff6c0f2357b21e980b4239ecd03b18))
+- add tabs component ([a7e720b](https://github.com/tsaitechnology/tsai-ui-flutter/commit/a7e720b78c68545dfd294058e5a35e4579d28da4))
+
+### Bug Fixes
+
+- smooth transparent button hover ([c431f75](https://github.com/tsaitechnology/tsai-ui-flutter/commit/c431f75cef93b192854ca41af01c6960d68a57b0))
+
 ## Unreleased
 
 ### Added
