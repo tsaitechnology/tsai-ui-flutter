@@ -1,3 +1,9 @@
+## 0.2.2 - 2026-07-25
+
+### Bug Fixes
+
+- remove gray header background in tabs demos ([ad6c902](https://github.com/tsaitechnology/tsai-ui-flutter/commit/ad6c902921d59bb5c17a5d2e34eab64e8668b024))
+
 ## 0.2.1 - 2026-07-25
 
 ### Maintenance
