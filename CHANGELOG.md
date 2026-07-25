@@ -1,3 +1,9 @@
+## 0.2.1 - 2026-07-25
+
+### Maintenance
+
+- prefix typography widgets with TsaiText ([42aabec](https://github.com/tsaitechnology/tsai-ui-flutter/commit/42aabece50e7f73a96afebb9358d1c777948d913))
+
 ## 0.2.0 - 2026-07-25
 
 ### Features
