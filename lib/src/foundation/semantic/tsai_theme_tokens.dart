@@ -737,6 +737,7 @@ final class TsaiMotionTokens {
   /// Creates a complete set of semantic motion values.
   const TsaiMotionTokens({
     required this.interaction,
+    required this.transition,
     required this.progressIndicator,
     required this.interactionCurve,
     required this.transitionCurve,
@@ -745,6 +746,10 @@ final class TsaiMotionTokens {
 
   /// Default duration for hover, focus, and control-state transitions.
   final Duration interaction;
+
+  /// Duration for content moving between stable positions, such as a tab
+  /// section swap. Longer than [interaction] so the movement reads clearly.
+  final Duration transition;
 
   /// Duration of one progress-indicator rotation.
   final Duration progressIndicator;
@@ -761,6 +766,7 @@ final class TsaiMotionTokens {
   /// Canonical interaction motion.
   static const standard = TsaiMotionTokens(
     interaction: Duration(milliseconds: 140),
+    transition: Duration(milliseconds: 220),
     progressIndicator: Duration(milliseconds: 850),
     interactionCurve: Curves.easeOut,
     transitionCurve: Curves.easeInOutCubic,
@@ -773,6 +779,13 @@ final class TsaiMotionTokens {
       microseconds: lerpDouble(
         interaction.inMicroseconds,
         other.interaction.inMicroseconds,
+        t,
+      )!.round(),
+    ),
+    transition: Duration(
+      microseconds: lerpDouble(
+        transition.inMicroseconds,
+        other.transition.inMicroseconds,
         t,
       )!.round(),
     ),

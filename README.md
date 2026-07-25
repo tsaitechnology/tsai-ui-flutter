@@ -65,6 +65,13 @@ TsaiLink(
   onPressed: () {},
 );
 
+TsaiTabs(
+  sections: const [
+    TsaiTabSection(tab: Text('Overview'), content: OverviewSection()),
+    TsaiTabSection(tab: Text('Activity'), content: ActivitySection()),
+  ],
+);
+
 TsaiInput(
   placeholder: 'Promo code',
   showClearButton: false,
@@ -105,6 +112,7 @@ lib/
       link/
       select/
       selection/
+      tabs/
       typography/
     icons/
 example/

@@ -60,6 +60,13 @@ controls share focus and activation handling, Input and Input Phone share the
 field/content/action frame, and OTP/PIN share a native editable overlay. These
 helpers do not cross component ownership boundaries through public APIs.
 
+Tabs keep selection separate from scroll ownership. `TsaiTabBar` and
+`TsaiTabContent` compose through Flutter's `TabController`; the convenience
+`TsaiTabs` widget owns a controller only when the caller does not provide one.
+Natural-height content delegates scrolling to its parent, viewport content
+expects bounded height and section-owned scrollables, and sticky behavior is a
+sliver composition rather than a visual tab property.
+
 Typography is exposed through category widgets rather than raw style lookup in
 application code. Required size and weight enums only represent combinations
 that exist in Penpot. Widgets resolve the active typography and content-color

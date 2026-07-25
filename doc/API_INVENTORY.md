@@ -39,6 +39,13 @@ import 'package:tsai_ui/tsai_icons.dart';
 | `TsaiButtonSize` | Medium/large | Public |
 | `TsaiButtonTheme` | Global Flutter-native overrides | Public |
 | `TsaiLink` | Compact inline action with optional leading/trailing icons | Public |
+| `TsaiTabSection` | Immutable tab-label and content-section pair | Public |
+| `TsaiTabBar` | Token-backed controlled tab selector | Public |
+| `TsaiTabContent` | Intrinsic or viewport tab content | Public |
+| `TsaiTabs` | Internally or externally controlled bar/content composition | Public |
+| `TsaiSliverTabBar` | Pinned or floating sliver tab selector | Public |
+| `TsaiTabBarFit` | Expanded or horizontally scrollable tab sizing | Public |
+| `TsaiTabContentLayout` | Natural-height or bounded viewport content | Public |
 | `TsaiCheckbox` | Controlled checkbox with tristate and error support | Public |
 | `TsaiRadio<T>` | Controlled generic radio button | Public |
 | `TsaiSwitch` | Controlled boolean switch | Public |
@@ -61,6 +68,7 @@ import 'package:tsai_ui/tsai_icons.dart';
 - button state resolver;
 - button content and progress layout;
 - link state resolver and content layout;
+- tabs indicator, intrinsic transition, and sliver delegate;
 - input field/content/action frames;
 - code-input editable overlay and state resolver;
 - example catalog implementation.

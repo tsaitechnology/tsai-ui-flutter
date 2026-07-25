@@ -28,6 +28,9 @@ lib/
     selection_controls/
       selection_controls_demo.dart       # Separate Checkbox, Radio, and Switch demos
       selection_controls_demo_screen.dart
+    tabs/
+      tabs_demo.dart                      # Document, viewport, and sticky compositions
+      tabs_demo_screen.dart               # Separate full-page scenario screens
     typography/
       typography_demo.dart               # Embeddable typography demo
       typography_demo_screen.dart        # Full-page composition
@@ -70,6 +73,9 @@ Render one full entity page by opening its route:
 /          Typography
 /#/buttons Buttons on Flutter web
 /#/links Links
+/#/tabs-document Tabs in a document-owned scroll view
+/#/tabs-viewport Fixed tabs with section-owned scrolling
+/#/tabs-sticky Tabs pinned after the page header
 /#/icons Icons
 /#/checkbox Checkbox
 /#/radio Radio

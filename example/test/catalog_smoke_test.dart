@@ -7,6 +7,7 @@ import 'package:tsai_ui_example/features/inputs/input_demo.dart';
 import 'package:tsai_ui_example/features/links/link_demo.dart';
 import 'package:tsai_ui_example/features/select/select_demo.dart';
 import 'package:tsai_ui_example/features/selection_controls/selection_controls_demo.dart';
+import 'package:tsai_ui_example/features/tabs/tabs_demo.dart';
 import 'package:tsai_ui_example/features/typography/typography_demo.dart';
 import 'package:tsai_ui_example/features/typography/typography_widget_demo_screen.dart';
 import 'package:tsai_ui_example/main.dart';
@@ -173,6 +174,45 @@ void main() {
     expect(find.byType(TsaiLink), findsWidgets);
     expect(find.text('Default'), findsOneWidget);
     expect(find.text('Disabled'), findsOneWidget);
+  });
+
+  testWidgets('renders document-owned tab content independently', (
+    tester,
+  ) async {
+    await _pumpEmbedded(tester, child: const TabsDocumentDemo());
+
+    expect(
+      find.byKey(const ValueKey<String>('tabs-document-demo')),
+      findsOneWidget,
+    );
+    expect(find.byType(TsaiTabs), findsOneWidget);
+    expect(find.byType(SingleChildScrollView), findsOneWidget);
+  });
+
+  testWidgets('renders internally scrolling tab content independently', (
+    tester,
+  ) async {
+    await _pumpEmbedded(tester, child: const TabsViewportDemo());
+
+    expect(
+      find.byKey(const ValueKey<String>('tabs-viewport-demo')),
+      findsOneWidget,
+    );
+    expect(find.byType(TabBarView), findsOneWidget);
+    expect(find.byType(ListView), findsWidgets);
+  });
+
+  testWidgets('renders the sticky tabs composition independently', (
+    tester,
+  ) async {
+    await _pumpEmbedded(tester, child: const TabsStickyDemo());
+
+    expect(
+      find.byKey(const ValueKey<String>('tabs-sticky-demo')),
+      findsOneWidget,
+    );
+    expect(find.byType(TsaiSliverTabBar), findsOneWidget);
+    expect(find.byType(CustomScrollView), findsOneWidget);
   });
 
   testWidgets('renders the checkbox demo with a playground', (tester) async {

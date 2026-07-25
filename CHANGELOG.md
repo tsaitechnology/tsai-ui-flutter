@@ -2,8 +2,10 @@
 
 ### Added
 
-- Added the Penpot `spacing.12` token, the `TsaiLink` component, and
-  `TsaiInput.trailingAction`.
+- Added the Penpot `spacing.12` token, the `TsaiLink` and `TsaiTabs`
+  components, and `TsaiInput.trailingAction`.
+- Added natural-height, bounded viewport, and pinned sliver tab compositions
+  with dedicated catalog examples.
 
 ### Changed
 

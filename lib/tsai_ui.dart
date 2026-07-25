@@ -8,6 +8,7 @@ export 'src/components/input/tsai_input.dart';
 export 'src/components/link/tsai_link.dart';
 export 'src/components/select/tsai_select.dart';
 export 'src/components/selection/tsai_selection_controls.dart';
+export 'src/components/tabs/tsai_tabs.dart';
 export 'src/components/typography/tsai_text.dart';
 export 'src/foundation/semantic/tsai_theme_tokens.dart';
 export 'src/foundation/theme/tsai_theme.dart';
