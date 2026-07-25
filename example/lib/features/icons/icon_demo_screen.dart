@@ -46,9 +46,9 @@ class _IconDemo extends StatelessWidget {
       key: const ValueKey<String>('icon-demo'),
       padding: EdgeInsets.all(tokens.spacing.space24),
       children: [
-        const TsaiHeading('TsaiIcon', size: TsaiHeadingSize.large),
+        const TsaiTextHeading('TsaiIcon', size: TsaiHeadingSize.large),
         SizedBox(height: tokens.spacing.space8),
-        TsaiBody(
+        TsaiTextBody(
           'A stable square adapter for Lucide or any Flutter IconData.',
           size: TsaiBodySize.medium,
           weight: TsaiTextWeight.regular,
@@ -70,7 +70,7 @@ class _IconDemo extends StatelessWidget {
                       children: [
                         TsaiIcon(item.$2, semanticLabel: item.$1),
                         SizedBox(height: tokens.spacing.space8),
-                        TsaiCaption(
+                        TsaiTextCaption(
                           item.$1,
                           size: TsaiCaptionSize.small,
                           weight: TsaiTextWeight.regular,

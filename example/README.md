@@ -85,13 +85,13 @@ Render one full entity page by opening its route:
 /#/input-phone Input Phone
 /#/input-otp OTP
 /#/input-pin PIN
-/#/typography/heading TsaiHeading
-/#/typography/body TsaiBody
-/#/typography/button-text TsaiButtonText
-/#/typography/caption TsaiCaption
-/#/typography/mono-heading TsaiMonoHeading
-/#/typography/mono-body TsaiMonoBody
-/#/typography/mono-caption TsaiMonoCaption
+/#/typography/heading TsaiTextHeading
+/#/typography/body TsaiTextBody
+/#/typography/button-text TsaiTextButton
+/#/typography/caption TsaiTextCaption
+/#/typography/mono-heading TsaiTextMonoHeading
+/#/typography/mono-body TsaiTextMonoBody
+/#/typography/mono-caption TsaiTextMonoCaption
 ```
 
 The widget-specific routes are stable deep links used by the public

@@ -1,11 +1,11 @@
-# TsaiMonoBody
+# TsaiTextMonoBody
 
 JetBrains Mono body text in `large` and `medium` sizes.
 
 [Open live example](https://tsaitechnology.github.io/tsai-ui-flutter/example/#/typography/mono-body){ target="_blank" rel="noopener" .md-button }
 
 ```dart
-const TsaiMonoBody(
+const TsaiTextMonoBody(
   'ETH / USD  +4.81%',
   size: TsaiBodySize.large,
 )

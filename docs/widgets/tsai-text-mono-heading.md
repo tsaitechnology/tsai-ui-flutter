@@ -1,11 +1,11 @@
-# TsaiMonoHeading
+# TsaiTextMonoHeading
 
 JetBrains Mono headings in `extraLarge` and `large` sizes.
 
 [Open live example](https://tsaitechnology.github.io/tsai-ui-flutter/example/#/typography/mono-heading){ target="_blank" rel="noopener" .md-button }
 
 ```dart
-const TsaiMonoHeading(
+const TsaiTextMonoHeading(
   '24,891.42',
   size: TsaiMonoHeadingSize.extraLarge,
 )

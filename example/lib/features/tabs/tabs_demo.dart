@@ -209,11 +209,11 @@ class _ScenarioHeader extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            TsaiHeading(title, size: TsaiHeadingSize.medium),
+            TsaiTextHeading(title, size: TsaiHeadingSize.medium),
             SizedBox(height: tokens.spacing.space8),
             ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 640),
-              child: TsaiBody(
+              child: TsaiTextBody(
                 description,
                 size: TsaiBodySize.medium,
                 weight: TsaiTextWeight.regular,
@@ -246,7 +246,7 @@ class _IntrinsicSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          TsaiHeading(title, size: TsaiHeadingSize.small),
+          TsaiTextHeading(title, size: TsaiHeadingSize.small),
           SizedBox(height: tokens.spacing.space16),
           for (var index = 0; index < itemCount; index++)
             _DemoRow(label: '$itemPrefix ${index + 1}', index: index),
@@ -303,13 +303,13 @@ class _DemoRow extends StatelessWidget {
       child: Row(
         children: [
           Expanded(
-            child: TsaiBody(
+            child: TsaiTextBody(
               label,
               size: TsaiBodySize.medium,
               weight: TsaiTextWeight.medium,
             ),
           ),
-          TsaiCaption(
+          TsaiTextCaption(
             index.isEven ? 'Updated today' : 'Updated yesterday',
             size: TsaiCaptionSize.medium,
             weight: TsaiTextWeight.regular,

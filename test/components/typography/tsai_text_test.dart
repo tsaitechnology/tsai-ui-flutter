@@ -9,23 +9,23 @@ void main() {
     final type = TsaiThemeTokens.light.typography;
     final cases = <(TsaiText, TextStyle)>[
       (
-        const TsaiHeading('Text', size: TsaiHeadingSize.extraLarge),
+        const TsaiTextHeading('Text', size: TsaiHeadingSize.extraLarge),
         type.headingExtraLarge,
       ),
       (
-        const TsaiHeading('Text', size: TsaiHeadingSize.large),
+        const TsaiTextHeading('Text', size: TsaiHeadingSize.large),
         type.headingLarge,
       ),
       (
-        const TsaiHeading('Text', size: TsaiHeadingSize.medium),
+        const TsaiTextHeading('Text', size: TsaiHeadingSize.medium),
         type.headingMedium,
       ),
       (
-        const TsaiHeading('Text', size: TsaiHeadingSize.small),
+        const TsaiTextHeading('Text', size: TsaiHeadingSize.small),
         type.headingSmall,
       ),
       (
-        const TsaiBody(
+        const TsaiTextBody(
           'Text',
           size: TsaiBodySize.large,
           weight: TsaiTextWeight.medium,
@@ -33,7 +33,7 @@ void main() {
         type.bodyLargeMedium,
       ),
       (
-        const TsaiBody(
+        const TsaiTextBody(
           'Text',
           size: TsaiBodySize.large,
           weight: TsaiTextWeight.regular,
@@ -41,7 +41,7 @@ void main() {
         type.bodyLarge,
       ),
       (
-        const TsaiBody(
+        const TsaiTextBody(
           'Text',
           size: TsaiBodySize.medium,
           weight: TsaiTextWeight.medium,
@@ -49,7 +49,7 @@ void main() {
         type.bodyMediumMedium,
       ),
       (
-        const TsaiBody(
+        const TsaiTextBody(
           'Text',
           size: TsaiBodySize.medium,
           weight: TsaiTextWeight.regular,
@@ -57,15 +57,15 @@ void main() {
         type.bodyMedium,
       ),
       (
-        const TsaiButtonText('Text', size: TsaiButtonTextSize.large),
+        const TsaiTextButton('Text', size: TsaiButtonTextSize.large),
         type.buttonLarge,
       ),
       (
-        const TsaiButtonText('Text', size: TsaiButtonTextSize.medium),
+        const TsaiTextButton('Text', size: TsaiButtonTextSize.medium),
         type.buttonMedium,
       ),
       (
-        const TsaiCaption(
+        const TsaiTextCaption(
           'Text',
           size: TsaiCaptionSize.medium,
           weight: TsaiTextWeight.medium,
@@ -73,7 +73,7 @@ void main() {
         type.captionMedium,
       ),
       (
-        const TsaiCaption(
+        const TsaiTextCaption(
           'Text',
           size: TsaiCaptionSize.medium,
           weight: TsaiTextWeight.regular,
@@ -81,7 +81,7 @@ void main() {
         type.captionMediumRegular,
       ),
       (
-        const TsaiCaption(
+        const TsaiTextCaption(
           'Text',
           size: TsaiCaptionSize.small,
           weight: TsaiTextWeight.medium,
@@ -89,7 +89,7 @@ void main() {
         type.captionSmall,
       ),
       (
-        const TsaiCaption(
+        const TsaiTextCaption(
           'Text',
           size: TsaiCaptionSize.small,
           weight: TsaiTextWeight.regular,
@@ -97,27 +97,27 @@ void main() {
         type.captionSmallRegular,
       ),
       (
-        const TsaiMonoHeading('Text', size: TsaiMonoHeadingSize.extraLarge),
+        const TsaiTextMonoHeading('Text', size: TsaiMonoHeadingSize.extraLarge),
         type.monoHeadingExtraLarge,
       ),
       (
-        const TsaiMonoHeading('Text', size: TsaiMonoHeadingSize.large),
+        const TsaiTextMonoHeading('Text', size: TsaiMonoHeadingSize.large),
         type.monoHeadingLarge,
       ),
       (
-        const TsaiMonoBody('Text', size: TsaiBodySize.large),
+        const TsaiTextMonoBody('Text', size: TsaiBodySize.large),
         type.monoBodyLarge,
       ),
       (
-        const TsaiMonoBody('Text', size: TsaiBodySize.medium),
+        const TsaiTextMonoBody('Text', size: TsaiBodySize.medium),
         type.monoBodyMedium,
       ),
       (
-        const TsaiMonoCaption('Text', weight: TsaiTextWeight.medium),
+        const TsaiTextMonoCaption('Text', weight: TsaiTextWeight.medium),
         type.monoCaption,
       ),
       (
-        const TsaiMonoCaption('Text', weight: TsaiTextWeight.regular),
+        const TsaiTextMonoCaption('Text', weight: TsaiTextWeight.regular),
         type.monoCaptionRegular,
       ),
     ];
@@ -134,7 +134,7 @@ void main() {
   });
 
   testWidgets('uses the active semantic content color', (tester) async {
-    const text = TsaiHeading('Text', size: TsaiHeadingSize.large);
+    const text = TsaiTextHeading('Text', size: TsaiHeadingSize.large);
 
     await _pump(tester, child: text);
     expect(
@@ -156,7 +156,7 @@ void main() {
     final semantics = tester.ensureSemantics();
     await _pump(
       tester,
-      child: const TsaiBody(
+      child: const TsaiTextBody(
         'Visible text',
         size: TsaiBodySize.medium,
         weight: TsaiTextWeight.regular,

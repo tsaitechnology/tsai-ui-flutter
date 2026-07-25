@@ -26,13 +26,13 @@ import 'package:tsai_ui/tsai_icons.dart';
 | `TsaiShadowTokens` | Theme-aware shadows | Public |
 | `TsaiMotionTokens` | Semantic durations and easing curves | Public |
 | `TsaiText` | Sealed base for typography widgets | Public |
-| `TsaiHeading` | Four Inter heading roles | Public |
-| `TsaiBody` | Four Inter body roles | Public |
-| `TsaiButtonText` | Two Inter button-label roles | Public |
-| `TsaiCaption` | Four Inter caption roles | Public |
-| `TsaiMonoHeading` | Two JetBrains Mono heading roles | Public |
-| `TsaiMonoBody` | Two JetBrains Mono body roles | Public |
-| `TsaiMonoCaption` | Two JetBrains Mono caption roles | Public |
+| `TsaiTextHeading` | Four Inter heading roles | Public |
+| `TsaiTextBody` | Four Inter body roles | Public |
+| `TsaiTextButton` | Two Inter button-label roles | Public |
+| `TsaiTextCaption` | Four Inter caption roles | Public |
+| `TsaiTextMonoHeading` | Two JetBrains Mono heading roles | Public |
+| `TsaiTextMonoBody` | Two JetBrains Mono body roles | Public |
+| `TsaiTextMonoCaption` | Two JetBrains Mono caption roles | Public |
 | Typography size and weight enums | Restrict widgets to valid Penpot roles | Public |
 | `TsaiButton` | Action component | Public |
 | `TsaiButtonVariant` | Primary/secondary/outline/ghost | Public |

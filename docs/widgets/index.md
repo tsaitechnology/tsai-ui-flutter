@@ -22,13 +22,13 @@ its live Flutter web example.
 
 ## Typography
 
-- [TsaiHeading](tsai-heading.md)
-- [TsaiBody](tsai-body.md)
-- [TsaiButtonText](tsai-button-text.md)
-- [TsaiCaption](tsai-caption.md)
-- [TsaiMonoHeading](tsai-mono-heading.md)
-- [TsaiMonoBody](tsai-mono-body.md)
-- [TsaiMonoCaption](tsai-mono-caption.md)
+- [TsaiTextHeading](tsai-text-heading.md)
+- [TsaiTextBody](tsai-text-body.md)
+- [TsaiTextButton](tsai-text-button.md)
+- [TsaiTextCaption](tsai-text-caption.md)
+- [TsaiTextMonoHeading](tsai-text-mono-heading.md)
+- [TsaiTextMonoBody](tsai-text-mono-body.md)
+- [TsaiTextMonoCaption](tsai-text-mono-caption.md)
 
 ## Icons
 

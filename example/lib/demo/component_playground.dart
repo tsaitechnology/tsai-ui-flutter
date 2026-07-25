@@ -31,7 +31,7 @@ class ComponentPlayground extends StatelessWidget {
         children: [
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            child: TsaiHeading('Playground', size: TsaiHeadingSize.small),
+            child: TsaiTextHeading('Playground', size: TsaiHeadingSize.small),
           ),
           Container(
             key: const ValueKey<String>('component-playground-controls'),
@@ -320,7 +320,7 @@ class PenpotExample extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          TsaiHeading(title, size: TsaiHeadingSize.small),
+          TsaiTextHeading(title, size: TsaiHeadingSize.small),
           SizedBox(height: tokens.spacing.space16),
           child,
         ],

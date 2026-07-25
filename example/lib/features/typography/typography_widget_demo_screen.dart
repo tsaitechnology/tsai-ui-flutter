@@ -5,13 +5,13 @@ import '../../demo/component_demo_window.dart';
 import '../../demo/component_playground.dart';
 
 enum TypographyWidgetRole {
-  heading(label: 'TsaiHeading', route: '/typography/heading'),
-  body(label: 'TsaiBody', route: '/typography/body'),
-  buttonText(label: 'TsaiButtonText', route: '/typography/button-text'),
-  caption(label: 'TsaiCaption', route: '/typography/caption'),
-  monoHeading(label: 'TsaiMonoHeading', route: '/typography/mono-heading'),
-  monoBody(label: 'TsaiMonoBody', route: '/typography/mono-body'),
-  monoCaption(label: 'TsaiMonoCaption', route: '/typography/mono-caption');
+  heading(label: 'TsaiTextHeading', route: '/typography/heading'),
+  body(label: 'TsaiTextBody', route: '/typography/body'),
+  buttonText(label: 'TsaiTextButton', route: '/typography/button-text'),
+  caption(label: 'TsaiTextCaption', route: '/typography/caption'),
+  monoHeading(label: 'TsaiTextMonoHeading', route: '/typography/mono-heading'),
+  monoBody(label: 'TsaiTextMonoBody', route: '/typography/mono-body'),
+  monoCaption(label: 'TsaiTextMonoCaption', route: '/typography/mono-caption');
 
   const TypographyWidgetRole({required this.label, required this.route});
 
@@ -53,9 +53,9 @@ class _TypographyWidgetDemo extends StatelessWidget {
       key: ValueKey<String>('${role.name}-widget-demo'),
       padding: EdgeInsets.all(tokens.spacing.space24),
       children: [
-        TsaiHeading(role.label, size: TsaiHeadingSize.large),
+        TsaiTextHeading(role.label, size: TsaiHeadingSize.large),
         SizedBox(height: tokens.spacing.space8),
-        TsaiBody(
+        TsaiTextBody(
           _description,
           size: TsaiBodySize.medium,
           weight: TsaiTextWeight.regular,
@@ -95,70 +95,70 @@ class _TypographyWidgetDemo extends StatelessWidget {
 
   List<Widget> get _samples => switch (role) {
     TypographyWidgetRole.heading => const [
-      TsaiHeading('Extra large heading', size: TsaiHeadingSize.extraLarge),
-      TsaiHeading('Large heading', size: TsaiHeadingSize.large),
-      TsaiHeading('Medium heading', size: TsaiHeadingSize.medium),
-      TsaiHeading('Small heading', size: TsaiHeadingSize.small),
+      TsaiTextHeading('Extra large heading', size: TsaiHeadingSize.extraLarge),
+      TsaiTextHeading('Large heading', size: TsaiHeadingSize.large),
+      TsaiTextHeading('Medium heading', size: TsaiHeadingSize.medium),
+      TsaiTextHeading('Small heading', size: TsaiHeadingSize.small),
     ],
     TypographyWidgetRole.body => const [
-      TsaiBody(
+      TsaiTextBody(
         'Large regular body',
         size: TsaiBodySize.large,
         weight: TsaiTextWeight.regular,
       ),
-      TsaiBody(
+      TsaiTextBody(
         'Large medium body',
         size: TsaiBodySize.large,
         weight: TsaiTextWeight.medium,
       ),
-      TsaiBody(
+      TsaiTextBody(
         'Medium regular body',
         size: TsaiBodySize.medium,
         weight: TsaiTextWeight.regular,
       ),
-      TsaiBody(
+      TsaiTextBody(
         'Medium medium body',
         size: TsaiBodySize.medium,
         weight: TsaiTextWeight.medium,
       ),
     ],
     TypographyWidgetRole.buttonText => const [
-      TsaiButtonText('Large button label', size: TsaiButtonTextSize.large),
-      TsaiButtonText('Medium button label', size: TsaiButtonTextSize.medium),
+      TsaiTextButton('Large button label', size: TsaiButtonTextSize.large),
+      TsaiTextButton('Medium button label', size: TsaiButtonTextSize.medium),
     ],
     TypographyWidgetRole.caption => const [
-      TsaiCaption(
+      TsaiTextCaption(
         'Medium regular caption',
         size: TsaiCaptionSize.medium,
         weight: TsaiTextWeight.regular,
       ),
-      TsaiCaption(
+      TsaiTextCaption(
         'Medium caption',
         size: TsaiCaptionSize.medium,
         weight: TsaiTextWeight.medium,
       ),
-      TsaiCaption(
+      TsaiTextCaption(
         'Small regular caption',
         size: TsaiCaptionSize.small,
         weight: TsaiTextWeight.regular,
       ),
-      TsaiCaption(
+      TsaiTextCaption(
         'Small caption',
         size: TsaiCaptionSize.small,
         weight: TsaiTextWeight.medium,
       ),
     ],
     TypographyWidgetRole.monoHeading => const [
-      TsaiMonoHeading('24,891.42', size: TsaiMonoHeadingSize.extraLarge),
-      TsaiMonoHeading('24,891.42', size: TsaiMonoHeadingSize.large),
+      TsaiTextMonoHeading('24,891.42', size: TsaiMonoHeadingSize.extraLarge),
+      TsaiTextMonoHeading('24,891.42', size: TsaiMonoHeadingSize.large),
     ],
     TypographyWidgetRole.monoBody => const [
-      TsaiMonoBody('ETH / USD  +4.81%', size: TsaiBodySize.large),
-      TsaiMonoBody('ETH / USD  +4.81%', size: TsaiBodySize.medium),
+      TsaiTextMonoBody('ETH / USD  +4.81%', size: TsaiBodySize.large),
+      TsaiTextMonoBody('ETH / USD  +4.81%', size: TsaiBodySize.medium),
     ],
     TypographyWidgetRole.monoCaption => const [
-      TsaiMonoCaption('09:41:27 UTC', weight: TsaiTextWeight.medium),
-      TsaiMonoCaption('09:41:27 UTC', weight: TsaiTextWeight.regular),
+      TsaiTextMonoCaption('09:41:27 UTC', weight: TsaiTextWeight.medium),
+      TsaiTextMonoCaption('09:41:27 UTC', weight: TsaiTextWeight.regular),
     ],
   };
 }

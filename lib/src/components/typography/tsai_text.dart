@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../foundation/semantic/tsai_theme_tokens.dart';
 
-/// Sizes available to [TsaiHeading].
+/// Sizes available to [TsaiTextHeading].
 enum TsaiHeadingSize {
   /// 32-pixel Inter heading.
   extraLarge,
@@ -35,7 +35,7 @@ enum TsaiTextWeight {
   medium,
 }
 
-/// Sizes available to [TsaiButtonText].
+/// Sizes available to [TsaiTextButton].
 enum TsaiButtonTextSize {
   /// 16-pixel button label.
   large,
@@ -44,7 +44,7 @@ enum TsaiButtonTextSize {
   medium,
 }
 
-/// Sizes available to [TsaiCaption].
+/// Sizes available to [TsaiTextCaption].
 enum TsaiCaptionSize {
   /// 13-pixel caption.
   medium,
@@ -53,7 +53,7 @@ enum TsaiCaptionSize {
   small,
 }
 
-/// Sizes available to [TsaiMonoHeading].
+/// Sizes available to [TsaiTextMonoHeading].
 enum TsaiMonoHeadingSize {
   /// 36-pixel JetBrains Mono heading.
   extraLarge,
@@ -63,9 +63,9 @@ enum TsaiMonoHeadingSize {
 }
 
 /// Four-size Inter heading from the Tsai typography system.
-final class TsaiHeading extends TsaiText {
+final class TsaiTextHeading extends TsaiText {
   /// Creates an Inter heading.
-  const TsaiHeading(
+  const TsaiTextHeading(
     super.data, {
     required this.size,
     super.key,
@@ -91,9 +91,9 @@ final class TsaiHeading extends TsaiText {
 }
 
 /// Four-role Inter body text from the Tsai typography system.
-final class TsaiBody extends TsaiText {
+final class TsaiTextBody extends TsaiText {
   /// Creates Inter body text.
-  const TsaiBody(
+  const TsaiTextBody(
     super.data, {
     required this.size,
     required this.weight,
@@ -124,9 +124,9 @@ final class TsaiBody extends TsaiText {
 }
 
 /// Two-size Inter button label from the Tsai typography system.
-final class TsaiButtonText extends TsaiText {
+final class TsaiTextButton extends TsaiText {
   /// Creates an Inter button label.
-  const TsaiButtonText(
+  const TsaiTextButton(
     super.data, {
     required this.size,
     super.key,
@@ -150,9 +150,9 @@ final class TsaiButtonText extends TsaiText {
 }
 
 /// Four-role Inter caption from the Tsai typography system.
-final class TsaiCaption extends TsaiText {
+final class TsaiTextCaption extends TsaiText {
   /// Creates an Inter caption.
-  const TsaiCaption(
+  const TsaiTextCaption(
     super.data, {
     required this.size,
     required this.weight,
@@ -185,9 +185,9 @@ final class TsaiCaption extends TsaiText {
 }
 
 /// Two-size JetBrains Mono heading from the Tsai typography system.
-final class TsaiMonoHeading extends TsaiText {
+final class TsaiTextMonoHeading extends TsaiText {
   /// Creates a monospaced heading.
-  const TsaiMonoHeading(
+  const TsaiTextMonoHeading(
     super.data, {
     required this.size,
     super.key,
@@ -211,9 +211,9 @@ final class TsaiMonoHeading extends TsaiText {
 }
 
 /// Two-size JetBrains Mono body text from the Tsai typography system.
-final class TsaiMonoBody extends TsaiText {
+final class TsaiTextMonoBody extends TsaiText {
   /// Creates monospaced body text.
-  const TsaiMonoBody(
+  const TsaiTextMonoBody(
     super.data, {
     required this.size,
     super.key,
@@ -237,9 +237,9 @@ final class TsaiMonoBody extends TsaiText {
 }
 
 /// Two-weight JetBrains Mono caption from the Tsai typography system.
-final class TsaiMonoCaption extends TsaiText {
+final class TsaiTextMonoCaption extends TsaiText {
   /// Creates a monospaced caption.
-  const TsaiMonoCaption(
+  const TsaiTextMonoCaption(
     super.data, {
     required this.weight,
     super.key,

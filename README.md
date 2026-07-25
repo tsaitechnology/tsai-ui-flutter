@@ -42,12 +42,12 @@ MaterialApp(
   ),
 );
 
-const TsaiHeading(
+const TsaiTextHeading(
   'Portfolio',
   size: TsaiHeadingSize.extraLarge,
 );
 
-const TsaiBody(
+const TsaiTextBody(
   'Review current positions and recent activity.',
   size: TsaiBodySize.large,
   weight: TsaiTextWeight.regular,

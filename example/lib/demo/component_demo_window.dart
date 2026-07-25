@@ -57,7 +57,7 @@ class _ComponentDemoWindowState extends State<ComponentDemoWindow> {
       child: Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
-          title: TsaiHeading(widget.title, size: TsaiHeadingSize.small),
+          title: TsaiTextHeading(widget.title, size: TsaiHeadingSize.small),
           centerTitle: false,
           backgroundColor: tokens.colors.canvas,
           surfaceTintColor: Colors.transparent,

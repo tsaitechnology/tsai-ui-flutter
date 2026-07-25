@@ -27,12 +27,12 @@ class _QuickStartExampleState extends State<QuickStartExample> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const TsaiHeading(
+                const TsaiTextHeading(
                   'Create your workspace',
                   size: TsaiHeadingSize.extraLarge,
                 ),
                 const SizedBox(height: 8),
-                const TsaiBody(
+                const TsaiTextBody(
                   'Compose accessible Flutter interfaces with Tsai UI.',
                   size: TsaiBodySize.large,
                   weight: TsaiTextWeight.regular,

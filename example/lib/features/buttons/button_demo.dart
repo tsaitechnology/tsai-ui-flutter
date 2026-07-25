@@ -168,7 +168,7 @@ class _StateSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          TsaiHeading(title, size: TsaiHeadingSize.small),
+          TsaiTextHeading(title, size: TsaiHeadingSize.small),
           SizedBox(height: tokens.spacing.space16),
           Wrap(
             spacing: tokens.spacing.space24,
@@ -214,7 +214,7 @@ class _VariantSample extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          TsaiCaption(
+          TsaiTextCaption(
             variant.name,
             size: TsaiCaptionSize.medium,
             weight: TsaiTextWeight.medium,

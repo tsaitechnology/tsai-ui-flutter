@@ -21,28 +21,28 @@ class TypographyDemo extends StatelessWidget {
           samples: [
             _TypographySample(
               name: 'headingExtraLarge',
-              sample: TsaiHeading(
+              sample: TsaiTextHeading(
                 'Make every decision visible',
                 size: TsaiHeadingSize.extraLarge,
               ),
             ),
             _TypographySample(
               name: 'headingLarge',
-              sample: TsaiHeading(
+              sample: TsaiTextHeading(
                 'Make every decision visible',
                 size: TsaiHeadingSize.large,
               ),
             ),
             _TypographySample(
               name: 'headingMedium',
-              sample: TsaiHeading(
+              sample: TsaiTextHeading(
                 'Make every decision visible',
                 size: TsaiHeadingSize.medium,
               ),
             ),
             _TypographySample(
               name: 'headingSmall',
-              sample: TsaiHeading(
+              sample: TsaiTextHeading(
                 'Make every decision visible',
                 size: TsaiHeadingSize.small,
               ),
@@ -56,7 +56,7 @@ class TypographyDemo extends StatelessWidget {
           samples: [
             _TypographySample(
               name: 'bodyLargeMedium',
-              sample: TsaiBody(
+              sample: TsaiTextBody(
                 'Clear interfaces turn complex work into focused action.',
                 size: TsaiBodySize.large,
                 weight: TsaiTextWeight.medium,
@@ -64,7 +64,7 @@ class TypographyDemo extends StatelessWidget {
             ),
             _TypographySample(
               name: 'bodyLarge',
-              sample: TsaiBody(
+              sample: TsaiTextBody(
                 'Clear interfaces turn complex work into focused action.',
                 size: TsaiBodySize.large,
                 weight: TsaiTextWeight.regular,
@@ -72,7 +72,7 @@ class TypographyDemo extends StatelessWidget {
             ),
             _TypographySample(
               name: 'bodyMediumMedium',
-              sample: TsaiBody(
+              sample: TsaiTextBody(
                 'Clear interfaces turn complex work into focused action.',
                 size: TsaiBodySize.medium,
                 weight: TsaiTextWeight.medium,
@@ -80,7 +80,7 @@ class TypographyDemo extends StatelessWidget {
             ),
             _TypographySample(
               name: 'bodyMedium',
-              sample: TsaiBody(
+              sample: TsaiTextBody(
                 'Clear interfaces turn complex work into focused action.',
                 size: TsaiBodySize.medium,
                 weight: TsaiTextWeight.regular,
@@ -95,14 +95,14 @@ class TypographyDemo extends StatelessWidget {
           samples: [
             _TypographySample(
               name: 'buttonLarge',
-              sample: TsaiButtonText(
+              sample: TsaiTextButton(
                 'Continue',
                 size: TsaiButtonTextSize.large,
               ),
             ),
             _TypographySample(
               name: 'buttonMedium',
-              sample: TsaiButtonText(
+              sample: TsaiTextButton(
                 'Continue',
                 size: TsaiButtonTextSize.medium,
               ),
@@ -116,7 +116,7 @@ class TypographyDemo extends StatelessWidget {
           samples: [
             _TypographySample(
               name: 'captionMedium',
-              sample: TsaiCaption(
+              sample: TsaiTextCaption(
                 'Updated a moment ago',
                 size: TsaiCaptionSize.medium,
                 weight: TsaiTextWeight.medium,
@@ -124,7 +124,7 @@ class TypographyDemo extends StatelessWidget {
             ),
             _TypographySample(
               name: 'captionMediumRegular',
-              sample: TsaiCaption(
+              sample: TsaiTextCaption(
                 'Updated a moment ago',
                 size: TsaiCaptionSize.medium,
                 weight: TsaiTextWeight.regular,
@@ -132,7 +132,7 @@ class TypographyDemo extends StatelessWidget {
             ),
             _TypographySample(
               name: 'captionSmall',
-              sample: TsaiCaption(
+              sample: TsaiTextCaption(
                 'Updated a moment ago',
                 size: TsaiCaptionSize.small,
                 weight: TsaiTextWeight.medium,
@@ -140,7 +140,7 @@ class TypographyDemo extends StatelessWidget {
             ),
             _TypographySample(
               name: 'captionSmallRegular',
-              sample: TsaiCaption(
+              sample: TsaiTextCaption(
                 'Updated a moment ago',
                 size: TsaiCaptionSize.small,
                 weight: TsaiTextWeight.regular,
@@ -155,42 +155,42 @@ class TypographyDemo extends StatelessWidget {
           samples: [
             _TypographySample(
               name: 'monoHeadingExtraLarge',
-              sample: TsaiMonoHeading(
+              sample: TsaiTextMonoHeading(
                 '24,891.42',
                 size: TsaiMonoHeadingSize.extraLarge,
               ),
             ),
             _TypographySample(
               name: 'monoHeadingLarge',
-              sample: TsaiMonoHeading(
+              sample: TsaiTextMonoHeading(
                 '24,891.42',
                 size: TsaiMonoHeadingSize.large,
               ),
             ),
             _TypographySample(
               name: 'monoBodyLarge',
-              sample: TsaiMonoBody(
+              sample: TsaiTextMonoBody(
                 'ETH / USD  +4.81%',
                 size: TsaiBodySize.large,
               ),
             ),
             _TypographySample(
               name: 'monoBodyMedium',
-              sample: TsaiMonoBody(
+              sample: TsaiTextMonoBody(
                 'ETH / USD  +4.81%',
                 size: TsaiBodySize.medium,
               ),
             ),
             _TypographySample(
               name: 'monoCaption',
-              sample: TsaiMonoCaption(
+              sample: TsaiTextMonoCaption(
                 '09:41:27 UTC',
                 weight: TsaiTextWeight.medium,
               ),
             ),
             _TypographySample(
               name: 'monoCaptionRegular',
-              sample: TsaiMonoCaption(
+              sample: TsaiTextMonoCaption(
                 '09:41:27 UTC',
                 weight: TsaiTextWeight.regular,
               ),
@@ -338,7 +338,7 @@ class _TypographyPlaygroundState extends State<_TypographyPlayground> {
       semanticsLabel: _emptyToNull(_semanticsLabel),
     );
     return switch (_role) {
-      _TypographyRole.headingExtraLarge => TsaiHeading(
+      _TypographyRole.headingExtraLarge => TsaiTextHeading(
         _data,
         size: TsaiHeadingSize.extraLarge,
         color: common.color,
@@ -349,7 +349,7 @@ class _TypographyPlaygroundState extends State<_TypographyPlayground> {
         textScaler: common.textScaler,
         semanticsLabel: common.semanticsLabel,
       ),
-      _TypographyRole.headingLarge => TsaiHeading(
+      _TypographyRole.headingLarge => TsaiTextHeading(
         _data,
         size: TsaiHeadingSize.large,
         color: common.color,
@@ -360,7 +360,7 @@ class _TypographyPlaygroundState extends State<_TypographyPlayground> {
         textScaler: common.textScaler,
         semanticsLabel: common.semanticsLabel,
       ),
-      _TypographyRole.headingMedium => TsaiHeading(
+      _TypographyRole.headingMedium => TsaiTextHeading(
         _data,
         size: TsaiHeadingSize.medium,
         color: common.color,
@@ -371,7 +371,7 @@ class _TypographyPlaygroundState extends State<_TypographyPlayground> {
         textScaler: common.textScaler,
         semanticsLabel: common.semanticsLabel,
       ),
-      _TypographyRole.headingSmall => TsaiHeading(
+      _TypographyRole.headingSmall => TsaiTextHeading(
         _data,
         size: TsaiHeadingSize.small,
         color: common.color,
@@ -382,7 +382,7 @@ class _TypographyPlaygroundState extends State<_TypographyPlayground> {
         textScaler: common.textScaler,
         semanticsLabel: common.semanticsLabel,
       ),
-      _TypographyRole.bodyLargeMedium => TsaiBody(
+      _TypographyRole.bodyLargeMedium => TsaiTextBody(
         _data,
         size: TsaiBodySize.large,
         weight: TsaiTextWeight.medium,
@@ -394,7 +394,7 @@ class _TypographyPlaygroundState extends State<_TypographyPlayground> {
         textScaler: common.textScaler,
         semanticsLabel: common.semanticsLabel,
       ),
-      _TypographyRole.bodyLarge => TsaiBody(
+      _TypographyRole.bodyLarge => TsaiTextBody(
         _data,
         size: TsaiBodySize.large,
         weight: TsaiTextWeight.regular,
@@ -406,7 +406,7 @@ class _TypographyPlaygroundState extends State<_TypographyPlayground> {
         textScaler: common.textScaler,
         semanticsLabel: common.semanticsLabel,
       ),
-      _TypographyRole.bodyMediumMedium => TsaiBody(
+      _TypographyRole.bodyMediumMedium => TsaiTextBody(
         _data,
         size: TsaiBodySize.medium,
         weight: TsaiTextWeight.medium,
@@ -418,7 +418,7 @@ class _TypographyPlaygroundState extends State<_TypographyPlayground> {
         textScaler: common.textScaler,
         semanticsLabel: common.semanticsLabel,
       ),
-      _TypographyRole.bodyMedium => TsaiBody(
+      _TypographyRole.bodyMedium => TsaiTextBody(
         _data,
         size: TsaiBodySize.medium,
         weight: TsaiTextWeight.regular,
@@ -430,7 +430,7 @@ class _TypographyPlaygroundState extends State<_TypographyPlayground> {
         textScaler: common.textScaler,
         semanticsLabel: common.semanticsLabel,
       ),
-      _TypographyRole.buttonLarge => TsaiButtonText(
+      _TypographyRole.buttonLarge => TsaiTextButton(
         _data,
         size: TsaiButtonTextSize.large,
         color: common.color,
@@ -441,7 +441,7 @@ class _TypographyPlaygroundState extends State<_TypographyPlayground> {
         textScaler: common.textScaler,
         semanticsLabel: common.semanticsLabel,
       ),
-      _TypographyRole.buttonMedium => TsaiButtonText(
+      _TypographyRole.buttonMedium => TsaiTextButton(
         _data,
         size: TsaiButtonTextSize.medium,
         color: common.color,
@@ -452,7 +452,7 @@ class _TypographyPlaygroundState extends State<_TypographyPlayground> {
         textScaler: common.textScaler,
         semanticsLabel: common.semanticsLabel,
       ),
-      _TypographyRole.captionMedium => TsaiCaption(
+      _TypographyRole.captionMedium => TsaiTextCaption(
         _data,
         size: TsaiCaptionSize.medium,
         weight: TsaiTextWeight.medium,
@@ -464,7 +464,7 @@ class _TypographyPlaygroundState extends State<_TypographyPlayground> {
         textScaler: common.textScaler,
         semanticsLabel: common.semanticsLabel,
       ),
-      _TypographyRole.captionMediumRegular => TsaiCaption(
+      _TypographyRole.captionMediumRegular => TsaiTextCaption(
         _data,
         size: TsaiCaptionSize.medium,
         weight: TsaiTextWeight.regular,
@@ -476,7 +476,7 @@ class _TypographyPlaygroundState extends State<_TypographyPlayground> {
         textScaler: common.textScaler,
         semanticsLabel: common.semanticsLabel,
       ),
-      _TypographyRole.captionSmall => TsaiCaption(
+      _TypographyRole.captionSmall => TsaiTextCaption(
         _data,
         size: TsaiCaptionSize.small,
         weight: TsaiTextWeight.medium,
@@ -488,7 +488,7 @@ class _TypographyPlaygroundState extends State<_TypographyPlayground> {
         textScaler: common.textScaler,
         semanticsLabel: common.semanticsLabel,
       ),
-      _TypographyRole.captionSmallRegular => TsaiCaption(
+      _TypographyRole.captionSmallRegular => TsaiTextCaption(
         _data,
         size: TsaiCaptionSize.small,
         weight: TsaiTextWeight.regular,
@@ -500,7 +500,7 @@ class _TypographyPlaygroundState extends State<_TypographyPlayground> {
         textScaler: common.textScaler,
         semanticsLabel: common.semanticsLabel,
       ),
-      _TypographyRole.monoHeadingExtraLarge => TsaiMonoHeading(
+      _TypographyRole.monoHeadingExtraLarge => TsaiTextMonoHeading(
         _data,
         size: TsaiMonoHeadingSize.extraLarge,
         color: common.color,
@@ -511,7 +511,7 @@ class _TypographyPlaygroundState extends State<_TypographyPlayground> {
         textScaler: common.textScaler,
         semanticsLabel: common.semanticsLabel,
       ),
-      _TypographyRole.monoHeadingLarge => TsaiMonoHeading(
+      _TypographyRole.monoHeadingLarge => TsaiTextMonoHeading(
         _data,
         size: TsaiMonoHeadingSize.large,
         color: common.color,
@@ -522,7 +522,7 @@ class _TypographyPlaygroundState extends State<_TypographyPlayground> {
         textScaler: common.textScaler,
         semanticsLabel: common.semanticsLabel,
       ),
-      _TypographyRole.monoBodyLarge => TsaiMonoBody(
+      _TypographyRole.monoBodyLarge => TsaiTextMonoBody(
         _data,
         size: TsaiBodySize.large,
         color: common.color,
@@ -533,7 +533,7 @@ class _TypographyPlaygroundState extends State<_TypographyPlayground> {
         textScaler: common.textScaler,
         semanticsLabel: common.semanticsLabel,
       ),
-      _TypographyRole.monoBodyMedium => TsaiMonoBody(
+      _TypographyRole.monoBodyMedium => TsaiTextMonoBody(
         _data,
         size: TsaiBodySize.medium,
         color: common.color,
@@ -544,7 +544,7 @@ class _TypographyPlaygroundState extends State<_TypographyPlayground> {
         textScaler: common.textScaler,
         semanticsLabel: common.semanticsLabel,
       ),
-      _TypographyRole.monoCaption => TsaiMonoCaption(
+      _TypographyRole.monoCaption => TsaiTextMonoCaption(
         _data,
         weight: TsaiTextWeight.medium,
         color: common.color,
@@ -555,7 +555,7 @@ class _TypographyPlaygroundState extends State<_TypographyPlayground> {
         textScaler: common.textScaler,
         semanticsLabel: common.semanticsLabel,
       ),
-      _TypographyRole.monoCaptionRegular => TsaiMonoCaption(
+      _TypographyRole.monoCaptionRegular => TsaiTextMonoCaption(
         _data,
         weight: TsaiTextWeight.regular,
         color: common.color,
@@ -593,7 +593,7 @@ class _TypographySection extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                TsaiHeading(title, size: TsaiHeadingSize.small),
+                TsaiTextHeading(title, size: TsaiHeadingSize.small),
                 SizedBox(height: tokens.spacing.space16),
                 ...samples,
               ],
@@ -622,7 +622,7 @@ class _TypographySample extends StatelessWidget {
         padding: EdgeInsets.symmetric(vertical: tokens.spacing.space16),
         child: LayoutBuilder(
           builder: (context, constraints) {
-            final label = TsaiMonoCaption(
+            final label = TsaiTextMonoCaption(
               name,
               weight: TsaiTextWeight.regular,
               color: tokens.colors.contentSecondary,

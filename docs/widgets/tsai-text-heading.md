@@ -1,4 +1,4 @@
-# TsaiHeading
+# TsaiTextHeading
 
 Inter headings in four semantic sizes: `extraLarge`, `large`, `medium`, and
 `small`.
@@ -6,7 +6,7 @@ Inter headings in four semantic sizes: `extraLarge`, `large`, `medium`, and
 [Open live example](https://tsaitechnology.github.io/tsai-ui-flutter/example/#/typography/heading){ target="_blank" rel="noopener" .md-button }
 
 ```dart
-const TsaiHeading(
+const TsaiTextHeading(
   'Portfolio',
   size: TsaiHeadingSize.extraLarge,
   maxLines: 2,

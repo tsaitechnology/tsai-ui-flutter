@@ -59,13 +59,13 @@ nav:
       - TsaiPhoneInput: widgets/tsai-phone-input.md
       - TsaiOtpInput: widgets/tsai-otp-input.md
       - TsaiPinInput: widgets/tsai-pin-input.md
-      - TsaiHeading: widgets/tsai-heading.md
-      - TsaiBody: widgets/tsai-body.md
-      - TsaiButtonText: widgets/tsai-button-text.md
-      - TsaiCaption: widgets/tsai-caption.md
-      - TsaiMonoHeading: widgets/tsai-mono-heading.md
-      - TsaiMonoBody: widgets/tsai-mono-body.md
-      - TsaiMonoCaption: widgets/tsai-mono-caption.md
+      - TsaiTextHeading: widgets/tsai-text-heading.md
+      - TsaiTextBody: widgets/tsai-text-body.md
+      - TsaiTextButton: widgets/tsai-text-button.md
+      - TsaiTextCaption: widgets/tsai-text-caption.md
+      - TsaiTextMonoHeading: widgets/tsai-text-mono-heading.md
+      - TsaiTextMonoBody: widgets/tsai-text-mono-body.md
+      - TsaiTextMonoCaption: widgets/tsai-text-mono-caption.md
       - TsaiIcon: widgets/tsai-icon.md
   - License: license.md
 
