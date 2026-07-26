@@ -1,3 +1,22 @@
+## 0.3.1 - 2026-07-26
+
+### Features
+
+- add title and refine component catalog ([a74f657](https://github.com/tsaitechnology/tsai-ui-flutter/commit/a74f657d521e456eb5d91bedf822cec43cea07f6))
+
+### Bug Fixes
+
+- preserve page title transition origin ([ed8bcdd](https://github.com/tsaitechnology/tsai-ui-flutter/commit/ed8bcdd6b8a84966b70908de8c158f5f8a82805d))
+
+### Documentation
+
+- make page top bar title editable ([0d53fb2](https://github.com/tsaitechnology/tsai-ui-flutter/commit/0d53fb2aa80b3776f9f9559b74dd0e66b77541d6))
+- expose page layout title controls ([651ee4b](https://github.com/tsaitechnology/tsai-ui-flutter/commit/651ee4b969e2daa224409f6b5462aeb0fa845025))
+
+### Maintenance
+
+- restrict page top bar title ([dba4474](https://github.com/tsaitechnology/tsai-ui-flutter/commit/dba4474bd91e2cc019d324d98fd5b0c46c0eb392))
+
 ## 0.3.0 - 2026-07-26
 
 ### Features
