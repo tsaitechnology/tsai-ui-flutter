@@ -68,11 +68,43 @@ void main() {
       findsNWidgets(3),
     );
 
+    final textControls = find.byKey(
+      const ValueKey<String>('tsai-input-editable'),
+    );
+    expect(textControls, findsNWidgets(2));
+
+    await tester.enterText(textControls.first, 'Account activity');
+    await tester.pump();
+    await tester.enterText(textControls.last, '');
+    await tester.pump();
+    expect(
+      find.descendant(of: preview, matching: find.text('Main account')),
+      findsNothing,
+    );
+
+    await tester.enterText(textControls.last, 'Savings and investments');
+    await tester.pump();
+
+    expect(
+      find.descendant(of: preview, matching: find.text('Account activity')),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: preview,
+        matching: find.text('Savings and investments'),
+      ),
+      findsOneWidget,
+    );
+
     await tester.drag(scrollable, const Offset(0, -240));
     await tester.pumpAndSettle();
 
     expect(
-      find.descendant(of: preview, matching: find.text('Main account')),
+      find.descendant(
+        of: preview,
+        matching: find.text('Savings and investments'),
+      ),
       findsNothing,
     );
   });

@@ -26,7 +26,13 @@ final class TsaiTitle extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        TsaiTextHeading(title, size: TsaiHeadingSize.extraLarge),
+        TsaiTextHeading(
+          title,
+          size: TsaiHeadingSize.extraLarge,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          softWrap: false,
+        ),
         if (subtitle case final subtitle?) ...[
           SizedBox(height: tokens.spacing.space4),
           TsaiTextBody(
@@ -34,6 +40,9 @@ final class TsaiTitle extends StatelessWidget {
             size: TsaiBodySize.medium,
             weight: TsaiTextWeight.regular,
             color: tokens.colors.contentSecondary,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            softWrap: false,
           ),
         ],
       ],

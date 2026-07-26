@@ -30,6 +30,12 @@ void main() {
     expect(subtitle.style!.fontSize, tokens.typography.bodyMedium.fontSize);
     expect(subtitle.style!.fontWeight, tokens.typography.bodyMedium.fontWeight);
     expect(subtitle.style!.color, tokens.colors.contentSecondary);
+    expect(title.maxLines, 1);
+    expect(title.overflow, TextOverflow.ellipsis);
+    expect(title.softWrap, isFalse);
+    expect(subtitle.maxLines, 1);
+    expect(subtitle.overflow, TextOverflow.ellipsis);
+    expect(subtitle.softWrap, isFalse);
     expect(gap.height, tokens.spacing.space4);
   });
 

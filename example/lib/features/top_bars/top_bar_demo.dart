@@ -177,9 +177,15 @@ class PageWithTopBarDemo extends StatefulWidget {
 }
 
 class _PageWithTopBarDemoState extends State<PageWithTopBarDemo> {
+  String _title = 'Portfolio';
+  String _subtitle = 'Main account';
   _BodyContent _bodyContent = _BodyContent.list;
   _PageLeadingContent _leading = _PageLeadingContent.backAction;
   _TrailingContent _trailing = _TrailingContent.twoActions;
+
+  String get _previewTitle => _title.trim().isEmpty ? 'Untitled' : _title;
+
+  String? get _previewSubtitle => _subtitle.trim().isEmpty ? null : _subtitle;
 
   @override
   Widget build(BuildContext context) => _LayoutDocument(
@@ -190,6 +196,16 @@ class _PageWithTopBarDemoState extends State<PageWithTopBarDemo> {
     ],
     playground: ComponentPlayground(
       controls: [
+        PlaygroundTextControl(
+          label: 'title',
+          value: _title,
+          onChanged: (value) => setState(() => _title = value),
+        ),
+        PlaygroundTextControl(
+          label: 'subtitle',
+          value: _subtitle,
+          onChanged: (value) => setState(() => _subtitle = value),
+        ),
         PlaygroundSelectControl<_BodyContent>(
           label: 'body content',
           value: _bodyContent,
@@ -215,8 +231,8 @@ class _PageWithTopBarDemoState extends State<PageWithTopBarDemo> {
       preview: SizedBox(
         height: 320,
         child: PageWithTopBar(
-          heading: 'Portfolio',
-          subtitle: 'Main account',
+          heading: _previewTitle,
+          subtitle: _previewSubtitle,
           leading: _pageLeading(_leading),
           trailing: _pageTrailing(_trailing),
           body: _body(_bodyContent),

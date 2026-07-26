@@ -2,7 +2,8 @@
 
 `TsaiTitle` combines a page heading with optional supporting text. It uses the
 canonical `headingExtraLarge` and `bodyMedium` typography tokens, primary and
-secondary content colors, and `spacing.space4` between the two lines.
+secondary content colors, and `spacing.space4` between the two lines. Each line
+uses an ellipsis when its text exceeds the available width.
 
 [Live example](https://tsaitechnology.github.io/tsai-ui-flutter/example/#/typography/title){ target="_blank" rel="noopener" .md-button }
 
