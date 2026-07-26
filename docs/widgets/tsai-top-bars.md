@@ -3,7 +3,9 @@
 Token-backed top bars for home and secondary pages, plus a page composition
 that moves its heading into a pinned bar when scrolling starts.
 
-[Live example](https://tsaitechnology.github.io/tsai-ui-flutter/example/#/top-bars){ target="_blank" rel="noopener" .md-button }
+[HomeTopBar example](https://tsaitechnology.github.io/tsai-ui-flutter/example/#/top-bars/home){ target="_blank" rel="noopener" .md-button }
+[PageTopBar example](https://tsaitechnology.github.io/tsai-ui-flutter/example/#/top-bars/page){ target="_blank" rel="noopener" .md-button }
+[PageWithTopBar example](https://tsaitechnology.github.io/tsai-ui-flutter/example/#/top-bars/page-layout){ target="_blank" rel="noopener" .md-button }
 
 ## Home top bar
 
@@ -47,8 +49,8 @@ to notifications and can be used by any home action.
 ## Page top bar
 
 `PageTopBar` is 56 pixels high and fills the available width. Its leading,
-center, and trailing layers are positioned independently. Showing or hiding
-the title therefore does not resize the bar or move either action list.
+center, and trailing content uses symmetric one-two-one tracks. Showing or
+hiding the title therefore does not resize the bar or move either action list.
 
 ```dart
 PageTopBar(
@@ -76,18 +78,24 @@ PageTopBar(
 ```
 
 The title slot accepts any widget and supplies the Penpot large-body text style
-through `DefaultTextStyle`. Both action types require a `TsaiIcon` and semantic
-label. Set `onPressed` to null for a disabled action.
+through `DefaultTextStyle`. `leading` and `trailing` are external widget lists;
+they can contain actions, text, or another compact composition. The bar uses
+a symmetric one-two-one track layout to keep the title geometrically centered
+and clip each slot inside its own bounds.
+
+Both action types require a `TsaiIcon` and semantic label. Set `onPressed` to
+null for a disabled action.
 
 ## Scroll-owning page
 
 `PageWithTopBar` keeps `PageTopBar` pinned and owns one
 `SingleChildScrollView`. The expanded heading and body move as one document.
-After any positive scroll offset, the single heading instance moves from its
-expanded position into the centered title slot while its typography animates
-from `headingExtraLarge` to `bodyLargeMedium`. Returning to offset zero reverses
-the same movement. Motion uses `TsaiMotionTokens` and becomes immediate when
-reduced motion is enabled.
+After any positive scroll offset, the expanded `TsaiTitle` is replaced by a
+moving primary heading while the subtitle is removed. The heading moves into
+the centered title slot as its typography animates from `headingExtraLarge` to
+`bodyLargeMedium`. Returning to offset zero completes the reverse movement
+before restoring `TsaiTitle`. Motion uses the token-backed ease-in-out curve
+and becomes immediate when reduced motion is enabled.
 
 ```dart
 PageWithTopBar(
@@ -105,6 +113,11 @@ PageWithTopBar(
       icon: const TsaiIcon(LucideIcons.plus),
       semanticLabel: 'Add position',
       onPressed: addPosition,
+    ),
+    PageTopBarAction(
+      icon: const TsaiIcon(LucideIcons.ellipsis),
+      semanticLabel: 'More',
+      onPressed: openMenu,
     ),
   ],
   body: const PortfolioContents(),

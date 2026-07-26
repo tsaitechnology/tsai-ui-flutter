@@ -15,7 +15,6 @@ class LinkDemoScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => ComponentDemoWindow(
-    title: 'Tsai UI',
     section: ComponentDemoSection.links,
     themeMode: themeMode,
     onThemeModeChanged: onThemeModeChanged,

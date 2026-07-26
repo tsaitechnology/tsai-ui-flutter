@@ -582,7 +582,12 @@ class _DemoPage extends StatelessWidget {
     return ListView(
       key: ValueKey<String>(pageKey),
       padding: EdgeInsets.all(tokens.spacing.space24),
-      children: [...examples, playground],
+      children: [
+        const TsaiTextHeading('Variants', size: TsaiHeadingSize.small),
+        SizedBox(height: tokens.spacing.space16),
+        ...examples,
+        playground,
+      ],
     );
   }
 }

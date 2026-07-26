@@ -37,7 +37,7 @@ void main() {
       expect(light.borders.hairline, dark.borders.hairline);
       expect(light.motion.interaction, dark.motion.interaction);
       expect(light.motion.progressIndicator, dark.motion.progressIndicator);
-      expect(light.motion.transitionCurve, Curves.easeInOutCubic);
+      expect(light.motion.transitionCurve, Curves.easeInOut);
       expect(
         light.typography.buttonLarge.fontSize,
         dark.typography.buttonLarge.fontSize,

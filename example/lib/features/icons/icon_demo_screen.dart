@@ -17,7 +17,6 @@ class IconDemoScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => ComponentDemoWindow(
-    title: 'Tsai UI',
     section: ComponentDemoSection.icons,
     themeMode: themeMode,
     onThemeModeChanged: onThemeModeChanged,
@@ -46,17 +45,8 @@ class _IconDemo extends StatelessWidget {
       key: const ValueKey<String>('icon-demo'),
       padding: EdgeInsets.all(tokens.spacing.space24),
       children: [
-        const TsaiTextHeading('TsaiIcon', size: TsaiHeadingSize.large),
-        SizedBox(height: tokens.spacing.space8),
-        TsaiTextBody(
-          'A stable square adapter for Lucide or any Flutter IconData.',
-          size: TsaiBodySize.medium,
-          weight: TsaiTextWeight.regular,
-          color: tokens.colors.contentSecondary,
-        ),
-        SizedBox(height: tokens.spacing.space32),
         PenpotExample(
-          title: 'Common icons',
+          title: 'Variants',
           child: PenpotBoard(
             child: Wrap(
               spacing: tokens.spacing.space24,

@@ -27,46 +27,6 @@
 
 - smooth transparent button hover ([c431f75](https://github.com/tsaitechnology/tsai-ui-flutter/commit/c431f75cef93b192854ca41af01c6960d68a57b0))
 
-## Unreleased
-
-### Added
-
-- Added token-backed `UserPill`, home and page top bars, icon actions, and the
-  scroll-owning `PageWithTopBar` composition with catalog examples.
-- Added the Penpot `spacing.12` token, the `TsaiLink` and `TsaiTabs`
-  components, and `TsaiInput.trailingAction`.
-- Added natural-height, bounded viewport, and pinned sliver tab compositions
-  with dedicated catalog examples.
-
-### Changed
-
-- Aligned medium button padding and input/select field insets with Penpot.
-- Moved progress duration and component easing curves into
-  `TsaiMotionTokens`.
-- Made the complete spacing and motion token schemas required, without
-  compatibility defaults.
-- Made `TsaiInput.showVisibilityButton` the only control that adds the
-  visibility action; `obscureText` now controls only the initial text state.
-- Removed the unused `cupertino_icons` dependency.
-- Updated architecture, release-readiness, and widget documentation for the
-  current public API.
-- Removed the animated country-code width from `TsaiPhoneInput`; the editable
-  now takes its measured width in the same layout pass.
-- Split the full `TsaiPhoneInput` field hit area at the country divider, so
-  taps on the left focus the country code and taps on the right focus the
-  national number.
-- Added `TsaiIcon.emoji` and `TsaiIcon.custom` for flags, SVG, PNG, and other
-  custom widget sources.
-- Changed reusable icon slots to accept composed `TsaiIcon` widgets.
-- Replaced `TsaiSelectOption.leading` with the typed
-  `TsaiSelectOption.icon` property.
-- Added a country Select example with emoji flags.
-
-### Fixed
-
-- Removed the intermediate dark/light color flash from outline and ghost
-  button hover transitions.
-
 ## 0.1.4 - 2026-07-24
 
 ### Features

@@ -14,7 +14,6 @@ class CheckboxDemoScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => ComponentDemoWindow(
-    title: 'Tsai UI',
     section: ComponentDemoSection.checkbox,
     themeMode: themeMode,
     onThemeModeChanged: onThemeModeChanged,
@@ -33,7 +32,6 @@ class RadioDemoScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => ComponentDemoWindow(
-    title: 'Tsai UI',
     section: ComponentDemoSection.radio,
     themeMode: themeMode,
     onThemeModeChanged: onThemeModeChanged,
@@ -52,7 +50,6 @@ class SwitchDemoScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => ComponentDemoWindow(
-    title: 'Tsai UI',
     section: ComponentDemoSection.switchControl,
     themeMode: themeMode,
     onThemeModeChanged: onThemeModeChanged,

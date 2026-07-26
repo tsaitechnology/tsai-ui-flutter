@@ -83,6 +83,8 @@ class _SelectDemoState extends State<SelectDemo> {
       key: const ValueKey<String>('select-demo'),
       padding: EdgeInsets.all(tokens.spacing.space24),
       children: [
+        const TsaiTextHeading('Variants', size: TsaiHeadingSize.small),
+        SizedBox(height: tokens.spacing.space16),
         PenpotExample(
           title: 'Select',
           child: PenpotBoard(

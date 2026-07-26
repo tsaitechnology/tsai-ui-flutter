@@ -33,6 +33,17 @@ class _ButtonDemoState extends State<ButtonDemo> {
     controller: widget.controller,
     physics: widget.physics,
     slivers: [
+      SliverPadding(
+        padding: EdgeInsets.fromLTRB(
+          TsaiThemeTokens.of(context).spacing.space24,
+          TsaiThemeTokens.of(context).spacing.space24,
+          TsaiThemeTokens.of(context).spacing.space24,
+          0,
+        ),
+        sliver: const SliverToBoxAdapter(
+          child: TsaiTextHeading('Variants', size: TsaiHeadingSize.small),
+        ),
+      ),
       SliverList.list(
         children: [
           _StateSection(

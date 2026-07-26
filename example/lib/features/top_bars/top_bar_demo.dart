@@ -2,135 +2,272 @@ import 'package:flutter/material.dart';
 import 'package:tsai_ui/tsai_icons.dart';
 import 'package:tsai_ui/tsai_ui.dart';
 
+import '../../demo/component_playground.dart';
+
+enum _HomeLeadingContent { text, user, none }
+
+enum _PageLeadingContent { text, backAction, none }
+
+enum _TrailingContent { none, twoActions, oneAction, text }
+
+enum _TitleContent { text, button, icon }
+
+enum _BodyContent { list, text, button, icon }
+
+class HomeTopBarDemo extends StatefulWidget {
+  const HomeTopBarDemo({super.key});
+
+  @override
+  State<HomeTopBarDemo> createState() => _HomeTopBarDemoState();
+}
+
+class _HomeTopBarDemoState extends State<HomeTopBarDemo> {
+  _HomeLeadingContent _leading = _HomeLeadingContent.user;
+  _TrailingContent _trailing = _TrailingContent.twoActions;
+  bool _indicator = false;
+
+  @override
+  Widget build(BuildContext context) => _LayoutDocument(
+    key: const ValueKey<String>('home-top-bar-demo'),
+    variants: [
+      const _SectionLabel('Title and menu'),
+      HomeTopBar(
+        leading: const [
+          TsaiTextHeading('Dashboard', size: TsaiHeadingSize.small),
+        ],
+        trailing: [
+          HomeTopBarAction(
+            icon: const TsaiIcon(LucideIcons.menu),
+            semanticLabel: 'Menu',
+            onPressed: () {},
+          ),
+        ],
+      ),
+      const _SectionLabel('User and actions'),
+      HomeTopBar(
+        leading: [
+          UserPill(
+            name: 'Ilona T.',
+            initials: 'IT',
+            semanticLabel: 'Open profile',
+            onPressed: () {},
+          ),
+        ],
+        trailing: [
+          HomeTopBarAction(
+            icon: const TsaiIcon(LucideIcons.scan_line),
+            semanticLabel: 'Scan',
+            onPressed: () {},
+          ),
+          HomeTopBarAction(
+            icon: const TsaiIcon(LucideIcons.bell),
+            semanticLabel: 'Notifications',
+            showIndicator: true,
+            onPressed: () {},
+          ),
+        ],
+      ),
+    ],
+    playground: ComponentPlayground(
+      controls: [
+        PlaygroundSelectControl<_HomeLeadingContent>(
+          label: 'leading content',
+          value: _leading,
+          values: _HomeLeadingContent.values,
+          labels: const ['Text', 'User', 'None'],
+          onChanged: (value) => setState(() => _leading = value),
+        ),
+        PlaygroundSelectControl<_TrailingContent>(
+          label: 'trailing content',
+          value: _trailing,
+          values: _TrailingContent.values,
+          labels: const ['None', 'Two actions', 'One action', 'Text'],
+          onChanged: (value) => setState(() => _trailing = value),
+        ),
+        PlaygroundToggleControl(
+          label: 'indicator',
+          value: _indicator,
+          onChanged: (value) => setState(() => _indicator = value),
+        ),
+      ],
+      preview: HomeTopBar(
+        leading: _homeLeading(_leading),
+        trailing: _homeTrailing(_trailing, showIndicator: _indicator),
+      ),
+    ),
+  );
+}
+
+class PageTopBarDemo extends StatefulWidget {
+  const PageTopBarDemo({super.key});
+
+  @override
+  State<PageTopBarDemo> createState() => _PageTopBarDemoState();
+}
+
+class _PageTopBarDemoState extends State<PageTopBarDemo> {
+  _TitleContent _title = _TitleContent.text;
+  _PageLeadingContent _leading = _PageLeadingContent.backAction;
+  _TrailingContent _trailing = _TrailingContent.twoActions;
+
+  @override
+  Widget build(BuildContext context) => _LayoutDocument(
+    key: const ValueKey<String>('page-top-bar-demo'),
+    variants: [
+      const _SectionLabel('Title with two edge actions'),
+      PageTopBar(
+        leading: [
+          PageTopBarAction(
+            icon: const TsaiIcon(LucideIcons.arrow_left),
+            semanticLabel: 'Back',
+            onPressed: () {},
+          ),
+        ],
+        title: const Text('Card details'),
+        trailing: [
+          PageTopBarAction(
+            icon: const TsaiIcon(LucideIcons.plus),
+            semanticLabel: 'Add',
+            onPressed: () {},
+          ),
+          PageTopBarAction(
+            icon: const TsaiIcon(LucideIcons.ellipsis),
+            semanticLabel: 'More',
+            onPressed: () {},
+          ),
+        ],
+      ),
+      const _SectionLabel('Title only'),
+      const PageTopBar(title: Text('Activity')),
+    ],
+    playground: ComponentPlayground(
+      controls: [
+        PlaygroundSelectControl<_TitleContent>(
+          label: 'title content',
+          value: _title,
+          values: _TitleContent.values,
+          labels: const ['Text', 'Button', 'Icon'],
+          onChanged: (value) => setState(() => _title = value),
+        ),
+        PlaygroundSelectControl<_PageLeadingContent>(
+          label: 'leading content',
+          value: _leading,
+          values: _PageLeadingContent.values,
+          labels: const ['Text', 'Back action', 'None'],
+          onChanged: (value) => setState(() => _leading = value),
+        ),
+        PlaygroundSelectControl<_TrailingContent>(
+          label: 'trailing content',
+          value: _trailing,
+          values: _TrailingContent.values,
+          labels: const ['None', 'Two actions', 'One action', 'Text'],
+          onChanged: (value) => setState(() => _trailing = value),
+        ),
+      ],
+      preview: PageTopBar(
+        leading: _pageLeading(_leading),
+        title: _titleSlot(_title),
+        trailing: _pageTrailing(_trailing),
+      ),
+    ),
+  );
+}
+
+class PageWithTopBarDemo extends StatefulWidget {
+  const PageWithTopBarDemo({super.key});
+
+  @override
+  State<PageWithTopBarDemo> createState() => _PageWithTopBarDemoState();
+}
+
+class _PageWithTopBarDemoState extends State<PageWithTopBarDemo> {
+  _BodyContent _bodyContent = _BodyContent.list;
+  _PageLeadingContent _leading = _PageLeadingContent.backAction;
+  _TrailingContent _trailing = _TrailingContent.twoActions;
+
+  @override
+  Widget build(BuildContext context) => _LayoutDocument(
+    key: const ValueKey<String>('page-with-top-bar-demo'),
+    variants: [
+      const _SectionLabel('Scrolling composition'),
+      const SizedBox(height: 420, child: _PortfolioPage()),
+    ],
+    playground: ComponentPlayground(
+      controls: [
+        PlaygroundSelectControl<_BodyContent>(
+          label: 'body content',
+          value: _bodyContent,
+          values: _BodyContent.values,
+          labels: const ['Long list', 'Text', 'Button', 'Icon'],
+          onChanged: (value) => setState(() => _bodyContent = value),
+        ),
+        PlaygroundSelectControl<_PageLeadingContent>(
+          label: 'leading content',
+          value: _leading,
+          values: _PageLeadingContent.values,
+          labels: const ['Text', 'Back action', 'None'],
+          onChanged: (value) => setState(() => _leading = value),
+        ),
+        PlaygroundSelectControl<_TrailingContent>(
+          label: 'trailing content',
+          value: _trailing,
+          values: _TrailingContent.values,
+          labels: const ['None', 'Two actions', 'One action', 'Text'],
+          onChanged: (value) => setState(() => _trailing = value),
+        ),
+      ],
+      preview: SizedBox(
+        height: 320,
+        child: PageWithTopBar(
+          heading: 'Portfolio',
+          subtitle: 'Main account',
+          leading: _pageLeading(_leading),
+          trailing: _pageTrailing(_trailing),
+          body: _body(_bodyContent),
+        ),
+      ),
+    ),
+  );
+}
+
 class TopBarDemo extends StatelessWidget {
   const TopBarDemo({super.key});
 
   @override
+  Widget build(BuildContext context) => const HomeTopBarDemo();
+}
+
+class _LayoutDocument extends StatelessWidget {
+  const _LayoutDocument({
+    required this.variants,
+    required this.playground,
+    super.key,
+  });
+
+  final List<Widget> variants;
+  final Widget playground;
+
+  @override
   Widget build(BuildContext context) {
     final tokens = TsaiThemeTokens.of(context);
-    return SingleChildScrollView(
-      key: const ValueKey<String>('top-bar-demo'),
-      padding: EdgeInsets.all(tokens.spacing.space24),
-      child: Align(
-        alignment: Alignment.topCenter,
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 720),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const TsaiTextHeading('HomeTopBar', size: TsaiHeadingSize.small),
-              SizedBox(height: tokens.spacing.space12),
-              Center(
-                child: SizedBox(
-                  width: 390,
-                  child: HomeTopBar(
-                    leading: [
-                      UserPill(
-                        name: 'Ilona T.',
-                        initials: 'IT',
-                        semanticLabel: 'Open profile',
-                        onPressed: () {},
-                      ),
-                    ],
-                    trailing: [
-                      HomeTopBarAction(
-                        icon: const TsaiIcon(LucideIcons.scan_line),
-                        semanticLabel: 'Scan',
-                        onPressed: () {},
-                      ),
-                      HomeTopBarAction(
-                        icon: const TsaiIcon(LucideIcons.bell),
-                        semanticLabel: 'Notifications',
-                        showIndicator: true,
-                        onPressed: () {},
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(height: tokens.spacing.space32),
-              const TsaiTextHeading('PageTopBar', size: TsaiHeadingSize.small),
-              SizedBox(height: tokens.spacing.space12),
-              Center(
-                child: SizedBox(
-                  width: 390,
-                  child: PageTopBar(
-                    leading: [
-                      PageTopBarAction(
-                        icon: const TsaiIcon(LucideIcons.arrow_left),
-                        semanticLabel: 'Back',
-                        onPressed: () {},
-                      ),
-                    ],
-                    title: const Text('Card details'),
-                    trailing: [
-                      PageTopBarAction(
-                        icon: const TsaiIcon(LucideIcons.plus),
-                        semanticLabel: 'Add',
-                        onPressed: () {},
-                      ),
-                      PageTopBarAction(
-                        icon: const TsaiIcon(LucideIcons.ellipsis),
-                        semanticLabel: 'More',
-                        onPressed: () {},
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(height: tokens.spacing.space32),
-              const TsaiTextHeading(
-                'PageWithTopBar',
-                size: TsaiHeadingSize.small,
-              ),
-              SizedBox(height: tokens.spacing.space12),
-              Center(
-                child: Container(
-                  width: 390,
-                  height: 420,
-                  clipBehavior: Clip.antiAlias,
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: tokens.colors.borderSubtle,
-                      width: tokens.borders.hairline,
-                    ),
-                    borderRadius: BorderRadius.circular(tokens.radii.small),
-                  ),
-                  child: PageWithTopBar(
-                    heading: 'Portfolio',
-                    leading: [
-                      PageTopBarAction(
-                        icon: const TsaiIcon(LucideIcons.arrow_left),
-                        semanticLabel: 'Back',
-                        onPressed: () {},
-                      ),
-                    ],
-                    trailing: [
-                      PageTopBarAction(
-                        icon: const TsaiIcon(LucideIcons.plus),
-                        semanticLabel: 'Add',
-                        onPressed: () {},
-                      ),
-                      PageTopBarAction(
-                        icon: const TsaiIcon(LucideIcons.ellipsis),
-                        semanticLabel: 'More',
-                        onPressed: () {},
-                      ),
-                    ],
-                    body: const _PortfolioBody(),
-                  ),
-                ),
-              ),
-            ],
-          ),
+    return ListView(
+      padding: EdgeInsets.only(bottom: tokens.spacing.space24),
+      children: [
+        const _SectionLabel('Variants'),
+        ...variants,
+        Padding(
+          padding: EdgeInsets.all(tokens.spacing.space16),
+          child: playground,
         ),
-      ),
+      ],
     );
   }
 }
 
-class _PortfolioBody extends StatelessWidget {
-  const _PortfolioBody();
+class _SectionLabel extends StatelessWidget {
+  const _SectionLabel(this.label);
+
+  final String label;
 
   @override
   Widget build(BuildContext context) {
@@ -140,71 +277,232 @@ class _PortfolioBody extends StatelessWidget {
         tokens.spacing.space16,
         tokens.spacing.space24,
         tokens.spacing.space16,
-        tokens.spacing.space32,
+        tokens.spacing.space8,
       ),
-      child: Column(
-        children: [
-          for (final item in const [
-            ('AAPL', 'Apple', r'$214.40'),
-            ('MSFT', 'Microsoft', r'$441.92'),
-            ('NVDA', 'NVIDIA', r'$173.74'),
-            ('TSLA', 'Tesla', r'$316.06'),
-            ('AMZN', 'Amazon', r'$232.22'),
-            ('META', 'Meta', r'$712.50'),
-            ('GOOG', 'Alphabet', r'$192.96'),
-          ])
-            _PortfolioRow(symbol: item.$1, name: item.$2, value: item.$3),
-        ],
-      ),
+      child: TsaiTextHeading(label, size: TsaiHeadingSize.small),
     );
   }
 }
 
-class _PortfolioRow extends StatelessWidget {
-  const _PortfolioRow({
-    required this.symbol,
-    required this.name,
-    required this.value,
-  });
+class _PortfolioPage extends StatelessWidget {
+  const _PortfolioPage();
 
-  final String symbol;
-  final String name;
-  final String value;
+  @override
+  Widget build(BuildContext context) => PageWithTopBar(
+    heading: 'Portfolio',
+    subtitle: 'Main account',
+    leading: [
+      PageTopBarAction(
+        icon: const TsaiIcon(LucideIcons.arrow_left),
+        semanticLabel: 'Back',
+        onPressed: () {},
+      ),
+    ],
+    trailing: [
+      PageTopBarAction(
+        icon: const TsaiIcon(LucideIcons.plus),
+        semanticLabel: 'Add',
+        onPressed: () {},
+      ),
+    ],
+    body: const _PortfolioBody(),
+  );
+}
+
+class _PortfolioBody extends StatelessWidget {
+  const _PortfolioBody();
 
   @override
   Widget build(BuildContext context) {
     final tokens = TsaiThemeTokens.of(context);
-    return Container(
-      height: tokens.spacing.space64,
-      decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(
-            color: tokens.colors.borderSubtle,
-            width: tokens.borders.hairline,
-          ),
-        ),
-      ),
-      child: Row(
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: tokens.spacing.space16),
+      child: Column(
         children: [
-          SizedBox(
-            width: tokens.spacing.space64,
-            child: TsaiTextMonoBody(symbol, size: TsaiBodySize.medium),
-          ),
-          Expanded(
-            child: TsaiTextBody(
-              name,
-              size: TsaiBodySize.medium,
-              weight: TsaiTextWeight.regular,
-              color: tokens.colors.contentSecondary,
+          for (final item in _portfolioItems)
+            Container(
+              height: tokens.spacing.space64,
+              decoration: BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(color: tokens.colors.borderSubtle),
+                ),
+              ),
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: tokens.spacing.space64,
+                    child: TsaiTextMonoBody(item.$1, size: TsaiBodySize.medium),
+                  ),
+                  Expanded(
+                    child: TsaiTextBody(
+                      item.$2,
+                      size: TsaiBodySize.medium,
+                      weight: TsaiTextWeight.regular,
+                    ),
+                  ),
+                  TsaiTextBody(
+                    item.$3,
+                    size: TsaiBodySize.medium,
+                    weight: TsaiTextWeight.medium,
+                  ),
+                ],
+              ),
             ),
-          ),
-          TsaiTextBody(
-            value,
-            size: TsaiBodySize.medium,
-            weight: TsaiTextWeight.medium,
-          ),
         ],
       ),
     );
   }
 }
+
+List<Widget> _homeLeading(_HomeLeadingContent content) => switch (content) {
+  _HomeLeadingContent.text => const [
+    TsaiTextHeading('Dashboard', size: TsaiHeadingSize.small),
+  ],
+  _HomeLeadingContent.user => [
+    UserPill(
+      name: 'Ilona T.',
+      initials: 'IT',
+      semanticLabel: 'Open profile',
+      onPressed: () {},
+    ),
+  ],
+  _HomeLeadingContent.none => const [],
+};
+
+List<Widget> _homeTrailing(
+  _TrailingContent content, {
+  required bool showIndicator,
+}) => switch (content) {
+  _TrailingContent.none => const [],
+  _TrailingContent.twoActions => [
+    HomeTopBarAction(
+      icon: const TsaiIcon(LucideIcons.scan_line),
+      semanticLabel: 'Scan',
+      onPressed: () {},
+    ),
+    HomeTopBarAction(
+      icon: const TsaiIcon(LucideIcons.bell),
+      semanticLabel: 'Notifications',
+      showIndicator: showIndicator,
+      onPressed: () {},
+    ),
+  ],
+  _TrailingContent.oneAction => [
+    HomeTopBarAction(
+      icon: const TsaiIcon(LucideIcons.menu),
+      semanticLabel: 'Menu',
+      showIndicator: showIndicator,
+      onPressed: () {},
+    ),
+  ],
+  _TrailingContent.text => const [
+    TsaiTextBody(
+      'Online',
+      size: TsaiBodySize.medium,
+      weight: TsaiTextWeight.medium,
+    ),
+  ],
+};
+
+List<Widget> _pageLeading(_PageLeadingContent content) => switch (content) {
+  _PageLeadingContent.text => const [
+    TsaiTextBody(
+      'Cancel',
+      size: TsaiBodySize.medium,
+      weight: TsaiTextWeight.medium,
+    ),
+  ],
+  _PageLeadingContent.backAction => [
+    PageTopBarAction(
+      icon: const TsaiIcon(LucideIcons.arrow_left),
+      semanticLabel: 'Back',
+      onPressed: () {},
+    ),
+  ],
+  _PageLeadingContent.none => const [],
+};
+
+List<Widget> _pageTrailing(_TrailingContent content) => switch (content) {
+  _TrailingContent.none => const [],
+  _TrailingContent.twoActions => [
+    PageTopBarAction(
+      icon: const TsaiIcon(LucideIcons.plus),
+      semanticLabel: 'Add',
+      onPressed: () {},
+    ),
+    PageTopBarAction(
+      icon: const TsaiIcon(LucideIcons.ellipsis),
+      semanticLabel: 'More',
+      onPressed: () {},
+    ),
+  ],
+  _TrailingContent.oneAction => [
+    PageTopBarAction(
+      icon: const TsaiIcon(LucideIcons.ellipsis),
+      semanticLabel: 'More',
+      onPressed: () {},
+    ),
+  ],
+  _TrailingContent.text => const [
+    TsaiTextBody(
+      'Save',
+      size: TsaiBodySize.medium,
+      weight: TsaiTextWeight.medium,
+    ),
+  ],
+};
+
+Widget _titleSlot(_TitleContent content) => switch (content) {
+  _TitleContent.text => const Text('Card details'),
+  _TitleContent.button => TsaiButton(
+    label: 'Action',
+    size: TsaiButtonSize.medium,
+    onPressed: () {},
+  ),
+  _TitleContent.icon => const TsaiIcon(LucideIcons.star),
+};
+
+Widget _body(_BodyContent content) => switch (content) {
+  _BodyContent.list => const _PortfolioBody(),
+  _BodyContent.text => const Padding(
+    padding: EdgeInsets.all(24),
+    child: TsaiTextBody(
+      'Content',
+      size: TsaiBodySize.medium,
+      weight: TsaiTextWeight.medium,
+    ),
+  ),
+  _BodyContent.button => Padding(
+    padding: const EdgeInsets.all(24),
+    child: Align(
+      alignment: AlignmentDirectional.topStart,
+      child: TsaiButton(
+        label: 'Action',
+        size: TsaiButtonSize.medium,
+        onPressed: () {},
+      ),
+    ),
+  ),
+  _BodyContent.icon => const Padding(
+    padding: EdgeInsets.all(24),
+    child: Align(
+      alignment: AlignmentDirectional.topStart,
+      child: TsaiIcon(LucideIcons.star),
+    ),
+  ),
+};
+
+const _portfolioItems = [
+  ('AAPL', 'Apple', r'$214.40'),
+  ('MSFT', 'Microsoft', r'$441.92'),
+  ('NVDA', 'NVIDIA', r'$173.74'),
+  ('TSLA', 'Tesla', r'$316.06'),
+  ('AMZN', 'Amazon', r'$232.22'),
+  ('META', 'Meta', r'$712.50'),
+  ('GOOG', 'Alphabet', r'$192.96'),
+  ('AMD', 'AMD', r'$165.61'),
+  ('NFLX', 'Netflix', r'$1,180.49'),
+  ('ORCL', 'Oracle', r'$246.01'),
+  ('CRM', 'Salesforce', r'$262.21'),
+  ('INTC', 'Intel', r'$34.52'),
+];

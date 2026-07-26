@@ -149,6 +149,33 @@ void main() {
     expect(tester.getCenter(find.text('Card details')).dx, closeTo(400, 0.01));
   });
 
+  testWidgets('PageTopBar constrains its title between external text slots', (
+    tester,
+  ) async {
+    await _pump(
+      tester,
+      child: const PageTopBar(
+        leading: [Text('Cancel changes')],
+        title: Text(
+          'A long centered page title that must remain constrained',
+          overflow: TextOverflow.ellipsis,
+          maxLines: 1,
+        ),
+        trailing: [Text('Save changes')],
+      ),
+    );
+
+    final leadingRect = tester.getRect(find.text('Cancel changes'));
+    final titleRect = tester.getRect(
+      find.text('A long centered page title that must remain constrained'),
+    );
+    final trailingRect = tester.getRect(find.text('Save changes'));
+
+    expect(titleRect.left, greaterThanOrEqualTo(leadingRect.right));
+    expect(titleRect.right, lessThanOrEqualTo(trailingRect.left));
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('PageWithTopBar promotes its heading after any scroll', (
     tester,
   ) async {
@@ -175,6 +202,7 @@ void main() {
     );
 
     expect(find.text('Portfolio'), findsOneWidget);
+    expect(find.text('Main account'), findsOneWidget);
     final heading = find.byKey(
       const ValueKey<String>('page-with-top-bar-heading'),
     );
@@ -195,6 +223,7 @@ void main() {
     await tester.pumpAndSettle();
 
     final collapsedHeadingRect = tester.getRect(heading);
+    expect(find.text('Main account'), findsNothing);
     expect(collapsedHeadingRect.top, closeTo(18, 0.01));
     expect(collapsedHeadingRect.center.dx, closeTo(400, 0.01));
     expect(find.text('Portfolio'), findsOneWidget);
@@ -202,9 +231,17 @@ void main() {
 
     controller.jumpTo(0);
     await tester.pump();
+    await tester.pump(const Duration(milliseconds: 110));
+
+    final returningHeadingRect = tester.getRect(heading);
+    expect(returningHeadingRect.top, greaterThan(collapsedHeadingRect.top));
+    expect(returningHeadingRect.top, lessThan(expandedHeadingRect.top));
+    expect(find.text('Main account'), findsNothing);
+
     await tester.pumpAndSettle();
 
     expect(tester.getRect(heading), expandedHeadingRect);
+    expect(find.text('Main account'), findsOneWidget);
     expect(tester.getCenter(trailingIcon), trailingCenter);
   });
 

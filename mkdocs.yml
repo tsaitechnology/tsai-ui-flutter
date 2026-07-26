@@ -48,26 +48,31 @@ nav:
   - Theming: theming.md
   - Widgets:
       - Overview: widgets/index.md
-      - TsaiButton: widgets/tsai-button.md
-      - TsaiLink: widgets/tsai-link.md
-      - TsaiTabs: widgets/tsai-tabs.md
-      - Tsai top bars: widgets/tsai-top-bars.md
-      - TsaiCheckbox: widgets/tsai-checkbox.md
-      - TsaiRadio: widgets/tsai-radio.md
-      - TsaiSwitch: widgets/tsai-switch.md
-      - TsaiSelect: widgets/tsai-select.md
-      - TsaiInput: widgets/tsai-input.md
-      - TsaiPhoneInput: widgets/tsai-phone-input.md
-      - TsaiOtpInput: widgets/tsai-otp-input.md
-      - TsaiPinInput: widgets/tsai-pin-input.md
-      - TsaiTextHeading: widgets/tsai-text-heading.md
-      - TsaiTextBody: widgets/tsai-text-body.md
-      - TsaiTextButton: widgets/tsai-text-button.md
-      - TsaiTextCaption: widgets/tsai-text-caption.md
-      - TsaiTextMonoHeading: widgets/tsai-text-mono-heading.md
-      - TsaiTextMonoBody: widgets/tsai-text-mono-body.md
-      - TsaiTextMonoCaption: widgets/tsai-text-mono-caption.md
-      - TsaiIcon: widgets/tsai-icon.md
+      - Common:
+          - TsaiButton: widgets/tsai-button.md
+          - TsaiLink: widgets/tsai-link.md
+          - TsaiIcon: widgets/tsai-icon.md
+      - Typography:
+          - TsaiTitle: widgets/tsai-title.md
+          - TsaiTextHeading: widgets/tsai-text-heading.md
+          - TsaiTextBody: widgets/tsai-text-body.md
+          - TsaiTextButton: widgets/tsai-text-button.md
+          - TsaiTextCaption: widgets/tsai-text-caption.md
+          - TsaiTextMonoHeading: widgets/tsai-text-mono-heading.md
+          - TsaiTextMonoBody: widgets/tsai-text-mono-body.md
+          - TsaiTextMonoCaption: widgets/tsai-text-mono-caption.md
+      - Forms:
+          - TsaiInput: widgets/tsai-input.md
+          - TsaiPhoneInput: widgets/tsai-phone-input.md
+          - TsaiOtpInput: widgets/tsai-otp-input.md
+          - TsaiPinInput: widgets/tsai-pin-input.md
+          - TsaiSelect: widgets/tsai-select.md
+          - TsaiCheckbox: widgets/tsai-checkbox.md
+          - TsaiRadio: widgets/tsai-radio.md
+          - TsaiSwitch: widgets/tsai-switch.md
+      - Layout:
+          - TsaiTabs: widgets/tsai-tabs.md
+          - Tsai top bars: widgets/tsai-top-bars.md
   - License: license.md
 
 strict: true

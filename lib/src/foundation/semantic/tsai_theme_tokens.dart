@@ -769,7 +769,7 @@ final class TsaiMotionTokens {
     transition: Duration(milliseconds: 220),
     progressIndicator: Duration(milliseconds: 850),
     interactionCurve: Curves.easeOut,
-    transitionCurve: Curves.easeInOutCubic,
+    transitionCurve: Curves.easeInOut,
     revealCurve: Curves.easeOutCubic,
   );
 

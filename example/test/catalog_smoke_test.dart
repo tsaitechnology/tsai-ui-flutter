@@ -45,53 +45,79 @@ void main() {
     expect(find.text('Buttons'), findsOneWidget);
     expect(find.text('Default'), findsOneWidget);
 
-    tester.widget<TabBar>(find.byType(TabBar)).onTap!(0);
+    await tester.tap(find.byTooltip('Open component menu').last);
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 400));
+    expect(find.text('Common'), findsOneWidget);
+    expect(find.text('Typography'), findsOneWidget);
+
+    await tester.tap(find.text('TsaiTextHeading'));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 400));
     expect(
-      find.byKey(const ValueKey<String>('typography-demo')),
+      find.byKey(const ValueKey<String>('heading-widget-demo')),
       findsOneWidget,
     );
   });
 
-  testWidgets('navigates full entity screens and switches theme', (
+  testWidgets('switches theme from the header and opens the drawer', (
     tester,
   ) async {
     await tester.pumpWidget(const CatalogApp());
 
-    expect(find.text('Typography'), findsOneWidget);
-    expect(find.text('Inter / Heading'), findsOneWidget);
-    expect(find.text('headingExtraLarge'), findsOneWidget);
-    expect(find.text('Make every decision visible'), findsNWidgets(4));
+    expect(find.text('Buttons'), findsOneWidget);
+    expect(find.text('Default'), findsOneWidget);
+    expect(find.byType(HomeTopBar), findsOneWidget);
 
     await tester.tap(find.byTooltip('Use light theme'));
-    await tester.pumpAndSettle();
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 400));
     expect(find.byTooltip('Use dark theme'), findsOneWidget);
 
+    await tester.tap(find.byTooltip('Open component menu'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 400));
+    expect(find.text('Common'), findsOneWidget);
+    expect(find.text('Typography'), findsOneWidget);
+
+    await tester.tap(find.text('TsaiTextHeading'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 400));
+    expect(
+      find.byKey(const ValueKey<String>('heading-widget-demo')),
+      findsOneWidget,
+    );
+
+    await tester.tap(find.byTooltip('Open component menu').last);
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 400));
     await tester.tap(find.text('Buttons'));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 400));
-
-    expect(find.text('Default'), findsOneWidget);
     expect(find.text('Loading'), findsOneWidget);
+  });
 
-    final buttonScroll = find.descendant(
-      of: find.byKey(const ValueKey<String>('button-demo')),
-      matching: find.byType(Scrollable),
-    );
-    await tester.scrollUntilVisible(
-      find.text('Without icon'),
-      400,
-      scrollable: buttonScroll,
-    );
-    expect(find.text('Without icon'), findsOneWidget);
+  testWidgets('keeps the catalog header usable at 320 pixels', (tester) async {
+    tester.view.physicalSize = const Size(320, 640);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
 
-    await tester.scrollUntilVisible(
-      find.text('Disabled'),
-      400,
-      scrollable: buttonScroll,
+    await tester.pumpWidget(
+      const CatalogApp(initialRoute: '/typography/mono-heading'),
     );
-    expect(find.text('Disabled'), findsOneWidget);
+    await tester.pump();
+
+    expect(find.text('TsaiTextMonoHeading'), findsOneWidget);
+    expect(find.byTooltip('Use light theme'), findsOneWidget);
+    expect(find.byTooltip('Open component menu'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+
+    await tester.tap(find.byTooltip('Open component menu'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 400));
+    expect(find.byType(Drawer), findsOneWidget);
+    expect(tester.takeException(), isNull);
   });
 
   for (final role in TypographyWidgetRole.values) {
@@ -105,7 +131,7 @@ void main() {
         find.byKey(ValueKey<String>('${role.name}-widget-demo')),
         findsOneWidget,
       );
-      expect(find.text(role.label), findsOneWidget);
+      expect(find.text(role.label), findsWidgets);
     });
   }
 
@@ -114,18 +140,25 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byKey(const ValueKey<String>('icon-demo')), findsOneWidget);
-    expect(find.text('TsaiIcon'), findsOneWidget);
+    expect(find.text('Icons'), findsOneWidget);
   });
 
-  testWidgets('opens top-bar compositions from their catalog route', (
-    tester,
-  ) async {
-    await tester.pumpWidget(const CatalogApp(initialRoute: '/top-bars'));
+  testWidgets('opens separate top-bar documentation routes', (tester) async {
+    await tester.pumpWidget(const CatalogApp(initialRoute: '/top-bars/home'));
     await tester.pumpAndSettle();
 
-    expect(find.byType(TopBarDemo), findsOneWidget);
-    expect(find.byType(HomeTopBar), findsOneWidget);
-    expect(find.byType(PageWithTopBar), findsOneWidget);
+    expect(find.byType(HomeTopBarDemo), findsOneWidget);
+    expect(find.byType(HomeTopBar), findsWidgets);
+
+    await tester.pumpWidget(
+      const CatalogApp(
+        key: ValueKey<String>('page-with-top-bar-app'),
+        initialRoute: '/top-bars/page-layout',
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(find.byType(PageWithTopBarDemo), findsOneWidget);
+    expect(find.byType(PageWithTopBar), findsWidgets);
   });
 
   testWidgets('renders the typography demo without the catalog window', (

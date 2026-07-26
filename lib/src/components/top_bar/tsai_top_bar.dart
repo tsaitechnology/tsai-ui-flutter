@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../foundation/semantic/tsai_theme_tokens.dart';
 import '../../icons/tsai_icon.dart';
+import '../typography/tsai_title.dart';
 
 /// A compact user summary for a [HomeTopBar].
 ///
@@ -242,14 +243,14 @@ class HomeTopBar extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Flexible(child: _SpacedRow(children: leading)),
-            SizedBox(width: tokens.spacing.space8),
-            Flexible(
+            Expanded(
               child: Align(
-                alignment: AlignmentDirectional.centerEnd,
-                child: _SpacedRow(children: trailing),
+                alignment: AlignmentDirectional.centerStart,
+                child: _SpacedRow(children: leading),
               ),
             ),
+            SizedBox(width: tokens.spacing.space8),
+            _SpacedRow(children: trailing),
           ],
         ),
       ),
@@ -313,9 +314,9 @@ class PageTopBarAction extends StatelessWidget {
 
 /// A 56-pixel secondary-page top bar with a geometrically centered title.
 ///
-/// The [leading], [title], and [trailing] layers are positioned independently,
-/// so adding or removing the title never resizes or moves the edge slots. This
-/// widget fills the available width and does not add a system [SafeArea].
+/// [leading], [title], and [trailing] occupy symmetric one-two-one tracks, so
+/// edge content remains bounded and the title stays centered. This widget
+/// fills the available width and does not add a system [SafeArea].
 class PageTopBar extends StatelessWidget {
   /// Creates a page top bar.
   const PageTopBar({
@@ -342,27 +343,45 @@ class PageTopBar extends StatelessWidget {
       height: tokens.spacing.space32 + tokens.spacing.space24,
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: tokens.spacing.space16),
-        child: Stack(
-          alignment: Alignment.center,
+        child: Row(
           children: [
-            Align(
-              alignment: AlignmentDirectional.centerStart,
-              child: _SpacedRow(children: leading),
-            ),
-            Align(
-              child: DefaultTextStyle(
-                style: tokens.typography.bodyLargeMedium.copyWith(
-                  color: tokens.colors.contentPrimary,
+            Expanded(
+              child: ClipRect(
+                child: Align(
+                  alignment: AlignmentDirectional.centerStart,
+                  child: _BoundedSpacedRow(
+                    alignment: MainAxisAlignment.start,
+                    children: leading,
+                  ),
                 ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                textAlign: TextAlign.center,
-                child: title ?? const SizedBox.shrink(),
               ),
             ),
-            Align(
-              alignment: AlignmentDirectional.centerEnd,
-              child: _SpacedRow(children: trailing),
+            Expanded(
+              flex: 2,
+              child: ClipRect(
+                child: Align(
+                  child: DefaultTextStyle(
+                    style: tokens.typography.bodyLargeMedium.copyWith(
+                      color: tokens.colors.contentPrimary,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
+                    child: title ?? const SizedBox.shrink(),
+                  ),
+                ),
+              ),
+            ),
+            Expanded(
+              child: ClipRect(
+                child: Align(
+                  alignment: AlignmentDirectional.centerEnd,
+                  child: _BoundedSpacedRow(
+                    alignment: MainAxisAlignment.end,
+                    children: trailing,
+                  ),
+                ),
+              ),
             ),
           ],
         ),
@@ -423,6 +442,7 @@ class _PageWithTopBarState extends State<PageWithTopBar> {
   late ScrollController _controller;
   late bool _ownsController;
   bool _showCollapsedTitle = false;
+  bool _isTitleTransitioning = false;
 
   @override
   void initState() {
@@ -466,7 +486,16 @@ class _PageWithTopBarState extends State<PageWithTopBar> {
   void _handleScroll() {
     final showCollapsedTitle = _controller.offset > 0;
     if (showCollapsedTitle != _showCollapsedTitle && mounted) {
-      setState(() => _showCollapsedTitle = showCollapsedTitle);
+      setState(() {
+        _showCollapsedTitle = showCollapsedTitle;
+        _isTitleTransitioning = true;
+      });
+    }
+  }
+
+  void _handleTitleTransitionEnd() {
+    if (_isTitleTransitioning && mounted) {
+      setState(() => _isTitleTransitioning = false);
     }
   }
 
@@ -485,6 +514,13 @@ class _PageWithTopBarState extends State<PageWithTopBar> {
     );
     final expandedHeadingHeight =
         expandedHeadingStyle.fontSize! * expandedHeadingStyle.height!;
+    final expandedTitleHeight =
+        expandedHeadingHeight +
+        (widget.subtitle == null
+            ? 0
+            : tokens.spacing.space4 +
+                  tokens.typography.bodyMedium.fontSize! *
+                      tokens.typography.bodyMedium.height!);
     final topBarHeight = tokens.spacing.space32 + tokens.spacing.space24;
     return SizedBox(
       width: double.infinity,
@@ -509,24 +545,18 @@ class _PageWithTopBarState extends State<PageWithTopBar> {
                           padding: EdgeInsets.symmetric(
                             horizontal: tokens.spacing.space16,
                           ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(height: expandedHeadingHeight),
-                              if (widget.subtitle case final subtitle?)
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                    top: tokens.spacing.space4,
-                                  ),
-                                  child: Text(
-                                    subtitle,
-                                    style: tokens.typography.bodyMedium
-                                        .copyWith(
-                                          color: tokens.colors.contentSecondary,
-                                        ),
-                                  ),
-                                ),
-                            ],
+                          child: SizedBox(
+                            height: expandedTitleHeight,
+                            child:
+                                !_showCollapsedTitle && !_isTitleTransitioning
+                                ? TsaiTitle(
+                                    widget.heading,
+                                    key: const ValueKey<String>(
+                                      'page-with-top-bar-heading',
+                                    ),
+                                    subtitle: widget.subtitle,
+                                  )
+                                : null,
                           ),
                         ),
                         widget.body,
@@ -539,6 +569,7 @@ class _PageWithTopBarState extends State<PageWithTopBar> {
             AnimatedPositionedDirectional(
               duration: duration,
               curve: tokens.motion.transitionCurve,
+              onEnd: _handleTitleTransitionEnd,
               top: _showCollapsedTitle
                   ? 0
                   : topBarHeight + tokens.spacing.space8,
@@ -547,24 +578,29 @@ class _PageWithTopBarState extends State<PageWithTopBar> {
               height: _showCollapsedTitle
                   ? topBarHeight
                   : expandedHeadingHeight,
-              child: IgnorePointer(
-                child: AnimatedAlign(
-                  duration: duration,
-                  curve: tokens.motion.transitionCurve,
-                  alignment: _showCollapsedTitle
-                      ? Alignment.center
-                      : AlignmentDirectional.centerStart,
-                  child: AnimatedDefaultTextStyle(
+              child: Visibility(
+                visible: _showCollapsedTitle || _isTitleTransitioning,
+                child: IgnorePointer(
+                  child: AnimatedAlign(
                     duration: duration,
                     curve: tokens.motion.transitionCurve,
-                    style: _showCollapsedTitle
-                        ? collapsedHeadingStyle
-                        : expandedHeadingStyle,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    child: Text(
-                      widget.heading,
-                      key: const ValueKey<String>('page-with-top-bar-heading'),
+                    alignment: _showCollapsedTitle
+                        ? Alignment.center
+                        : AlignmentDirectional.centerStart,
+                    child: AnimatedDefaultTextStyle(
+                      duration: duration,
+                      curve: tokens.motion.transitionCurve,
+                      style: _showCollapsedTitle
+                          ? collapsedHeadingStyle
+                          : expandedHeadingStyle,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      child: Text(
+                        widget.heading,
+                        key: const ValueKey<String>(
+                          'page-with-top-bar-heading',
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -591,6 +627,27 @@ class _SpacedRow extends StatelessWidget {
         for (var index = 0; index < children.length; index++) ...[
           if (index > 0) SizedBox(width: gap),
           children[index],
+        ],
+      ],
+    );
+  }
+}
+
+class _BoundedSpacedRow extends StatelessWidget {
+  const _BoundedSpacedRow({required this.alignment, required this.children});
+
+  final MainAxisAlignment alignment;
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) {
+    final gap = TsaiThemeTokens.of(context).spacing.space8;
+    return Row(
+      mainAxisAlignment: alignment,
+      children: [
+        for (var index = 0; index < children.length; index++) ...[
+          if (index > 0) SizedBox(width: gap),
+          Flexible(fit: FlexFit.loose, child: children[index]),
         ],
       ],
     );

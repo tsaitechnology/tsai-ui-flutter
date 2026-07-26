@@ -25,6 +25,8 @@ class _LinkDemoState extends State<LinkDemo> {
       key: const ValueKey<String>('link-demo'),
       padding: EdgeInsets.all(tokens.spacing.space24),
       children: [
+        const TsaiTextHeading('Variants', size: TsaiHeadingSize.small),
+        SizedBox(height: tokens.spacing.space16),
         Wrap(
           spacing: tokens.spacing.space24,
           runSpacing: tokens.spacing.space16,

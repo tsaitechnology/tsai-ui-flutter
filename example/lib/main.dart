@@ -3,7 +3,7 @@ import 'package:tsai_ui/tsai_ui.dart';
 
 import 'catalog_app.dart';
 
-void main() => runApp(const CatalogApp(home: QuickStartExample()));
+void main() => runApp(const CatalogApp());
 
 /// A compact example of theming and composing Tsai UI components.
 class QuickStartExample extends StatefulWidget {

@@ -33,6 +33,7 @@ import 'package:tsai_ui/tsai_icons.dart';
 | `TsaiTextMonoHeading` | Two JetBrains Mono heading roles | Public |
 | `TsaiTextMonoBody` | Two JetBrains Mono body roles | Public |
 | `TsaiTextMonoCaption` | Two JetBrains Mono caption roles | Public |
+| `TsaiTitle` | Page title with optional supporting text | Public |
 | Typography size and weight enums | Restrict widgets to valid Penpot roles | Public |
 | `TsaiButton` | Action component | Public |
 | `TsaiButtonVariant` | Primary/secondary/outline/ghost | Public |

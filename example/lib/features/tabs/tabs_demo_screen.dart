@@ -15,11 +15,10 @@ class TabsDocumentDemoScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => ComponentDemoWindow(
-    title: 'Tsai UI',
     section: ComponentDemoSection.tabsDocument,
     themeMode: themeMode,
     onThemeModeChanged: onThemeModeChanged,
-    child: const TabsDocumentDemo(),
+    child: const TabsCatalogDemo(),
   );
 }
 
@@ -35,8 +34,7 @@ class TabsViewportDemoScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => ComponentDemoWindow(
-    title: 'Tsai UI',
-    section: ComponentDemoSection.tabsViewport,
+    section: ComponentDemoSection.tabsDocument,
     themeMode: themeMode,
     onThemeModeChanged: onThemeModeChanged,
     child: const TabsViewportDemo(),
@@ -55,8 +53,7 @@ class TabsStickyDemoScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => ComponentDemoWindow(
-    title: 'Tsai UI',
-    section: ComponentDemoSection.tabsSticky,
+    section: ComponentDemoSection.tabsDocument,
     themeMode: themeMode,
     onThemeModeChanged: onThemeModeChanged,
     child: const TabsStickyDemo(),

@@ -9,7 +9,6 @@ import 'features/select/select_demo_screen.dart';
 import 'features/selection_controls/selection_controls_demo_screen.dart';
 import 'features/tabs/tabs_demo_screen.dart';
 import 'features/top_bars/top_bar_demo_screen.dart';
-import 'features/typography/typography_demo_screen.dart';
 import 'features/typography/typography_widget_demo_screen.dart';
 
 class CatalogApp extends StatefulWidget {
@@ -36,19 +35,19 @@ class _CatalogAppState extends State<CatalogApp> {
     routes: {
       '/': (context) =>
           widget.home ??
-          TypographyDemoScreen(
+          ButtonDemoScreen(
             themeMode: _themeMode,
             onThemeModeChanged: _setThemeMode,
           ),
-      '/typography': (context) => TypographyDemoScreen(
-        themeMode: _themeMode,
-        onThemeModeChanged: _setThemeMode,
-      ),
       '/buttons': (context) => ButtonDemoScreen(
         themeMode: _themeMode,
         onThemeModeChanged: _setThemeMode,
       ),
       '/links': (context) => LinkDemoScreen(
+        themeMode: _themeMode,
+        onThemeModeChanged: _setThemeMode,
+      ),
+      '/tabs': (context) => TabsDocumentDemoScreen(
         themeMode: _themeMode,
         onThemeModeChanged: _setThemeMode,
       ),
@@ -64,7 +63,19 @@ class _CatalogAppState extends State<CatalogApp> {
         themeMode: _themeMode,
         onThemeModeChanged: _setThemeMode,
       ),
-      '/top-bars': (context) => TopBarDemoScreen(
+      '/top-bars/home': (context) => HomeTopBarDemoScreen(
+        themeMode: _themeMode,
+        onThemeModeChanged: _setThemeMode,
+      ),
+      '/top-bars/page': (context) => PageTopBarDemoScreen(
+        themeMode: _themeMode,
+        onThemeModeChanged: _setThemeMode,
+      ),
+      '/top-bars/page-layout': (context) => PageWithTopBarDemoScreen(
+        themeMode: _themeMode,
+        onThemeModeChanged: _setThemeMode,
+      ),
+      '/top-bars': (context) => HomeTopBarDemoScreen(
         themeMode: _themeMode,
         onThemeModeChanged: _setThemeMode,
       ),

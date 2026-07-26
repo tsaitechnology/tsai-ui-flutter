@@ -3,26 +3,15 @@
 Every exported Tsai widget has a dedicated reference page and a direct link to
 its live Flutter web example.
 
-## Actions and selection
+## Common
 
 - [TsaiButton](tsai-button.md)
 - [TsaiLink](tsai-link.md)
-- [TsaiTabs](tsai-tabs.md)
-- [Tsai top bars](tsai-top-bars.md)
-- [TsaiCheckbox](tsai-checkbox.md)
-- [TsaiRadio](tsai-radio.md)
-- [TsaiSwitch](tsai-switch.md)
-- [TsaiSelect](tsai-select.md)
-
-## Inputs
-
-- [TsaiInput](tsai-input.md)
-- [TsaiPhoneInput](tsai-phone-input.md)
-- [TsaiOtpInput](tsai-otp-input.md)
-- [TsaiPinInput](tsai-pin-input.md)
+- [TsaiIcon](tsai-icon.md)
 
 ## Typography
 
+- [TsaiTitle](tsai-title.md)
 - [TsaiTextHeading](tsai-text-heading.md)
 - [TsaiTextBody](tsai-text-body.md)
 - [TsaiTextButton](tsai-text-button.md)
@@ -31,6 +20,18 @@ its live Flutter web example.
 - [TsaiTextMonoBody](tsai-text-mono-body.md)
 - [TsaiTextMonoCaption](tsai-text-mono-caption.md)
 
-## Icons
+## Forms
 
-- [TsaiIcon](tsai-icon.md)
+- [TsaiInput](tsai-input.md)
+- [TsaiPhoneInput](tsai-phone-input.md)
+- [TsaiOtpInput](tsai-otp-input.md)
+- [TsaiPinInput](tsai-pin-input.md)
+- [TsaiSelect](tsai-select.md)
+- [TsaiCheckbox](tsai-checkbox.md)
+- [TsaiRadio](tsai-radio.md)
+- [TsaiSwitch](tsai-switch.md)
+
+## Layout
+
+- [TsaiTabs](tsai-tabs.md)
+- [Tsai top bars](tsai-top-bars.md)

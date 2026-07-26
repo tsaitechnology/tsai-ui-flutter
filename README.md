@@ -53,6 +53,11 @@ const TsaiTextBody(
   weight: TsaiTextWeight.regular,
 );
 
+const TsaiTitle(
+  'Portfolio',
+  subtitle: 'Main account',
+);
+
 TsaiCheckbox(
   value: accepted,
   label: 'Accept terms',
@@ -113,6 +118,7 @@ lib/
       select/
       selection/
       tabs/
+      top_bar/
       typography/
     icons/
 example/

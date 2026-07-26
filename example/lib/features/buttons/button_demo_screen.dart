@@ -15,7 +15,6 @@ class ButtonDemoScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => ComponentDemoWindow(
-    title: 'Tsai UI',
     section: ComponentDemoSection.buttons,
     themeMode: themeMode,
     onThemeModeChanged: onThemeModeChanged,

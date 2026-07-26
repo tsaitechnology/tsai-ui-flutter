@@ -14,7 +14,6 @@ class InputDemoScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => ComponentDemoWindow(
-    title: 'Tsai UI',
     section: ComponentDemoSection.input,
     themeMode: themeMode,
     onThemeModeChanged: onThemeModeChanged,
@@ -33,7 +32,6 @@ class PhoneInputDemoScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => ComponentDemoWindow(
-    title: 'Tsai UI',
     section: ComponentDemoSection.inputPhone,
     themeMode: themeMode,
     onThemeModeChanged: onThemeModeChanged,
@@ -52,7 +50,6 @@ class OtpInputDemoScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => ComponentDemoWindow(
-    title: 'Tsai UI',
     section: ComponentDemoSection.inputOtp,
     themeMode: themeMode,
     onThemeModeChanged: onThemeModeChanged,
@@ -71,7 +68,6 @@ class PinInputDemoScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => ComponentDemoWindow(
-    title: 'Tsai UI',
     section: ComponentDemoSection.inputPin,
     themeMode: themeMode,
     onThemeModeChanged: onThemeModeChanged,

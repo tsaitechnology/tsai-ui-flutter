@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import '../../demo/component_demo_window.dart';
 import 'top_bar_demo.dart';
 
-class TopBarDemoScreen extends StatelessWidget {
-  const TopBarDemoScreen({
+class HomeTopBarDemoScreen extends StatelessWidget {
+  const HomeTopBarDemoScreen({
     required this.themeMode,
     required this.onThemeModeChanged,
     super.key,
@@ -15,10 +15,47 @@ class TopBarDemoScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => ComponentDemoWindow(
-    title: 'Tsai UI',
-    section: ComponentDemoSection.topBars,
+    section: ComponentDemoSection.homeTopBar,
     themeMode: themeMode,
     onThemeModeChanged: onThemeModeChanged,
-    child: const TopBarDemo(),
+    child: const HomeTopBarDemo(),
+  );
+}
+
+class PageTopBarDemoScreen extends StatelessWidget {
+  const PageTopBarDemoScreen({
+    required this.themeMode,
+    required this.onThemeModeChanged,
+    super.key,
+  });
+
+  final ThemeMode themeMode;
+  final ValueChanged<ThemeMode> onThemeModeChanged;
+
+  @override
+  Widget build(BuildContext context) => ComponentDemoWindow(
+    section: ComponentDemoSection.pageTopBar,
+    themeMode: themeMode,
+    onThemeModeChanged: onThemeModeChanged,
+    child: const PageTopBarDemo(),
+  );
+}
+
+class PageWithTopBarDemoScreen extends StatelessWidget {
+  const PageWithTopBarDemoScreen({
+    required this.themeMode,
+    required this.onThemeModeChanged,
+    super.key,
+  });
+
+  final ThemeMode themeMode;
+  final ValueChanged<ThemeMode> onThemeModeChanged;
+
+  @override
+  Widget build(BuildContext context) => ComponentDemoWindow(
+    section: ComponentDemoSection.pageWithTopBar,
+    themeMode: themeMode,
+    onThemeModeChanged: onThemeModeChanged,
+    child: const PageWithTopBarDemo(),
   );
 }
