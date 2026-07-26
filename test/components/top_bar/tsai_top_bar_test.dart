@@ -210,11 +210,17 @@ void main() {
 
     controller.jumpTo(1);
     await tester.pump();
+
+    final transitionStartRect = tester.getRect(heading);
+    expect(transitionStartRect.left, closeTo(expandedHeadingRect.left, 0.01));
+
     await tester.pump(const Duration(milliseconds: 110));
 
     final movingHeadingRect = tester.getRect(heading);
     expect(movingHeadingRect.top, lessThan(expandedHeadingRect.top));
     expect(movingHeadingRect.top, greaterThan(18));
+    expect(movingHeadingRect.left, greaterThan(transitionStartRect.left));
+    expect(movingHeadingRect.center.dx, lessThan(400));
 
     await tester.pumpAndSettle();
 

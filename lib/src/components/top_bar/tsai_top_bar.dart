@@ -582,6 +582,7 @@ class _PageWithTopBarState extends State<PageWithTopBar> {
                   : expandedHeadingHeight,
               child: Visibility(
                 visible: _showCollapsedTitle || _isTitleTransitioning,
+                maintainState: true,
                 child: IgnorePointer(
                   child: AnimatedAlign(
                     duration: duration,
