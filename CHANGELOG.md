@@ -1,3 +1,9 @@
+## 0.3.0 - 2026-07-26
+
+### Features
+
+- add top bar components ([c2d42d0](https://github.com/tsaitechnology/tsai-ui-flutter/commit/c2d42d08126c077ff003428ce4c990dcbb468718))
+
 ## 0.2.2 - 2026-07-25
 
 ### Bug Fixes
