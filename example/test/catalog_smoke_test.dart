@@ -8,6 +8,7 @@ import 'package:tsai_ui_example/features/links/link_demo.dart';
 import 'package:tsai_ui_example/features/select/select_demo.dart';
 import 'package:tsai_ui_example/features/selection_controls/selection_controls_demo.dart';
 import 'package:tsai_ui_example/features/tabs/tabs_demo.dart';
+import 'package:tsai_ui_example/features/top_bars/top_bar_demo.dart';
 import 'package:tsai_ui_example/features/typography/typography_demo.dart';
 import 'package:tsai_ui_example/features/typography/typography_widget_demo_screen.dart';
 import 'package:tsai_ui_example/main.dart';
@@ -114,6 +115,17 @@ void main() {
 
     expect(find.byKey(const ValueKey<String>('icon-demo')), findsOneWidget);
     expect(find.text('TsaiIcon'), findsOneWidget);
+  });
+
+  testWidgets('opens top-bar compositions from their catalog route', (
+    tester,
+  ) async {
+    await tester.pumpWidget(const CatalogApp(initialRoute: '/top-bars'));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(TopBarDemo), findsOneWidget);
+    expect(find.byType(HomeTopBar), findsOneWidget);
+    expect(find.byType(PageWithTopBar), findsOneWidget);
   });
 
   testWidgets('renders the typography demo without the catalog window', (

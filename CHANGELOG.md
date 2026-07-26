@@ -25,6 +25,8 @@
 
 ### Added
 
+- Added token-backed `UserPill`, home and page top bars, icon actions, and the
+  scroll-owning `PageWithTopBar` composition with catalog examples.
 - Added the Penpot `spacing.12` token, the `TsaiLink` and `TsaiTabs`
   components, and `TsaiInput.trailingAction`.
 - Added natural-height, bounded viewport, and pinned sliver tab compositions

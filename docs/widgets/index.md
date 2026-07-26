@@ -8,6 +8,7 @@ its live Flutter web example.
 - [TsaiButton](tsai-button.md)
 - [TsaiLink](tsai-link.md)
 - [TsaiTabs](tsai-tabs.md)
+- [Tsai top bars](tsai-top-bars.md)
 - [TsaiCheckbox](tsai-checkbox.md)
 - [TsaiRadio](tsai-radio.md)
 - [TsaiSwitch](tsai-switch.md)

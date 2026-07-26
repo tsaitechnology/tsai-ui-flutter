@@ -59,6 +59,12 @@ import 'package:tsai_ui/tsai_icons.dart';
 | `TsaiOtpInput` | Cell-based one-time-password input | Public |
 | `TsaiPinInput` | Dot-based PIN input | Public |
 | `TsaiIcon` | Stable IconData, emoji, and custom-widget sizing/color adapter | Public |
+| `UserPill` | User name and network-avatar summary with initials fallback | Public |
+| `HomeTopBarAction` | Circular home-bar icon action with an optional status indicator | Public |
+| `HomeTopBar` | Home-page top bar with leading and trailing widget lists | Public |
+| `PageTopBarAction` | Compact icon action for secondary-page top bars | Public |
+| `PageTopBar` | Secondary-page top bar with leading, centered title, and trailing slots | Public |
+| `PageWithTopBar` | Scroll-owning page composition that promotes its heading into a pinned top bar | Public |
 | `LucideIcons` | Opt-in icon catalog re-export | External contract |
 
 ## Internal
@@ -71,6 +77,7 @@ import 'package:tsai_ui/tsai_icons.dart';
 - tabs indicator, intrinsic transition, and sliver delegate;
 - input field/content/action frames;
 - code-input editable overlay and state resolver;
+- top-bar spacing, action frames, avatar loading, and heading transition;
 - example catalog implementation.
 
 No generated Penpot model, router, state-management API, or application service

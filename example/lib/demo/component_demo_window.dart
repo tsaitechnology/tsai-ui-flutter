@@ -9,6 +9,7 @@ enum ComponentDemoSection {
   tabsDocument(label: 'Tabs / Document', route: '/tabs-document'),
   tabsViewport(label: 'Tabs / Viewport', route: '/tabs-viewport'),
   tabsSticky(label: 'Tabs / Sticky', route: '/tabs-sticky'),
+  topBars(label: 'Top Bars', route: '/top-bars'),
   icons(label: 'Icons', route: '/icons'),
   checkbox(label: 'Checkbox', route: '/checkbox'),
   radio(label: 'Radio', route: '/radio'),

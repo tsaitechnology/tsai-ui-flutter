@@ -8,6 +8,7 @@ import 'features/links/link_demo_screen.dart';
 import 'features/select/select_demo_screen.dart';
 import 'features/selection_controls/selection_controls_demo_screen.dart';
 import 'features/tabs/tabs_demo_screen.dart';
+import 'features/top_bars/top_bar_demo_screen.dart';
 import 'features/typography/typography_demo_screen.dart';
 import 'features/typography/typography_widget_demo_screen.dart';
 
@@ -60,6 +61,10 @@ class _CatalogAppState extends State<CatalogApp> {
         onThemeModeChanged: _setThemeMode,
       ),
       '/tabs-sticky': (context) => TabsStickyDemoScreen(
+        themeMode: _themeMode,
+        onThemeModeChanged: _setThemeMode,
+      ),
+      '/top-bars': (context) => TopBarDemoScreen(
         themeMode: _themeMode,
         onThemeModeChanged: _setThemeMode,
       ),
