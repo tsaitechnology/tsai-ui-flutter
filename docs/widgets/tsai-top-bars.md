@@ -49,7 +49,7 @@ to notifications and can be used by any home action.
 ## Page top bar
 
 `PageTopBar` is 56 pixels high and fills the available width. Its leading,
-center, and trailing content uses symmetric one-two-one tracks. Showing or
+title, and trailing content uses symmetric one-two-one tracks. Showing or
 hiding the title therefore does not resize the bar or move either action list.
 
 ```dart
@@ -61,7 +61,7 @@ PageTopBar(
       onPressed: Navigator.of(context).pop,
     ),
   ],
-  title: const Text('Card details'),
+  title: 'Card details',
   trailing: [
     PageTopBarAction(
       icon: const TsaiIcon(LucideIcons.plus),
@@ -77,11 +77,11 @@ PageTopBar(
 )
 ```
 
-The title slot accepts any widget and supplies the Penpot large-body text style
-through `DefaultTextStyle`. `leading` and `trailing` are external widget lists;
-they can contain actions, text, or another compact composition. The bar uses
-a symmetric one-two-one track layout to keep the title geometrically centered
-and clip each slot inside its own bounds.
+`title` accepts text and applies the Penpot large-body text style. `leading`
+and `trailing` are external widget lists; they can contain actions, text, or
+another compact composition. The bar uses a symmetric one-two-one track layout
+to keep the title geometrically centered and clip each track inside its own
+bounds.
 
 Both action types require a `TsaiIcon` and semantic label. Set `onPressed` to
 null for a disabled action.
@@ -90,10 +90,12 @@ null for a disabled action.
 
 `PageWithTopBar` keeps `PageTopBar` pinned and owns one
 `SingleChildScrollView`. The expanded heading and body move as one document.
+Its `heading` and optional `subtitle` are text values, so the title area cannot
+be replaced with an unrelated widget.
 After any positive scroll offset, the expanded `TsaiTitle` is replaced by a
 moving primary heading while the subtitle is removed. The heading moves into
-the centered title slot as its typography animates from `headingExtraLarge` to
-`bodyLargeMedium`. Returning to offset zero completes the reverse movement
+the centered title position as its typography animates from `headingExtraLarge`
+to `bodyLargeMedium`. Returning to offset zero completes the reverse movement
 before restoring `TsaiTitle`. Motion uses the token-backed ease-in-out curve
 and becomes immediate when reduced motion is enabled.
 

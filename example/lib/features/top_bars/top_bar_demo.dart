@@ -10,8 +10,6 @@ enum _PageLeadingContent { text, backAction, none }
 
 enum _TrailingContent { none, twoActions, oneAction, text }
 
-enum _TitleContent { text, button, icon }
-
 enum _BodyContent { list, text, button, icon }
 
 class HomeTopBarDemo extends StatefulWidget {
@@ -106,7 +104,6 @@ class PageTopBarDemo extends StatefulWidget {
 }
 
 class _PageTopBarDemoState extends State<PageTopBarDemo> {
-  _TitleContent _title = _TitleContent.text;
   _PageLeadingContent _leading = _PageLeadingContent.backAction;
   _TrailingContent _trailing = _TrailingContent.twoActions;
 
@@ -123,7 +120,7 @@ class _PageTopBarDemoState extends State<PageTopBarDemo> {
             onPressed: () {},
           ),
         ],
-        title: const Text('Card details'),
+        title: 'Card details',
         trailing: [
           PageTopBarAction(
             icon: const TsaiIcon(LucideIcons.plus),
@@ -138,17 +135,10 @@ class _PageTopBarDemoState extends State<PageTopBarDemo> {
         ],
       ),
       const _SectionLabel('Title only'),
-      const PageTopBar(title: Text('Activity')),
+      const PageTopBar(title: 'Activity'),
     ],
     playground: ComponentPlayground(
       controls: [
-        PlaygroundSelectControl<_TitleContent>(
-          label: 'title content',
-          value: _title,
-          values: _TitleContent.values,
-          labels: const ['Text', 'Button', 'Icon'],
-          onChanged: (value) => setState(() => _title = value),
-        ),
         PlaygroundSelectControl<_PageLeadingContent>(
           label: 'leading content',
           value: _leading,
@@ -166,7 +156,7 @@ class _PageTopBarDemoState extends State<PageTopBarDemo> {
       ],
       preview: PageTopBar(
         leading: _pageLeading(_leading),
-        title: _titleSlot(_title),
+        title: 'Card details',
         trailing: _pageTrailing(_trailing),
       ),
     ),
@@ -450,16 +440,6 @@ List<Widget> _pageTrailing(_TrailingContent content) => switch (content) {
       weight: TsaiTextWeight.medium,
     ),
   ],
-};
-
-Widget _titleSlot(_TitleContent content) => switch (content) {
-  _TitleContent.text => const Text('Card details'),
-  _TitleContent.button => TsaiButton(
-    label: 'Action',
-    size: TsaiButtonSize.medium,
-    onPressed: () {},
-  ),
-  _TitleContent.icon => const TsaiIcon(LucideIcons.star),
 };
 
 Widget _body(_BodyContent content) => switch (content) {

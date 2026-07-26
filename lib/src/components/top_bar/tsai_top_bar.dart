@@ -329,8 +329,8 @@ class PageTopBar extends StatelessWidget {
   /// Widgets placed at the directional start.
   final List<Widget> leading;
 
-  /// Optional centered title.
-  final Widget? title;
+  /// Optional centered title text.
+  final String? title;
 
   /// Widgets placed at the directional end.
   final List<Widget> trailing;
@@ -360,15 +360,17 @@ class PageTopBar extends StatelessWidget {
               flex: 2,
               child: ClipRect(
                 child: Align(
-                  child: DefaultTextStyle(
-                    style: tokens.typography.bodyLargeMedium.copyWith(
-                      color: tokens.colors.contentPrimary,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.center,
-                    child: title ?? const SizedBox.shrink(),
-                  ),
+                  child: title == null
+                      ? const SizedBox.shrink()
+                      : Text(
+                          title!,
+                          style: tokens.typography.bodyLargeMedium.copyWith(
+                            color: tokens.colors.contentPrimary,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.center,
+                        ),
                 ),
               ),
             ),

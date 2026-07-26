@@ -20,6 +20,7 @@ void main() {
       find.descendant(of: preview, matching: find.text('Card details')),
       findsOneWidget,
     );
+    expect(find.text('title content'), findsNothing);
     expect(find.text('Two actions'), findsOneWidget);
   });
 

@@ -114,7 +114,7 @@ void main() {
             onPressed: () {},
           ),
         ],
-        title: const Text('Card details'),
+        title: 'Card details',
         trailing: [
           PageTopBarAction(
             icon: const TsaiIcon(Icons.add),
@@ -156,11 +156,7 @@ void main() {
       tester,
       child: const PageTopBar(
         leading: [Text('Cancel changes')],
-        title: Text(
-          'A long centered page title that must remain constrained',
-          overflow: TextOverflow.ellipsis,
-          maxLines: 1,
-        ),
+        title: 'A long centered page title that must remain constrained',
         trailing: [Text('Save changes')],
       ),
     );
