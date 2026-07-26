@@ -21,7 +21,19 @@ void main() {
       findsOneWidget,
     );
     expect(find.text('title content'), findsNothing);
+    expect(find.text('title'), findsOneWidget);
     expect(find.text('Two actions'), findsOneWidget);
+
+    await tester.enterText(
+      find.byKey(const ValueKey<String>('tsai-input-editable')),
+      'Account activity',
+    );
+    await tester.pump();
+
+    expect(
+      find.descendant(of: preview, matching: find.text('Account activity')),
+      findsOneWidget,
+    );
   });
 
   testWidgets('PageWithTopBar playground provides a long scrolling list', (

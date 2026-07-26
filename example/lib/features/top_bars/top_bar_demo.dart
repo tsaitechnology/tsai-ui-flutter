@@ -104,6 +104,7 @@ class PageTopBarDemo extends StatefulWidget {
 }
 
 class _PageTopBarDemoState extends State<PageTopBarDemo> {
+  String _title = 'Card details';
   _PageLeadingContent _leading = _PageLeadingContent.backAction;
   _TrailingContent _trailing = _TrailingContent.twoActions;
 
@@ -139,6 +140,11 @@ class _PageTopBarDemoState extends State<PageTopBarDemo> {
     ],
     playground: ComponentPlayground(
       controls: [
+        PlaygroundTextControl(
+          label: 'title',
+          value: _title,
+          onChanged: (value) => setState(() => _title = value),
+        ),
         PlaygroundSelectControl<_PageLeadingContent>(
           label: 'leading content',
           value: _leading,
@@ -156,7 +162,7 @@ class _PageTopBarDemoState extends State<PageTopBarDemo> {
       ],
       preview: PageTopBar(
         leading: _pageLeading(_leading),
-        title: 'Card details',
+        title: _title,
         trailing: _pageTrailing(_trailing),
       ),
     ),
