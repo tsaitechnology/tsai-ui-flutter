@@ -1,3 +1,13 @@
+## 0.4.0 - 2026-07-31
+
+### Features
+
+- add composed app navigation example ([35cf468](https://github.com/tsaitechnology/tsai-ui-flutter/commit/35cf468892a2f8d97b17e6585d8eb472a08c19a1))
+
+### Bug Fixes
+
+- overlay top bars on scrolling content ([763000b](https://github.com/tsaitechnology/tsai-ui-flutter/commit/763000b4e8555bd407d9c35dc56c3b18f66e4fd4))
+
 ## 0.3.2 - 2026-07-31
 
 ### Features
