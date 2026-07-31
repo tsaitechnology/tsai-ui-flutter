@@ -1,3 +1,9 @@
+## 0.4.1 - 2026-07-31
+
+### Bug Fixes
+
+- unify bottom navigation item sizing ([f5602e6](https://github.com/tsaitechnology/tsai-ui-flutter/commit/f5602e604daf6850e06c13e97ca0c16644a8a741))
+
 ## 0.4.0 - 2026-07-31
 
 ### Features
