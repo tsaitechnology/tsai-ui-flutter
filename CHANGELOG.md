@@ -1,3 +1,13 @@
+## 0.3.2 - 2026-07-31
+
+### Features
+
+- add tokenized bottom navigation ([e9f2f3f](https://github.com/tsaitechnology/tsai-ui-flutter/commit/e9f2f3f445696bd4c10bdafb18c0408d7d3f6e92))
+
+### Documentation
+
+- add repository agent instructions ([7a6fdcf](https://github.com/tsaitechnology/tsai-ui-flutter/commit/7a6fdcff1b2b5d037e3498757c3d33c8c2ce8249))
+
 ## 0.3.1 - 2026-07-26
 
 ### Features
