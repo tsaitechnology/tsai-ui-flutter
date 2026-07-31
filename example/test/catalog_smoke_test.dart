@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tsai_ui/tsai_ui.dart';
 import 'package:tsai_ui_example/catalog_app.dart';
 import 'package:tsai_ui_example/features/buttons/button_demo.dart';
+import 'package:tsai_ui_example/features/bottom_nav_bar/bottom_nav_bar_demo.dart';
 import 'package:tsai_ui_example/features/inputs/input_demo.dart';
 import 'package:tsai_ui_example/features/links/link_demo.dart';
 import 'package:tsai_ui_example/features/select/select_demo.dart';
@@ -159,6 +160,23 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byType(PageWithTopBarDemo), findsOneWidget);
     expect(find.byType(PageWithTopBar), findsWidgets);
+  });
+
+  testWidgets('opens four bottom-nav-bar backdrop examples', (tester) async {
+    await tester.pumpWidget(const CatalogApp(initialRoute: '/bottom-nav-bar'));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(BottomNavBarDemo), findsOneWidget);
+    expect(find.text('1 destination'), findsOneWidget);
+    expect(find.byType(BottomNavBar), findsWidgets);
+
+    await tester.scrollUntilVisible(
+      find.text('4 destinations'),
+      300,
+      scrollable: find.byType(Scrollable).last,
+    );
+    expect(find.text('4 destinations'), findsOneWidget);
+    expect(find.byType(BottomNavBar), findsWidgets);
   });
 
   testWidgets('renders the typography demo without the catalog window', (

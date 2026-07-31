@@ -34,4 +34,5 @@ its live Flutter web example.
 ## Layout
 
 - [TsaiTabs](tsai-tabs.md)
+- [BottomNavBar](tsai-bottom-nav-bar.md)
 - [Tsai top bars](tsai-top-bars.md)

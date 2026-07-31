@@ -24,6 +24,7 @@ void main() {
     expect(find.text('IT'), findsOneWidget);
     expect(find.byType(Image), findsOneWidget);
     expect(find.byType(UserPill), findsNWidgets(2));
+    expect(find.byType(BackdropFilter), findsNWidgets(2));
   });
 
   testWidgets('UserPill invokes its optional action', (tester) async {
@@ -77,11 +78,34 @@ void main() {
       find.byWidgetPredicate(
         (widget) =>
             widget is SizedBox &&
-            widget.height == 64 &&
+            widget.height == 76 &&
             widget.width == double.infinity,
       ),
       findsOneWidget,
     );
+    expect(
+      find.descendant(
+        of: find.byType(HomeTopBar),
+        matching: find.byType(BackdropFilter),
+      ),
+      findsNWidgets(3),
+    );
+    final homeDecoration = tester.widget<DecoratedBox>(
+      find
+          .descendant(
+            of: find.byType(HomeTopBar),
+            matching: find.byWidgetPredicate(
+              (widget) =>
+                  widget is DecoratedBox &&
+                  widget.decoration is BoxDecoration &&
+                  (widget.decoration as BoxDecoration).gradient != null,
+            ),
+          )
+          .first,
+    );
+    final gradient = (homeDecoration.decoration as BoxDecoration).gradient!;
+    expect(gradient.colors.first, TsaiThemeTokens.light.colors.canvasGlass);
+    expect(gradient.colors.last.a, 0);
     expect(
       find.byWidgetPredicate(
         (widget) =>
@@ -89,8 +113,29 @@ void main() {
       ),
       findsNWidgets(2),
     );
+    final userPillRect = tester.getRect(find.byType(UserPill));
+    final firstActionRect = tester.getRect(find.byType(HomeTopBarAction).first);
+    expect(userPillRect.height, 40);
+    expect(firstActionRect.height, 40);
+    expect(userPillRect.top, firstActionRect.top);
+    expect(userPillRect.top, tester.getRect(find.byType(HomeTopBar)).top + 12);
     expect(
       find.byKey(const ValueKey<String>('home-top-bar-action-indicator')),
+      findsOneWidget,
+    );
+    final indicator = find.byKey(
+      const ValueKey<String>('home-top-bar-action-indicator'),
+    );
+    expect(
+      find.ancestor(of: indicator, matching: find.byType(InkWell)),
+      findsNothing,
+    );
+    expect(
+      find.ancestor(of: indicator, matching: find.byType(ClipRRect)),
+      findsNothing,
+    );
+    expect(
+      find.ancestor(of: indicator, matching: find.byType(HomeTopBarAction)),
       findsOneWidget,
     );
 

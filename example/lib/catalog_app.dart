@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tsai_ui/tsai_ui.dart';
 
 import 'features/buttons/button_demo_screen.dart';
+import 'features/bottom_nav_bar/bottom_nav_bar_demo_screen.dart';
 import 'features/icons/icon_demo_screen.dart';
 import 'features/inputs/input_demo_screen.dart';
 import 'features/links/link_demo_screen.dart';
@@ -60,6 +61,10 @@ class _CatalogAppState extends State<CatalogApp> {
         onThemeModeChanged: _setThemeMode,
       ),
       '/tabs-sticky': (context) => TabsStickyDemoScreen(
+        themeMode: _themeMode,
+        onThemeModeChanged: _setThemeMode,
+      ),
+      '/bottom-nav-bar': (context) => BottomNavBarDemoScreen(
         themeMode: _themeMode,
         onThemeModeChanged: _setThemeMode,
       ),

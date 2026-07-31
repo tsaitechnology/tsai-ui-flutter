@@ -13,6 +13,9 @@ lib/
     component_demo_window.dart           # Shared chrome, navigation, theme UI
     component_playground.dart            # Shared preview and parameter controls
   features/
+    bottom_nav_bar/
+      bottom_nav_bar_demo.dart            # One-to-four item glass/backdrop examples
+      bottom_nav_bar_demo_screen.dart
     buttons/
       button_demo.dart                   # Embeddable button demo
       button_demo_screen.dart            # Full-page composition
@@ -76,6 +79,7 @@ Render one full entity page by opening its route:
 /#/tabs-document Tabs in a document-owned scroll view
 /#/tabs-viewport Fixed tabs with section-owned scrolling
 /#/tabs-sticky Tabs pinned after the page header
+/#/bottom-nav-bar Bottom Nav Bar with 1-4 destinations
 /#/icons Icons
 /#/checkbox Checkbox
 /#/radio Radio
@@ -112,7 +116,7 @@ SizedBox(
 ```
 
 Every component page starts with the canonical Penpot variant board and Penpot
-example layouts. The interactive playground is always the final section.
+example layouts. Where a playground is applicable, it is the final section.
 Inside it, editable public properties and callback output are arranged
 vertically above the live component preview. Selection-control lists preserve
 the documented 16-pixel list spacing and 24-pixel multiline spacing.

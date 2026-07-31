@@ -9,17 +9,20 @@ import '../primitives/reference_tokens.dart';
 final class TsaiThemeTokens extends ThemeExtension<TsaiThemeTokens> {
   const TsaiThemeTokens._({
     required this.colors,
+    required this.gradients,
     required this.typography,
     required this.spacing,
     required this.radii,
     required this.borders,
     required this.shadows,
+    required this.effects,
     required this.motion,
   });
 
   /// Canonical light token set sourced from Penpot.
   static final light = _fromReference(
     TsaiReferenceTokens.lightColors,
+    TsaiReferenceTokens.lightGradients,
     const TsaiShadowTokens(
       soft: BoxShadow(
         color: Color(0x1A000000),
@@ -37,6 +40,7 @@ final class TsaiThemeTokens extends ThemeExtension<TsaiThemeTokens> {
   /// Canonical dark token set sourced from Penpot.
   static final dark = _fromReference(
     TsaiReferenceTokens.darkColors,
+    TsaiReferenceTokens.darkGradients,
     const TsaiShadowTokens(
       soft: BoxShadow(
         color: Color(0x80000000),
@@ -54,6 +58,9 @@ final class TsaiThemeTokens extends ThemeExtension<TsaiThemeTokens> {
   /// Intent-based colors for surfaces, content, actions, borders, and icons.
   final TsaiColorTokens colors;
 
+  /// Theme-aware reusable gradients sourced from Penpot color assets.
+  final TsaiGradientTokens gradients;
+
   /// Role-based Inter and JetBrains Mono text styles.
   final TsaiTypographyTokens typography;
 
@@ -68,6 +75,9 @@ final class TsaiThemeTokens extends ThemeExtension<TsaiThemeTokens> {
 
   /// Semantic elevation effects.
   final TsaiShadowTokens shadows;
+
+  /// Semantic backdrop and image effects.
+  final TsaiEffectTokens effects;
 
   /// Semantic interaction durations.
   final TsaiMotionTokens motion;
@@ -93,19 +103,23 @@ final class TsaiThemeTokens extends ThemeExtension<TsaiThemeTokens> {
   @override
   TsaiThemeTokens copyWith({
     TsaiColorTokens? colors,
+    TsaiGradientTokens? gradients,
     TsaiTypographyTokens? typography,
     TsaiSpacingTokens? spacing,
     TsaiRadiusTokens? radii,
     TsaiBorderTokens? borders,
     TsaiShadowTokens? shadows,
+    TsaiEffectTokens? effects,
     TsaiMotionTokens? motion,
   }) => TsaiThemeTokens._(
     colors: colors ?? this.colors,
+    gradients: gradients ?? this.gradients,
     typography: typography ?? this.typography,
     spacing: spacing ?? this.spacing,
     radii: radii ?? this.radii,
     borders: borders ?? this.borders,
     shadows: shadows ?? this.shadows,
+    effects: effects ?? this.effects,
     motion: motion ?? this.motion,
   );
 
@@ -119,26 +133,33 @@ final class TsaiThemeTokens extends ThemeExtension<TsaiThemeTokens> {
     }
     return TsaiThemeTokens._(
       colors: colors.lerp(other.colors, t),
+      gradients: gradients.lerp(other.gradients, t),
       typography: typography.lerp(other.typography, t),
       spacing: spacing.lerp(other.spacing, t),
       radii: radii.lerp(other.radii, t),
       borders: borders.lerp(other.borders, t),
       shadows: shadows.lerp(other.shadows, t),
+      effects: effects.lerp(other.effects, t),
       motion: motion.lerp(other.motion, t),
     );
   }
 
   static TsaiThemeTokens _fromReference(
     TsaiReferenceColors colors,
+    TsaiReferenceGradients gradients,
     TsaiShadowTokens shadows,
   ) => TsaiThemeTokens._(
     colors: TsaiColorTokens(
       canvas: colors.background,
+      canvasGlass: colors.backgroundGlass,
       surface: colors.surface1,
       surfaceRaised: colors.surface2,
+      surfaceGlass: colors.surfaceGlass,
       surfaceAccent: colors.surfaceIndigo,
       surfaceAccentPressed: colors.surfaceIndigoDeep,
+      surfaceAccentGlass: colors.surfaceIndigoGlass,
       contentPrimary: colors.textPrimary,
+      contentAccent: colors.textAccent,
       contentSecondary: colors.textSecondary,
       contentTertiary: colors.textTertiary,
       contentOnActionPrimary: colors.textOnAccentPrimary,
@@ -156,11 +177,16 @@ final class TsaiThemeTokens extends ThemeExtension<TsaiThemeTokens> {
       iconOnAction: colors.iconOnAccent,
       iconBright: colors.iconBright,
     ),
+    gradients: TsaiGradientTokens(
+      topScrim: gradients.topScrim,
+      bottomScrim: gradients.bottomScrim,
+    ),
     typography: TsaiTypographyTokens.standard,
     spacing: TsaiSpacingTokens.standard,
     radii: TsaiRadiusTokens.standard,
     borders: const TsaiBorderTokens(hairline: 1),
     shadows: shadows,
+    effects: TsaiEffectTokens.standard,
     motion: TsaiMotionTokens.standard,
   );
 }
@@ -171,11 +197,15 @@ final class TsaiColorTokens {
   /// Creates a complete set of semantic colors.
   const TsaiColorTokens({
     required this.canvas,
+    required this.canvasGlass,
     required this.surface,
     required this.surfaceRaised,
+    required this.surfaceGlass,
     required this.surfaceAccent,
     required this.surfaceAccentPressed,
+    required this.surfaceAccentGlass,
     required this.contentPrimary,
+    required this.contentAccent,
     required this.contentSecondary,
     required this.contentTertiary,
     required this.contentOnActionPrimary,
@@ -197,11 +227,17 @@ final class TsaiColorTokens {
   /// Application canvas.
   final Color canvas;
 
+  /// Translucent application canvas used by fading chrome.
+  final Color canvasGlass;
+
   /// Default contained surface.
   final Color surface;
 
   /// Raised or emphasized surface.
   final Color surfaceRaised;
+
+  /// Translucent contained surface used over scrollable content.
+  final Color surfaceGlass;
 
   /// Accent-tinted surface.
   final Color surfaceAccent;
@@ -209,8 +245,14 @@ final class TsaiColorTokens {
   /// Pressed accent-tinted surface.
   final Color surfaceAccentPressed;
 
+  /// Translucent accent-tinted surface used inside glass surfaces.
+  final Color surfaceAccentGlass;
+
   /// Primary text content.
   final Color contentPrimary;
+
+  /// Accent-colored text used for selected navigation labels.
+  final Color contentAccent;
 
   /// Secondary text content.
   final Color contentSecondary;
@@ -263,15 +305,23 @@ final class TsaiColorTokens {
   /// Interpolates every color role.
   TsaiColorTokens lerp(TsaiColorTokens other, double t) => TsaiColorTokens(
     canvas: Color.lerp(canvas, other.canvas, t)!,
+    canvasGlass: Color.lerp(canvasGlass, other.canvasGlass, t)!,
     surface: Color.lerp(surface, other.surface, t)!,
     surfaceRaised: Color.lerp(surfaceRaised, other.surfaceRaised, t)!,
+    surfaceGlass: Color.lerp(surfaceGlass, other.surfaceGlass, t)!,
     surfaceAccent: Color.lerp(surfaceAccent, other.surfaceAccent, t)!,
     surfaceAccentPressed: Color.lerp(
       surfaceAccentPressed,
       other.surfaceAccentPressed,
       t,
     )!,
+    surfaceAccentGlass: Color.lerp(
+      surfaceAccentGlass,
+      other.surfaceAccentGlass,
+      t,
+    )!,
     contentPrimary: Color.lerp(contentPrimary, other.contentPrimary, t)!,
+    contentAccent: Color.lerp(contentAccent, other.contentAccent, t)!,
     contentSecondary: Color.lerp(contentSecondary, other.contentSecondary, t)!,
     contentTertiary: Color.lerp(contentTertiary, other.contentTertiary, t)!,
     contentOnActionPrimary: Color.lerp(
@@ -305,6 +355,26 @@ final class TsaiColorTokens {
     iconOnAction: Color.lerp(iconOnAction, other.iconOnAction, t)!,
     iconBright: Color.lerp(iconBright, other.iconBright, t)!,
   );
+}
+
+/// Theme-aware reusable gradients sourced from Penpot color assets.
+@immutable
+final class TsaiGradientTokens {
+  /// Creates a complete set of semantic gradients.
+  const TsaiGradientTokens({required this.topScrim, required this.bottomScrim});
+
+  /// Fades from the application canvas into transparent content below.
+  final LinearGradient topScrim;
+
+  /// Fades from transparent content above into the application canvas.
+  final LinearGradient bottomScrim;
+
+  /// Interpolates every gradient role.
+  TsaiGradientTokens lerp(TsaiGradientTokens other, double t) =>
+      TsaiGradientTokens(
+        topScrim: LinearGradient.lerp(topScrim, other.topScrim, t)!,
+        bottomScrim: LinearGradient.lerp(bottomScrim, other.bottomScrim, t)!,
+      );
 }
 
 /// Semantic typography roles sourced from the Penpot typography set.
@@ -576,6 +646,7 @@ final class TsaiSpacingTokens {
   const TsaiSpacingTokens({
     required this.space2,
     required this.space4,
+    required this.space6,
     required this.space8,
     required this.space12,
     required this.space16,
@@ -591,6 +662,7 @@ final class TsaiSpacingTokens {
   static const standard = TsaiSpacingTokens(
     space2: 2,
     space4: 4,
+    space6: 6,
     space8: 8,
     space12: 12,
     space16: 16,
@@ -607,6 +679,9 @@ final class TsaiSpacingTokens {
 
   /// Four pixels.
   final double space4;
+
+  /// Six pixels.
+  final double space6;
 
   /// Eight pixels.
   final double space8;
@@ -640,6 +715,7 @@ final class TsaiSpacingTokens {
       TsaiSpacingTokens(
         space2: lerpDouble(space2, other.space2, t)!,
         space4: lerpDouble(space4, other.space4, t)!,
+        space6: lerpDouble(space6, other.space6, t)!,
         space8: lerpDouble(space8, other.space8, t)!,
         space12: lerpDouble(space12, other.space12, t)!,
         space16: lerpDouble(space16, other.space16, t)!,
@@ -729,6 +805,23 @@ final class TsaiShadowTokens {
     soft: BoxShadow.lerp(soft, other.soft, t)!,
     accentGlow: BoxShadow.lerp(accentGlow, other.accentGlow, t)!,
   );
+}
+
+/// Semantic visual effects sourced from Penpot number tokens.
+@immutable
+final class TsaiEffectTokens {
+  /// Creates a complete visual-effect token set.
+  const TsaiEffectTokens({required this.glassBlur});
+
+  /// Canonical visual-effect values sourced from Penpot.
+  static const standard = TsaiEffectTokens(glassBlur: 24);
+
+  /// Sigma used by glass-surface backdrop blur.
+  final double glassBlur;
+
+  /// Interpolates every visual-effect role.
+  TsaiEffectTokens lerp(TsaiEffectTokens other, double t) =>
+      TsaiEffectTokens(glassBlur: lerpDouble(glassBlur, other.glassBlur, t)!);
 }
 
 /// Semantic motion shared by interactive components.

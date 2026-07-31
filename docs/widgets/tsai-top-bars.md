@@ -9,8 +9,10 @@ that moves its heading into a pinned bar when scrolling starts.
 
 ## Home top bar
 
-`HomeTopBar` is 64 pixels high and accepts lists of widgets at both directional
-edges. Items in each list use the Penpot eight-pixel gap.
+`HomeTopBar` is 76 pixels high and accepts lists of widgets at both directional
+edges. Items in each list use the Penpot eight-pixel gap. Its background uses
+the theme's reusable top scrim asset, while `UserPill` and
+`HomeTopBarAction` use token-backed glass surfaces and backdrop blur.
 
 ```dart
 HomeTopBar(
@@ -136,7 +138,7 @@ the owned scrollable.
 
 ## Safe areas
 
-The 64- and 56-pixel values are the visual component heights from Penpot.
+The 76- and 56-pixel values are the visual component heights from Penpot.
 `HomeTopBar`, `PageTopBar`, and `PageWithTopBar` do not add a system safe area.
 Place the composition inside `SafeArea` when the screen can extend under system
 status regions.

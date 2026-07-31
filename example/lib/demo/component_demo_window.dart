@@ -106,6 +106,11 @@ enum ComponentDemoSection {
     route: '/tabs',
     category: ComponentDemoCategory.layout,
   ),
+  bottomNavBar(
+    label: 'Bottom Nav Bar',
+    route: '/bottom-nav-bar',
+    category: ComponentDemoCategory.layout,
+  ),
   homeTopBar(
     label: 'Home Top Bar',
     route: '/top-bars/home',

@@ -40,6 +40,22 @@ return ColoredBox(
 );
 ```
 
+Reusable Penpot scrim assets are exposed through the typed gradient group:
+
+```dart
+DecoratedBox(
+  decoration: BoxDecoration(
+    gradient: tokens.gradients.bottomScrim,
+  ),
+  child: content,
+);
+```
+
+`topScrim` and `bottomScrim` resolve to their light or dark Penpot asset with
+the active `TsaiTheme`. Backdrop effects such as glass surfaces read
+`tokens.effects.glassBlur`; applications creating a complete custom token set
+must provide every color, gradient, and effect role.
+
 Buttons also support application-wide variant overrides through
 `TsaiButtonTheme`. Keep overrides semantic and test them in both brightness
 modes.

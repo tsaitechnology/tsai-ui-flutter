@@ -29,41 +29,45 @@ class _HomeTopBarDemoState extends State<HomeTopBarDemo> {
     key: const ValueKey<String>('home-top-bar-demo'),
     variants: [
       const _SectionLabel('Title and menu'),
-      HomeTopBar(
-        leading: const [
-          TsaiTextHeading('Dashboard', size: TsaiHeadingSize.small),
-        ],
-        trailing: [
-          HomeTopBarAction(
-            icon: const TsaiIcon(LucideIcons.menu),
-            semanticLabel: 'Menu',
-            onPressed: () {},
-          ),
-        ],
+      _HomeTopBarBackdrop(
+        child: HomeTopBar(
+          leading: const [
+            TsaiTextHeading('Dashboard', size: TsaiHeadingSize.small),
+          ],
+          trailing: [
+            HomeTopBarAction(
+              icon: const TsaiIcon(LucideIcons.menu),
+              semanticLabel: 'Menu',
+              onPressed: () {},
+            ),
+          ],
+        ),
       ),
       const _SectionLabel('User and actions'),
-      HomeTopBar(
-        leading: [
-          UserPill(
-            name: 'Ilona T.',
-            initials: 'IT',
-            semanticLabel: 'Open profile',
-            onPressed: () {},
-          ),
-        ],
-        trailing: [
-          HomeTopBarAction(
-            icon: const TsaiIcon(LucideIcons.scan_line),
-            semanticLabel: 'Scan',
-            onPressed: () {},
-          ),
-          HomeTopBarAction(
-            icon: const TsaiIcon(LucideIcons.bell),
-            semanticLabel: 'Notifications',
-            showIndicator: true,
-            onPressed: () {},
-          ),
-        ],
+      _HomeTopBarBackdrop(
+        child: HomeTopBar(
+          leading: [
+            UserPill(
+              name: 'Ilona T.',
+              initials: 'IT',
+              semanticLabel: 'Open profile',
+              onPressed: () {},
+            ),
+          ],
+          trailing: [
+            HomeTopBarAction(
+              icon: const TsaiIcon(LucideIcons.scan_line),
+              semanticLabel: 'Scan',
+              onPressed: () {},
+            ),
+            HomeTopBarAction(
+              icon: const TsaiIcon(LucideIcons.bell),
+              semanticLabel: 'Notifications',
+              showIndicator: true,
+              onPressed: () {},
+            ),
+          ],
+        ),
       ),
     ],
     playground: ComponentPlayground(
@@ -88,9 +92,11 @@ class _HomeTopBarDemoState extends State<HomeTopBarDemo> {
           onChanged: (value) => setState(() => _indicator = value),
         ),
       ],
-      preview: HomeTopBar(
-        leading: _homeLeading(_leading),
-        trailing: _homeTrailing(_trailing, showIndicator: _indicator),
+      preview: _HomeTopBarBackdrop(
+        child: HomeTopBar(
+          leading: _homeLeading(_leading),
+          trailing: _homeTrailing(_trailing, showIndicator: _indicator),
+        ),
       ),
     ),
   );
@@ -292,6 +298,51 @@ class _SectionLabel extends StatelessWidget {
         tokens.spacing.space8,
       ),
       child: TsaiTextHeading(label, size: TsaiHeadingSize.small),
+    );
+  }
+}
+
+class _HomeTopBarBackdrop extends StatelessWidget {
+  const _HomeTopBarBackdrop({required this.child});
+
+  final HomeTopBar child;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = TsaiThemeTokens.of(context).colors;
+    return SizedBox(
+      key: const ValueKey<String>('home-top-bar-backdrop'),
+      height: 112,
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: SizedBox.expand(
+                  child: ColoredBox(color: colors.actionPrimary),
+                ),
+              ),
+              Expanded(
+                child: SizedBox.expand(
+                  child: ColoredBox(color: colors.positive),
+                ),
+              ),
+              Expanded(
+                child: SizedBox.expand(
+                  child: ColoredBox(color: colors.negative),
+                ),
+              ),
+              Expanded(
+                child: SizedBox.expand(
+                  child: ColoredBox(color: colors.surfaceAccentPressed),
+                ),
+              ),
+            ],
+          ),
+          Align(alignment: Alignment.topCenter, child: child),
+        ],
+      ),
     );
   }
 }

@@ -1,6 +1,7 @@
 /// Enterprise Flutter components backed by the Tsai design system.
 library;
 
+export 'src/components/bottom_nav_bar/tsai_bottom_nav_bar.dart';
 export 'src/components/button/tsai_button.dart';
 export 'src/components/button/tsai_button_theme.dart';
 export 'src/components/input/tsai_code_input.dart';

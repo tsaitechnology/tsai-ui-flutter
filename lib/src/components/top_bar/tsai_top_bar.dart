@@ -1,3 +1,5 @@
+import 'dart:ui' show ImageFilter;
+
 import 'package:flutter/material.dart';
 
 import '../../foundation/semantic/tsai_theme_tokens.dart';
@@ -38,47 +40,40 @@ class UserPill extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tokens = TsaiThemeTokens.of(context);
-    final content = Container(
+    final content = SizedBox(
       height: tokens.spacing.space32 + tokens.spacing.space8,
-      padding: EdgeInsetsDirectional.only(
-        start: tokens.spacing.space4,
-        end: tokens.spacing.space12,
-      ),
-      decoration: BoxDecoration(
-        color: onPressed == null
-            ? tokens.colors.surface
-            : tokens.colors.surface.withValues(alpha: 0),
-        borderRadius: BorderRadius.circular(tokens.radii.pill),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _UserAvatar(avatarUrl: avatarUrl, initials: initials),
-          SizedBox(width: tokens.spacing.space8),
-          Flexible(
-            child: Text(
-              name,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: tokens.typography.bodyMediumMedium.copyWith(
-                color: tokens.colors.contentPrimary,
+      child: Padding(
+        padding: EdgeInsetsDirectional.only(
+          start: tokens.spacing.space4,
+          end: tokens.spacing.space12,
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _UserAvatar(avatarUrl: avatarUrl, initials: initials),
+            SizedBox(width: tokens.spacing.space8),
+            Flexible(
+              child: Text(
+                name,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: tokens.typography.bodyMediumMedium.copyWith(
+                  color: tokens.colors.contentPrimary,
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
     if (onPressed == null) {
-      return content;
+      return _HomeGlassSurface(child: content);
     }
     return Semantics(
       button: true,
       label: semanticLabel,
       excludeSemantics: semanticLabel != null,
-      child: Material(
-        color: tokens.colors.surface,
-        borderRadius: BorderRadius.circular(tokens.radii.pill),
-        clipBehavior: Clip.antiAlias,
+      child: _HomeGlassSurface(
         child: InkWell(
           onTap: onPressed,
           splashFactory: NoSplash.splashFactory,
@@ -101,7 +96,7 @@ class _UserAvatar extends StatelessWidget {
   Widget build(BuildContext context) {
     final tokens = TsaiThemeTokens.of(context);
     final fallback = ColoredBox(
-      color: tokens.colors.borderStrong,
+      color: tokens.colors.surfaceAccentGlass,
       child: Center(
         child: Text(
           initials,
@@ -168,45 +163,46 @@ class HomeTopBarAction extends StatelessWidget {
         enabled: onPressed != null,
         label: semanticLabel,
         excludeSemantics: true,
-        child: Material(
-          color: tokens.colors.surface,
-          borderRadius: BorderRadius.circular(tokens.radii.pill),
-          clipBehavior: Clip.none,
-          child: InkWell(
-            onTap: onPressed,
-            customBorder: const CircleBorder(),
-            splashFactory: NoSplash.splashFactory,
-            hoverColor: tokens.colors.surfaceRaised,
-            highlightColor: tokens.colors.surfaceRaised,
-            child: SizedBox.square(
-              dimension: extent,
-              child: Stack(
-                clipBehavior: Clip.none,
-                children: [
-                  Center(
-                    child: IconTheme.merge(
-                      data: IconThemeData(color: tokens.colors.iconPrimary),
-                      child: icon,
-                    ),
-                  ),
-                  if (showIndicator)
-                    PositionedDirectional(
-                      top: tokens.spacing.space2,
-                      end: tokens.spacing.space2 + tokens.borders.hairline,
-                      child: DecoratedBox(
-                        key: const ValueKey<String>(
-                          'home-top-bar-action-indicator',
-                        ),
-                        decoration: BoxDecoration(
-                          color: tokens.colors.actionPrimary,
-                          shape: BoxShape.circle,
-                        ),
-                        child: SizedBox.square(dimension: indicatorExtent),
+        child: SizedBox.square(
+          dimension: extent,
+          child: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              Positioned.fill(
+                child: _HomeGlassSurface(
+                  child: InkWell(
+                    onTap: onPressed,
+                    customBorder: const CircleBorder(),
+                    splashFactory: NoSplash.splashFactory,
+                    hoverColor: tokens.colors.surfaceRaised,
+                    highlightColor: tokens.colors.surfaceRaised,
+                    child: Center(
+                      child: IconTheme.merge(
+                        data: IconThemeData(color: tokens.colors.iconPrimary),
+                        child: icon,
                       ),
                     ),
-                ],
+                  ),
+                ),
               ),
-            ),
+              if (showIndicator)
+                PositionedDirectional(
+                  top: tokens.spacing.space2,
+                  end: tokens.spacing.space2 + tokens.borders.hairline,
+                  child: IgnorePointer(
+                    child: DecoratedBox(
+                      key: const ValueKey<String>(
+                        'home-top-bar-action-indicator',
+                      ),
+                      decoration: BoxDecoration(
+                        color: tokens.colors.actionPrimary,
+                        shape: BoxShape.circle,
+                      ),
+                      child: SizedBox.square(dimension: indicatorExtent),
+                    ),
+                  ),
+                ),
+            ],
           ),
         ),
       ),
@@ -214,7 +210,7 @@ class HomeTopBarAction extends StatelessWidget {
   }
 }
 
-/// A 64-pixel home-page top bar with composable edge slots.
+/// A 76-pixel home-page top bar with composable edge slots.
 ///
 /// The widgets in [leading] and [trailing] are separated by the Penpot
 /// eight-pixel action gap. This widget does not add a system [SafeArea].
@@ -235,23 +231,64 @@ class HomeTopBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tokens = TsaiThemeTokens.of(context);
-    return SizedBox(
-      width: double.infinity,
-      height: tokens.spacing.space64,
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: tokens.spacing.space16),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: Align(
-                alignment: AlignmentDirectional.centerStart,
-                child: _SpacedRow(children: leading),
+    return DecoratedBox(
+      decoration: BoxDecoration(gradient: tokens.gradients.topScrim),
+      child: SizedBox(
+        width: double.infinity,
+        height: tokens.spacing.space64 + tokens.spacing.space12,
+        child: Padding(
+          padding: EdgeInsetsDirectional.only(
+            top: tokens.spacing.space12,
+            start: tokens.spacing.space16,
+            end: tokens.spacing.space16,
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Align(
+                  alignment: AlignmentDirectional.centerStart,
+                  heightFactor: 1,
+                  child: _SpacedRow(children: leading),
+                ),
               ),
+              SizedBox(width: tokens.spacing.space8),
+              _SpacedRow(children: trailing),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _HomeGlassSurface extends StatelessWidget {
+  const _HomeGlassSurface({required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final tokens = TsaiThemeTokens.of(context);
+    final borderRadius = BorderRadius.circular(tokens.radii.pill);
+    return ClipRRect(
+      borderRadius: borderRadius,
+      child: BackdropFilter(
+        filter: ImageFilter.blur(
+          sigmaX: tokens.effects.glassBlur,
+          sigmaY: tokens.effects.glassBlur,
+        ),
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            color: tokens.colors.surfaceGlass,
+            border: Border.all(
+              color: tokens.colors.borderSubtle,
+              width: tokens.borders.hairline,
             ),
-            SizedBox(width: tokens.spacing.space8),
-            _SpacedRow(children: trailing),
-          ],
+            borderRadius: borderRadius,
+          ),
+          child: Material(type: MaterialType.transparency, child: child),
         ),
       ),
     );

@@ -72,6 +72,7 @@ nav:
           - TsaiSwitch: widgets/tsai-switch.md
       - Layout:
           - TsaiTabs: widgets/tsai-tabs.md
+          - BottomNavBar: widgets/tsai-bottom-nav-bar.md
           - Tsai top bars: widgets/tsai-top-bars.md
   - License: license.md
 

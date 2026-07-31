@@ -23,6 +23,27 @@ void main() {
         TsaiThemeTokens.dark.colors.actionPrimary,
         const Color(0xFF6366F1),
       );
+      expect(
+        TsaiThemeTokens.light.colors.surfaceGlass,
+        const Color(0xCCEFEFF1),
+      );
+      expect(TsaiThemeTokens.dark.colors.surfaceGlass, const Color(0xCC141416));
+      expect(
+        TsaiThemeTokens.light.colors.contentAccent,
+        const Color(0xFF4F46E5),
+      );
+      expect(
+        TsaiThemeTokens.dark.colors.contentAccent,
+        const Color(0xFFA5B4FC),
+      );
+      expect(TsaiThemeTokens.light.gradients.topScrim.colors, const [
+        Color(0xCCFAFAFA),
+        Color(0x00FAFAFA),
+      ]);
+      expect(TsaiThemeTokens.dark.gradients.bottomScrim.colors, const [
+        Color(0x000A0A0B),
+        Color(0xCC0A0A0B),
+      ]);
     });
 
     test('uses the same complete schema for both themes', () {
@@ -31,10 +52,14 @@ void main() {
 
       expect(light.runtimeType, dark.runtimeType);
       expect(light.spacing.space12, 12);
+      expect(light.spacing.space6, 6);
+      expect(light.spacing.space6, dark.spacing.space6);
       expect(light.spacing.space12, dark.spacing.space12);
       expect(light.spacing.space80, dark.spacing.space80);
       expect(light.radii.pill, dark.radii.pill);
       expect(light.borders.hairline, dark.borders.hairline);
+      expect(light.effects.glassBlur, 24);
+      expect(light.effects.glassBlur, dark.effects.glassBlur);
       expect(light.motion.interaction, dark.motion.interaction);
       expect(light.motion.progressIndicator, dark.motion.progressIndicator);
       expect(light.motion.transitionCurve, Curves.easeInOut);
@@ -49,11 +74,13 @@ void main() {
       final result = source.copyWith(colors: TsaiThemeTokens.dark.colors);
 
       expect(result.colors, same(TsaiThemeTokens.dark.colors));
+      expect(result.gradients, same(source.gradients));
       expect(result.typography, same(source.typography));
       expect(result.spacing, same(source.spacing));
       expect(result.radii, same(source.radii));
       expect(result.borders, same(source.borders));
       expect(result.shadows, same(source.shadows));
+      expect(result.effects, same(source.effects));
       expect(result.motion, same(source.motion));
     });
 

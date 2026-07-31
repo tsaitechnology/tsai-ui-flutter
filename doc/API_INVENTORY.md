@@ -19,11 +19,13 @@ import 'package:tsai_ui/tsai_icons.dart';
 | `TsaiTheme` | Installs light/dark themes | Public |
 | `TsaiThemeTokens` | Complete semantic schema | Public |
 | `TsaiColorTokens` | Semantic color roles | Public |
+| `TsaiGradientTokens` | Theme-aware top and bottom scrim assets | Public |
 | `TsaiTypographyTokens` | Typography roles | Public |
 | `TsaiSpacingTokens` | Spacing scale | Public |
 | `TsaiRadiusTokens` | Radius scale | Public |
 | `TsaiBorderTokens` | Border widths | Public |
 | `TsaiShadowTokens` | Theme-aware shadows | Public |
+| `TsaiEffectTokens` | Semantic backdrop and image effects | Public |
 | `TsaiMotionTokens` | Semantic durations and easing curves | Public |
 | `TsaiText` | Sealed base for typography widgets | Public |
 | `TsaiTextHeading` | Four Inter heading roles | Public |
@@ -66,6 +68,8 @@ import 'package:tsai_ui/tsai_icons.dart';
 | `PageTopBarAction` | Compact icon action for secondary-page top bars | Public |
 | `PageTopBar` | Secondary-page top bar with widget edge slots and a centered text title | Public |
 | `PageWithTopBar` | Scroll-owning page composition that promotes its heading into a pinned top bar | Public |
+| `BottomNavBarItem` | Immutable icon, label, and optional semantic label for a bottom destination | Public |
+| `BottomNavBar` | Controlled one-to-four destination glass bottom-navigation bar | Public |
 | `LucideIcons` | Opt-in icon catalog re-export | External contract |
 
 ## Internal
@@ -79,6 +83,7 @@ import 'package:tsai_ui/tsai_icons.dart';
 - input field/content/action frames;
 - code-input editable overlay and state resolver;
 - top-bar spacing, action frames, avatar loading, and heading transition;
+- bottom-navigation item geometry, glass pill, and destination state rendering;
 - example catalog implementation.
 
 No generated Penpot model, router, state-management API, or application service

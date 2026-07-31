@@ -25,7 +25,8 @@ components.
 of the same immutable schema. Every field is non-null, and Dart constructors
 enforce parity.
 
-- Reference tokens are private values transferred directly from Penpot.
+- Reference tokens and reusable gradient assets are private values transferred
+  directly from Penpot.
 - Semantic tokens are public, intent-based roles.
 - Component defaults are resolved by the component; global button overrides
   use `TsaiButtonTheme`.
@@ -42,13 +43,14 @@ Instance-level visual overrides are intentionally limited. This protects
 design-system consistency while preserving composition slots for content.
 
 Penpot currently defines tokens for color, typography, spacing, radius, border
-width, shadow, and font family. Values from those domains must come from
-`TsaiThemeTokens` or be an explicit mathematical derivative, such as a
-two-hairline focus border. Fixed component geometry such as control height,
-icon slot, OTP cell, switch track, touch target, and spinner path remains a
-private component specification because Penpot does not expose sizing tokens
-for it. Reusing a spacing token for an unrelated glyph or control size is
-forbidden even when the numeric values happen to match.
+width, shadow, and font family, plus reusable top/bottom scrim assets. Values
+from those domains must come from `TsaiThemeTokens` or be an explicit
+mathematical derivative, such as a two-hairline focus border. Fixed component
+geometry such as control height, icon slot, OTP cell, switch track, touch
+target, and spinner path remains a private component specification because
+Penpot does not expose sizing tokens for it. Reusing a spacing token for an
+unrelated glyph or control size is forbidden even when the numeric values
+happen to match.
 
 Transparent paint used to suppress native overlays and platform semantic
 colors used by adaptive Cupertino surfaces are rendering behavior, not

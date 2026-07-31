@@ -77,6 +77,21 @@ TsaiTabs(
   ],
 );
 
+BottomNavBar(
+  items: const [
+    BottomNavBarItem(
+      icon: TsaiIcon(LucideIcons.house, size: 20),
+      label: 'Home',
+    ),
+    BottomNavBarItem(
+      icon: TsaiIcon(LucideIcons.credit_card, size: 20),
+      label: 'Cards',
+    ),
+  ],
+  selectedIndex: selectedIndex,
+  onSelected: (index) => setState(() => selectedIndex = index),
+);
+
 TsaiInput(
   placeholder: 'Promo code',
   showClearButton: false,
@@ -95,10 +110,10 @@ TsaiOtpInput(
 );
 ```
 
-Component colors, typography, spacing, radii, borders, shadows, and motion
-consume semantic tokens. Fixed component geometry remains private until Penpot
-defines corresponding sizing tokens. Reference palette values and Penpot
-identifiers are not part of the public API.
+Component colors, reusable scrim gradients, typography, spacing, radii,
+borders, shadows, effects, and motion consume semantic tokens. Fixed component
+geometry remains private until Penpot defines corresponding sizing tokens.
+Reference palette values and Penpot identifiers are not part of the public API.
 
 ## Structure
 
@@ -112,6 +127,7 @@ lib/
       semantic/
       theme/
     components/
+      bottom_nav_bar/
       button/
       input/
       link/
