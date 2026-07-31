@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tsai_ui/tsai_ui.dart';
 
 void main() {
-  const expectedPillWidths = {1: 88.0, 2: 168.0, 3: 328.0, 4: 328.0, 5: 358.0};
+  const expectedPillWidths = {1: 88.0, 2: 168.0, 3: 248.0, 4: 328.0, 5: 358.0};
   const expectedItemWidths = {1: 80.0, 2: 80.0, 3: 80.0, 4: 80.0, 5: 70.0};
 
   for (var count = 1; count <= 5; count++) {
@@ -44,7 +44,7 @@ void main() {
     });
   }
 
-  testWidgets('three-item design mode leaves the third slot empty', (
+  testWidgets('three-item layout places destinations in adjacent slots', (
     tester,
   ) async {
     await _pump(
@@ -60,7 +60,7 @@ void main() {
     final stats = tester.getRect(_item('Stats'));
     final cards = tester.getRect(_item('Cards'));
     expect(stats.left, home.right);
-    expect(cards.left - stats.right, 80);
+    expect(cards.left, stats.right);
   });
 
   testWidgets('fit mode shares narrow parent width across real items', (
@@ -68,7 +68,7 @@ void main() {
   ) async {
     await _pump(
       tester,
-      width: 320,
+      width: 240,
       child: BottomNavBar(
         items: _items.take(3).toList(),
         selectedIndex: 0,
@@ -82,8 +82,8 @@ void main() {
     final home = tester.getRect(_item('Home'));
     final stats = tester.getRect(_item('Stats'));
     final cards = tester.getRect(_item('Cards'));
-    expect(pill.width, 288);
-    expect(home.width, closeTo(280 / 3, 0.01));
+    expect(pill.width, 208);
+    expect(home.width, closeTo(200 / 3, 0.01));
     expect(stats.left, closeTo(home.right, 0.01));
     expect(cards.left, closeTo(stats.right, 0.01));
     expect(tester.takeException(), isNull);

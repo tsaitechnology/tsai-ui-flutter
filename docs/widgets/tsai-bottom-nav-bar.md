@@ -39,21 +39,21 @@ BottomNavBar(
 ## Layout
 
 `items` must contain between one and five destinations. The component first
-tries the preferred Penpot composition with `80 × 54` destinations:
+uses `80 × 54` destinations when they fit:
 
-| Items | Preferred pill | Slot composition |
-| ---: | ---: | --- |
-| 1 | 88 px | one destination |
-| 2 | 168 px | two destinations |
-| 3 | 328 px | destinations in slots 1, 2, and 4 |
-| 4 | 328 px | four destinations |
-| 5 | 408 px | five destinations |
+| Items | Preferred pill |
+| ---: | ---: |
+| 1 | 88 px |
+| 2 | 168 px |
+| 3 | 248 px |
+| 4 | 328 px |
+| 5 | 408 px |
 
 The extra eight pixels are the four-pixel pill padding on both sides. When the
-preferred composition does not fit with 16-pixel outer margins, the pill uses
-the available parent width minus 32 pixels and every real destination receives
-an equal share of its content width. In fit mode, the three-item variant no
-longer reserves an empty slot.
+preferred width does not fit with 16-pixel outer margins, the pill uses the
+available parent width minus 32 pixels and every destination receives an equal
+share of its content width. The same sizing rule applies to all variants from
+one to five destinations.
 
 The full-width outer bar is 94 pixels high and uses the theme's bottom scrim
 asset. It does not add a system safe area. Width is resolved from parent layout

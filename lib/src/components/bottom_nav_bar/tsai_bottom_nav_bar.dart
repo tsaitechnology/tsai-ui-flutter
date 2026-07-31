@@ -28,9 +28,9 @@ final class BottomNavBarItem {
 
 /// A centered glass bottom-navigation bar with one to five destinations.
 ///
-/// Destinations keep the Penpot 80 by 54 pixel size while the preferred
-/// composition fits. When it does not, the pill uses the available width minus
-/// 16 pixels on each side and destinations divide its content width equally.
+/// Destinations keep the Penpot 80 by 54 pixel size while they fit. When they
+/// do not, the pill uses the available width minus 16 pixels on each side and
+/// destinations divide its content width equally.
 /// [selectedIndex] is controlled by the caller and [onSelected] fires once
 /// when a destination is activated.
 class BottomNavBar extends StatelessWidget {
@@ -72,13 +72,8 @@ class BottomNavBar extends StatelessWidget {
         height: barHeight,
         child: LayoutBuilder(
           builder: (context, constraints) {
-            final designSlotCount = switch (items.length) {
-              1 || 2 => items.length,
-              3 || 4 => 4,
-              _ => items.length,
-            };
             final preferredPillWidth =
-                itemWidth * designSlotCount + pillPadding * 2;
+                itemWidth * items.length + pillPadding * 2;
             final availablePillWidth = math.max(
               pillPadding * 2,
               constraints.maxWidth - tokens.spacing.space32,
@@ -87,13 +82,7 @@ class BottomNavBar extends StatelessWidget {
             final pillWidth = useFitMode
                 ? availablePillWidth
                 : preferredPillWidth;
-            final slotCount = useFitMode ? items.length : designSlotCount;
-            final slotWidth = (pillWidth - pillPadding * 2) / slotCount;
-            final itemSlots = !useFitMode && items.length == 3
-                ? <int?>[0, 1, null, 2]
-                : <int?>[
-                    for (var index = 0; index < items.length; index++) index,
-                  ];
+            final slotWidth = (pillWidth - pillPadding * 2) / items.length;
 
             return Align(
               alignment: Alignment.topCenter,
@@ -121,17 +110,18 @@ class BottomNavBar extends StatelessWidget {
                         padding: EdgeInsets.all(pillPadding),
                         child: Row(
                           children: [
-                            for (final itemIndex in itemSlots)
-                              if (itemIndex == null)
-                                SizedBox(width: slotWidth)
-                              else
-                                _BottomNavBarButton(
-                                  item: items[itemIndex],
-                                  selected: itemIndex == selectedIndex,
-                                  width: slotWidth,
-                                  height: itemHeight,
-                                  onPressed: () => onSelected(itemIndex),
-                                ),
+                            for (
+                              var itemIndex = 0;
+                              itemIndex < items.length;
+                              itemIndex++
+                            )
+                              _BottomNavBarButton(
+                                item: items[itemIndex],
+                                selected: itemIndex == selectedIndex,
+                                width: slotWidth,
+                                height: itemHeight,
+                                onPressed: () => onSelected(itemIndex),
+                              ),
                           ],
                         ),
                       ),
