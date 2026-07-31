@@ -270,12 +270,19 @@ void main() {
     );
     final expandedHeadingRect = tester.getRect(heading);
     final trailingCenter = tester.getCenter(trailingIcon);
+    expect(_pageTopBarBackground(tester).color, Colors.transparent);
+    expect(_pageTopBarFilter(tester).enabled, isFalse);
 
     controller.jumpTo(1);
     await tester.pump();
 
     final transitionStartRect = tester.getRect(heading);
     expect(transitionStartRect.left, closeTo(expandedHeadingRect.left, 0.01));
+    expect(
+      _pageTopBarBackground(tester).color,
+      TsaiThemeTokens.light.colors.canvasGlass,
+    );
+    expect(_pageTopBarFilter(tester).enabled, isTrue);
 
     await tester.pump(const Duration(milliseconds: 110));
 
@@ -296,6 +303,8 @@ void main() {
 
     controller.jumpTo(0);
     await tester.pump();
+    expect(_pageTopBarBackground(tester).color, Colors.transparent);
+    expect(_pageTopBarFilter(tester).enabled, isFalse);
     await tester.pump(const Duration(milliseconds: 110));
 
     final returningHeadingRect = tester.getRect(heading);
@@ -406,6 +415,19 @@ void main() {
     );
   });
 }
+
+ColoredBox _pageTopBarBackground(WidgetTester tester) =>
+    tester.widget<ColoredBox>(
+      find.byKey(const ValueKey<String>('page-top-bar-background')),
+    );
+
+BackdropFilter _pageTopBarFilter(WidgetTester tester) =>
+    tester.widget<BackdropFilter>(
+      find.descendant(
+        of: find.byType(PageTopBar),
+        matching: find.byType(BackdropFilter),
+      ),
+    );
 
 Future<void> _pump(WidgetTester tester, {required Widget child}) =>
     tester.pumpWidget(

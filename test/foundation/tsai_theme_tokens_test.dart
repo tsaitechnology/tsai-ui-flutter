@@ -36,6 +36,8 @@ void main() {
         TsaiThemeTokens.dark.colors.contentAccent,
         const Color(0xFFA5B4FC),
       );
+      expect(TsaiThemeTokens.light.colors.iconBright, const Color(0xFF6366F1));
+      expect(TsaiThemeTokens.dark.colors.iconBright, const Color(0xFFA5B4FC));
       expect(TsaiThemeTokens.light.gradients.topScrim.colors, const [
         Color(0xCCFAFAFA),
         Color(0x00FAFAFA),

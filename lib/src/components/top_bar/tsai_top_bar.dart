@@ -361,7 +361,13 @@ class PageTopBar extends StatelessWidget {
     this.leading = const [],
     this.title,
     this.trailing = const [],
-  });
+  }) : _showBackground = true;
+
+  const PageTopBar._({
+    required this._showBackground,
+    this.leading = const [],
+    this.trailing = const [],
+  }) : title = null;
 
   /// Widgets placed at the directional start.
   final List<Widget> leading;
@@ -372,17 +378,23 @@ class PageTopBar extends StatelessWidget {
   /// Widgets placed at the directional end.
   final List<Widget> trailing;
 
+  final bool _showBackground;
+
   @override
   Widget build(BuildContext context) {
     final tokens = TsaiThemeTokens.of(context);
     return ClipRect(
       child: BackdropFilter(
+        enabled: _showBackground,
         filter: ImageFilter.blur(
           sigmaX: tokens.effects.glassBlur,
           sigmaY: tokens.effects.glassBlur,
         ),
         child: ColoredBox(
-          color: tokens.colors.canvasGlass,
+          key: const ValueKey<String>('page-top-bar-background'),
+          color: _showBackground
+              ? tokens.colors.canvasGlass
+              : Colors.transparent,
           child: SizedBox(
             width: double.infinity,
             height: tokens.spacing.space32 + tokens.spacing.space24,
@@ -614,7 +626,8 @@ class _PageWithTopBarState extends State<PageWithTopBar> {
               top: 0,
               start: 0,
               end: 0,
-              child: PageTopBar(
+              child: PageTopBar._(
+                showBackground: _showCollapsedTitle,
                 leading: widget.leading,
                 trailing: widget.trailing,
               ),

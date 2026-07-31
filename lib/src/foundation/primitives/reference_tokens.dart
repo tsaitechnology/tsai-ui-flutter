@@ -52,7 +52,7 @@ abstract final class TsaiReferenceTokens {
     iconSecondary: Color(0xFF767677),
     iconTertiary: Color(0xFFA6A6A6),
     iconOnAccent: Color(0xFFFFFFFF),
-    iconBright: Color(0xFF97A4FA),
+    iconBright: Color(0xFF6366F1),
     surfaceIndigo: Color(0xFFF2F3FE),
     surfaceIndigoDeep: Color(0xFFE9EAFD),
     surfaceIndigoGlass: Color(0xCCCACFEE),

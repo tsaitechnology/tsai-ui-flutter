@@ -118,7 +118,8 @@ null for a disabled action.
 `PageWithTopBar` keeps `PageTopBar` pinned above one full-height
 `SingleChildScrollView`. A leading inset inside that scroll document places the
 expanded heading below the bar at rest. The heading and body then move under
-the glass bar as one document.
+the bar as one document. At rest, the bar has no background or backdrop blur;
+its glass surface appears after the scroll offset becomes positive.
 Its `heading` and optional `subtitle` are text values, so the title area cannot
 be replaced with an unrelated widget.
 After any positive scroll offset, the expanded `TsaiTitle` is replaced by a
