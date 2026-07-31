@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'dart:ui' show ImageFilter;
 
 import 'package:flutter/material.dart';
@@ -25,12 +26,13 @@ final class BottomNavBarItem {
   final String? semanticLabel;
 }
 
-/// A centered glass bottom-navigation bar with one to four destinations.
+/// A centered glass bottom-navigation bar with one to five destinations.
 ///
-/// Every destination keeps the Penpot 80 by 54 pixel size. The centered glass
-/// pill grows from 88 to 328 pixels as destinations are added. [selectedIndex]
-/// is controlled by the caller and [onSelected] fires once when a destination
-/// is activated.
+/// Destinations keep the Penpot 80 by 54 pixel size while the preferred
+/// composition fits. When it does not, the pill uses the available width minus
+/// 16 pixels on each side and destinations divide its content width equally.
+/// [selectedIndex] is controlled by the caller and [onSelected] fires once
+/// when a destination is activated.
 class BottomNavBar extends StatelessWidget {
   /// Creates a controlled bottom-navigation bar.
   const BottomNavBar({
@@ -38,12 +40,12 @@ class BottomNavBar extends StatelessWidget {
     required this.selectedIndex,
     required this.onSelected,
     super.key,
-  }) : assert(items.length > 0 && items.length <= 4),
+  }) : assert(items.length > 0 && items.length <= 5),
        assert(selectedIndex >= 0 && selectedIndex < items.length);
 
   /// Destinations displayed in directional order.
   ///
-  /// The list must contain between one and four items.
+  /// The list must contain between one and five items.
   final List<BottomNavBarItem> items;
 
   /// Index of the currently selected destination.
@@ -59,7 +61,6 @@ class BottomNavBar extends StatelessWidget {
     final itemHeight =
         tokens.spacing.space32 + tokens.spacing.space16 + tokens.spacing.space6;
     final pillPadding = tokens.spacing.space4;
-    final pillWidth = itemWidth * items.length + pillPadding * 2;
     final pillHeight = itemHeight + pillPadding * 2;
     final barHeight = pillHeight + tokens.spacing.space32;
     final borderRadius = BorderRadius.circular(tokens.radii.pill);
@@ -69,55 +70,77 @@ class BottomNavBar extends StatelessWidget {
       child: SizedBox(
         width: double.infinity,
         height: barHeight,
-        child: Align(
-          alignment: Alignment.topCenter,
-          child: OverflowBox(
-            minWidth: pillWidth,
-            maxWidth: pillWidth,
-            minHeight: pillHeight,
-            maxHeight: pillHeight,
-            alignment: Alignment.topCenter,
-            child: SizedBox(
-              key: const ValueKey<String>('bottom-nav-bar-pill'),
-              width: pillWidth,
-              height: pillHeight,
-              child: ClipRRect(
-                borderRadius: borderRadius,
-                child: BackdropFilter(
-                  filter: ImageFilter.blur(
-                    sigmaX: tokens.effects.glassBlur,
-                    sigmaY: tokens.effects.glassBlur,
-                  ),
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      color: tokens.colors.surfaceGlass,
-                      border: Border.all(
-                        color: tokens.colors.borderSubtle,
-                        width: tokens.borders.hairline,
-                      ),
-                      borderRadius: borderRadius,
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final designSlotCount = switch (items.length) {
+              1 || 2 => items.length,
+              3 || 4 => 4,
+              _ => items.length,
+            };
+            final preferredPillWidth =
+                itemWidth * designSlotCount + pillPadding * 2;
+            final availablePillWidth = math.max(
+              pillPadding * 2,
+              constraints.maxWidth - tokens.spacing.space32,
+            );
+            final useFitMode = preferredPillWidth > availablePillWidth;
+            final pillWidth = useFitMode
+                ? availablePillWidth
+                : preferredPillWidth;
+            final slotCount = useFitMode ? items.length : designSlotCount;
+            final slotWidth = (pillWidth - pillPadding * 2) / slotCount;
+            final itemSlots = !useFitMode && items.length == 3
+                ? <int?>[0, 1, null, 2]
+                : <int?>[
+                    for (var index = 0; index < items.length; index++) index,
+                  ];
+
+            return Align(
+              alignment: Alignment.topCenter,
+              child: SizedBox(
+                key: const ValueKey<String>('bottom-nav-bar-pill'),
+                width: pillWidth,
+                height: pillHeight,
+                child: ClipRRect(
+                  borderRadius: borderRadius,
+                  child: BackdropFilter(
+                    filter: ImageFilter.blur(
+                      sigmaX: tokens.effects.glassBlur,
+                      sigmaY: tokens.effects.glassBlur,
                     ),
-                    child: Padding(
-                      padding: EdgeInsets.all(pillPadding),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          for (var index = 0; index < items.length; index++)
-                            _BottomNavBarButton(
-                              item: items[index],
-                              selected: index == selectedIndex,
-                              width: itemWidth,
-                              height: itemHeight,
-                              onPressed: () => onSelected(index),
-                            ),
-                        ],
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: tokens.colors.surfaceGlass,
+                        border: Border.all(
+                          color: tokens.colors.borderSubtle,
+                          width: tokens.borders.hairline,
+                        ),
+                        borderRadius: borderRadius,
+                      ),
+                      child: Padding(
+                        padding: EdgeInsets.all(pillPadding),
+                        child: Row(
+                          children: [
+                            for (final itemIndex in itemSlots)
+                              if (itemIndex == null)
+                                SizedBox(width: slotWidth)
+                              else
+                                _BottomNavBarButton(
+                                  item: items[itemIndex],
+                                  selected: itemIndex == selectedIndex,
+                                  width: slotWidth,
+                                  height: itemHeight,
+                                  onPressed: () => onSelected(itemIndex),
+                                ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
-          ),
+            );
+          },
         ),
       ),
     );

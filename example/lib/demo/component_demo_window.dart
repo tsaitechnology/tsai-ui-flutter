@@ -6,7 +6,8 @@ enum ComponentDemoCategory {
   common('Common'),
   typography('Typography'),
   forms('Forms'),
-  layout('Layout');
+  layout('Layout'),
+  appExamples('App examples');
 
   const ComponentDemoCategory(this.label);
 
@@ -125,6 +126,11 @@ enum ComponentDemoSection {
     label: 'Page With Top Bar',
     route: '/top-bars/page-layout',
     category: ComponentDemoCategory.layout,
+  ),
+  appWithTwoPages(
+    label: 'App with 2 pages',
+    route: '/app-examples/two-pages',
+    category: ComponentDemoCategory.appExamples,
   );
 
   const ComponentDemoSection({
@@ -136,6 +142,53 @@ enum ComponentDemoSection {
   final String label;
   final String route;
   final ComponentDemoCategory category;
+}
+
+typedef AppExampleBuilder =
+    Widget Function(BuildContext context, VoidCallback openCatalog);
+
+class AppExampleWindow extends StatefulWidget {
+  const AppExampleWindow({
+    required this.section,
+    required this.builder,
+    super.key,
+  });
+
+  final ComponentDemoSection section;
+  final AppExampleBuilder builder;
+
+  @override
+  State<AppExampleWindow> createState() => _AppExampleWindowState();
+}
+
+class _AppExampleWindowState extends State<AppExampleWindow> {
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      key: _scaffoldKey,
+      endDrawer: _CatalogDrawer(
+        section: widget.section,
+        onSectionSelected: _openSection,
+      ),
+      body: SafeArea(
+        child: widget.builder(
+          context,
+          () => _scaffoldKey.currentState?.openEndDrawer(),
+        ),
+      ),
+    );
+  }
+
+  void _openSection(ComponentDemoSection target) {
+    if (_scaffoldKey.currentState?.isEndDrawerOpen ?? false) {
+      Navigator.of(context).pop();
+    }
+    if (target != widget.section) {
+      Navigator.of(context).pushReplacementNamed(target.route);
+    }
+  }
 }
 
 class ComponentDemoWindow extends StatefulWidget {

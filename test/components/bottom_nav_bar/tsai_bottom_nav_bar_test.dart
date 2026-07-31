@@ -5,8 +5,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tsai_ui/tsai_ui.dart';
 
 void main() {
-  for (var count = 1; count <= 4; count++) {
-    testWidgets('$count items keep 80-pixel buttons and center the pill', (
+  const expectedPillWidths = {1: 88.0, 2: 168.0, 3: 328.0, 4: 328.0, 5: 358.0};
+  const expectedItemWidths = {1: 80.0, 2: 80.0, 3: 80.0, 4: 80.0, 5: 70.0};
+
+  for (var count = 1; count <= 5; count++) {
+    testWidgets('$count items resolve Penpot geometry at 390 pixels', (
       tester,
     ) async {
       await _pump(
@@ -22,7 +25,7 @@ void main() {
         find.byKey(const ValueKey<String>('bottom-nav-bar-pill')),
       );
       final bar = tester.getRect(find.byType(BottomNavBar));
-      expect(pill.width, 8 + 80 * count);
+      expect(pill.width, expectedPillWidths[count]);
       expect(pill.height, 62);
       expect(pill.center.dx, bar.center.dx);
 
@@ -35,11 +38,74 @@ void main() {
                 ),
               )
               .width,
-          80,
+          expectedItemWidths[count],
         );
       }
     });
   }
+
+  testWidgets('three-item design mode leaves the third slot empty', (
+    tester,
+  ) async {
+    await _pump(
+      tester,
+      child: BottomNavBar(
+        items: _items.take(3).toList(),
+        selectedIndex: 0,
+        onSelected: (_) {},
+      ),
+    );
+
+    final home = tester.getRect(_item('Home'));
+    final stats = tester.getRect(_item('Stats'));
+    final cards = tester.getRect(_item('Cards'));
+    expect(stats.left, home.right);
+    expect(cards.left - stats.right, 80);
+  });
+
+  testWidgets('fit mode shares narrow parent width across real items', (
+    tester,
+  ) async {
+    await _pump(
+      tester,
+      width: 320,
+      child: BottomNavBar(
+        items: _items.take(3).toList(),
+        selectedIndex: 0,
+        onSelected: (_) {},
+      ),
+    );
+
+    final pill = tester.getRect(
+      find.byKey(const ValueKey<String>('bottom-nav-bar-pill')),
+    );
+    final home = tester.getRect(_item('Home'));
+    final stats = tester.getRect(_item('Stats'));
+    final cards = tester.getRect(_item('Cards'));
+    expect(pill.width, 288);
+    expect(home.width, closeTo(280 / 3, 0.01));
+    expect(stats.left, closeTo(home.right, 0.01));
+    expect(cards.left, closeTo(stats.right, 0.01));
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('five items keep 80-pixel slots when they fit', (tester) async {
+    await _pump(
+      tester,
+      width: 440,
+      child: BottomNavBar(items: _items, selectedIndex: 0, onSelected: (_) {}),
+    );
+
+    expect(
+      tester
+          .getSize(find.byKey(const ValueKey<String>('bottom-nav-bar-pill')))
+          .width,
+      408,
+    );
+    for (final item in _items) {
+      expect(tester.getSize(_item(item.label)).width, 80);
+    }
+  });
 
   testWidgets('renders selected state and reports destination changes', (
     tester,
@@ -115,7 +181,7 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  test('requires one to four items and a valid selected index', () {
+  test('requires one to five items and a valid selected index', () {
     expect(
       () => BottomNavBar(items: const [], selectedIndex: 0, onSelected: (_) {}),
       throwsAssertionError,
@@ -129,7 +195,7 @@ void main() {
       throwsAssertionError,
     );
     expect(
-      () => BottomNavBar(items: _items, selectedIndex: 4, onSelected: (_) {}),
+      () => BottomNavBar(items: _items, selectedIndex: 5, onSelected: (_) {}),
       throwsAssertionError,
     );
   });
@@ -140,17 +206,24 @@ const _items = [
   BottomNavBarItem(icon: TsaiIcon(Icons.bar_chart), label: 'Stats'),
   BottomNavBarItem(icon: TsaiIcon(Icons.credit_card), label: 'Cards'),
   BottomNavBarItem(icon: TsaiIcon(Icons.person), label: 'Profile'),
+  BottomNavBarItem(icon: TsaiIcon(Icons.settings), label: 'Settings'),
 ];
 
-Future<void> _pump(WidgetTester tester, {required Widget child}) =>
-    tester.pumpWidget(
-      MaterialApp(
-        theme: TsaiTheme.dark(),
-        home: Scaffold(
-          body: Align(
-            alignment: Alignment.topCenter,
-            child: SizedBox(width: 390, child: child),
-          ),
-        ),
+Finder _item(String label) =>
+    find.byKey(ValueKey<String>('bottom-nav-bar-item-$label'));
+
+Future<void> _pump(
+  WidgetTester tester, {
+  required Widget child,
+  double width = 390,
+}) => tester.pumpWidget(
+  MaterialApp(
+    theme: TsaiTheme.dark(),
+    home: Scaffold(
+      body: Align(
+        alignment: Alignment.topCenter,
+        child: SizedBox(width: width, child: child),
       ),
-    );
+    ),
+  ),
+);

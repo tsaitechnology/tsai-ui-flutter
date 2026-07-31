@@ -13,8 +13,10 @@ lib/
     component_demo_window.dart           # Shared chrome, navigation, theme UI
     component_playground.dart            # Shared preview and parameter controls
   features/
+    app_examples/
+      app_with_two_pages_example.dart     # Composed Home/Form app shell
     bottom_nav_bar/
-      bottom_nav_bar_demo.dart            # One-to-four item glass/backdrop examples
+      bottom_nav_bar_demo.dart            # One-to-five item glass/backdrop examples
       bottom_nav_bar_demo_screen.dart
     buttons/
       button_demo.dart                   # Embeddable button demo
@@ -58,6 +60,8 @@ CatalogApp
 - An entity screen only composes its demo with `ComponentDemoWindow`.
 - An entity demo renders the component matrix without creating a
   `MaterialApp`, `Scaffold`, route, or theme state.
+- An app example composes several library components into a stateful screen
+  shell. It has no component playground and remains internal to the catalog.
 
 This separation keeps the same demo usable as a complete catalog page or as an
 embedded interactive-documentation block.
@@ -79,7 +83,8 @@ Render one full entity page by opening its route:
 /#/tabs-document Tabs in a document-owned scroll view
 /#/tabs-viewport Fixed tabs with section-owned scrolling
 /#/tabs-sticky Tabs pinned after the page header
-/#/bottom-nav-bar Bottom Nav Bar with 1-4 destinations
+/#/bottom-nav-bar Bottom Nav Bar with 1-5 destinations
+/#/app-examples/two-pages App shell with Home and Form pages
 /#/icons Icons
 /#/checkbox Checkbox
 /#/radio Radio

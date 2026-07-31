@@ -69,7 +69,7 @@ import 'package:tsai_ui/tsai_icons.dart';
 | `PageTopBar` | Secondary-page top bar with widget edge slots and a centered text title | Public |
 | `PageWithTopBar` | Scroll-owning page composition that promotes its heading into a pinned top bar | Public |
 | `BottomNavBarItem` | Immutable icon, label, and optional semantic label for a bottom destination | Public |
-| `BottomNavBar` | Controlled one-to-four destination glass bottom-navigation bar | Public |
+| `BottomNavBar` | Controlled one-to-five destination glass bottom-navigation bar | Public |
 | `LucideIcons` | Opt-in icon catalog re-export | External contract |
 
 ## Internal

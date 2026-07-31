@@ -29,8 +29,10 @@ Latest snapshot read on 2026-07-31:
 - Input + Button example: an M Secondary button is placed inside the 56-pixel
   input field with an 8-pixel trailing inset.
 - Bottom Nav: a 94-pixel full-width bottom scrim containing a centered glass
-  pill; one to four 80 × 54 items; four-pixel pill padding; selected
-  accent-glass surface; `blur.glass = 24`.
+  pill; one to five 80 × 54 preferred items; a four-slot composition for three
+  items; equal-width responsive items when the preferred composition does not
+  fit; four-pixel pill padding; selected accent-glass surface;
+  `blur.glass = 24`.
 
 ## Sync workflow
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tsai_ui/tsai_ui.dart';
 import 'package:tsai_ui_example/catalog_app.dart';
+import 'package:tsai_ui_example/features/app_examples/app_with_two_pages_example.dart';
 import 'package:tsai_ui_example/features/buttons/button_demo.dart';
 import 'package:tsai_ui_example/features/bottom_nav_bar/bottom_nav_bar_demo.dart';
 import 'package:tsai_ui_example/features/inputs/input_demo.dart';
@@ -162,7 +163,7 @@ void main() {
     expect(find.byType(PageWithTopBar), findsWidgets);
   });
 
-  testWidgets('opens four bottom-nav-bar backdrop examples', (tester) async {
+  testWidgets('opens five bottom-nav-bar backdrop examples', (tester) async {
     await tester.pumpWidget(const CatalogApp(initialRoute: '/bottom-nav-bar'));
     await tester.pumpAndSettle();
 
@@ -171,12 +172,91 @@ void main() {
     expect(find.byType(BottomNavBar), findsWidgets);
 
     await tester.scrollUntilVisible(
-      find.text('4 destinations'),
+      find.text('5 destinations'),
       300,
       scrollable: find.byType(Scrollable).last,
     );
-    expect(find.text('4 destinations'), findsOneWidget);
+    expect(find.text('5 destinations'), findsOneWidget);
     expect(find.byType(BottomNavBar), findsWidgets);
+  });
+
+  testWidgets('app example overlays navigation and switches two pages', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(390, 844);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await tester.pumpWidget(
+      const CatalogApp(initialRoute: '/app-examples/two-pages'),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.byType(AppWithTwoPagesExample), findsOneWidget);
+    expect(find.byType(HomeScreenExample), findsOneWidget);
+    expect(find.byType(BottomNavBar), findsOneWidget);
+    expect(find.byType(IndexedStack), findsOneWidget);
+
+    final scroll = tester.getRect(
+      find.byKey(const ValueKey<String>('home-screen-scroll')),
+    );
+    final navigation = tester.getRect(find.byType(BottomNavBar));
+    expect(scroll.bottom, greaterThan(navigation.top));
+
+    final homeSelect = tester.widget<TsaiSelect<String>>(
+      find.byKey(const ValueKey<String>('home-country-select')),
+    );
+    expect(homeSelect.presentation, TsaiSelectPresentation.cupertinoPicker);
+    await tester.drag(
+      find.byKey(const ValueKey<String>('home-screen-scroll')),
+      const Offset(0, -360),
+    );
+    await tester.pump();
+    await tester.tap(find.byKey(const ValueKey<String>('home-country-select')));
+    await tester.pumpAndSettle();
+    expect(
+      find.byKey(const ValueKey<String>('tsai-select-cupertino-picker')),
+      findsOneWidget,
+    );
+    expect(find.byType(BottomNavBar), findsOneWidget);
+    await tester.tap(find.text('Cancel'));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.bySemanticsLabel('Form'));
+    await tester.pump();
+    expect(find.byType(FormScreenExample), findsOneWidget);
+    expect(find.byType(PageWithTopBar), findsOneWidget);
+    expect(
+      find.byKey(const ValueKey<String>('first-name-input')),
+      findsOneWidget,
+    );
+    final formSelect = tester.widget<TsaiSelect<String>>(
+      find.byKey(const ValueKey<String>('form-country-select')),
+    );
+    expect(formSelect.presentation, TsaiSelectPresentation.cupertinoPicker);
+    expect(find.byType(BottomNavBar), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('lists the composed app example in the catalog drawer', (
+    tester,
+  ) async {
+    await tester.pumpWidget(const CatalogApp());
+    await tester.tap(find.byTooltip('Open component menu'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 400));
+
+    await tester.scrollUntilVisible(
+      find.text('App with 2 pages'),
+      300,
+      scrollable: find.descendant(
+        of: find.byType(Drawer),
+        matching: find.byType(Scrollable),
+      ),
+    );
+    expect(find.text('App examples'), findsOneWidget);
+    expect(find.text('App with 2 pages'), findsOneWidget);
   });
 
   testWidgets('renders the typography demo without the catalog window', (

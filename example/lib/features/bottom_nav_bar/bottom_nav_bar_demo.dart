@@ -10,24 +10,25 @@ class BottomNavBarDemo extends StatefulWidget {
 }
 
 class _BottomNavBarDemoState extends State<BottomNavBarDemo> {
-  final _selectedIndices = [0, 0, 0, 0];
+  final _selectedIndices = [0, 0, 0, 0, 0];
 
   @override
   Widget build(BuildContext context) {
     final tokens = TsaiThemeTokens.of(context);
     return ListView(
       key: const ValueKey<String>('bottom-nav-bar-demo'),
-      padding: EdgeInsets.fromLTRB(
-        tokens.spacing.space24,
-        tokens.spacing.space32,
-        tokens.spacing.space24,
-        tokens.spacing.space64,
+      padding: EdgeInsets.only(
+        top: tokens.spacing.space32,
+        bottom: tokens.spacing.space64,
       ),
       children: [
-        for (var count = 1; count <= 4; count++) ...[
-          TsaiTextHeading(
-            '$count ${count == 1 ? 'destination' : 'destinations'}',
-            size: TsaiHeadingSize.small,
+        for (var count = 1; count <= 5; count++) ...[
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: tokens.spacing.space24),
+            child: TsaiTextHeading(
+              '$count ${count == 1 ? 'destination' : 'destinations'}',
+              size: TsaiHeadingSize.small,
+            ),
           ),
           SizedBox(height: tokens.spacing.space16),
           _BackdropExample(
@@ -36,7 +37,7 @@ class _BottomNavBarDemoState extends State<BottomNavBarDemo> {
             onSelected: (index) =>
                 setState(() => _selectedIndices[count - 1] = index),
           ),
-          if (count < 4) SizedBox(height: tokens.spacing.space32),
+          if (count < 5) SizedBox(height: tokens.spacing.space32),
         ],
       ],
     );
@@ -125,5 +126,9 @@ const _items = [
   BottomNavBarItem(
     icon: TsaiIcon(LucideIcons.user, size: 20),
     label: 'Profile',
+  ),
+  BottomNavBarItem(
+    icon: TsaiIcon(LucideIcons.settings, size: 20),
+    label: 'Settings',
   ),
 ];
