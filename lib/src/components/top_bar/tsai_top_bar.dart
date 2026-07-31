@@ -349,7 +349,7 @@ class PageTopBarAction extends StatelessWidget {
   }
 }
 
-/// A 56-pixel secondary-page top bar with a geometrically centered title.
+/// A 56-pixel glass secondary-page top bar with a centered title.
 ///
 /// [leading], [title], and [trailing] occupy symmetric one-two-one tracks, so
 /// edge content remains bounded and the title stays centered. This widget
@@ -375,54 +375,66 @@ class PageTopBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tokens = TsaiThemeTokens.of(context);
-    return SizedBox(
-      width: double.infinity,
-      height: tokens.spacing.space32 + tokens.spacing.space24,
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: tokens.spacing.space16),
-        child: Row(
-          children: [
-            Expanded(
-              child: ClipRect(
-                child: Align(
-                  alignment: AlignmentDirectional.centerStart,
-                  child: _BoundedSpacedRow(
-                    alignment: MainAxisAlignment.start,
-                    children: leading,
-                  ),
-                ),
-              ),
-            ),
-            Expanded(
-              flex: 2,
-              child: ClipRect(
-                child: Align(
-                  child: title == null
-                      ? const SizedBox.shrink()
-                      : Text(
-                          title!,
-                          style: tokens.typography.bodyLargeMedium.copyWith(
-                            color: tokens.colors.contentPrimary,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          textAlign: TextAlign.center,
+    return ClipRect(
+      child: BackdropFilter(
+        filter: ImageFilter.blur(
+          sigmaX: tokens.effects.glassBlur,
+          sigmaY: tokens.effects.glassBlur,
+        ),
+        child: ColoredBox(
+          color: tokens.colors.canvasGlass,
+          child: SizedBox(
+            width: double.infinity,
+            height: tokens.spacing.space32 + tokens.spacing.space24,
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: tokens.spacing.space16),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: ClipRect(
+                      child: Align(
+                        alignment: AlignmentDirectional.centerStart,
+                        child: _BoundedSpacedRow(
+                          alignment: MainAxisAlignment.start,
+                          children: leading,
                         ),
-                ),
-              ),
-            ),
-            Expanded(
-              child: ClipRect(
-                child: Align(
-                  alignment: AlignmentDirectional.centerEnd,
-                  child: _BoundedSpacedRow(
-                    alignment: MainAxisAlignment.end,
-                    children: trailing,
+                      ),
+                    ),
                   ),
-                ),
+                  Expanded(
+                    flex: 2,
+                    child: ClipRect(
+                      child: Align(
+                        child: title == null
+                            ? const SizedBox.shrink()
+                            : Text(
+                                title!,
+                                style: tokens.typography.bodyLargeMedium
+                                    .copyWith(
+                                      color: tokens.colors.contentPrimary,
+                                    ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                textAlign: TextAlign.center,
+                              ),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: ClipRect(
+                      child: Align(
+                        alignment: AlignmentDirectional.centerEnd,
+                        child: _BoundedSpacedRow(
+                          alignment: MainAxisAlignment.end,
+                          children: trailing,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -437,8 +449,9 @@ class PageTopBar extends StatelessWidget {
 /// height and must not contain an unbounded primary scroll view.
 ///
 /// When [controller] is omitted, this widget creates and disposes its own
-/// [ScrollController]. The top bar remains outside the scrollable and this
-/// widget does not add a system [SafeArea].
+/// [ScrollController]. The top bar overlays the scrollable while a leading
+/// scroll inset keeps the expanded title below it at rest. This widget does
+/// not add a system [SafeArea].
 class PageWithTopBar extends StatefulWidget {
   /// Creates a scroll-owning page with a top bar.
   const PageWithTopBar({
@@ -566,44 +579,45 @@ class _PageWithTopBarState extends State<PageWithTopBar> {
       child: ColoredBox(
         color: tokens.colors.canvas,
         child: Stack(
+          fit: StackFit.expand,
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                PageTopBar(leading: widget.leading, trailing: widget.trailing),
-                Expanded(
-                  child: SingleChildScrollView(
-                    key: const ValueKey<String>('page-with-top-bar-scrollable'),
-                    controller: _controller,
-                    physics: widget.physics,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        SizedBox(height: tokens.spacing.space8),
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: tokens.spacing.space16,
-                          ),
-                          child: SizedBox(
-                            height: expandedTitleHeight,
-                            child:
-                                !_showCollapsedTitle && !_isTitleTransitioning
-                                ? TsaiTitle(
-                                    widget.heading,
-                                    key: const ValueKey<String>(
-                                      'page-with-top-bar-heading',
-                                    ),
-                                    subtitle: widget.subtitle,
-                                  )
-                                : null,
-                          ),
-                        ),
-                        widget.body,
-                      ],
+            SingleChildScrollView(
+              key: const ValueKey<String>('page-with-top-bar-scrollable'),
+              controller: _controller,
+              physics: widget.physics,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  SizedBox(height: topBarHeight + tokens.spacing.space8),
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: tokens.spacing.space16,
+                    ),
+                    child: SizedBox(
+                      height: expandedTitleHeight,
+                      child: !_showCollapsedTitle && !_isTitleTransitioning
+                          ? TsaiTitle(
+                              widget.heading,
+                              key: const ValueKey<String>(
+                                'page-with-top-bar-heading',
+                              ),
+                              subtitle: widget.subtitle,
+                            )
+                          : null,
                     ),
                   ),
-                ),
-              ],
+                  widget.body,
+                ],
+              ),
+            ),
+            PositionedDirectional(
+              top: 0,
+              start: 0,
+              end: 0,
+              child: PageTopBar(
+                leading: widget.leading,
+                trailing: widget.trailing,
+              ),
             ),
             AnimatedPositionedDirectional(
               duration: duration,

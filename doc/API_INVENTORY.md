@@ -66,8 +66,8 @@ import 'package:tsai_ui/tsai_icons.dart';
 | `HomeTopBarAction` | Circular home-bar icon action with an optional status indicator | Public |
 | `HomeTopBar` | Home-page top bar with leading and trailing widget lists | Public |
 | `PageTopBarAction` | Compact icon action for secondary-page top bars | Public |
-| `PageTopBar` | Secondary-page top bar with widget edge slots and a centered text title | Public |
-| `PageWithTopBar` | Scroll-owning page composition that promotes its heading into a pinned top bar | Public |
+| `PageTopBar` | Glass secondary-page bar with widget edge slots and a centered text title | Public |
+| `PageWithTopBar` | Full-height scroll composition that promotes its heading beneath a pinned overlay bar | Public |
 | `BottomNavBarItem` | Immutable icon, label, and optional semantic label for a bottom destination | Public |
 | `BottomNavBar` | Controlled one-to-five destination glass bottom-navigation bar | Public |
 | `LucideIcons` | Opt-in icon catalog re-export | External contract |

@@ -191,6 +191,24 @@ void main() {
       ),
       findsNWidgets(3),
     );
+    expect(
+      find.descendant(
+        of: find.byType(PageTopBar),
+        matching: find.byType(BackdropFilter),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byType(PageTopBar),
+        matching: find.byWidgetPredicate(
+          (widget) =>
+              widget is ColoredBox &&
+              widget.color == TsaiThemeTokens.light.colors.canvasGlass,
+        ),
+      ),
+      findsOneWidget,
+    );
     expect(tester.getCenter(find.text('Card details')).dx, closeTo(400, 0.01));
   });
 
@@ -327,6 +345,39 @@ void main() {
       find.byKey(const ValueKey<String>('page-with-top-bar-heading')),
       findsOneWidget,
     );
+  });
+
+  testWidgets('PageWithTopBar scrolls its document behind the glass bar', (
+    tester,
+  ) async {
+    final controller = ScrollController();
+    addTearDown(controller.dispose);
+    await _pump(
+      tester,
+      child: PageWithTopBar(
+        controller: controller,
+        heading: 'Portfolio',
+        body: const SizedBox(key: ValueKey<String>('page-body'), height: 1000),
+      ),
+    );
+
+    final pageRect = tester.getRect(find.byType(PageWithTopBar));
+    final scrollRect = tester.getRect(
+      find.byKey(const ValueKey<String>('page-with-top-bar-scrollable')),
+    );
+    final barRect = tester.getRect(find.byType(PageTopBar));
+    expect(scrollRect.top, pageRect.top);
+    expect(scrollRect.bottom, pageRect.bottom);
+    expect(barRect.top, pageRect.top);
+
+    controller.jumpTo(100);
+    await tester.pumpAndSettle();
+
+    final bodyRect = tester.getRect(
+      find.byKey(const ValueKey<String>('page-body')),
+    );
+    expect(bodyRect.top, lessThan(barRect.bottom));
+    expect(bodyRect.bottom, greaterThan(barRect.bottom));
   });
 
   testWidgets('PageWithTopBar respects an external initial scroll offset', (

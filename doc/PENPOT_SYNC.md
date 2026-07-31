@@ -28,6 +28,10 @@ Latest snapshot read on 2026-07-31:
   optional 16-pixel icons, and a 4-pixel content gap.
 - Input + Button example: an M Secondary button is placed inside the 56-pixel
   input field with an 8-pixel trailing inset.
+- Home Top App Bar: 76-pixel top scrim with no bar-level blur; UserPill and
+  actions use `surfaceGlass` and `blur.glass = 24`.
+- Page Top App Bar: 56-pixel `canvasGlass` surface with
+  `blur.glass = 24`, intended to overlay scrolling page content.
 - Bottom Nav: a 94-pixel full-width bottom scrim containing a centered glass
   pill; one to five 80 × 54 preferred items; a four-slot composition for three
   items; equal-width responsive items when the preferred composition does not

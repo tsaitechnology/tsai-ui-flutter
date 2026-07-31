@@ -63,7 +63,8 @@ constraints rather than the global screen size.
 
 Keep the bar outside individual pages and overlay it at the application-shell
 level. This lets every page use the full viewport and scroll underneath the
-scrim without changing `PageWithTopBar` or its scroll behavior.
+scrim. `PageWithTopBar` applies the same overlay model independently at the top
+of each page.
 
 [Open composed app example](https://tsaitechnology.github.io/tsai-ui-flutter/example/#/app-examples/two-pages){ target="_blank" rel="noopener" .md-button }
 

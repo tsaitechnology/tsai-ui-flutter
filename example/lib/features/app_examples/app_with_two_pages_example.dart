@@ -115,127 +115,136 @@ class _HomeScreenExampleState extends State<HomeScreenExample> {
     final tokens = TsaiThemeTokens.of(context);
     return ColoredBox(
       color: tokens.colors.canvas,
-      child: Column(
+      child: Stack(
+        fit: StackFit.expand,
         children: [
-          HomeTopBar(
-            leading: const [UserPill(name: 'Ilona T.', initials: 'IT')],
-            trailing: [
-              HomeTopBarAction(
-                icon: TsaiIcon(_themeIcon(widget.themeMode)),
-                semanticLabel: _themeLabel(widget.themeMode),
-                onPressed: () =>
-                    _toggleTheme(widget.themeMode, widget.onThemeModeChanged),
-              ),
-              HomeTopBarAction(
-                icon: const TsaiIcon(LucideIcons.bell),
-                semanticLabel: 'Notifications',
-                showIndicator: true,
-                onPressed: () {},
-              ),
-              HomeTopBarAction(
-                icon: const TsaiIcon(LucideIcons.menu),
-                semanticLabel: 'Open component menu',
-                onPressed: widget.onOpenCatalog,
-              ),
-            ],
-          ),
-          Expanded(
-            child: SingleChildScrollView(
-              key: const ValueKey<String>('home-screen-scroll'),
-              padding: EdgeInsets.only(bottom: tokens.spacing.space64 + 62),
-              child: Center(
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 720),
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: tokens.spacing.space16,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        SizedBox(height: tokens.spacing.space24),
-                        const TsaiTextHeading(
-                          'Good morning',
-                          size: TsaiHeadingSize.large,
-                        ),
-                        SizedBox(height: tokens.spacing.space4),
-                        TsaiTextBody(
-                          'Your accounts and recent activity are up to date.',
-                          size: TsaiBodySize.large,
-                          weight: TsaiTextWeight.regular,
-                          color: tokens.colors.contentSecondary,
-                        ),
-                        SizedBox(height: tokens.spacing.space24),
-                        _BalanceSummary(tokens: tokens),
-                        SizedBox(height: tokens.spacing.space24),
-                        const TsaiTextHeading(
-                          'Quick actions',
-                          size: TsaiHeadingSize.small,
-                        ),
-                        SizedBox(height: tokens.spacing.space12),
-                        const Row(
-                          children: [
-                            Expanded(
-                              child: _QuickAction(
-                                icon: LucideIcons.send,
-                                label: 'Transfer',
-                              ),
+          SingleChildScrollView(
+            key: const ValueKey<String>('home-screen-scroll'),
+            padding: EdgeInsets.only(
+              top: tokens.spacing.space64 + tokens.spacing.space12,
+              bottom: tokens.spacing.space64 + 62,
+            ),
+            child: Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 720),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: tokens.spacing.space16,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      SizedBox(height: tokens.spacing.space24),
+                      const TsaiTextHeading(
+                        'Good morning',
+                        size: TsaiHeadingSize.large,
+                      ),
+                      SizedBox(height: tokens.spacing.space4),
+                      TsaiTextBody(
+                        'Your accounts and recent activity are up to date.',
+                        size: TsaiBodySize.large,
+                        weight: TsaiTextWeight.regular,
+                        color: tokens.colors.contentSecondary,
+                      ),
+                      SizedBox(height: tokens.spacing.space24),
+                      _BalanceSummary(
+                        key: const ValueKey<String>('home-balance-summary'),
+                        tokens: tokens,
+                      ),
+                      SizedBox(height: tokens.spacing.space24),
+                      const TsaiTextHeading(
+                        'Quick actions',
+                        size: TsaiHeadingSize.small,
+                      ),
+                      SizedBox(height: tokens.spacing.space12),
+                      const Row(
+                        children: [
+                          Expanded(
+                            child: _QuickAction(
+                              icon: LucideIcons.send,
+                              label: 'Transfer',
                             ),
-                            SizedBox(width: 8),
-                            Expanded(
-                              child: _QuickAction(
-                                icon: LucideIcons.receipt,
-                                label: 'Pay',
-                              ),
-                            ),
-                            SizedBox(width: 8),
-                            Expanded(
-                              child: _QuickAction(
-                                icon: LucideIcons.wallet_cards,
-                                label: 'Cards',
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: tokens.spacing.space24),
-                        const TsaiTextHeading(
-                          'Spending region',
-                          size: TsaiHeadingSize.small,
-                        ),
-                        SizedBox(height: tokens.spacing.space12),
-                        TsaiSelect<String>(
-                          key: const ValueKey<String>('home-country-select'),
-                          options: _countryOptions,
-                          value: _country,
-                          placeholder: 'Country',
-                          description: 'Used for regional account insights.',
-                          presentation: TsaiSelectPresentation.cupertinoPicker,
-                          onChanged: (value) =>
-                              setState(() => _country = value),
-                        ),
-                        SizedBox(height: tokens.spacing.space24),
-                        const TsaiTextHeading(
-                          'Recent activity',
-                          size: TsaiHeadingSize.small,
-                        ),
-                        SizedBox(height: tokens.spacing.space8),
-                        for (final activity in _activities)
-                          _ActivityRow(activity: activity),
-                        SizedBox(height: tokens.spacing.space16),
-                        TsaiButton(
-                          label: 'View all activity',
-                          variant: TsaiButtonVariant.outline,
-                          leadingIcon: const TsaiIcon(
-                            LucideIcons.receipt_text,
-                            size: 16,
                           ),
-                          onPressed: () {},
+                          SizedBox(width: 8),
+                          Expanded(
+                            child: _QuickAction(
+                              icon: LucideIcons.receipt,
+                              label: 'Pay',
+                            ),
+                          ),
+                          SizedBox(width: 8),
+                          Expanded(
+                            child: _QuickAction(
+                              icon: LucideIcons.wallet_cards,
+                              label: 'Cards',
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: tokens.spacing.space24),
+                      const TsaiTextHeading(
+                        'Spending region',
+                        size: TsaiHeadingSize.small,
+                      ),
+                      SizedBox(height: tokens.spacing.space12),
+                      TsaiSelect<String>(
+                        key: const ValueKey<String>('home-country-select'),
+                        options: _countryOptions,
+                        value: _country,
+                        placeholder: 'Country',
+                        description: 'Used for regional account insights.',
+                        presentation: TsaiSelectPresentation.cupertinoPicker,
+                        onChanged: (value) => setState(() => _country = value),
+                      ),
+                      SizedBox(height: tokens.spacing.space24),
+                      const TsaiTextHeading(
+                        'Recent activity',
+                        size: TsaiHeadingSize.small,
+                      ),
+                      SizedBox(height: tokens.spacing.space8),
+                      for (final activity in _activities)
+                        _ActivityRow(activity: activity),
+                      SizedBox(height: tokens.spacing.space16),
+                      TsaiButton(
+                        label: 'View all activity',
+                        variant: TsaiButtonVariant.outline,
+                        leadingIcon: const TsaiIcon(
+                          LucideIcons.receipt_text,
+                          size: 16,
                         ),
-                      ],
-                    ),
+                        onPressed: () {},
+                      ),
+                    ],
                   ),
                 ),
               ),
+            ),
+          ),
+          PositionedDirectional(
+            top: 0,
+            start: 0,
+            end: 0,
+            child: HomeTopBar(
+              leading: const [UserPill(name: 'Ilona T.', initials: 'IT')],
+              trailing: [
+                HomeTopBarAction(
+                  icon: TsaiIcon(_themeIcon(widget.themeMode)),
+                  semanticLabel: _themeLabel(widget.themeMode),
+                  onPressed: () =>
+                      _toggleTheme(widget.themeMode, widget.onThemeModeChanged),
+                ),
+                HomeTopBarAction(
+                  icon: const TsaiIcon(LucideIcons.bell),
+                  semanticLabel: 'Notifications',
+                  showIndicator: true,
+                  onPressed: () {},
+                ),
+                HomeTopBarAction(
+                  icon: const TsaiIcon(LucideIcons.menu),
+                  semanticLabel: 'Open component menu',
+                  onPressed: widget.onOpenCatalog,
+                ),
+              ],
             ),
           ),
         ],
@@ -408,7 +417,7 @@ class _FormScreenExampleState extends State<FormScreenExample> {
 }
 
 class _BalanceSummary extends StatelessWidget {
-  const _BalanceSummary({required this.tokens});
+  const _BalanceSummary({required this.tokens, super.key});
 
   final TsaiThemeTokens tokens;
 

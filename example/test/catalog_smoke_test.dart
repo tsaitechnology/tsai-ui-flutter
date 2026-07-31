@@ -201,7 +201,9 @@ void main() {
     final scroll = tester.getRect(
       find.byKey(const ValueKey<String>('home-screen-scroll')),
     );
+    final homeBar = tester.getRect(find.byType(HomeTopBar));
     final navigation = tester.getRect(find.byType(BottomNavBar));
+    expect(scroll.top, homeBar.top);
     expect(scroll.bottom, greaterThan(navigation.top));
 
     final homeSelect = tester.widget<TsaiSelect<String>>(
@@ -213,6 +215,11 @@ void main() {
       const Offset(0, -360),
     );
     await tester.pump();
+    final balance = tester.getRect(
+      find.byKey(const ValueKey<String>('home-balance-summary')),
+    );
+    expect(balance.top, lessThan(homeBar.bottom));
+    expect(balance.bottom, greaterThan(homeBar.top));
     await tester.tap(find.byKey(const ValueKey<String>('home-country-select')));
     await tester.pumpAndSettle();
     expect(

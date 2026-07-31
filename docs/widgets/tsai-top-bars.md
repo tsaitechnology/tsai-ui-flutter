@@ -14,6 +14,29 @@ edges. Items in each list use the Penpot eight-pixel gap. Its background uses
 the theme's reusable top scrim asset, while `UserPill` and
 `HomeTopBarAction` use token-backed glass surfaces and backdrop blur.
 
+Place the bar above the page scroll view in a `Stack`. Give the scrollable a
+76-pixel leading content inset instead of reserving a separate layout row for
+the bar. The content then starts below the bar at rest and scrolls underneath
+its scrim and glass controls.
+
+```dart
+Stack(
+  fit: StackFit.expand,
+  children: [
+    SingleChildScrollView(
+      padding: const EdgeInsets.only(top: 76),
+      child: const HomeContents(),
+    ),
+    const PositionedDirectional(
+      top: 0,
+      start: 0,
+      end: 0,
+      child: HomeTopBar(/* ... */),
+    ),
+  ],
+)
+```
+
 ```dart
 HomeTopBar(
   leading: [
@@ -53,6 +76,8 @@ to notifications and can be used by any home action.
 `PageTopBar` is 56 pixels high and fills the available width. Its leading,
 title, and trailing content uses symmetric one-two-one tracks. Showing or
 hiding the title therefore does not resize the bar or move either action list.
+The bar uses the token-backed translucent canvas surface and background blur,
+so scrolling content remains visible without competing with its controls.
 
 ```dart
 PageTopBar(
@@ -90,8 +115,10 @@ null for a disabled action.
 
 ## Scroll-owning page
 
-`PageWithTopBar` keeps `PageTopBar` pinned and owns one
-`SingleChildScrollView`. The expanded heading and body move as one document.
+`PageWithTopBar` keeps `PageTopBar` pinned above one full-height
+`SingleChildScrollView`. A leading inset inside that scroll document places the
+expanded heading below the bar at rest. The heading and body then move under
+the glass bar as one document.
 Its `heading` and optional `subtitle` are text values, so the title area cannot
 be replaced with an unrelated widget.
 After any positive scroll offset, the expanded `TsaiTitle` is replaced by a
