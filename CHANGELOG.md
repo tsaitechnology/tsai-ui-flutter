@@ -1,3 +1,9 @@
+## 0.4.2 - 2026-07-31
+
+### Bug Fixes
+
+- update page top bar scroll styling ([bf62569](https://github.com/tsaitechnology/tsai-ui-flutter/commit/bf6256961f128eb702bd9aec716d6a4a2142772c))
+
 ## 0.4.1 - 2026-07-31
 
 ### Bug Fixes
