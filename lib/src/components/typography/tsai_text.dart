@@ -182,6 +182,10 @@ final class TsaiTextCaption extends TsaiText {
         (TsaiCaptionSize.small, TsaiTextWeight.regular) =>
           tokens.captionSmallRegular,
       };
+
+  @override
+  String get _displayData =>
+      size == TsaiCaptionSize.small ? data.toUpperCase() : data;
 }
 
 /// Two-size JetBrains Mono heading from the Tsai typography system.
@@ -302,11 +306,13 @@ sealed class TsaiText extends StatelessWidget {
 
   TextStyle _resolveStyle(TsaiTypographyTokens tokens);
 
+  String get _displayData => data;
+
   @override
   Widget build(BuildContext context) {
     final tokens = TsaiThemeTokens.of(context);
     return Text(
-      data,
+      _displayData,
       style: _resolveStyle(
         tokens.typography,
       ).copyWith(color: color ?? tokens.colors.contentPrimary),
@@ -315,7 +321,7 @@ sealed class TsaiText extends StatelessWidget {
       maxLines: maxLines,
       softWrap: softWrap,
       textScaler: textScaler,
-      semanticsLabel: semanticsLabel,
+      semanticsLabel: semanticsLabel ?? (_displayData == data ? null : data),
     );
   }
 }

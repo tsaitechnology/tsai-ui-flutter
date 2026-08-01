@@ -62,6 +62,11 @@ controls share focus and activation handling, Input and Input Phone share the
 field/content/action frame, and OTP/PIN share a native editable overlay. These
 helpers do not cross component ownership boundaries through public APIs.
 
+Large component families use Dart part files grouped by public widget and
+private implementation responsibility. Their canonical exported library file
+owns imports and keeps helpers library-private, so file organization does not
+expand or fragment the public API.
+
 Tabs keep selection separate from scroll ownership. `TsaiTabBar` and
 `TsaiTabContent` compose through Flutter's `TabController`; the convenience
 `TsaiTabs` widget owns a controller only when the caller does not provide one.

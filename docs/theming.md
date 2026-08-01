@@ -56,6 +56,9 @@ the active `TsaiTheme`. Backdrop effects such as glass surfaces read
 `tokens.effects.glassBlur`; applications creating a complete custom token set
 must provide every color, gradient, and effect role.
 
+Nested surfaces inside a medium-radius container use
+`tokens.radii.innerMedium` rather than deriving a radius from spacing values.
+
 Buttons also support application-wide variant overrides through
 `TsaiButtonTheme`. Keep overrides semantic and test them in both brightness
 modes.

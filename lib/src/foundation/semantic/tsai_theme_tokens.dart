@@ -411,6 +411,7 @@ final class TsaiTypographyTokens {
       package: 'tsai_ui',
       fontSize: 32,
       fontWeight: FontWeight.w600,
+      letterSpacing: 0,
       height: 1.1875,
     ),
     headingLarge: TextStyle(
@@ -418,6 +419,7 @@ final class TsaiTypographyTokens {
       package: 'tsai_ui',
       fontSize: 24,
       fontWeight: FontWeight.w600,
+      letterSpacing: 0,
       height: 1.1667,
     ),
     headingMedium: TextStyle(
@@ -425,6 +427,7 @@ final class TsaiTypographyTokens {
       package: 'tsai_ui',
       fontSize: 20,
       fontWeight: FontWeight.w600,
+      letterSpacing: 0,
       height: 1.2,
     ),
     headingSmall: TextStyle(
@@ -432,6 +435,7 @@ final class TsaiTypographyTokens {
       package: 'tsai_ui',
       fontSize: 18,
       fontWeight: FontWeight.w600,
+      letterSpacing: 0,
       height: 1.2222,
     ),
     bodyLargeMedium: TextStyle(
@@ -439,12 +443,15 @@ final class TsaiTypographyTokens {
       package: 'tsai_ui',
       fontSize: 16,
       fontWeight: FontWeight.w500,
+      letterSpacing: 0,
       height: 1.25,
     ),
     bodyLarge: TextStyle(
       fontFamily: 'Inter',
       package: 'tsai_ui',
       fontSize: 16,
+      fontWeight: FontWeight.w400,
+      letterSpacing: 0,
       height: 1.25,
     ),
     bodyMediumMedium: TextStyle(
@@ -452,12 +459,15 @@ final class TsaiTypographyTokens {
       package: 'tsai_ui',
       fontSize: 14,
       fontWeight: FontWeight.w500,
+      letterSpacing: 0,
       height: 1.1429,
     ),
     bodyMedium: TextStyle(
       fontFamily: 'Inter',
       package: 'tsai_ui',
       fontSize: 14,
+      fontWeight: FontWeight.w400,
+      letterSpacing: 0,
       height: 1.1429,
     ),
     buttonLarge: TextStyle(
@@ -465,6 +475,7 @@ final class TsaiTypographyTokens {
       package: 'tsai_ui',
       fontSize: 16,
       fontWeight: FontWeight.w600,
+      letterSpacing: 0,
       height: 1.25,
     ),
     buttonMedium: TextStyle(
@@ -472,6 +483,7 @@ final class TsaiTypographyTokens {
       package: 'tsai_ui',
       fontSize: 14,
       fontWeight: FontWeight.w600,
+      letterSpacing: 0,
       height: 1.1429,
     ),
     captionMedium: TextStyle(
@@ -479,12 +491,15 @@ final class TsaiTypographyTokens {
       package: 'tsai_ui',
       fontSize: 13,
       fontWeight: FontWeight.w500,
+      letterSpacing: 0,
       height: 1.2308,
     ),
     captionMediumRegular: TextStyle(
       fontFamily: 'Inter',
       package: 'tsai_ui',
       fontSize: 13,
+      fontWeight: FontWeight.w400,
+      letterSpacing: 0,
       height: 1.2308,
     ),
     captionSmall: TextStyle(
@@ -492,12 +507,15 @@ final class TsaiTypographyTokens {
       package: 'tsai_ui',
       fontSize: 11,
       fontWeight: FontWeight.w500,
+      letterSpacing: 0,
       height: 1.2727,
     ),
     captionSmallRegular: TextStyle(
       fontFamily: 'Inter',
       package: 'tsai_ui',
       fontSize: 11,
+      fontWeight: FontWeight.w400,
+      letterSpacing: 0,
       height: 1.2727,
     ),
     monoHeadingExtraLarge: TextStyle(
@@ -505,6 +523,7 @@ final class TsaiTypographyTokens {
       package: 'tsai_ui',
       fontSize: 36,
       fontWeight: FontWeight.w600,
+      letterSpacing: 0,
       height: 1.2222,
     ),
     monoHeadingLarge: TextStyle(
@@ -512,6 +531,7 @@ final class TsaiTypographyTokens {
       package: 'tsai_ui',
       fontSize: 24,
       fontWeight: FontWeight.w600,
+      letterSpacing: 0,
       height: 1.1667,
     ),
     monoBodyLarge: TextStyle(
@@ -519,12 +539,15 @@ final class TsaiTypographyTokens {
       package: 'tsai_ui',
       fontSize: 16,
       fontWeight: FontWeight.w500,
+      letterSpacing: 0,
       height: 1.25,
     ),
     monoBodyMedium: TextStyle(
       fontFamily: 'JetBrains Mono',
       package: 'tsai_ui',
       fontSize: 14,
+      fontWeight: FontWeight.w400,
+      letterSpacing: 0,
       height: 1.1429,
     ),
     monoCaption: TextStyle(
@@ -532,12 +555,15 @@ final class TsaiTypographyTokens {
       package: 'tsai_ui',
       fontSize: 13,
       fontWeight: FontWeight.w500,
+      letterSpacing: 0,
       height: 1.2308,
     ),
     monoCaptionRegular: TextStyle(
       fontFamily: 'JetBrains Mono',
       package: 'tsai_ui',
       fontSize: 13,
+      fontWeight: FontWeight.w400,
+      letterSpacing: 0,
       height: 1.2308,
     ),
   );
@@ -734,6 +760,7 @@ final class TsaiRadiusTokens {
   /// Creates a complete corner-radius scale.
   const TsaiRadiusTokens({
     required this.small,
+    required this.innerMedium,
     required this.medium,
     required this.large,
     required this.extraLarge,
@@ -743,6 +770,7 @@ final class TsaiRadiusTokens {
   /// Canonical radius values sourced from Penpot.
   static const standard = TsaiRadiusTokens(
     small: 6,
+    innerMedium: 10,
     medium: 12,
     large: 16,
     extraLarge: 24,
@@ -751,6 +779,9 @@ final class TsaiRadiusTokens {
 
   /// Six-pixel radius.
   final double small;
+
+  /// Ten-pixel radius for nested surfaces inside a medium-radius container.
+  final double innerMedium;
 
   /// Twelve-pixel radius.
   final double medium;
@@ -767,6 +798,7 @@ final class TsaiRadiusTokens {
   /// Interpolates every radius value.
   TsaiRadiusTokens lerp(TsaiRadiusTokens other, double t) => TsaiRadiusTokens(
     small: lerpDouble(small, other.small, t)!,
+    innerMedium: lerpDouble(innerMedium, other.innerMedium, t)!,
     medium: lerpDouble(medium, other.medium, t)!,
     large: lerpDouble(large, other.large, t)!,
     extraLarge: lerpDouble(extraLarge, other.extraLarge, t)!,

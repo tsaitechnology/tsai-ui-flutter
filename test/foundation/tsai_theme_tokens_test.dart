@@ -59,6 +59,8 @@ void main() {
       expect(light.spacing.space12, dark.spacing.space12);
       expect(light.spacing.space80, dark.spacing.space80);
       expect(light.radii.pill, dark.radii.pill);
+      expect(light.radii.innerMedium, 10);
+      expect(light.radii.innerMedium, dark.radii.innerMedium);
       expect(light.borders.hairline, dark.borders.hairline);
       expect(light.effects.glassBlur, 24);
       expect(light.effects.glassBlur, dark.effects.glassBlur);
@@ -69,6 +71,8 @@ void main() {
         light.typography.buttonLarge.fontSize,
         dark.typography.buttonLarge.fontSize,
       );
+      expect(light.typography.bodyLarge.fontWeight, FontWeight.w400);
+      expect(light.typography.bodyLarge.letterSpacing, 0);
     });
 
     test('copyWith only replaces requested groups', () {

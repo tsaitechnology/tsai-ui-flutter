@@ -17,6 +17,7 @@ Latest snapshot read on 2026-07-31:
   `bottom-dark`, normalized as semantic top/bottom scrim gradients;
 - typography roles: 20;
 - spacing values: 12, including `spacing.6 = 6` and `spacing.12 = 12`;
+- nested medium radius: `radius.inner.md = 10`;
 - button axes: state, type, size;
 - button matrix: 4 × 4 × 2 = 32 variants.
 - icon/loader slot: 16 × 16, with a 12-pixel loader path and 1.5 stroke;

@@ -129,6 +129,7 @@ void main() {
       expect(actual.fontFamily, expected.fontFamily);
       expect(actual.fontSize, expected.fontSize);
       expect(actual.fontWeight, expected.fontWeight);
+      expect(actual.letterSpacing, 0);
       expect(actual.height, expected.height);
     }
   });
@@ -178,6 +179,24 @@ void main() {
     expect(text.softWrap, isFalse);
     expect(text.textScaler, TextScaler.noScaling);
     expect(find.bySemanticsLabel('Accessible text'), findsOneWidget);
+    semantics.dispose();
+  });
+
+  testWidgets('small captions render uppercase and preserve source semantics', (
+    tester,
+  ) async {
+    final semantics = tester.ensureSemantics();
+    await _pump(
+      tester,
+      child: const TsaiTextCaption(
+        'Account status',
+        size: TsaiCaptionSize.small,
+        weight: TsaiTextWeight.regular,
+      ),
+    );
+
+    expect(find.text('ACCOUNT STATUS'), findsOneWidget);
+    expect(find.bySemanticsLabel('Account status'), findsOneWidget);
     semantics.dispose();
   });
 }
