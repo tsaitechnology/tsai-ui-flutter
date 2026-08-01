@@ -281,7 +281,10 @@ class _TsaiCodeInputState extends State<_TsaiCodeInput> {
                   focusNode: widget.focusNode,
                   enabled: widget.enabled,
                   autofocus: widget.autofocus,
-                  keyboardType: TextInputType.number,
+                  keyboardType: const TextInputType.numberWithOptions(
+                    decimal: false,
+                    signed: false,
+                  ),
                   textInputAction: TextInputAction.done,
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,

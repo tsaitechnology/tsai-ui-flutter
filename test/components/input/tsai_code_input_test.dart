@@ -90,6 +90,18 @@ void main() {
     );
   });
 
+  testWidgets('PIN requests a digits-only keyboard', (tester) async {
+    await _pump(tester, child: const TsaiPinInput());
+
+    final input = tester.widget<TextField>(
+      find.byKey(const ValueKey('tsai-pin-editable')),
+    );
+    expect(
+      input.keyboardType,
+      const TextInputType.numberWithOptions(decimal: false, signed: false),
+    );
+  });
+
   testWidgets('PIN status colors affect every dot', (tester) async {
     await _pump(
       tester,
