@@ -1,3 +1,9 @@
+## 0.4.5 - 2026-08-02
+
+### Maintenance
+
+- Update components to latest Penpot tokens ([928f2e3](https://github.com/tsaitechnology/tsai-ui-flutter/commit/928f2e377fddbf3cd3b35b7a2af876eaa97cda58))
+
 ## 0.4.4 - 2026-08-02
 
 ### Maintenance
