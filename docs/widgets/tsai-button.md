@@ -4,6 +4,9 @@ A token-driven action button with primary, secondary, outline, and ghost
 variants; medium and large sizes; loading, disabled, expanded, focus, and icon
 states.
 
+The medium size uses the 12-pixel `type.button.m` typography role. The outline
+variant uses the semantic `borderSubtle` hairline color.
+
 [Open live example](https://tsaitechnology.github.io/tsai-ui-flutter/example/#/buttons){ target="_blank" rel="noopener" .md-button }
 
 ```dart

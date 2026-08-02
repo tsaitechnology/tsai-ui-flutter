@@ -2,6 +2,8 @@
 
 Inter button-label typography in `large` and `medium` sizes.
 
+The large role is 16 pixels and the medium role is 12 pixels.
+
 [Open live example](https://tsaitechnology.github.io/tsai-ui-flutter/example/#/typography/button-text){ target="_blank" rel="noopener" .md-button }
 
 ```dart

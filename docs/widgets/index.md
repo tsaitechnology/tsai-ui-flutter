@@ -31,6 +31,10 @@ its live Flutter web example.
 - [TsaiRadio](tsai-radio.md)
 - [TsaiSwitch](tsai-switch.md)
 
+## UI Blocks
+
+- [Tsai UI Blocks](tsai-ui-blocks.md)
+
 ## Layout
 
 - [TsaiTabs](tsai-tabs.md)

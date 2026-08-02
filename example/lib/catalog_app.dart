@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tsai_ui/tsai_ui.dart';
 
+import 'demo/component_demo_window.dart';
 import 'features/app_examples/app_with_two_pages_example.dart';
 import 'features/buttons/button_demo_screen.dart';
 import 'features/bottom_nav_bar/bottom_nav_bar_demo_screen.dart';
@@ -12,6 +13,7 @@ import 'features/selection_controls/selection_controls_demo_screen.dart';
 import 'features/tabs/tabs_demo_screen.dart';
 import 'features/top_bars/top_bar_demo_screen.dart';
 import 'features/typography/typography_widget_demo_screen.dart';
+import 'features/ui_blocks/ui_blocks_demo_screen.dart';
 
 class CatalogApp extends StatefulWidget {
   const CatalogApp({super.key, this.initialRoute, this.home});
@@ -131,6 +133,17 @@ class _CatalogAppState extends State<CatalogApp> {
         themeMode: _themeMode,
         onThemeModeChanged: _setThemeMode,
       ),
+      for (final section in [
+        ComponentDemoSection.sectionHeader,
+        ComponentDemoSection.emptyState,
+        ComponentDemoSection.listItem,
+        ComponentDemoSection.list,
+      ])
+        section.route: (context) => UIBlocksDemoScreen(
+          section: section,
+          themeMode: _themeMode,
+          onThemeModeChanged: _setThemeMode,
+        ),
     },
   );
 

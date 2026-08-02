@@ -62,6 +62,10 @@ import 'package:tsai_ui/tsai_icons.dart';
 | `TsaiOtpInput` | Cell-based one-time-password input | Public |
 | `TsaiPinInput` | Dot-based PIN input | Public |
 | `TsaiIcon` | Stable IconData, emoji, and custom-widget sizing/color adapter | Public |
+| `TsaiSectionHeader` | Compact section label with an optional trailing icon slot | Public |
+| `TsaiEmptyState` | Centered icon, message, description, and optional action composition | Public |
+| `TsaiListItem` | Composable row with active, icon, content, trailing, chevron, and activation support | Public |
+| `TsaiList` | Section header, list-item collection, and optional bottom-button composition | Public |
 | `UserPill` | User name and network-avatar summary with initials fallback | Public |
 | `HomeTopBarAction` | Circular home-bar icon action with an optional status indicator | Public |
 | `HomeTopBar` | Home-page top bar with leading and trailing widget lists | Public |
@@ -84,6 +88,7 @@ import 'package:tsai_ui/tsai_icons.dart';
 - code-input editable overlay and state resolver;
 - top-bar spacing, action frames, avatar loading, and heading transition;
 - bottom-navigation item geometry, glass pill, and destination state rendering;
+- circular icon surfaces used by list items and empty states;
 - example catalog implementation.
 
 No generated Penpot model, router, state-management API, or application service

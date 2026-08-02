@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tsai_ui/tsai_ui.dart';
 import 'package:tsai_ui_example/catalog_app.dart';
+import 'package:tsai_ui_example/demo/component_demo_window.dart';
 import 'package:tsai_ui_example/features/app_examples/app_with_two_pages_example.dart';
 import 'package:tsai_ui_example/features/buttons/button_demo.dart';
 import 'package:tsai_ui_example/features/bottom_nav_bar/bottom_nav_bar_demo.dart';
@@ -13,6 +14,7 @@ import 'package:tsai_ui_example/features/tabs/tabs_demo.dart';
 import 'package:tsai_ui_example/features/top_bars/top_bar_demo.dart';
 import 'package:tsai_ui_example/features/typography/typography_demo.dart';
 import 'package:tsai_ui_example/features/typography/typography_widget_demo_screen.dart';
+import 'package:tsai_ui_example/features/ui_blocks/ui_blocks_demo.dart';
 import 'package:tsai_ui_example/main.dart';
 
 void main() {
@@ -145,6 +147,34 @@ void main() {
     expect(find.text('Icons'), findsOneWidget);
   });
 
+  for (final section in [
+    ComponentDemoSection.sectionHeader,
+    ComponentDemoSection.emptyState,
+    ComponentDemoSection.listItem,
+    ComponentDemoSection.list,
+  ]) {
+    testWidgets('opens ${section.label} from its UI Blocks route', (
+      tester,
+    ) async {
+      await tester.pumpWidget(CatalogApp(initialRoute: section.route));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(UIBlocksDemo), findsOneWidget);
+      expect(find.text(section.label), findsWidgets);
+      await tester.scrollUntilVisible(
+        find.byKey(const ValueKey<String>('component-playground')),
+        500,
+        scrollable: find.byType(Scrollable).first,
+      );
+      await tester.pumpAndSettle();
+      expect(
+        find.byKey(const ValueKey<String>('component-playground')),
+        findsOneWidget,
+      );
+      expect(tester.takeException(), isNull);
+    });
+  }
+
   testWidgets('opens separate top-bar documentation routes', (tester) async {
     await tester.pumpWidget(const CatalogApp(initialRoute: '/top-bars/home'));
     await tester.pumpAndSettle();
@@ -196,6 +226,8 @@ void main() {
     expect(find.byType(AppWithTwoPagesExample), findsOneWidget);
     expect(find.byType(HomeScreenExample), findsOneWidget);
     expect(find.byType(BottomNavBar), findsOneWidget);
+    expect(find.byType(TsaiList), findsOneWidget);
+    expect(find.byType(TsaiListItem), findsNWidgets(7));
     expect(find.byType(IndexedStack), findsOneWidget);
 
     final scroll = tester.getRect(

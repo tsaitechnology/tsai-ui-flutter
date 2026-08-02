@@ -60,7 +60,27 @@ void main() {
       button.style!.padding!.resolve({}),
       const EdgeInsetsDirectional.only(start: 12, end: 16),
     );
-    expect(button.style!.textStyle!.resolve({})!.fontSize, 14);
+    expect(button.style!.textStyle!.resolve({})!.fontSize, 12);
+  });
+
+  testWidgets('outline uses the Penpot hairline border token', (tester) async {
+    await _pump(
+      tester,
+      child: TsaiButton(
+        label: 'Button',
+        variant: TsaiButtonVariant.outline,
+        onPressed: () {},
+      ),
+    );
+
+    final button = tester.widget<TextButton>(find.byType(TextButton));
+    expect(
+      button.style!.side!.resolve({}),
+      BorderSide(
+        color: TsaiThemeTokens.dark.colors.borderSubtle,
+        width: TsaiThemeTokens.dark.borders.hairline,
+      ),
+    );
   });
 
   testWidgets('uses the Penpot icon gaps for both sizes', (tester) async {

@@ -182,7 +182,7 @@ void main() {
     semantics.dispose();
   });
 
-  testWidgets('small captions render uppercase and preserve source semantics', (
+  testWidgets('small captions preserve developer-provided casing', (
     tester,
   ) async {
     final semantics = tester.ensureSemantics();
@@ -195,7 +195,7 @@ void main() {
       ),
     );
 
-    expect(find.text('ACCOUNT STATUS'), findsOneWidget);
+    expect(find.text('Account status'), findsOneWidget);
     expect(find.bySemanticsLabel('Account status'), findsOneWidget);
     semantics.dispose();
   });

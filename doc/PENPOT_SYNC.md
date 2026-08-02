@@ -8,7 +8,7 @@ file-id: ab506819-5bcf-801f-8008-4e8f605cef78
 library: Design System
 ```
 
-Latest snapshot read on 2026-07-31:
+Latest snapshot read on 2026-08-02:
 
 - sets: `dark`, `light`, `typography`, `spacing`;
 - color roles include glass canvas, surface, accent-surface, and accent-text
@@ -19,12 +19,23 @@ Latest snapshot read on 2026-07-31:
 - spacing values: 12, including `spacing.6 = 6` and `spacing.12 = 12`;
 - nested medium radius: `radius.inner.md = 10`;
 - button axes: state, type, size;
-- button matrix: 4 × 4 × 2 = 32 variants.
+- button matrix: 4 × 4 × 2 = 32 variants;
 - icon/loader slot: 16 × 16, with a 12-pixel loader path and 1.5 stroke;
 - icon-to-text gap: 8 pixels for L and 4 pixels for M;
-- loading replaces the icon in the same slot without changing button width.
+- loading replaces the icon in the same slot without changing button width;
 - M button: 40 pixels high, `radius.md`, 12-pixel start and 16-pixel end
-  padding.
+  padding, and a 12-pixel `type.button.m` label;
+- Stroke button: `color.border.hairline` border rather than an accent-surface
+  color;
+- Section Header: 8-pixel vertical padding, medium caption title, and optional
+  16-pixel trailing icon;
+- List Item: 8-pixel vertical padding and gap; optional 40-pixel circular icon,
+  external content and trailing slots, 20-pixel chevron, and active hairline
+  surface with `radius.lg`;
+- List: Section Header, List Items, and optional bottom button separated by
+  `spacing.8`;
+- Empty State: 32-pixel vertical padding, 64-pixel circular icon surface,
+  centered title/description stack, and optional M button.
 - Link states: Default, Active, Disabled; 32-pixel visual height, 14/500 label,
   optional 16-pixel icons, and a 4-pixel content gap.
 - Input + Button example: an M Secondary button is placed inside the 56-pixel

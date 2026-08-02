@@ -71,6 +71,7 @@ void main() {
         light.typography.buttonLarge.fontSize,
         dark.typography.buttonLarge.fontSize,
       );
+      expect(light.typography.buttonMedium.fontSize, 12);
       expect(light.typography.bodyLarge.fontWeight, FontWeight.w400);
       expect(light.typography.bodyLarge.letterSpacing, 0);
     });

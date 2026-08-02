@@ -197,23 +197,7 @@ class _HomeScreenExampleState extends State<HomeScreenExample> {
                         onChanged: (value) => setState(() => _country = value),
                       ),
                       SizedBox(height: tokens.spacing.space24),
-                      const TsaiTextHeading(
-                        'Recent activity',
-                        size: TsaiHeadingSize.small,
-                      ),
-                      SizedBox(height: tokens.spacing.space8),
-                      for (final activity in _activities)
-                        _ActivityRow(activity: activity),
-                      SizedBox(height: tokens.spacing.space16),
-                      TsaiButton(
-                        label: 'View all activity',
-                        variant: TsaiButtonVariant.outline,
-                        leadingIcon: const TsaiIcon(
-                          LucideIcons.receipt_text,
-                          size: 16,
-                        ),
-                        onPressed: () {},
-                      ),
+                      const _ActivityList(),
                     ],
                   ),
                 ),
@@ -513,46 +497,21 @@ class _QuickAction extends StatelessWidget {
   }
 }
 
-class _ActivityRow extends StatelessWidget {
-  const _ActivityRow({required this.activity});
-
-  final _Activity activity;
+class _ActivityList extends StatelessWidget {
+  const _ActivityList();
 
   @override
   Widget build(BuildContext context) {
     final tokens = TsaiThemeTokens.of(context);
-    return Container(
-      height: 68,
-      decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(
-            color: tokens.colors.borderSubtle,
-            width: tokens.borders.hairline,
-          ),
-        ),
-      ),
-      child: Row(
-        children: [
-          SizedBox.square(
-            dimension: tokens.spacing.space32 + tokens.spacing.space8,
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                color: tokens.colors.surfaceRaised,
-                borderRadius: BorderRadius.circular(tokens.radii.medium),
-              ),
-              child: Center(
-                child: TsaiIcon(
-                  activity.icon,
-                  size: 20,
-                  color: tokens.colors.iconPrimary,
-                ),
-              ),
-            ),
-          ),
-          SizedBox(width: tokens.spacing.space12),
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+    return TsaiList(
+      title: 'Recent activity',
+      headerTrailingIcon: const TsaiIcon(LucideIcons.search, size: 16),
+      items: [
+        for (final activity in _activities)
+          TsaiListItem(
+            icon: TsaiIcon(activity.icon, size: 20),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 TsaiTextBody(
@@ -565,23 +524,43 @@ class _ActivityRow extends StatelessWidget {
                 SizedBox(height: tokens.spacing.space2),
                 TsaiTextCaption(
                   activity.subtitle,
-                  size: TsaiCaptionSize.small,
+                  size: TsaiCaptionSize.medium,
                   weight: TsaiTextWeight.regular,
-                  color: tokens.colors.contentSecondary,
+                  color: tokens.colors.contentTertiary,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ),
+            trailing: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                TsaiTextMonoBody(
+                  activity.amount,
+                  size: TsaiBodySize.medium,
+                  color: activity.incoming
+                      ? tokens.colors.positive
+                      : tokens.colors.contentPrimary,
+                ),
+                SizedBox(height: tokens.spacing.space2),
+                TsaiTextCaption(
+                  activity.time,
+                  size: TsaiCaptionSize.medium,
+                  weight: TsaiTextWeight.regular,
+                  color: tokens.colors.contentTertiary,
                 ),
               ],
             ),
           ),
-          SizedBox(width: tokens.spacing.space8),
-          TsaiTextBody(
-            activity.amount,
-            size: TsaiBodySize.medium,
-            weight: TsaiTextWeight.medium,
-            color: activity.incoming
-                ? tokens.colors.positive
-                : tokens.colors.contentPrimary,
-          ),
-        ],
+      ],
+      button: TsaiButton(
+        label: 'View all activity',
+        size: TsaiButtonSize.medium,
+        variant: TsaiButtonVariant.outline,
+        isExpanded: true,
+        leadingIcon: const TsaiIcon(LucideIcons.receipt_text, size: 16),
+        onPressed: () {},
       ),
     );
   }
@@ -594,6 +573,7 @@ class _Activity {
     required this.title,
     required this.subtitle,
     required this.amount,
+    required this.time,
     this.incoming = false,
   });
 
@@ -601,6 +581,7 @@ class _Activity {
   final String title;
   final String subtitle;
   final String amount;
+  final String time;
   final bool incoming;
 }
 
@@ -633,6 +614,7 @@ const _activities = [
     title: 'Tsai Technology',
     subtitle: 'Salary · Today',
     amount: r'+$4,800.00',
+    time: '10:00',
     incoming: true,
   ),
   _Activity(
@@ -640,30 +622,35 @@ const _activities = [
     title: 'Market Central',
     subtitle: 'Groceries · Yesterday',
     amount: r'-$86.20',
+    time: '18:42',
   ),
   _Activity(
     icon: LucideIcons.building_2,
     title: 'Studio rent',
     subtitle: 'Transfer · Jul 29',
     amount: r'-$1,240.00',
+    time: '09:12',
   ),
   _Activity(
     icon: LucideIcons.wallet,
     title: 'Savings transfer',
     subtitle: 'Internal · Jul 28',
     amount: r'-$600.00',
+    time: '14:05',
   ),
   _Activity(
     icon: LucideIcons.receipt_text,
     title: 'Cloud services',
     subtitle: 'Software · Jul 27',
     amount: r'-$42.00',
+    time: '21:47',
   ),
   _Activity(
     icon: LucideIcons.landmark,
     title: 'Interest payment',
     subtitle: 'Income · Jul 25',
     amount: r'+$18.42',
+    time: '08:30',
     incoming: true,
   ),
   _Activity(
@@ -671,6 +658,7 @@ const _activities = [
     title: 'Corner coffee',
     subtitle: 'Dining · Jul 24',
     amount: r'-$7.80',
+    time: '16:15',
   ),
 ];
 

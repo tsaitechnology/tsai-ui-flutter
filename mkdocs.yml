@@ -70,6 +70,8 @@ nav:
           - TsaiCheckbox: widgets/tsai-checkbox.md
           - TsaiRadio: widgets/tsai-radio.md
           - TsaiSwitch: widgets/tsai-switch.md
+      - UI Blocks:
+          - Section, empty state, and lists: widgets/tsai-ui-blocks.md
       - Layout:
           - TsaiTabs: widgets/tsai-tabs.md
           - BottomNavBar: widgets/tsai-bottom-nav-bar.md

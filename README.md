@@ -92,6 +92,25 @@ BottomNavBar(
   onSelected: (index) => setState(() => selectedIndex = index),
 );
 
+TsaiList(
+  title: 'Transactions',
+  headerTrailingIcon: const TsaiIcon(LucideIcons.search, size: 16),
+  items: const [
+    TsaiListItem(
+      icon: TsaiIcon(LucideIcons.coffee, size: 20),
+      content: TsaiTextBody(
+        'Blue Bottle',
+        size: TsaiBodySize.medium,
+        weight: TsaiTextWeight.medium,
+      ),
+      trailing: TsaiTextMonoBody(
+        '-\$4.50',
+        size: TsaiBodySize.medium,
+      ),
+    ),
+  ],
+);
+
 TsaiInput(
   placeholder: 'Promo code',
   showClearButton: false,
@@ -136,6 +155,7 @@ lib/
       tabs/
       top_bar/
       typography/
+      ui_blocks/
     icons/
 example/
   lib/

@@ -13,6 +13,7 @@ export 'src/components/tabs/tsai_tabs.dart';
 export 'src/components/top_bar/tsai_top_bar.dart';
 export 'src/components/typography/tsai_text.dart';
 export 'src/components/typography/tsai_title.dart';
+export 'src/components/ui_blocks/tsai_ui_blocks.dart';
 export 'src/foundation/semantic/tsai_theme_tokens.dart';
 export 'src/foundation/theme/tsai_theme.dart';
 export 'src/icons/tsai_icon.dart';

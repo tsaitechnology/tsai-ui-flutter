@@ -36,6 +36,9 @@ lib/
     tabs/
       tabs_demo.dart                      # Document, viewport, and sticky compositions
       tabs_demo_screen.dart               # Separate full-page scenario screens
+    ui_blocks/
+      ui_blocks_demo.dart                 # Section Header, Empty State, List Item, and List examples
+      ui_blocks_demo_screen.dart
     typography/
       typography_demo.dart               # Embeddable typography demo
       typography_demo_screen.dart        # Full-page composition
@@ -94,6 +97,10 @@ Render one full entity page by opening its route:
 /#/input-phone Input Phone
 /#/input-otp OTP
 /#/input-pin PIN
+/#/ui-blocks/section-header Section Header
+/#/ui-blocks/empty-state Empty State
+/#/ui-blocks/list-item List Item
+/#/ui-blocks/list List
 /#/typography/heading TsaiTextHeading
 /#/typography/body TsaiTextBody
 /#/typography/button-text TsaiTextButton

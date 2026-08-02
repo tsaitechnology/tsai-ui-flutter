@@ -14,5 +14,5 @@ const TsaiTextCaption(
 
 Captions are suitable for supporting metadata. Keep essential instructions in
 body text so they remain prominent at larger accessibility text scales.
-Small captions render uppercase while preserving the source text for
-accessibility semantics.
+Text casing is preserved for both sizes. Apply uppercase or any other casing at
+the call site when the surrounding composition requires it.

@@ -2,7 +2,8 @@
 
 Tsai UI is a Flutter component library for Android, iOS, and web. It provides
 typed light and dark themes, semantic design tokens, typography, form controls,
-selection controls, buttons, links, tabs, top and bottom navigation bars, and
+selection controls, buttons, links, reusable UI blocks, tabs, top and bottom
+navigation bars, and
 Lucide-compatible icons.
 
 [Install Tsai UI](installation.md){ .md-button .md-button--primary }

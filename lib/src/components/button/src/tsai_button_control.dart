@@ -211,7 +211,7 @@ class TsaiButton extends StatelessWidget {
       return BorderSide(color: colors.actionPrimarySoft, width: width * 2);
     }
     if (variant == TsaiButtonVariant.outline) {
-      return BorderSide(color: colors.surfaceAccent, width: width);
+      return BorderSide(color: colors.borderSubtle, width: width);
     }
     return BorderSide.none;
   }

@@ -6,6 +6,7 @@ enum ComponentDemoCategory {
   common('Common'),
   typography('Typography'),
   forms('Forms'),
+  uiBlocks('UI Blocks'),
   layout('Layout'),
   appExamples('App examples');
 
@@ -101,6 +102,26 @@ enum ComponentDemoSection {
     label: 'Switch',
     route: '/switch',
     category: ComponentDemoCategory.forms,
+  ),
+  sectionHeader(
+    label: 'Section Header',
+    route: '/ui-blocks/section-header',
+    category: ComponentDemoCategory.uiBlocks,
+  ),
+  emptyState(
+    label: 'Empty State',
+    route: '/ui-blocks/empty-state',
+    category: ComponentDemoCategory.uiBlocks,
+  ),
+  listItem(
+    label: 'List Item',
+    route: '/ui-blocks/list-item',
+    category: ComponentDemoCategory.uiBlocks,
+  ),
+  list(
+    label: 'List',
+    route: '/ui-blocks/list',
+    category: ComponentDemoCategory.uiBlocks,
   ),
   tabsDocument(
     label: 'Tabs',

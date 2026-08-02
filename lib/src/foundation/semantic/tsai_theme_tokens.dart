@@ -481,7 +481,7 @@ final class TsaiTypographyTokens {
     buttonMedium: TextStyle(
       fontFamily: 'Inter',
       package: 'tsai_ui',
-      fontSize: 14,
+      fontSize: 12,
       fontWeight: FontWeight.w600,
       letterSpacing: 0,
       height: 1.1429,
