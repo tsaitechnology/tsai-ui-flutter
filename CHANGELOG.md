@@ -1,3 +1,10 @@
+## 0.4.4 - 2026-08-02
+
+### Maintenance
+
+- Restructure icon and avatar components ([8cdd4c0](https://github.com/tsaitechnology/tsai-ui-flutter/commit/8cdd4c02c93fb14559628a3f7ae2fc1059967e1a))
+- Refine HitIcon sizing and color inheritance ([8569682](https://github.com/tsaitechnology/tsai-ui-flutter/commit/85696820915f5e4f2f3da97c9741506a6b64bd91))
+
 ## 0.4.3 - 2026-08-02
 
 ### Features
