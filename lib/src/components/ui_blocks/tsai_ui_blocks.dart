@@ -48,10 +48,14 @@ class TsaiSectionHeader extends StatelessWidget {
           else ...[
             Expanded(child: titleWidget),
             SizedBox(width: tokens.spacing.space8),
-            HitIcon(
-              icon: trailingIcon!,
-              onPressed: onTrailingIconPressed,
-              semanticLabel: trailingIconSemanticLabel,
+            IconTheme.merge(
+              data: IconThemeData(color: tokens.colors.iconSecondary),
+              child: HitIcon(
+                icon: trailingIcon!,
+                iconSize: 24,
+                onPressed: onTrailingIconPressed,
+                semanticLabel: trailingIconSemanticLabel,
+              ),
             ),
           ],
         ],

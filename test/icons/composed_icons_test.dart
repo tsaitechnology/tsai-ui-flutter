@@ -3,34 +3,25 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tsai_ui/tsai_ui.dart';
 
 void main() {
-  testWidgets('HitIcon keeps 32/24 geometry and invokes its action', (
+  testWidgets('HitIcon keeps a 32 target and configurable inherited icon', (
     tester,
   ) async {
     var presses = 0;
     await _pump(
       tester,
       child: HitIcon(
-        icon: const Icon(Icons.search),
+        icon: const Icon(Icons.search, color: Colors.red),
+        iconSize: 18,
         semanticLabel: 'Search',
         onPressed: () => presses++,
       ),
     );
 
     expect(tester.getSize(find.byType(HitIcon)), const Size.square(32));
-    expect(IconTheme.of(tester.element(find.byIcon(Icons.search))).size, 24);
-    expect(
-      IconTheme.of(tester.element(find.byIcon(Icons.search))).color,
-      TsaiThemeTokens.dark.colors.iconPrimary,
-    );
+    expect(IconTheme.of(tester.element(find.byIcon(Icons.search))).size, 18);
+    expect(tester.widget<Icon>(find.byIcon(Icons.search)).color, Colors.red);
     expect(find.bySemanticsLabel('Search'), findsOneWidget);
-    final filter = tester.widget<ColorFiltered>(find.byType(ColorFiltered));
-    expect(
-      filter.colorFilter,
-      ColorFilter.mode(
-        TsaiThemeTokens.dark.colors.iconPrimary,
-        BlendMode.srcIn,
-      ),
-    );
+    expect(find.byType(ColorFiltered), findsNothing);
     expect(
       find.descendant(
         of: find.byType(HitIcon),

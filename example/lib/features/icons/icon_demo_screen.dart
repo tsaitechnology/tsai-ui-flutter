@@ -185,6 +185,7 @@ class _HitIconPlayground extends StatefulWidget {
 
 class _HitIconPlaygroundState extends State<_HitIconPlayground> {
   String _icon = 'search';
+  double _iconSize = 24;
   bool _enabled = true;
   int _presses = 0;
 
@@ -208,10 +209,21 @@ class _HitIconPlaygroundState extends State<_HitIconPlayground> {
         value: _enabled,
         onChanged: (value) => setState(() => _enabled = value),
       ),
+      PlaygroundField(
+        label: 'iconSize: ${_iconSize.round()}',
+        child: Slider(
+          value: _iconSize,
+          min: 12,
+          max: 32,
+          divisions: 10,
+          onChanged: (value) => setState(() => _iconSize = value),
+        ),
+      ),
       PlaygroundOutput(label: 'presses', value: '$_presses'),
     ],
     preview: HitIcon(
       icon: TsaiIcon(_iconData),
+      iconSize: _iconSize,
       semanticLabel: 'Demo action',
       onPressed: _enabled ? () => setState(() => _presses++) : null,
     ),

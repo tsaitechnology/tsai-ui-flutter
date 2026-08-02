@@ -24,6 +24,10 @@ void main() {
     expect(find.byType(HitIcon), findsOneWidget);
     expect(icon.size, isNull);
     expect(IconTheme.of(tester.element(find.byIcon(Icons.search))).size, 24);
+    expect(
+      IconTheme.of(tester.element(find.byIcon(Icons.search))).color,
+      TsaiThemeTokens.dark.colors.iconSecondary,
+    );
   });
 
   testWidgets('empty state composes its icon, copy, and button', (
