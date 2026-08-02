@@ -120,7 +120,7 @@ class _AvatarPlaygroundState extends State<_AvatarPlayground> {
     preview: Avatar(
       initials: _initials.isEmpty ? 'IT' : _initials,
       image: _content == _AvatarContent.image
-          ? const NetworkImage('https://i.pravatar.cc/64?img=47')
+          ? NetworkImage(_avatarImageUrl)
           : null,
       semanticLabel: _semanticLabel ? 'Demo avatar' : null,
     ),
@@ -171,9 +171,11 @@ class _UserPillPlaygroundState extends State<_UserPillPlayground> {
     preview: UserPill(
       name: _name.isEmpty ? 'Ilona T.' : _name,
       initials: _initials.isEmpty ? 'IT' : _initials,
-      avatarUrl: _showImage ? 'https://i.pravatar.cc/64?img=47' : null,
+      avatarUrl: _showImage ? _avatarImageUrl : null,
       semanticLabel: 'Open demo profile',
       onPressed: _interactive ? () => setState(() => _presses++) : null,
     ),
   );
 }
+
+String get _avatarImageUrl => Uri.base.resolve('images/avatar.png').toString();
