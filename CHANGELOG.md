@@ -1,3 +1,17 @@
+## 0.4.3 - 2026-08-02
+
+### Features
+
+- add reusable UI blocks ([432cc2e](https://github.com/tsaitechnology/tsai-ui-flutter/commit/432cc2e22b4ade02786c67b9c7929c89f49b4fae))
+
+### Bug Fixes
+
+- use numeric keyboard for pin input ([0b51301](https://github.com/tsaitechnology/tsai-ui-flutter/commit/0b51301dff0cf441053baac92283667023524e90))
+
+### Maintenance
+
+- align tokens and component structure ([23f4f41](https://github.com/tsaitechnology/tsai-ui-flutter/commit/23f4f4138f42afe5a99b8a8ff95e7e8cf31c867d))
+
 ## 0.4.2 - 2026-07-31
 
 ### Bug Fixes
