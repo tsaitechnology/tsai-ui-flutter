@@ -38,6 +38,14 @@ void main() {
       );
       expect(TsaiThemeTokens.light.colors.iconBright, const Color(0xFF6366F1));
       expect(TsaiThemeTokens.dark.colors.iconBright, const Color(0xFFA5B4FC));
+      expect(
+        TsaiThemeTokens.light.colors.iconSecondary,
+        const Color(0xFF838099),
+      );
+      expect(
+        TsaiThemeTokens.dark.colors.iconSecondary,
+        const Color(0xFF7F7D8B),
+      );
       expect(TsaiThemeTokens.light.gradients.topScrim.colors, const [
         Color(0xCCFAFAFA),
         Color(0x00FAFAFA),

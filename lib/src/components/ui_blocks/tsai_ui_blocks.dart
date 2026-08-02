@@ -17,7 +17,7 @@ class TsaiSectionHeader extends StatelessWidget {
     this.trailingIconSemanticLabel,
   });
 
-  /// Section label displayed with the medium caption typography role.
+  /// Section label displayed with the medium body typography role.
   final String title;
 
   /// Optional icon displayed at the trailing edge.
@@ -32,9 +32,9 @@ class TsaiSectionHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tokens = TsaiThemeTokens.of(context);
-    final titleWidget = TsaiTextCaption(
+    final titleWidget = TsaiTextBody(
       title,
-      size: TsaiCaptionSize.medium,
+      size: TsaiBodySize.medium,
       weight: TsaiTextWeight.medium,
       color: tokens.colors.contentSecondary,
     );

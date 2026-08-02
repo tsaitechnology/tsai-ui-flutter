@@ -488,7 +488,7 @@ Widget _content(String title, String subtitle) => Builder(
           subtitle,
           size: TsaiCaptionSize.medium,
           weight: TsaiTextWeight.regular,
-          color: tokens.colors.contentTertiary,
+          color: tokens.colors.contentSecondary,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),
@@ -517,7 +517,7 @@ Widget _trailing(String value, String subValue, {bool positive = false}) =>
               subValue,
               size: TsaiCaptionSize.medium,
               weight: TsaiTextWeight.regular,
-              color: tokens.colors.contentTertiary,
+              color: tokens.colors.contentSecondary,
             ),
           ],
         );

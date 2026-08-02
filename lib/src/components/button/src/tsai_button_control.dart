@@ -186,7 +186,7 @@ class TsaiButton extends StatelessWidget {
       TsaiButtonVariant.secondary =>
         active ? colors.surfaceAccentPressed : colors.surfaceAccent,
       TsaiButtonVariant.outline || TsaiButtonVariant.ghost =>
-        active ? colors.surface : colors.surface.withValues(alpha: 0),
+        active ? colors.borderSubtle : colors.surface.withValues(alpha: 0),
     };
   }
 

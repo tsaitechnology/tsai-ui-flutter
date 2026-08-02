@@ -171,12 +171,12 @@ void main() {
     expect(_animatedBackgroundColor(tester, backgroundKey), hoveredColor);
   });
 
-  testWidgets('outline and ghost hover animate only surface opacity', (
+  testWidgets('outline and ghost hover animate to the hairline color', (
     tester,
   ) async {
     const backgroundKey = ValueKey<String>('tsai-button-animated-background');
     for (final theme in [TsaiTheme.light(), TsaiTheme.dark()]) {
-      final surface = theme.extension<TsaiThemeTokens>()!.colors.surface;
+      final colors = theme.extension<TsaiThemeTokens>()!.colors;
       for (final variant in [
         TsaiButtonVariant.outline,
         TsaiButtonVariant.ghost,
@@ -195,7 +195,7 @@ void main() {
 
         expect(
           _animatedBackgroundColor(tester, backgroundKey),
-          surface.withValues(alpha: 0),
+          colors.surface.withValues(alpha: 0),
         );
 
         final mouse = await tester.createGesture(kind: PointerDeviceKind.mouse);
@@ -206,10 +206,12 @@ void main() {
 
         final midColor = _animatedBackgroundColor(tester, backgroundKey)!;
         expect(midColor.a, greaterThan(0));
-        expect(midColor.a, lessThan(surface.a));
-        expect(midColor.r, closeTo(surface.r, 0.001));
-        expect(midColor.g, closeTo(surface.g, 0.001));
-        expect(midColor.b, closeTo(surface.b, 0.001));
+        expect(midColor, isNot(colors.borderSubtle));
+        await tester.pump(const Duration(milliseconds: 70));
+        expect(
+          _animatedBackgroundColor(tester, backgroundKey),
+          colors.borderSubtle,
+        );
         await mouse.removePointer();
       }
     }

@@ -7,17 +7,20 @@ void main() {
   testWidgets('section header renders text and an optional icon slot', (
     tester,
   ) async {
+    var presses = 0;
     await _pump(
       tester,
       child: TsaiSectionHeader(
         title: 'Transactions',
         trailingIcon: const Icon(Icons.search),
         trailingIconSemanticLabel: 'Search transactions',
-        onTrailingIconPressed: () {},
+        onTrailingIconPressed: () => presses++,
       ),
     );
 
     expect(find.text('Transactions'), findsOneWidget);
+    expect(find.byType(TsaiTextBody), findsOneWidget);
+    expect(find.byType(TsaiTextCaption), findsNothing);
     expect(find.byIcon(Icons.search), findsOneWidget);
     expect(tester.getSize(find.byType(TsaiSectionHeader)).height, 32);
     final icon = tester.widget<Icon>(find.byIcon(Icons.search));
@@ -28,6 +31,10 @@ void main() {
       IconTheme.of(tester.element(find.byIcon(Icons.search))).color,
       TsaiThemeTokens.dark.colors.iconSecondary,
     );
+
+    await tester.tap(find.byType(HitIcon));
+    await tester.pump();
+    expect(presses, 1);
   });
 
   testWidgets('empty state composes its icon, copy, and button', (
