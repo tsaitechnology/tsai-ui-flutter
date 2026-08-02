@@ -1,3 +1,9 @@
+## 0.4.6 - 2026-08-02
+
+### Maintenance
+
+- Use same-origin avatar image in catalog ([ad02c2a](https://github.com/tsaitechnology/tsai-ui-flutter/commit/ad02c2a259713721811d7f9986d56e7b581bc596))
+
 ## 0.4.5 - 2026-08-02
 
 ### Maintenance
