@@ -12,9 +12,11 @@ typography and business data remain outside the library.
 ## Section Header
 
 ```dart
-const TsaiSectionHeader(
+TsaiSectionHeader(
   title: 'Transactions',
-  trailingIcon: TsaiIcon(LucideIcons.search, size: 16),
+  trailingIcon: const TsaiIcon(LucideIcons.search),
+  trailingIconSemanticLabel: 'Search transactions',
+  onTrailingIconPressed: openSearch,
 )
 ```
 
@@ -87,5 +89,5 @@ TsaiList(
 )
 ```
 
-The circular icon surface is an internal layout detail. Pass any icon widget
-supported by the application; no separate icon-circle API is required.
+List item icons are rendered through the public `CircleIcon` component, which
+keeps the Penpot 40-pixel circle and 20-pixel icon geometry consistent.

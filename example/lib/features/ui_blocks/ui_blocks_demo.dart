@@ -49,7 +49,9 @@ class _SectionHeaderExample extends StatelessWidget {
       padding: EdgeInsets.all(30),
       child: TsaiSectionHeader(
         title: 'Transactions',
-        trailingIcon: TsaiIcon(LucideIcons.search, size: 16),
+        trailingIcon: TsaiIcon(LucideIcons.search),
+        trailingIconSemanticLabel: 'Search transactions',
+        onTrailingIconPressed: _noop,
       ),
     ),
   );
@@ -182,8 +184,10 @@ class _SectionHeaderPlaygroundState extends State<_SectionHeaderPlayground> {
     preview: TsaiSectionHeader(
       title: _title,
       trailingIcon: _showTrailingIcon
-          ? const TsaiIcon(LucideIcons.search, size: 16)
+          ? const TsaiIcon(LucideIcons.search)
           : null,
+      trailingIconSemanticLabel: 'Search transactions',
+      onTrailingIconPressed: _showTrailingIcon ? _noop : null,
     ),
     controls: [
       PlaygroundTextControl(
@@ -199,6 +203,8 @@ class _SectionHeaderPlaygroundState extends State<_SectionHeaderPlayground> {
     ],
   );
 }
+
+void _noop() {}
 
 class _EmptyStatePlayground extends StatefulWidget {
   const _EmptyStatePlayground();
@@ -356,7 +362,7 @@ class _ListPlaygroundState extends State<_ListPlayground> {
       preview: TsaiList(
         title: _title,
         headerTrailingIcon: _showHeaderIcon
-            ? const TsaiIcon(LucideIcons.search, size: 16)
+            ? const TsaiIcon(LucideIcons.search)
             : null,
         items: items,
         button: _showButton
@@ -398,7 +404,7 @@ class _ListPlaygroundState extends State<_ListPlayground> {
 
 Widget _transactionList() => TsaiList(
   title: 'Transactions',
-  headerTrailingIcon: const TsaiIcon(LucideIcons.search, size: 16),
+  headerTrailingIcon: const TsaiIcon(LucideIcons.search),
   items: _transactionItems(),
   button: TsaiButton(
     label: 'Show all',

@@ -21,6 +21,10 @@ lib/
     buttons/
       button_demo.dart                   # Embeddable button demo
       button_demo_screen.dart            # Full-page composition
+    avatars/
+      avatar_demo_screen.dart             # Avatar and UserPill examples
+    icons/
+      icon_demo_screen.dart               # TsaiIcon, HitIcon, and CircleIcon examples
     inputs/
       input_demo.dart                    # Separate Input, Phone, OTP, and PIN demos
       input_demo_screen.dart
@@ -88,7 +92,11 @@ Render one full entity page by opening its route:
 /#/tabs-sticky Tabs pinned after the page header
 /#/bottom-nav-bar Bottom Nav Bar with 1-5 destinations
 /#/app-examples/two-pages App shell with Home and Form pages
-/#/icons Icons
+/#/icons/tsai-icon TsaiIcon
+/#/icons/hit-icon HitIcon
+/#/icons/circle-icon CircleIcon
+/#/avatars/avatar Avatar
+/#/avatars/user-pill UserPill
 /#/checkbox Checkbox
 /#/radio Radio
 /#/switch Switch

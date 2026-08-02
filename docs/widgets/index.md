@@ -7,7 +7,17 @@ its live Flutter web example.
 
 - [TsaiButton](tsai-button.md)
 - [TsaiLink](tsai-link.md)
+
+## Icons
+
 - [TsaiIcon](tsai-icon.md)
+- [HitIcon](hit-icon.md)
+- [CircleIcon](circle-icon.md)
+
+## Avatars
+
+- [Avatar](avatar.md)
+- [UserPill](user-pill.md)
 
 ## Typography
 

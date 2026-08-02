@@ -11,7 +11,7 @@ that moves its heading into a pinned bar when scrolling starts.
 
 `HomeTopBar` is 76 pixels high and accepts lists of widgets at both directional
 edges. Items in each list use the Penpot eight-pixel gap. Its background uses
-the theme's reusable top scrim asset, while `UserPill` and
+the theme's reusable top scrim asset, while the reusable `UserPill` and
 `HomeTopBarAction` use token-backed glass surfaces and backdrop blur.
 
 Place the bar above the page scroll view in a `Stack`. Give the scrollable a
@@ -64,7 +64,7 @@ HomeTopBar(
 )
 ```
 
-`UserPill` renders a 32-pixel network avatar. It displays `initials` while the
+`UserPill` composes the public 32-pixel `Avatar`. It displays `initials` while the
 image is loading and when the URL is absent, empty, or fails. `onPressed` is
 optional, so the pill can be display-only.
 

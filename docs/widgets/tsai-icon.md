@@ -3,7 +3,7 @@
 A stable square adapter for Lucide glyphs, emoji, SVG, PNG, or other custom
 Flutter widgets.
 
-[Open live example](https://tsaitechnology.github.io/tsai-ui-flutter/example/#/icons){ target="_blank" rel="noopener" .md-button }
+[Open live example](https://tsaitechnology.github.io/tsai-ui-flutter/example/#/icons/tsai-icon){ target="_blank" rel="noopener" .md-button }
 
 ```dart
 import 'package:tsai_ui/tsai_icons.dart';

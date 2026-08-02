@@ -74,7 +74,10 @@ class ComponentPlayground extends StatelessWidget {
                   child: LayoutBuilder(
                     builder: (context, constraints) => SizedBox(
                       width: constraints.maxWidth.clamp(0, 360),
-                      child: preview,
+                      child: Align(
+                        alignment: AlignmentDirectional.centerStart,
+                        child: preview,
+                      ),
                     ),
                   ),
                 ),

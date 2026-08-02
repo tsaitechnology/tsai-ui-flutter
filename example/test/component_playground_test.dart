@@ -4,6 +4,8 @@ import 'package:tsai_ui/tsai_ui.dart';
 import 'package:tsai_ui_example/demo/component_playground.dart';
 
 void main() {
+  const previewKey = ValueKey<String>('compact-preview');
+
   testWidgets('uses a compact bordered playground layout', (tester) async {
     await tester.pumpWidget(
       MaterialApp(
@@ -23,7 +25,11 @@ void main() {
                 onChanged: _noopBool,
               ),
             ],
-            preview: const Text('Preview value'),
+            preview: const SizedBox.square(
+              key: previewKey,
+              dimension: 32,
+              child: Text('Preview value'),
+            ),
           ),
         ),
       ),
@@ -53,6 +59,7 @@ void main() {
       ),
       const Size(766, 96),
     );
+    expect(tester.getSize(find.byKey(previewKey)), const Size.square(32));
   });
 }
 

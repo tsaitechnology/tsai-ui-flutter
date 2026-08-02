@@ -505,7 +505,7 @@ class _ActivityList extends StatelessWidget {
     final tokens = TsaiThemeTokens.of(context);
     return TsaiList(
       title: 'Recent activity',
-      headerTrailingIcon: const TsaiIcon(LucideIcons.search, size: 16),
+      headerTrailingIcon: const TsaiIcon(LucideIcons.search),
       items: [
         for (final activity in _activities)
           TsaiListItem(

@@ -4,6 +4,8 @@ import 'package:tsai_ui/tsai_ui.dart';
 
 enum ComponentDemoCategory {
   common('Common'),
+  icons('Icons'),
+  avatars('Avatars'),
   typography('Typography'),
   forms('Forms'),
   uiBlocks('UI Blocks'),
@@ -26,10 +28,30 @@ enum ComponentDemoSection {
     route: '/links',
     category: ComponentDemoCategory.common,
   ),
-  icons(
-    label: 'Icons',
-    route: '/icons',
-    category: ComponentDemoCategory.common,
+  tsaiIcon(
+    label: 'TsaiIcon',
+    route: '/icons/tsai-icon',
+    category: ComponentDemoCategory.icons,
+  ),
+  hitIcon(
+    label: 'HitIcon',
+    route: '/icons/hit-icon',
+    category: ComponentDemoCategory.icons,
+  ),
+  circleIcon(
+    label: 'CircleIcon',
+    route: '/icons/circle-icon',
+    category: ComponentDemoCategory.icons,
+  ),
+  avatar(
+    label: 'Avatar',
+    route: '/avatars/avatar',
+    category: ComponentDemoCategory.avatars,
+  ),
+  userPill(
+    label: 'UserPill',
+    route: '/avatars/user-pill',
+    category: ComponentDemoCategory.avatars,
   ),
   title(
     label: 'TsaiTitle',

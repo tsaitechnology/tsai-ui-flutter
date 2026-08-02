@@ -51,7 +51,13 @@ nav:
       - Common:
           - TsaiButton: widgets/tsai-button.md
           - TsaiLink: widgets/tsai-link.md
+      - Icons:
           - TsaiIcon: widgets/tsai-icon.md
+          - HitIcon: widgets/hit-icon.md
+          - CircleIcon: widgets/circle-icon.md
+      - Avatars:
+          - Avatar: widgets/avatar.md
+          - UserPill: widgets/user-pill.md
       - Typography:
           - TsaiTitle: widgets/tsai-title.md
           - TsaiTextHeading: widgets/tsai-text-heading.md

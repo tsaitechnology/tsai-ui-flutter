@@ -2,18 +2,32 @@ import 'package:flutter/material.dart';
 import 'package:flutter_lucide/flutter_lucide.dart';
 
 import '../../foundation/semantic/tsai_theme_tokens.dart';
+import '../../icons/circle_icon.dart';
+import '../../icons/hit_icon.dart';
 import '../typography/tsai_text.dart';
 
 /// A compact section label with an optional trailing icon slot.
 class TsaiSectionHeader extends StatelessWidget {
   /// Creates a section header.
-  const TsaiSectionHeader({required this.title, super.key, this.trailingIcon});
+  const TsaiSectionHeader({
+    required this.title,
+    super.key,
+    this.trailingIcon,
+    this.onTrailingIconPressed,
+    this.trailingIconSemanticLabel,
+  });
 
   /// Section label displayed with the medium caption typography role.
   final String title;
 
   /// Optional icon displayed at the trailing edge.
   final Widget? trailingIcon;
+
+  /// Called when the trailing icon is activated.
+  final VoidCallback? onTrailingIconPressed;
+
+  /// Accessibility label for the trailing icon action.
+  final String? trailingIconSemanticLabel;
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +39,8 @@ class TsaiSectionHeader extends StatelessWidget {
       color: tokens.colors.contentSecondary,
     );
 
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: tokens.spacing.space8),
+    return SizedBox(
+      height: 32,
       child: Row(
         children: [
           if (trailingIcon == null)
@@ -34,15 +48,10 @@ class TsaiSectionHeader extends StatelessWidget {
           else ...[
             Expanded(child: titleWidget),
             SizedBox(width: tokens.spacing.space8),
-            IconTheme.merge(
-              data: IconThemeData(
-                size: tokens.spacing.space16,
-                color: tokens.colors.iconSecondary,
-              ),
-              child: SizedBox.square(
-                dimension: tokens.spacing.space16,
-                child: Center(child: trailingIcon),
-              ),
+            HitIcon(
+              icon: trailingIcon!,
+              onPressed: onTrailingIconPressed,
+              semanticLabel: trailingIconSemanticLabel,
             ),
           ],
         ],
@@ -174,11 +183,7 @@ class TsaiListItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               if (icon case final icon?) ...[
-                _IconCircle(
-                  size: tokens.spacing.space32 + tokens.spacing.space8,
-                  iconSize: tokens.spacing.space20,
-                  icon: icon,
-                ),
+                CircleIcon(icon: icon),
                 SizedBox(width: tokens.spacing.space8),
               ],
               Expanded(child: content),

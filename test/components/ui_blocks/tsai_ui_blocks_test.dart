@@ -9,9 +9,11 @@ void main() {
   ) async {
     await _pump(
       tester,
-      child: const TsaiSectionHeader(
+      child: TsaiSectionHeader(
         title: 'Transactions',
-        trailingIcon: Icon(Icons.search),
+        trailingIcon: const Icon(Icons.search),
+        trailingIconSemanticLabel: 'Search transactions',
+        onTrailingIconPressed: () {},
       ),
     );
 
@@ -19,11 +21,9 @@ void main() {
     expect(find.byIcon(Icons.search), findsOneWidget);
     expect(tester.getSize(find.byType(TsaiSectionHeader)).height, 32);
     final icon = tester.widget<Icon>(find.byIcon(Icons.search));
+    expect(find.byType(HitIcon), findsOneWidget);
     expect(icon.size, isNull);
-    expect(
-      IconTheme.of(tester.element(find.byIcon(Icons.search))).size,
-      TsaiThemeTokens.dark.spacing.space16,
-    );
+    expect(IconTheme.of(tester.element(find.byIcon(Icons.search))).size, 24);
   });
 
   testWidgets('empty state composes its icon, copy, and button', (
@@ -70,6 +70,7 @@ void main() {
     expect(find.text('Blue Bottle'), findsOneWidget);
     expect(find.text(r'-$4.50'), findsOneWidget);
     expect(find.byIcon(Icons.coffee), findsOneWidget);
+    expect(find.byType(CircleIcon), findsOneWidget);
     expect(find.byIcon(LucideIcons.chevron_right), findsOneWidget);
     expect(
       find.byKey(const ValueKey<String>('tsai-list-item-active-background')),

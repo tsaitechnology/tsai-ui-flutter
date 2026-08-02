@@ -139,13 +139,36 @@ void main() {
     });
   }
 
-  testWidgets('opens TsaiIcon from its documentation route', (tester) async {
-    await tester.pumpWidget(const CatalogApp(initialRoute: '/icons'));
-    await tester.pumpAndSettle();
+  for (final section in [
+    ComponentDemoSection.tsaiIcon,
+    ComponentDemoSection.hitIcon,
+    ComponentDemoSection.circleIcon,
+    ComponentDemoSection.avatar,
+    ComponentDemoSection.userPill,
+  ]) {
+    testWidgets('opens ${section.label} from its documentation route', (
+      tester,
+    ) async {
+      await tester.pumpWidget(CatalogApp(initialRoute: section.route));
+      await tester.pumpAndSettle();
 
-    expect(find.byKey(const ValueKey<String>('icon-demo')), findsOneWidget);
-    expect(find.text('Icons'), findsOneWidget);
-  });
+      expect(
+        find.byKey(ValueKey<String>('${section.name}-demo')),
+        findsOneWidget,
+      );
+      expect(find.text(section.label), findsWidgets);
+      await tester.scrollUntilVisible(
+        find.byKey(const ValueKey<String>('component-playground')),
+        500,
+        scrollable: find.byType(Scrollable).first,
+      );
+      await tester.pumpAndSettle();
+      expect(
+        find.byKey(const ValueKey<String>('component-playground')),
+        findsOneWidget,
+      );
+    });
+  }
 
   for (final section in [
     ComponentDemoSection.sectionHeader,

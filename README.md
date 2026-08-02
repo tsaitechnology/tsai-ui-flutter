@@ -94,7 +94,7 @@ BottomNavBar(
 
 TsaiList(
   title: 'Transactions',
-  headerTrailingIcon: const TsaiIcon(LucideIcons.search, size: 16),
+  headerTrailingIcon: const TsaiIcon(LucideIcons.search),
   items: const [
     TsaiListItem(
       icon: TsaiIcon(LucideIcons.coffee, size: 20),
