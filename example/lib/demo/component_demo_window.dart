@@ -43,6 +43,11 @@ enum ComponentDemoSection {
     route: '/icons/circle-icon',
     category: ComponentDemoCategory.icons,
   ),
+  cryptoIcon(
+    label: 'Crypto Icon',
+    route: '/icons/crypto-icon',
+    category: ComponentDemoCategory.icons,
+  ),
   avatar(
     label: 'Avatar',
     route: '/avatars/avatar',
@@ -94,6 +99,11 @@ enum ComponentDemoSection {
     category: ComponentDemoCategory.typography,
   ),
   input(label: 'Input', route: '/input', category: ComponentDemoCategory.forms),
+  inputSearch(
+    label: 'Search Input',
+    route: '/input-search',
+    category: ComponentDemoCategory.forms,
+  ),
   inputPhone(
     label: 'Phone Input',
     route: '/input-phone',
@@ -145,6 +155,11 @@ enum ComponentDemoSection {
     route: '/ui-blocks/list',
     category: ComponentDemoCategory.uiBlocks,
   ),
+  glow(
+    label: 'Glow',
+    route: '/effects/glow',
+    category: ComponentDemoCategory.uiBlocks,
+  ),
   tabsDocument(
     label: 'Tabs',
     route: '/tabs',
@@ -153,6 +168,16 @@ enum ComponentDemoSection {
   bottomNavBar(
     label: 'Bottom Nav Bar',
     route: '/bottom-nav-bar',
+    category: ComponentDemoCategory.layout,
+  ),
+  bottomSheet(
+    label: 'Bottom Sheet',
+    route: '/bottom-sheet',
+    category: ComponentDemoCategory.layout,
+  ),
+  modalDialog(
+    label: 'Modal Dialog',
+    route: '/modal-dialog',
     category: ComponentDemoCategory.layout,
   ),
   homeTopBar(
@@ -168,6 +193,11 @@ enum ComponentDemoSection {
   pageWithTopBar(
     label: 'Page With Top Bar',
     route: '/top-bars/page-layout',
+    category: ComponentDemoCategory.layout,
+  ),
+  pageWithSearchTopBar(
+    label: 'Page With Search Top Bar',
+    route: '/top-bars/page-search-layout',
     category: ComponentDemoCategory.layout,
   ),
   appWithTwoPages(

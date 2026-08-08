@@ -269,6 +269,99 @@ class _InputDemoState extends State<InputDemo> {
   );
 }
 
+class SearchInputDemo extends StatefulWidget {
+  const SearchInputDemo({super.key});
+
+  @override
+  State<SearchInputDemo> createState() => _SearchInputDemoState();
+}
+
+class _SearchInputDemoState extends State<SearchInputDemo> {
+  final _controller = TextEditingController();
+  String _placeholder = 'Search';
+  String _semanticLabel = '';
+  bool _enabled = true;
+  bool _showClearButton = true;
+  bool _autofocus = false;
+  String _event = 'No events';
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => _DemoPage(
+    pageKey: 'input-search-demo',
+    playground: ComponentPlayground(
+      controls: [
+        _TextProperty(
+          label: 'value',
+          controller: _controller,
+          onChanged: (_) => setState(() {}),
+        ),
+        _TextProperty(
+          label: 'placeholder',
+          value: _placeholder,
+          onChanged: (value) => setState(() => _placeholder = value),
+        ),
+        _TextProperty(
+          label: 'semanticLabel',
+          value: _semanticLabel,
+          onChanged: (value) => setState(() => _semanticLabel = value),
+        ),
+        _Toggle(
+          label: 'enabled',
+          value: _enabled,
+          onChanged: (value) => setState(() => _enabled = value),
+        ),
+        _Toggle(
+          label: 'showClearButton',
+          value: _showClearButton,
+          onChanged: (value) => setState(() => _showClearButton = value),
+        ),
+        _Toggle(
+          label: 'autofocus',
+          value: _autofocus,
+          onChanged: (value) => setState(() => _autofocus = value),
+        ),
+        _EventProperty(_event),
+      ],
+      preview: TsaiSearchInput(
+        controller: _controller,
+        placeholder: _placeholder,
+        semanticLabel: _emptyToNull(_semanticLabel),
+        enabled: _enabled,
+        autofocus: _autofocus,
+        showClearButton: _showClearButton,
+        onChanged: (value) => setState(() => _event = 'onChanged($value)'),
+        onSubmitted: (value) => setState(() => _event = 'onSubmitted($value)'),
+        onFocusChange: (value) =>
+            setState(() => _event = 'onFocusChange($value)'),
+        onCleared: () => setState(() => _event = 'onCleared()'),
+      ),
+    ),
+    examples: const [
+      PenpotExample(
+        title: 'Input Search states',
+        child: PenpotBoard(
+          width: 352,
+          child: Column(
+            children: [
+              TsaiSearchInput(),
+              SizedBox(height: 20),
+              TsaiSearchInput(initialValue: 'Query'),
+              SizedBox(height: 20),
+              TsaiSearchInput(enabled: false),
+            ],
+          ),
+        ),
+      ),
+    ],
+  );
+}
+
 class PhoneInputDemo extends StatefulWidget {
   const PhoneInputDemo({super.key});
 

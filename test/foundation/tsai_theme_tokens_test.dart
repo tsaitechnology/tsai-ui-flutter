@@ -28,6 +28,20 @@ void main() {
         const Color(0xCCEFEFF1),
       );
       expect(TsaiThemeTokens.dark.colors.surfaceGlass, const Color(0xCC141416));
+      expect(TsaiThemeTokens.light.colors.surface, const Color(0xFFFFFFFF));
+      expect(TsaiThemeTokens.dark.colors.surface, const Color(0xFF15161F));
+      expect(
+        TsaiThemeTokens.light.colors.borderSubtle,
+        const Color(0xFFE1E2EB),
+      );
+      expect(TsaiThemeTokens.dark.colors.borderSubtle, const Color(0xFF24252E));
+      expect(
+        TsaiThemeTokens.light.colors.overlayScrim,
+        const Color(0x66000000),
+      );
+      expect(TsaiThemeTokens.dark.colors.overlayScrim, const Color(0x99000000));
+      expect(TsaiThemeTokens.light.colors.accentGlow, const Color(0x33C7D2FE));
+      expect(TsaiThemeTokens.dark.colors.accentGlow, const Color(0x1A6366F1));
       expect(
         TsaiThemeTokens.light.colors.contentAccent,
         const Color(0xFF4F46E5),
@@ -69,6 +83,8 @@ void main() {
       expect(light.radii.pill, dark.radii.pill);
       expect(light.radii.innerMedium, 10);
       expect(light.radii.innerMedium, dark.radii.innerMedium);
+      expect(light.radii.extraExtraLarge, 32);
+      expect(light.radii.extraExtraLarge, dark.radii.extraExtraLarge);
       expect(light.borders.hairline, dark.borders.hairline);
       expect(light.effects.glassBlur, 24);
       expect(light.effects.glassBlur, dark.effects.glassBlur);

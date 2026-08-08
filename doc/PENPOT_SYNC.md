@@ -8,7 +8,7 @@ file-id: ab506819-5bcf-801f-8008-4e8f605cef78
 library: Design System
 ```
 
-Latest snapshot read on 2026-08-02:
+Latest snapshot read on 2026-08-08:
 
 - sets: `dark`, `light`, `typography`, `spacing`;
 - color roles include glass canvas, surface, accent-surface, and accent-text
@@ -18,6 +18,14 @@ Latest snapshot read on 2026-08-02:
 - typography roles: 20;
 - spacing values: 12, including `spacing.6 = 6` and `spacing.12 = 12`;
 - nested medium radius: `radius.inner.md = 10`;
+- large sheet radius: `radius.xxl = 32`;
+- modal overlay: `color.bg.overlay = #00000066` (light) and `#00000099`
+  (dark);
+- background glow: `color.accent.glow = #C7D2FE33` (light) and
+  `#6366F11A` (dark);
+- updated values: dark `color.surface.1 = #15161F`, light
+  `color.border.hairline = #E1E2EB`, and dark
+  `color.border.hairline = #24252E`;
 - button axes: state, type, size;
 - button matrix: 4 × 4 × 2 = 32 variants;
 - icon/loader slot: 16 × 16, with a 12-pixel loader path and 1.5 stroke;

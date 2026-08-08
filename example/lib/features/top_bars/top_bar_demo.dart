@@ -255,6 +255,115 @@ class TopBarDemo extends StatelessWidget {
   Widget build(BuildContext context) => const HomeTopBarDemo();
 }
 
+class PageWithSearchTopBarDemo extends StatefulWidget {
+  const PageWithSearchTopBarDemo({super.key});
+
+  @override
+  State<PageWithSearchTopBarDemo> createState() =>
+      _PageWithSearchTopBarDemoState();
+}
+
+class _PageWithSearchTopBarDemoState extends State<PageWithSearchTopBarDemo> {
+  final _searchController = TextEditingController();
+  String _title = 'Card details';
+  _BodyContent _bodyContent = _BodyContent.list;
+  _PageLeadingContent _leading = _PageLeadingContent.backAction;
+  _TrailingContent _trailing = _TrailingContent.twoActions;
+  String _event = 'No search events';
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => _LayoutDocument(
+    key: const ValueKey<String>('page-with-search-top-bar-demo'),
+    variants: [
+      const _SectionLabel('Pinned glass app bar and search'),
+      SizedBox(
+        height: 420,
+        child: PageWithSearchTopBar(
+          title: 'Card details',
+          search: const TsaiSearchInput(),
+          leading: [
+            PageTopBarAction(
+              icon: const TsaiIcon(LucideIcons.arrow_left),
+              semanticLabel: 'Back',
+              onPressed: () {},
+            ),
+          ],
+          trailing: [
+            PageTopBarAction(
+              icon: const TsaiIcon(LucideIcons.plus),
+              semanticLabel: 'Add',
+              onPressed: () {},
+            ),
+            PageTopBarAction(
+              icon: const TsaiIcon(LucideIcons.ellipsis),
+              semanticLabel: 'More',
+              onPressed: () {},
+            ),
+          ],
+          body: _body(_BodyContent.list),
+        ),
+      ),
+    ],
+    playground: ComponentPlayground(
+      controls: [
+        PlaygroundTextControl(
+          label: 'title',
+          value: _title,
+          onChanged: (value) => setState(() => _title = value),
+        ),
+        PlaygroundTextControl(
+          label: 'query',
+          controller: _searchController,
+          onChanged: (_) => setState(() {}),
+        ),
+        PlaygroundSelectControl<_BodyContent>(
+          label: 'body content',
+          value: _bodyContent,
+          values: _BodyContent.values,
+          labels: const ['Long list', 'Text', 'Button', 'Icon'],
+          onChanged: (value) => setState(() => _bodyContent = value),
+        ),
+        PlaygroundSelectControl<_PageLeadingContent>(
+          label: 'leading content',
+          value: _leading,
+          values: _PageLeadingContent.values,
+          labels: const ['Text', 'Back action', 'None'],
+          onChanged: (value) => setState(() => _leading = value),
+        ),
+        PlaygroundSelectControl<_TrailingContent>(
+          label: 'trailing content',
+          value: _trailing,
+          values: _TrailingContent.values,
+          labels: const ['None', 'Two actions', 'One action', 'Text'],
+          onChanged: (value) => setState(() => _trailing = value),
+        ),
+        PlaygroundOutput(label: 'event', value: _event),
+      ],
+      preview: SizedBox(
+        height: 320,
+        child: PageWithSearchTopBar(
+          title: _title,
+          search: TsaiSearchInput(
+            controller: _searchController,
+            onChanged: (value) => setState(() => _event = 'onChanged($value)'),
+            onSubmitted: (value) =>
+                setState(() => _event = 'onSubmitted($value)'),
+          ),
+          leading: _pageLeading(_leading),
+          trailing: _pageTrailing(_trailing),
+          body: _body(_bodyContent),
+        ),
+      ),
+    ),
+  );
+}
+
 class _LayoutDocument extends StatelessWidget {
   const _LayoutDocument({
     required this.variants,

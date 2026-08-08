@@ -356,6 +356,49 @@ void main() {
     );
   });
 
+  testWidgets('PageWithSearchTopBar pins 112-pixel glass search chrome', (
+    tester,
+  ) async {
+    final controller = ScrollController();
+    addTearDown(controller.dispose);
+    await _pump(
+      tester,
+      child: PageWithSearchTopBar(
+        controller: controller,
+        title: 'Card details',
+        search: const TsaiSearchInput(),
+        body: const SizedBox(height: 1000, child: Text('Scrollable content')),
+      ),
+    );
+
+    final background = find.byKey(
+      const ValueKey<String>('page-with-search-top-bar-background'),
+    );
+    expect(tester.getSize(background).height, 112);
+    expect(find.byType(TsaiSearchInput), findsOneWidget);
+    final pageRect = tester.getRect(find.byType(PageWithSearchTopBar));
+    expect(
+      tester.getRect(find.byType(TsaiSearchInput)),
+      Rect.fromLTWH(pageRect.left + 16, 64, pageRect.width - 32, 40),
+    );
+    final initialHeaderRect = tester.getRect(background);
+    final initialContentTop = tester
+        .getTopLeft(find.text('Scrollable content'))
+        .dy;
+
+    controller.jumpTo(80);
+    await tester.pump();
+    expect(tester.getRect(background), initialHeaderRect);
+    expect(
+      tester.getTopLeft(find.text('Scrollable content')).dy,
+      closeTo(initialContentTop - 80, 0.01),
+    );
+    expect(
+      tester.widget<ColoredBox>(background).color,
+      TsaiThemeTokens.light.colors.canvasGlass,
+    );
+  });
+
   testWidgets('PageWithTopBar scrolls its document behind the glass bar', (
     tester,
   ) async {

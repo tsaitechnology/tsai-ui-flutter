@@ -42,6 +42,7 @@ class _IconDemo extends StatelessWidget {
           ComponentDemoSection.tsaiIcon => const _TsaiIconExample(),
           ComponentDemoSection.hitIcon => const _HitIconExample(),
           ComponentDemoSection.circleIcon => const _CircleIconExample(),
+          ComponentDemoSection.cryptoIcon => const _CryptoIconExample(),
           _ => throw ArgumentError.value(section, 'section'),
         },
         SizedBox(height: tokens.spacing.space32),
@@ -49,6 +50,7 @@ class _IconDemo extends StatelessWidget {
           ComponentDemoSection.tsaiIcon => const _TsaiIconPlayground(),
           ComponentDemoSection.hitIcon => const _HitIconPlayground(),
           ComponentDemoSection.circleIcon => const _CircleIconPlayground(),
+          ComponentDemoSection.cryptoIcon => const _CryptoIconPlayground(),
           _ => throw ArgumentError.value(section, 'section'),
         },
       ],
@@ -131,6 +133,42 @@ class _CircleIconExample extends StatelessWidget {
       ),
     ),
   );
+}
+
+class _CryptoIconExample extends StatelessWidget {
+  const _CryptoIconExample();
+
+  @override
+  Widget build(BuildContext context) {
+    final tokens = TsaiThemeTokens.of(context);
+    return PenpotExample(
+      title: 'TsaiCryptoIcon',
+      child: PenpotBoard(
+        child: Wrap(
+          spacing: tokens.spacing.space24,
+          runSpacing: tokens.spacing.space24,
+          children: [
+            for (final asset in TsaiCryptoAsset.values)
+              SizedBox(
+                width: 72,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    TsaiCryptoIcon(asset, semanticLabel: asset.name),
+                    SizedBox(height: tokens.spacing.space8),
+                    TsaiTextCaption(
+                      asset.name.toUpperCase(),
+                      size: TsaiCaptionSize.small,
+                      weight: TsaiTextWeight.regular,
+                    ),
+                  ],
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
 }
 
 class _TsaiIconPlayground extends StatefulWidget {
@@ -287,4 +325,42 @@ class _CircleIconPreview extends StatelessWidget {
       ),
     );
   }
+}
+
+class _CryptoIconPlayground extends StatefulWidget {
+  const _CryptoIconPlayground();
+
+  @override
+  State<_CryptoIconPlayground> createState() => _CryptoIconPlaygroundState();
+}
+
+class _CryptoIconPlaygroundState extends State<_CryptoIconPlayground> {
+  TsaiCryptoAsset _asset = TsaiCryptoAsset.btc;
+  double _size = 24;
+
+  @override
+  Widget build(BuildContext context) => ComponentPlayground(
+    controls: [
+      PlaygroundSelectControl<TsaiCryptoAsset>(
+        label: 'asset',
+        value: _asset,
+        values: TsaiCryptoAsset.values,
+        labels: [
+          for (final asset in TsaiCryptoAsset.values) asset.name.toUpperCase(),
+        ],
+        onChanged: (value) => setState(() => _asset = value),
+      ),
+      PlaygroundField(
+        label: 'size: ${_size.round()}',
+        child: Slider(
+          value: _size,
+          min: 16,
+          max: 64,
+          divisions: 12,
+          onChanged: (value) => setState(() => _size = value),
+        ),
+      ),
+    ],
+    preview: TsaiCryptoIcon(_asset, size: _size, semanticLabel: _asset.name),
+  );
 }

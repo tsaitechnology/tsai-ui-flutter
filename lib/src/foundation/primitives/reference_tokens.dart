@@ -39,7 +39,7 @@ abstract final class TsaiReferenceTokens {
     textAccent: Color(0xFF4F46E5),
     textSecondary: Color(0xFF6A6A6B),
     textTertiary: Color(0xFF9A9A9A),
-    borderHairline: Color(0xFFE2E2E2),
+    borderHairline: Color(0xFFE1E2EB),
     borderStrong: Color(0xFFD4D4D4),
     accentLight: Color(0xFF818CF8),
     accent: Color(0xFF6366F1),
@@ -56,19 +56,21 @@ abstract final class TsaiReferenceTokens {
     surfaceIndigo: Color(0xFFF2F3FE),
     surfaceIndigoDeep: Color(0xFFE9EAFD),
     surfaceIndigoGlass: Color(0xCCCACFEE),
+    backgroundOverlay: Color(0x66000000),
+    accentGlow: Color(0x33C7D2FE),
   );
 
   static const darkColors = TsaiReferenceColors(
     background: Color(0xFF0A0A0B),
     backgroundGlass: Color(0xCC0A0A0B),
-    surface1: Color(0xFF141416),
+    surface1: Color(0xFF15161F),
     surface2: Color(0xFF1C1C20),
     surfaceGlass: Color(0xCC141416),
     textPrimary: Color(0xFFECECEC),
     textAccent: Color(0xFFA5B4FC),
     textSecondary: Color(0xFF9D9D9D),
     textTertiary: Color(0xFF6C6C6D),
-    borderHairline: Color(0xFF232324),
+    borderHairline: Color(0xFF24252E),
     borderStrong: Color(0xFF3F3F42),
     accentLight: Color(0xFF818CF8),
     accent: Color(0xFF6366F1),
@@ -85,6 +87,8 @@ abstract final class TsaiReferenceTokens {
     surfaceIndigo: Color(0xFF1E1F33),
     surfaceIndigoDeep: Color(0xFF26284A),
     surfaceIndigoGlass: Color(0xCC31345E),
+    backgroundOverlay: Color(0x99000000),
+    accentGlow: Color(0x1A6366F1),
   );
 }
 
@@ -117,6 +121,8 @@ final class TsaiReferenceColors {
     required this.surfaceIndigo,
     required this.surfaceIndigoDeep,
     required this.surfaceIndigoGlass,
+    required this.backgroundOverlay,
+    required this.accentGlow,
   });
 
   final Color background;
@@ -145,6 +151,8 @@ final class TsaiReferenceColors {
   final Color surfaceIndigo;
   final Color surfaceIndigoDeep;
   final Color surfaceIndigoGlass;
+  final Color backgroundOverlay;
+  final Color accentGlow;
 }
 
 @immutable

@@ -55,6 +55,8 @@ void main() {
     expect(find.text('Common'), findsOneWidget);
     expect(find.text('Typography'), findsOneWidget);
 
+    await tester.ensureVisible(find.text('TsaiTextHeading'));
+    await tester.pump(const Duration(milliseconds: 400));
     await tester.tap(find.text('TsaiTextHeading'));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 400));
@@ -84,6 +86,8 @@ void main() {
     expect(find.text('Common'), findsOneWidget);
     expect(find.text('Typography'), findsOneWidget);
 
+    await tester.ensureVisible(find.text('TsaiTextHeading'));
+    await tester.pump(const Duration(milliseconds: 400));
     await tester.tap(find.text('TsaiTextHeading'));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 400));
@@ -143,6 +147,7 @@ void main() {
     ComponentDemoSection.tsaiIcon,
     ComponentDemoSection.hitIcon,
     ComponentDemoSection.circleIcon,
+    ComponentDemoSection.cryptoIcon,
     ComponentDemoSection.avatar,
     ComponentDemoSection.userPill,
   ]) {
@@ -576,6 +581,24 @@ void main() {
       6,
     );
   });
+
+  for (final demo in <(String, String)>[
+    ('/input-search', 'input-search-demo'),
+    ('/effects/glow', 'glow-demo'),
+    ('/bottom-sheet', 'bottom-sheet-demo'),
+    ('/modal-dialog', 'modal-dialog-demo'),
+    ('/top-bars/page-search-layout', 'page-with-search-top-bar-demo'),
+  ]) {
+    testWidgets('opens ${demo.$1} from its documentation route', (
+      tester,
+    ) async {
+      await tester.pumpWidget(CatalogApp(initialRoute: demo.$1));
+      await tester.pumpAndSettle();
+
+      expect(find.byKey(ValueKey<String>(demo.$2)), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    });
+  }
 }
 
 Future<void> _scrollToPlayground(WidgetTester tester) async {

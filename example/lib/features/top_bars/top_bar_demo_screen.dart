@@ -59,3 +59,22 @@ class PageWithTopBarDemoScreen extends StatelessWidget {
     child: const PageWithTopBarDemo(),
   );
 }
+
+class PageWithSearchTopBarDemoScreen extends StatelessWidget {
+  const PageWithSearchTopBarDemoScreen({
+    required this.themeMode,
+    required this.onThemeModeChanged,
+    super.key,
+  });
+
+  final ThemeMode themeMode;
+  final ValueChanged<ThemeMode> onThemeModeChanged;
+
+  @override
+  Widget build(BuildContext context) => ComponentDemoWindow(
+    section: ComponentDemoSection.pageWithSearchTopBar,
+    themeMode: themeMode,
+    onThemeModeChanged: onThemeModeChanged,
+    child: const PageWithSearchTopBarDemo(),
+  );
+}

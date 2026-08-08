@@ -55,6 +55,7 @@ nav:
           - TsaiIcon: widgets/tsai-icon.md
           - HitIcon: widgets/hit-icon.md
           - CircleIcon: widgets/circle-icon.md
+          - TsaiCryptoIcon: widgets/tsai-crypto-icon.md
       - Avatars:
           - Avatar: widgets/avatar.md
           - UserPill: widgets/user-pill.md
@@ -69,6 +70,7 @@ nav:
           - TsaiTextMonoCaption: widgets/tsai-text-mono-caption.md
       - Forms:
           - TsaiInput: widgets/tsai-input.md
+          - TsaiSearchInput: widgets/tsai-search-input.md
           - TsaiPhoneInput: widgets/tsai-phone-input.md
           - TsaiOtpInput: widgets/tsai-otp-input.md
           - TsaiPinInput: widgets/tsai-pin-input.md
@@ -78,9 +80,12 @@ nav:
           - TsaiSwitch: widgets/tsai-switch.md
       - UI Blocks:
           - Section, empty state, and lists: widgets/tsai-ui-blocks.md
+          - TsaiGlow: widgets/tsai-glow.md
       - Layout:
           - TsaiTabs: widgets/tsai-tabs.md
           - BottomNavBar: widgets/tsai-bottom-nav-bar.md
+          - TsaiBottomSheet: widgets/tsai-bottom-sheet.md
+          - TsaiModalDialog: widgets/tsai-modal-dialog.md
           - Tsai top bars: widgets/tsai-top-bars.md
   - License: license.md
 

@@ -13,6 +13,7 @@ its live Flutter web example.
 - [TsaiIcon](tsai-icon.md)
 - [HitIcon](hit-icon.md)
 - [CircleIcon](circle-icon.md)
+- [TsaiCryptoIcon](tsai-crypto-icon.md)
 
 ## Avatars
 
@@ -33,6 +34,7 @@ its live Flutter web example.
 ## Forms
 
 - [TsaiInput](tsai-input.md)
+- [TsaiSearchInput](tsai-search-input.md)
 - [TsaiPhoneInput](tsai-phone-input.md)
 - [TsaiOtpInput](tsai-otp-input.md)
 - [TsaiPinInput](tsai-pin-input.md)
@@ -43,10 +45,13 @@ its live Flutter web example.
 
 ## UI Blocks
 
+- [TsaiGlow](tsai-glow.md)
 - [Tsai UI Blocks](tsai-ui-blocks.md)
 
 ## Layout
 
 - [TsaiTabs](tsai-tabs.md)
 - [BottomNavBar](tsai-bottom-nav-bar.md)
+- [TsaiBottomSheet](tsai-bottom-sheet.md)
+- [TsaiModalDialog](tsai-modal-dialog.md)
 - [Tsai top bars](tsai-top-bars.md)

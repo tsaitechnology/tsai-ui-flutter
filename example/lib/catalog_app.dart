@@ -5,10 +5,13 @@ import 'demo/component_demo_window.dart';
 import 'features/app_examples/app_with_two_pages_example.dart';
 import 'features/avatars/avatar_demo_screen.dart';
 import 'features/buttons/button_demo_screen.dart';
+import 'features/effects/glow_demo_screen.dart';
 import 'features/bottom_nav_bar/bottom_nav_bar_demo_screen.dart';
+import 'features/bottom_sheet/bottom_sheet_demo_screen.dart';
 import 'features/icons/icon_demo_screen.dart';
 import 'features/inputs/input_demo_screen.dart';
 import 'features/links/link_demo_screen.dart';
+import 'features/modal_dialog/modal_dialog_demo_screen.dart';
 import 'features/select/select_demo_screen.dart';
 import 'features/selection_controls/selection_controls_demo_screen.dart';
 import 'features/tabs/tabs_demo_screen.dart';
@@ -72,6 +75,14 @@ class _CatalogAppState extends State<CatalogApp> {
         themeMode: _themeMode,
         onThemeModeChanged: _setThemeMode,
       ),
+      '/bottom-sheet': (context) => BottomSheetDemoScreen(
+        themeMode: _themeMode,
+        onThemeModeChanged: _setThemeMode,
+      ),
+      '/modal-dialog': (context) => ModalDialogDemoScreen(
+        themeMode: _themeMode,
+        onThemeModeChanged: _setThemeMode,
+      ),
       '/app-examples/two-pages': (context) => AppWithTwoPagesExampleScreen(
         themeMode: _themeMode,
         onThemeModeChanged: _setThemeMode,
@@ -88,6 +99,11 @@ class _CatalogAppState extends State<CatalogApp> {
         themeMode: _themeMode,
         onThemeModeChanged: _setThemeMode,
       ),
+      '/top-bars/page-search-layout': (context) =>
+          PageWithSearchTopBarDemoScreen(
+            themeMode: _themeMode,
+            onThemeModeChanged: _setThemeMode,
+          ),
       '/top-bars': (context) => HomeTopBarDemoScreen(
         themeMode: _themeMode,
         onThemeModeChanged: _setThemeMode,
@@ -101,6 +117,7 @@ class _CatalogAppState extends State<CatalogApp> {
         ComponentDemoSection.tsaiIcon,
         ComponentDemoSection.hitIcon,
         ComponentDemoSection.circleIcon,
+        ComponentDemoSection.cryptoIcon,
       ])
         section.route: (context) => IconDemoScreen(
           section: section,
@@ -139,6 +156,14 @@ class _CatalogAppState extends State<CatalogApp> {
         onThemeModeChanged: _setThemeMode,
       ),
       '/input': (context) => InputDemoScreen(
+        themeMode: _themeMode,
+        onThemeModeChanged: _setThemeMode,
+      ),
+      '/input-search': (context) => SearchInputDemoScreen(
+        themeMode: _themeMode,
+        onThemeModeChanged: _setThemeMode,
+      ),
+      '/effects/glow': (context) => GlowDemoScreen(
         themeMode: _themeMode,
         onThemeModeChanged: _setThemeMode,
       ),

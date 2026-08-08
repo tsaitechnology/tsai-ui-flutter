@@ -6,6 +6,7 @@ that moves its heading into a pinned bar when scrolling starts.
 [HomeTopBar example](https://tsaitechnology.github.io/tsai-ui-flutter/example/#/top-bars/home){ target="_blank" rel="noopener" .md-button }
 [PageTopBar example](https://tsaitechnology.github.io/tsai-ui-flutter/example/#/top-bars/page){ target="_blank" rel="noopener" .md-button }
 [PageWithTopBar example](https://tsaitechnology.github.io/tsai-ui-flutter/example/#/top-bars/page-layout){ target="_blank" rel="noopener" .md-button }
+[PageWithSearchTopBar example](https://tsaitechnology.github.io/tsai-ui-flutter/example/#/top-bars/page-search-layout){ target="_blank" rel="noopener" .md-button }
 
 ## Home top bar
 
@@ -164,9 +165,39 @@ Pass `controller` to observe or change the position. When it is omitted,
 `PageWithTopBar` creates and disposes its own controller. `physics` customizes
 the owned scrollable.
 
+## Scroll page with search
+
+`PageWithSearchTopBar` pins the Penpot scroll-state composition: a 56-pixel
+`PageTopBar`, an eight-pixel gap, a 40-pixel `TsaiSearchInput`, and an
+eight-pixel lower inset inside one 112-pixel glass header. The owned document
+starts with a 120-pixel inset and scrolls underneath that header.
+
+```dart
+PageWithSearchTopBar(
+  title: 'Card details',
+  search: TsaiSearchInput(
+    controller: searchController,
+    onChanged: filterCards,
+  ),
+  leading: [
+    PageTopBarAction(
+      icon: const TsaiIcon(LucideIcons.arrow_left),
+      semanticLabel: 'Back',
+      onPressed: Navigator.of(context).pop,
+    ),
+  ],
+  body: const CardDetailsContent(),
+)
+```
+
+The `search` slot is typed as `TsaiSearchInput`, preserving the design geometry
+while leaving query ownership with the caller. As with `PageWithTopBar`, the
+body must have finite intrinsic height and must not contain another unbounded
+primary scroll view.
+
 ## Safe areas
 
 The 76- and 56-pixel values are the visual component heights from Penpot.
-`HomeTopBar`, `PageTopBar`, and `PageWithTopBar` do not add a system safe area.
+`HomeTopBar`, `PageTopBar`, `PageWithTopBar`, and `PageWithSearchTopBar` do not add a system safe area.
 Place the composition inside `SafeArea` when the screen can extend under system
 status regions.

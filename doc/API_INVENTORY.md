@@ -18,11 +18,11 @@ import 'package:tsai_ui/tsai_icons.dart';
 | --- | --- | --- |
 | `TsaiTheme` | Installs light/dark themes | Public |
 | `TsaiThemeTokens` | Complete semantic schema | Public |
-| `TsaiColorTokens` | Semantic color roles | Public |
+| `TsaiColorTokens` | Semantic color roles, including modal scrim and background glow | Public |
 | `TsaiGradientTokens` | Theme-aware top and bottom scrim assets | Public |
 | `TsaiTypographyTokens` | Typography roles | Public |
 | `TsaiSpacingTokens` | Spacing scale | Public |
-| `TsaiRadiusTokens` | Radius scale | Public |
+| `TsaiRadiusTokens` | Radius scale through the 32-pixel sheet radius | Public |
 | `TsaiBorderTokens` | Border widths | Public |
 | `TsaiShadowTokens` | Theme-aware shadows | Public |
 | `TsaiEffectTokens` | Semantic backdrop and image effects | Public |
@@ -57,16 +57,20 @@ import 'package:tsai_ui/tsai_icons.dart';
 | `TsaiSelectOption<T>` | Immutable select option with an optional composed `TsaiIcon` | Public |
 | `TsaiSelectPresentation` | Adaptive/menu/Android/iOS presentation policy | Public |
 | `TsaiInput` | Text and opt-in password/visibility input | Public |
+| `TsaiSearchInput` | Compact search field with native editing, submission, focus, and clear behavior | Public |
 | `TsaiPhoneInput` | Country-code and masked national-number input | Public |
 | `TsaiPhoneInputFormatter` | Cursor-aware phone mask formatter | Public |
 | `TsaiOtpInput` | Cell-based one-time-password input | Public |
 | `TsaiPinInput` | Dot-based PIN input | Public |
 | `TsaiIcon` | Stable IconData, emoji, and custom-widget sizing/color adapter | Public |
+| `TsaiCryptoAsset` | Fifteen cryptocurrency assets mirrored from the Penpot pack | Public |
+| `TsaiCryptoIcon` | Scalable full-color cryptocurrency artwork in a stable square slot | Public |
 | `HitIcon` | Fixed 32-pixel interaction field with a centered 24-pixel icon | Public |
 | `CircleIcon` | Token-backed 40-pixel circle with a centered 20-pixel icon | Public |
 | `Avatar` | Fixed 32-pixel image-provider avatar with initials fallback | Public |
 | `TsaiSectionHeader` | Compact section label with an optional trailing icon slot | Public |
 | `TsaiEmptyState` | Centered icon, message, description, and optional action composition | Public |
+| `TsaiGlow` | Decorative theme-aware blurred accent background | Public |
 | `TsaiListItem` | Composable row with active, icon, content, trailing, chevron, and activation support | Public |
 | `TsaiList` | Section header, list-item collection, and optional bottom-button composition | Public |
 | `UserPill` | User name and network-avatar summary with initials fallback | Public |
@@ -75,8 +79,15 @@ import 'package:tsai_ui/tsai_icons.dart';
 | `PageTopBarAction` | Compact icon action for secondary-page top bars | Public |
 | `PageTopBar` | Glass secondary-page bar with widget edge slots and a centered text title | Public |
 | `PageWithTopBar` | Full-height scroll composition that promotes its heading beneath a pinned overlay bar | Public |
+| `PageWithSearchTopBar` | Scroll composition with a pinned 112-pixel glass app bar and search field | Public |
 | `BottomNavBarItem` | Immutable icon, label, and optional semantic label for a bottom destination | Public |
 | `BottomNavBar` | Controlled one-to-five destination glass bottom-navigation bar | Public |
+| `TsaiBottomSheetSize` | Half and full Penpot sheet heights | Public |
+| `TsaiBottomSheet` | Composable rounded sheet surface with glow, app bar, content, and actions | Public |
+| `showTsaiBottomSheet<T>` | Theme-aware modal route for `TsaiBottomSheet` | Public |
+| `TsaiModalDialogActionsLayout` | Row and stacked dialog action arrangements | Public |
+| `TsaiModalDialog` | Compact icon, message, and action dialog surface | Public |
+| `showTsaiModalDialog<T>` | Theme-aware modal route for `TsaiModalDialog` | Public |
 | `LucideIcons` | Opt-in icon catalog re-export | External contract |
 
 ## Internal

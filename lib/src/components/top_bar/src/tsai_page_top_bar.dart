@@ -71,8 +71,9 @@ class PageTopBar extends StatelessWidget {
   const PageTopBar._({
     required this._showBackground,
     this.leading = const [],
+    this.title,
     this.trailing = const [],
-  }) : title = null;
+  });
 
   /// Widgets placed at the directional start.
   final List<Widget> leading;

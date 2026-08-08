@@ -158,6 +158,8 @@ final class TsaiThemeTokens extends ThemeExtension<TsaiThemeTokens> {
       surfaceAccent: colors.surfaceIndigo,
       surfaceAccentPressed: colors.surfaceIndigoDeep,
       surfaceAccentGlass: colors.surfaceIndigoGlass,
+      overlayScrim: colors.backgroundOverlay,
+      accentGlow: colors.accentGlow,
       contentPrimary: colors.textPrimary,
       contentAccent: colors.textAccent,
       contentSecondary: colors.textSecondary,
@@ -222,6 +224,8 @@ final class TsaiColorTokens {
     required this.iconTertiary,
     required this.iconOnAction,
     required this.iconBright,
+    this.overlayScrim = const Color(0x66000000),
+    this.accentGlow = const Color(0x33C7D2FE),
   });
 
   /// Application canvas.
@@ -302,6 +306,12 @@ final class TsaiColorTokens {
   /// Bright accent icon.
   final Color iconBright;
 
+  /// Scrim placed behind modal surfaces.
+  final Color overlayScrim;
+
+  /// Translucent accent used by large blurred background glows.
+  final Color accentGlow;
+
   /// Interpolates every color role.
   TsaiColorTokens lerp(TsaiColorTokens other, double t) => TsaiColorTokens(
     canvas: Color.lerp(canvas, other.canvas, t)!,
@@ -354,6 +364,8 @@ final class TsaiColorTokens {
     iconTertiary: Color.lerp(iconTertiary, other.iconTertiary, t)!,
     iconOnAction: Color.lerp(iconOnAction, other.iconOnAction, t)!,
     iconBright: Color.lerp(iconBright, other.iconBright, t)!,
+    overlayScrim: Color.lerp(overlayScrim, other.overlayScrim, t)!,
+    accentGlow: Color.lerp(accentGlow, other.accentGlow, t)!,
   );
 }
 
@@ -764,6 +776,7 @@ final class TsaiRadiusTokens {
     required this.medium,
     required this.large,
     required this.extraLarge,
+    this.extraExtraLarge = 32,
     required this.pill,
   });
 
@@ -774,6 +787,7 @@ final class TsaiRadiusTokens {
     medium: 12,
     large: 16,
     extraLarge: 24,
+    extraExtraLarge: 32,
     pill: 999,
   );
 
@@ -792,6 +806,9 @@ final class TsaiRadiusTokens {
   /// Twenty-four-pixel radius.
   final double extraLarge;
 
+  /// Thirty-two-pixel radius used by large sheet surfaces.
+  final double extraExtraLarge;
+
   /// Fully rounded radius.
   final double pill;
 
@@ -802,6 +819,7 @@ final class TsaiRadiusTokens {
     medium: lerpDouble(medium, other.medium, t)!,
     large: lerpDouble(large, other.large, t)!,
     extraLarge: lerpDouble(extraLarge, other.extraLarge, t)!,
+    extraExtraLarge: lerpDouble(extraExtraLarge, other.extraExtraLarge, t)!,
     pill: lerpDouble(pill, other.pill, t)!,
   );
 }

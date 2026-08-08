@@ -39,6 +39,24 @@ class PhoneInputDemoScreen extends StatelessWidget {
   );
 }
 
+class SearchInputDemoScreen extends StatelessWidget {
+  const SearchInputDemoScreen({
+    required this.themeMode,
+    required this.onThemeModeChanged,
+    super.key,
+  });
+  final ThemeMode themeMode;
+  final ValueChanged<ThemeMode> onThemeModeChanged;
+
+  @override
+  Widget build(BuildContext context) => ComponentDemoWindow(
+    section: ComponentDemoSection.inputSearch,
+    themeMode: themeMode,
+    onThemeModeChanged: onThemeModeChanged,
+    child: const SearchInputDemo(),
+  );
+}
+
 class OtpInputDemoScreen extends StatelessWidget {
   const OtpInputDemoScreen({
     required this.themeMode,

@@ -122,6 +122,16 @@ TsaiInput(
   ),
 );
 
+TsaiSearchInput(
+  hintText: 'Search assets',
+  onChanged: (value) {},
+);
+
+const TsaiCryptoIcon(
+  TsaiCryptoAsset.btc,
+  semanticLabel: 'Bitcoin',
+);
+
 TsaiOtpInput(
   length: 6,
   onChanged: (value) {},
@@ -147,9 +157,12 @@ lib/
       theme/
     components/
       bottom_nav_bar/
+      bottom_sheet/
       button/
+      effects/
       input/
       link/
+      modal_dialog/
       select/
       selection/
       tabs/
