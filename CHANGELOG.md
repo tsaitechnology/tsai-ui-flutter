@@ -1,3 +1,9 @@
+## 0.4.7 - 2026-08-08
+
+### Features
+
+- sync new Penpot components and tokens ([48249ec](https://github.com/tsaitechnology/tsai-ui-flutter/commit/48249ecb7bbe6b82fd3afdf471453efba604825e))
+
 ## 0.4.6 - 2026-08-02
 
 ### Maintenance
