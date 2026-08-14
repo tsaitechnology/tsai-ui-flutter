@@ -1,6 +1,46 @@
 import 'package:flutter/material.dart';
 import 'package:tsai_ui/tsai_ui.dart';
 
+/// A vivid token-backed surface for previewing blur and shadow effects.
+class PlaygroundColorBackdrop extends StatelessWidget {
+  const PlaygroundColorBackdrop({
+    required this.child,
+    required this.height,
+    super.key,
+    this.alignment = Alignment.center,
+  });
+
+  final Widget child;
+  final double height;
+  final AlignmentGeometry alignment;
+
+  @override
+  Widget build(BuildContext context) {
+    final tokens = TsaiThemeTokens.of(context);
+    return SizedBox(
+      height: height,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(tokens.radii.innerMedium),
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: AlignmentDirectional.centerStart,
+              end: AlignmentDirectional.centerEnd,
+              colors: [
+                tokens.colors.actionPrimary,
+                tokens.colors.accentSuccess,
+                tokens.colors.accentError,
+                tokens.colors.surfaceAccentPressed,
+              ],
+            ),
+          ),
+          child: Align(alignment: alignment, child: child),
+        ),
+      ),
+    );
+  }
+}
+
 class ComponentPlayground extends StatelessWidget {
   const ComponentPlayground({
     required this.preview,

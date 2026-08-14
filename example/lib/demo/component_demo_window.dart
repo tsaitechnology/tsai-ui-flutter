@@ -160,6 +160,26 @@ enum ComponentDemoSection {
     route: '/effects/glow',
     category: ComponentDemoCategory.uiBlocks,
   ),
+  toast(
+    label: 'Toast',
+    route: '/feedback/toast',
+    category: ComponentDemoCategory.uiBlocks,
+  ),
+  inlineAlert(
+    label: 'Inline Alert',
+    route: '/feedback/inline-alert',
+    category: ComponentDemoCategory.uiBlocks,
+  ),
+  progress(
+    label: 'Progress',
+    route: '/feedback/progress',
+    category: ComponentDemoCategory.uiBlocks,
+  ),
+  card(
+    label: 'Card',
+    route: '/ui-blocks/card',
+    category: ComponentDemoCategory.uiBlocks,
+  ),
   tabsDocument(
     label: 'Tabs',
     route: '/tabs',

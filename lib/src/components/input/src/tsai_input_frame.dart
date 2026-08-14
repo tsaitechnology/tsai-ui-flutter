@@ -30,7 +30,7 @@ class _TsaiInputFrame extends StatelessWidget {
     final tokens = TsaiThemeTokens.of(context);
     final colors = tokens.colors;
     final borderColor = hasError
-        ? colors.negative
+        ? colors.accentError
         : focused
         ? colors.actionPrimarySoft
         : hovered && enabled
@@ -93,7 +93,7 @@ class _TsaiInputFrame extends StatelessWidget {
               style: tokens.typography.captionMediumRegular.copyWith(
                 color: errorText == null
                     ? colors.contentSecondary
-                    : colors.negative,
+                    : colors.accentError,
               ),
             ),
           ),

@@ -7,8 +7,11 @@ import '../../foundation/semantic/tsai_theme_tokens.dart';
 import '../../icons/tsai_icon.dart';
 import '../effects/tsai_glow.dart';
 
-/// Penpot-supported bottom-sheet heights.
+/// Bottom-sheet sizing policies.
 enum TsaiBottomSheetSize {
+  /// Sizes the sheet to its content, up to the available viewport height.
+  content(null),
+
   /// A 424-pixel sheet intended for focused, short workflows.
   half(424),
 
@@ -17,8 +20,8 @@ enum TsaiBottomSheetSize {
 
   const TsaiBottomSheetSize(this.designHeight);
 
-  /// Height of the corresponding Penpot component.
-  final double designHeight;
+  /// Height of the corresponding fixed Penpot component, if any.
+  final double? designHeight;
 }
 
 /// A composable Tsai bottom-sheet surface.
@@ -28,7 +31,7 @@ class TsaiBottomSheet extends StatelessWidget {
     required this.title,
     required this.child,
     super.key,
-    this.size = TsaiBottomSheetSize.half,
+    this.size = TsaiBottomSheetSize.content,
     this.height,
     this.leading = const [],
     this.trailing = const [],
@@ -41,10 +44,10 @@ class TsaiBottomSheet extends StatelessWidget {
   /// Centered sheet title.
   final String title;
 
-  /// Content that expands between the app bar and actions.
+  /// Content placed between the app bar and actions.
   final Widget child;
 
-  /// Penpot height variant used when [height] is omitted.
+  /// Sizing policy used when [height] is omitted. Defaults to content height.
   final TsaiBottomSheetSize size;
 
   /// Optional explicit height for constrained or adaptive hosts.
@@ -72,6 +75,7 @@ class TsaiBottomSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     final tokens = TsaiThemeTokens.of(context);
     final sheetHeight = height ?? size.designHeight;
+    final hasFixedHeight = sheetHeight != null;
     return SizedBox(
       height: sheetHeight,
       width: double.infinity,
@@ -84,17 +88,21 @@ class TsaiBottomSheet extends StatelessWidget {
         ),
         child: Stack(
           children: [
-            const PositionedDirectional(
+            const Positioned(
               top: -280,
-              start: -45,
-              child: TsaiGlow(),
+              left: 0,
+              right: 0,
+              child: Center(child: TsaiGlow()),
             ),
             Padding(
               padding: EdgeInsets.only(
                 top: tokens.spacing.space8,
-                bottom: tokens.spacing.space32,
+                bottom: tokens.spacing.space32 + tokens.spacing.space8 + 2,
               ),
               child: Column(
+                mainAxisSize: hasFixedHeight
+                    ? MainAxisSize.max
+                    : MainAxisSize.min,
                 children: [
                   Container(
                     key: const ValueKey<String>('tsai-bottom-sheet-grabber'),
@@ -110,7 +118,8 @@ class TsaiBottomSheet extends StatelessWidget {
                     leading: leading,
                     trailing: trailing,
                   ),
-                  Expanded(
+                  Flexible(
+                    fit: hasFixedHeight ? FlexFit.tight : FlexFit.loose,
                     child: Padding(
                       padding: EdgeInsets.symmetric(
                         horizontal: tokens.spacing.space24,
@@ -145,12 +154,12 @@ class TsaiBottomSheet extends StatelessWidget {
             if (showCloseButton)
               PositionedDirectional(
                 top: tokens.spacing.space16,
-                end: tokens.spacing.space16,
+                end: tokens.spacing.space8,
                 child: IconButton(
                   key: const ValueKey<String>('tsai-bottom-sheet-close'),
                   tooltip: 'Close',
                   onPressed: onClose,
-                  icon: const TsaiIcon(LucideIcons.x, size: 20),
+                  icon: const TsaiIcon(LucideIcons.x, size: 24),
                   color: tokens.colors.iconSecondary,
                 ),
               ),
@@ -166,7 +175,7 @@ Future<T?> showTsaiBottomSheet<T>({
   required BuildContext context,
   required String title,
   required Widget child,
-  TsaiBottomSheetSize size = TsaiBottomSheetSize.half,
+  TsaiBottomSheetSize size = TsaiBottomSheetSize.content,
   List<Widget> leading = const [],
   List<Widget> trailing = const [],
   Widget? secondaryAction,
@@ -183,7 +192,10 @@ Future<T?> showTsaiBottomSheet<T>({
       mediaQuery.size.height -
       mediaQuery.padding.top -
       mediaQuery.viewInsets.bottom;
-  final resolvedHeight = math.min(size.designHeight, availableHeight);
+  final designHeight = size.designHeight;
+  final resolvedHeight = designHeight == null
+      ? null
+      : math.min(designHeight, availableHeight);
   return showModalBottomSheet<T>(
     context: context,
     useRootNavigator: useRootNavigator,
@@ -193,7 +205,7 @@ Future<T?> showTsaiBottomSheet<T>({
     barrierColor: tokens.colors.overlayScrim,
     barrierLabel: barrierLabel,
     backgroundColor: Colors.transparent,
-    constraints: BoxConstraints(maxHeight: resolvedHeight),
+    constraints: BoxConstraints(maxHeight: availableHeight),
     builder: (sheetContext) => TsaiBottomSheet(
       title: title,
       size: size,
@@ -232,9 +244,10 @@ class _SheetAppBar extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: tokens.spacing.space16),
             child: Row(
               children: [
-                Expanded(child: _SheetEdge(children: leading)),
-                const SizedBox(width: 120),
-                Expanded(
+                SizedBox(width: 72, child: _SheetEdge(children: leading)),
+                const Spacer(),
+                SizedBox(
+                  width: 72,
                   child: _SheetEdge(
                     alignment: MainAxisAlignment.end,
                     children: trailing,

@@ -50,7 +50,7 @@ class _SelectContent<T> extends StatelessWidget {
                             color: !enabled
                                 ? colors.contentTertiary
                                 : hasError && floating
-                                ? colors.negative
+                                ? colors.accentError
                                 : floating
                                 ? colors.contentSecondary
                                 : colors.contentTertiary,

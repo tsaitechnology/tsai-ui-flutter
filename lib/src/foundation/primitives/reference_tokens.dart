@@ -44,8 +44,18 @@ abstract final class TsaiReferenceTokens {
     accentLight: Color(0xFF818CF8),
     accent: Color(0xFF6366F1),
     accentDeep: Color(0xFF4F46E5),
-    gain: Color(0xFF10B981),
-    loss: Color(0xFFEF4444),
+    semanticAccentInfo: Color(0xFF3B82F6),
+    semanticAccentSuccess: Color(0xFF10B981),
+    semanticAccentError: Color(0xFFEF4444),
+    semanticAccentWarning: Color(0xFFF59E0B),
+    semanticSurfaceInfo: Color(0xFFEBF0FA),
+    semanticSurfaceSuccess: Color(0xFFE8F5F1),
+    semanticSurfaceError: Color(0xFFF9ECEC),
+    semanticSurfaceWarning: Color(0xFFFAF3E7),
+    semanticBorderInfo: Color(0xFFC8DAF9),
+    semanticBorderSuccess: Color(0xFFBDE9DB),
+    semanticBorderError: Color(0xFFF7CACA),
+    semanticBorderWarning: Color(0xFFF9E2BB),
     textOnAccentPrimary: Color(0xFFFFFFFF),
     textOnAccentSecondary: Color(0xFFC8C9FA),
     iconPrimary: Color(0xFF0A0A0B),
@@ -56,6 +66,7 @@ abstract final class TsaiReferenceTokens {
     surfaceIndigo: Color(0xFFF2F3FE),
     surfaceIndigoDeep: Color(0xFFE9EAFD),
     surfaceIndigoGlass: Color(0xCCCACFEE),
+    surfaceIndigoGlassDim: Color(0x4DE4E7FA),
     backgroundOverlay: Color(0x66000000),
     accentGlow: Color(0x33C7D2FE),
   );
@@ -75,8 +86,18 @@ abstract final class TsaiReferenceTokens {
     accentLight: Color(0xFF818CF8),
     accent: Color(0xFF6366F1),
     accentDeep: Color(0xFF4F46E5),
-    gain: Color(0xFF34D399),
-    loss: Color(0xFFF87171),
+    semanticAccentInfo: Color(0xFF60A5FA),
+    semanticAccentSuccess: Color(0xFF34D399),
+    semanticAccentError: Color(0xFFF87171),
+    semanticAccentWarning: Color(0xFFFBBF24),
+    semanticSurfaceInfo: Color(0xFF141D28),
+    semanticSurfaceSuccess: Color(0xFF0F221C),
+    semanticSurfaceError: Color(0xFF271717),
+    semanticSurfaceWarning: Color(0xFF27200E),
+    semanticBorderInfo: Color(0xFF263E5A),
+    semanticBorderSuccess: Color(0xFF184C3A),
+    semanticBorderError: Color(0xFF592D2D),
+    semanticBorderWarning: Color(0xFF5A4613),
     textOnAccentPrimary: Color(0xFFFFFFFF),
     textOnAccentSecondary: Color(0xFFC8C9FA),
     iconPrimary: Color(0xFFFFFFFF),
@@ -87,6 +108,7 @@ abstract final class TsaiReferenceTokens {
     surfaceIndigo: Color(0xFF1E1F33),
     surfaceIndigoDeep: Color(0xFF26284A),
     surfaceIndigoGlass: Color(0xCC31345E),
+    surfaceIndigoGlassDim: Color(0x4D31345E),
     backgroundOverlay: Color(0x99000000),
     accentGlow: Color(0x1A6366F1),
   );
@@ -109,8 +131,18 @@ final class TsaiReferenceColors {
     required this.accentLight,
     required this.accent,
     required this.accentDeep,
-    required this.gain,
-    required this.loss,
+    required this.semanticAccentInfo,
+    required this.semanticAccentSuccess,
+    required this.semanticAccentError,
+    required this.semanticAccentWarning,
+    required this.semanticSurfaceInfo,
+    required this.semanticSurfaceSuccess,
+    required this.semanticSurfaceError,
+    required this.semanticSurfaceWarning,
+    required this.semanticBorderInfo,
+    required this.semanticBorderSuccess,
+    required this.semanticBorderError,
+    required this.semanticBorderWarning,
     required this.textOnAccentPrimary,
     required this.textOnAccentSecondary,
     required this.iconPrimary,
@@ -121,6 +153,7 @@ final class TsaiReferenceColors {
     required this.surfaceIndigo,
     required this.surfaceIndigoDeep,
     required this.surfaceIndigoGlass,
+    required this.surfaceIndigoGlassDim,
     required this.backgroundOverlay,
     required this.accentGlow,
   });
@@ -139,8 +172,18 @@ final class TsaiReferenceColors {
   final Color accentLight;
   final Color accent;
   final Color accentDeep;
-  final Color gain;
-  final Color loss;
+  final Color semanticAccentInfo;
+  final Color semanticAccentSuccess;
+  final Color semanticAccentError;
+  final Color semanticAccentWarning;
+  final Color semanticSurfaceInfo;
+  final Color semanticSurfaceSuccess;
+  final Color semanticSurfaceError;
+  final Color semanticSurfaceWarning;
+  final Color semanticBorderInfo;
+  final Color semanticBorderSuccess;
+  final Color semanticBorderError;
+  final Color semanticBorderWarning;
   final Color textOnAccentPrimary;
   final Color textOnAccentSecondary;
   final Color iconPrimary;
@@ -151,6 +194,7 @@ final class TsaiReferenceColors {
   final Color surfaceIndigo;
   final Color surfaceIndigoDeep;
   final Color surfaceIndigoGlass;
+  final Color surfaceIndigoGlassDim;
   final Color backgroundOverlay;
   final Color accentGlow;
 }

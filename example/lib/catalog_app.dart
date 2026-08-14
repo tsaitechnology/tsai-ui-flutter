@@ -6,6 +6,7 @@ import 'features/app_examples/app_with_two_pages_example.dart';
 import 'features/avatars/avatar_demo_screen.dart';
 import 'features/buttons/button_demo_screen.dart';
 import 'features/effects/glow_demo_screen.dart';
+import 'features/feedback/feedback_demo_screen.dart';
 import 'features/bottom_nav_bar/bottom_nav_bar_demo_screen.dart';
 import 'features/bottom_sheet/bottom_sheet_demo_screen.dart';
 import 'features/icons/icon_demo_screen.dart';
@@ -167,6 +168,17 @@ class _CatalogAppState extends State<CatalogApp> {
         themeMode: _themeMode,
         onThemeModeChanged: _setThemeMode,
       ),
+      for (final section in [
+        ComponentDemoSection.toast,
+        ComponentDemoSection.inlineAlert,
+        ComponentDemoSection.progress,
+        ComponentDemoSection.card,
+      ])
+        section.route: (context) => FeedbackDemoScreen(
+          section: section,
+          themeMode: _themeMode,
+          onThemeModeChanged: _setThemeMode,
+        ),
       '/input-phone': (context) => PhoneInputDemoScreen(
         themeMode: _themeMode,
         onThemeModeChanged: _setThemeMode,

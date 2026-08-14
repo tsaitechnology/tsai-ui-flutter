@@ -9,7 +9,8 @@ void main() {
       _TestApp(
         child: TsaiModalDialog(
           title: 'Title',
-          message: 'Message that explains what happens.',
+          message:
+              'Message that explains what happens and what it means for the user.',
           icon: const Icon(Icons.notifications_none, size: 24),
           secondaryAction: _button('Cancel'),
           primaryAction: _button('Confirm'),
@@ -24,6 +25,28 @@ void main() {
     );
     expect(
       find.byKey(const ValueKey('tsai-modal-dialog-actions-row')),
+      findsOneWidget,
+    );
+    final dialogRect = tester.getRect(find.byType(TsaiModalDialog));
+    final iconRect = tester.getRect(
+      find.byKey(const ValueKey('tsai-modal-dialog-icon')),
+    );
+    final titleRect = tester.getRect(find.text('Title'));
+    final messageRect = tester.getRect(
+      find.text(
+        'Message that explains what happens and what it means for the user.',
+      ),
+    );
+    final actionsRect = tester.getRect(
+      find.byKey(const ValueKey('tsai-modal-dialog-actions-row')),
+    );
+    expect(iconRect.top - dialogRect.top, 24);
+    expect(titleRect.top - iconRect.bottom, 8);
+    expect(messageRect.top - titleRect.bottom, 8);
+    expect(actionsRect.top - messageRect.bottom, 24);
+    expect(dialogRect.bottom - actionsRect.bottom, 40);
+    expect(
+      find.byKey(const ValueKey('tsai-modal-dialog-filter')),
       findsOneWidget,
     );
     final surface = tester.widget<Material>(
@@ -47,6 +70,11 @@ void main() {
       find.byKey(const ValueKey('tsai-modal-dialog-actions-stacked')),
       findsOneWidget,
     );
+    final stackedDialogRect = tester.getRect(find.byType(TsaiModalDialog));
+    final stackedActionsRect = tester.getRect(
+      find.byKey(const ValueKey('tsai-modal-dialog-actions-stacked')),
+    );
+    expect(stackedDialogRect.bottom - stackedActionsRect.bottom, 40);
   });
 
   testWidgets('modal helper opens and Escape dismisses the route', (
@@ -82,7 +110,8 @@ void main() {
   });
 }
 
-Widget _button(String label) => TsaiButton(label: label, onPressed: () {});
+Widget _button(String label) =>
+    TsaiButton(label: label, size: TsaiButtonSize.medium, onPressed: () {});
 
 class _Launcher extends StatelessWidget {
   const _Launcher({this.stacked = false});

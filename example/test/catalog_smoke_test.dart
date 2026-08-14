@@ -203,6 +203,30 @@ void main() {
     });
   }
 
+  for (final section in [
+    ComponentDemoSection.toast,
+    ComponentDemoSection.inlineAlert,
+    ComponentDemoSection.progress,
+    ComponentDemoSection.card,
+  ]) {
+    testWidgets('opens ${section.label} in its playground', (tester) async {
+      await tester.pumpWidget(CatalogApp(initialRoute: section.route));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 400));
+
+      expect(
+        find.byKey(ValueKey<String>('${section.name}-demo')),
+        findsOneWidget,
+      );
+      expect(find.text(section.label), findsWidgets);
+      expect(
+        find.byKey(const ValueKey<String>('component-playground')),
+        findsOneWidget,
+      );
+      expect(tester.takeException(), isNull);
+    });
+  }
+
   testWidgets('opens separate top-bar documentation routes', (tester) async {
     await tester.pumpWidget(const CatalogApp(initialRoute: '/top-bars/home'));
     await tester.pumpAndSettle();

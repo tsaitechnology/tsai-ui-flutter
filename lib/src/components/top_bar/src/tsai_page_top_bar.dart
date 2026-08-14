@@ -56,9 +56,9 @@ class PageTopBarAction extends StatelessWidget {
 
 /// A 56-pixel glass secondary-page top bar with a centered title.
 ///
-/// [leading], [title], and [trailing] occupy symmetric one-two-one tracks, so
-/// edge content remains bounded and the title stays centered. This widget
-/// fills the available width and does not add a system [SafeArea].
+/// [leading] and [trailing] occupy the fixed 72-pixel Penpot edge slots while
+/// [title] remains centered over the full bar. This widget fills the available
+/// width and does not add a system [SafeArea].
 class PageTopBar extends StatelessWidget {
   /// Creates a page top bar.
   const PageTopBar({
@@ -106,49 +106,52 @@ class PageTopBar extends StatelessWidget {
             height: tokens.spacing.space32 + tokens.spacing.space24,
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: tokens.spacing.space16),
-              child: Row(
+              child: Stack(
+                alignment: Alignment.center,
                 children: [
-                  Expanded(
-                    child: ClipRect(
-                      child: Align(
-                        alignment: AlignmentDirectional.centerStart,
-                        child: _BoundedSpacedRow(
-                          alignment: MainAxisAlignment.start,
-                          children: leading,
+                  Row(
+                    children: [
+                      SizedBox(
+                        width: 72,
+                        child: ClipRect(
+                          child: Align(
+                            alignment: AlignmentDirectional.centerStart,
+                            child: _BoundedSpacedRow(
+                              alignment: MainAxisAlignment.start,
+                              children: leading,
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: ClipRect(
-                      child: Align(
-                        child: title == null
-                            ? const SizedBox.shrink()
-                            : Text(
-                                title!,
-                                style: tokens.typography.bodyLargeMedium
-                                    .copyWith(
-                                      color: tokens.colors.contentPrimary,
-                                    ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.center,
-                              ),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: ClipRect(
-                      child: Align(
-                        alignment: AlignmentDirectional.centerEnd,
-                        child: _BoundedSpacedRow(
-                          alignment: MainAxisAlignment.end,
-                          children: trailing,
+                      const Spacer(),
+                      SizedBox(
+                        width: 72,
+                        child: ClipRect(
+                          child: Align(
+                            alignment: AlignmentDirectional.centerEnd,
+                            child: _BoundedSpacedRow(
+                              alignment: MainAxisAlignment.end,
+                              children: trailing,
+                            ),
+                          ),
                         ),
                       ),
-                    ),
+                    ],
                   ),
+                  if (title case final title?)
+                    PositionedDirectional(
+                      start: 72,
+                      end: 72,
+                      child: Text(
+                        title,
+                        style: tokens.typography.bodyLargeMedium.copyWith(
+                          color: tokens.colors.contentPrimary,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
                 ],
               ),
             ),

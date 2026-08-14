@@ -53,13 +53,13 @@ void main() {
     await _pump(tester, child: const TsaiOtpInput(isError: true));
     expect(
       _cellDecoration(tester, 0).border,
-      Border.all(color: TsaiThemeTokens.dark.colors.negative),
+      Border.all(color: TsaiThemeTokens.dark.colors.accentError),
     );
 
     await _pump(tester, child: const TsaiOtpInput(isSuccess: true));
     expect(
       _cellDecoration(tester, 0).border,
-      Border.all(color: TsaiThemeTokens.dark.colors.positive),
+      Border.all(color: TsaiThemeTokens.dark.colors.accentSuccess),
     );
 
     await _pump(tester, child: const TsaiOtpInput(enabled: false));
@@ -110,7 +110,7 @@ void main() {
     for (var index = 0; index < 4; index++) {
       expect(
         _dotDecoration(tester, index).color,
-        TsaiThemeTokens.dark.colors.negative,
+        TsaiThemeTokens.dark.colors.accentError,
       );
     }
   });

@@ -179,7 +179,7 @@ void main() {
               as BoxDecoration;
       expect(
         (decoration.border! as Border).top.color,
-        TsaiThemeTokens.dark.colors.negative,
+        TsaiThemeTokens.dark.colors.accentError,
       );
     });
 

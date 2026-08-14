@@ -229,7 +229,7 @@ enum _TypographyRole {
   monoCaptionRegular,
 }
 
-enum _TypographyColor { defaultColor, secondary, negative, positive }
+enum _TypographyColor { defaultColor, secondary, error, success }
 
 class _TypographyPlayground extends StatefulWidget {
   const _TypographyPlayground();
@@ -255,8 +255,8 @@ class _TypographyPlaygroundState extends State<_TypographyPlayground> {
     final color = switch (_color) {
       _TypographyColor.defaultColor => null,
       _TypographyColor.secondary => tokens.colors.contentSecondary,
-      _TypographyColor.negative => tokens.colors.negative,
-      _TypographyColor.positive => tokens.colors.positive,
+      _TypographyColor.error => tokens.colors.accentError,
+      _TypographyColor.success => tokens.colors.accentSuccess,
     };
     return ComponentPlayground(
       controls: [

@@ -8,7 +8,7 @@ file-id: ab506819-5bcf-801f-8008-4e8f605cef78
 library: Design System
 ```
 
-Latest snapshot read on 2026-08-08:
+Latest snapshot read on 2026-08-13:
 
 - sets: `dark`, `light`, `typography`, `spacing`;
 - color roles include glass canvas, surface, accent-surface, and accent-text
@@ -23,6 +23,12 @@ Latest snapshot read on 2026-08-08:
   (dark);
 - background glow: `color.accent.glow = #C7D2FE33` (light) and
   `#6366F11A` (dark);
+- dim accent glass: `color.surface.indigo.glassDim = #E4E7FA4D` (light) and
+  `#31345E4D` (dark);
+- semantic status accents, surfaces, and borders for info, success, error, and
+  warning are mapped directly from the light and dark Penpot sets;
+- canonical status accent roles are `color.semantic.accent.success` and
+  `color.semantic.accent.error`;
 - updated values: dark `color.surface.1 = #15161F`, light
   `color.border.hairline = #E1E2EB`, and dark
   `color.border.hairline = #24252E`;
@@ -57,6 +63,20 @@ Latest snapshot read on 2026-08-08:
   items; equal-width responsive items when the preferred composition does not
   fit; four-pixel pill padding; selected accent-glass surface;
   `blur.glass = 24`.
+- Modal Dialog: 320-pixel surface, 24-pixel backdrop blur, 40-pixel action
+  bottom inset, and exact row or stacked action geometry.
+- Bottom Sheet: 42-pixel action bottom inset and fixed 72-pixel app-bar edge
+  slots around the centered title; the 480-pixel glow remains horizontally
+  centered at every host width, while content sizing is the Flutter default.
+- Toast: 48-pixel glass pill in 242-pixel Undo, 238-pixel Action, and 194-pixel
+  Info reference compositions.
+- Inline Alert: 342 × 74 pixels with 12-pixel vertical padding, a 20-pixel
+  status icon, and tone-specific semantic surface and border roles.
+- Progress Bar: 342-pixel track compositions with Left, Right, Top, and Both
+  label arrangements and Default, Success, and Error states.
+- Spinner: 16, 24, and 32-pixel extents with 1.5, 2, and 2.5-pixel strokes.
+- Card: 342 × 148 reference composition, 16-pixel radius and padding,
+  20-pixel header, 16-pixel content gap, and arbitrary body content.
 
 ## Sync workflow
 

@@ -76,7 +76,7 @@ class TsaiRadio<T> extends StatelessWidget {
       final border = focused
           ? colors.actionPrimarySoft
           : isError && !_selected
-          ? colors.negative
+          ? colors.accentError
           : enabled
           ? (hovered ? colors.actionPrimarySoft : colors.borderStrong)
           : colors.borderSubtle;

@@ -203,7 +203,7 @@ class _TsaiSelectState<T> extends State<TsaiSelect<T>> {
               style: tokens.typography.captionMediumRegular.copyWith(
                 color: widget.errorText == null
                     ? tokens.colors.contentSecondary
-                    : tokens.colors.negative,
+                    : tokens.colors.accentError,
               ),
             ),
           ),
@@ -218,7 +218,7 @@ class _TsaiSelectState<T> extends State<TsaiSelect<T>> {
     final selected = _selectedOption;
     final hasError = widget.errorText != null;
     final borderColor = hasError
-        ? colors.negative
+        ? colors.accentError
         : _focused || _open
         ? colors.actionPrimarySoft
         : _hovered && _enabled

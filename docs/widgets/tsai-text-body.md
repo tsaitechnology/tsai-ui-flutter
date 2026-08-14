@@ -13,4 +13,4 @@ const TsaiTextBody(
 ```
 
 Use this widget for general interface copy. Override `color` with a semantic
-token value when secondary, positive, or negative emphasis is required.
+token value when secondary, success, or error emphasis is required.

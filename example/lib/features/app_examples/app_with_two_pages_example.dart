@@ -432,7 +432,7 @@ class _BalanceSummary extends StatelessWidget {
           '+2.4% this month',
           size: TsaiBodySize.medium,
           weight: TsaiTextWeight.medium,
-          color: tokens.colors.positive,
+          color: tokens.colors.accentSuccess,
         ),
         SizedBox(height: tokens.spacing.space20),
         Wrap(
@@ -540,7 +540,7 @@ class _ActivityList extends StatelessWidget {
                   activity.amount,
                   size: TsaiBodySize.medium,
                   color: activity.incoming
-                      ? tokens.colors.positive
+                      ? tokens.colors.accentSuccess
                       : tokens.colors.contentPrimary,
                 ),
                 SizedBox(height: tokens.spacing.space2),

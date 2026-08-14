@@ -81,7 +81,7 @@ class TsaiCheckbox extends StatelessWidget {
         final border = focused
             ? colors.actionPrimarySoft
             : isError && !active
-            ? colors.negative
+            ? colors.accentError
             : enabled
             ? (hovered ? colors.actionPrimarySoft : colors.borderStrong)
             : colors.borderSubtle;

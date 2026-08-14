@@ -72,11 +72,15 @@ class _UserPillExample extends StatelessWidget {
   Widget build(BuildContext context) => PenpotExample(
     title: 'UserPill',
     child: PenpotBoard(
-      child: UserPill(
-        name: 'Ilona T.',
-        initials: 'IT',
-        semanticLabel: 'Open profile',
-        onPressed: () {},
+      padding: EdgeInsets.zero,
+      child: PlaygroundColorBackdrop(
+        height: 96,
+        child: UserPill(
+          name: 'Ilona T.',
+          initials: 'IT',
+          semanticLabel: 'Open profile',
+          onPressed: () {},
+        ),
       ),
     ),
   );
@@ -168,12 +172,15 @@ class _UserPillPlaygroundState extends State<_UserPillPlayground> {
       ),
       PlaygroundOutput(label: 'presses', value: '$_presses'),
     ],
-    preview: UserPill(
-      name: _name.isEmpty ? 'Ilona T.' : _name,
-      initials: _initials.isEmpty ? 'IT' : _initials,
-      avatarUrl: _showImage ? _avatarImageUrl : null,
-      semanticLabel: 'Open demo profile',
-      onPressed: _interactive ? () => setState(() => _presses++) : null,
+    preview: PlaygroundColorBackdrop(
+      height: 96,
+      child: UserPill(
+        name: _name.isEmpty ? 'Ilona T.' : _name,
+        initials: _initials.isEmpty ? 'IT' : _initials,
+        avatarUrl: _showImage ? _avatarImageUrl : null,
+        semanticLabel: 'Open demo profile',
+        onPressed: _interactive ? () => setState(() => _presses++) : null,
+      ),
     ),
   );
 }

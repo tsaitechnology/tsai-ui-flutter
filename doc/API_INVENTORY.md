@@ -18,7 +18,7 @@ import 'package:tsai_ui/tsai_icons.dart';
 | --- | --- | --- |
 | `TsaiTheme` | Installs light/dark themes | Public |
 | `TsaiThemeTokens` | Complete semantic schema | Public |
-| `TsaiColorTokens` | Semantic color roles, including modal scrim and background glow | Public |
+| `TsaiColorTokens` | Semantic color roles, including status accents/surfaces/borders, glass surfaces, modal scrim, and background glow | Public |
 | `TsaiGradientTokens` | Theme-aware top and bottom scrim assets | Public |
 | `TsaiTypographyTokens` | Typography roles | Public |
 | `TsaiSpacingTokens` | Spacing scale | Public |
@@ -82,12 +82,22 @@ import 'package:tsai_ui/tsai_icons.dart';
 | `PageWithSearchTopBar` | Scroll composition with a pinned 112-pixel glass app bar and search field | Public |
 | `BottomNavBarItem` | Immutable icon, label, and optional semantic label for a bottom destination | Public |
 | `BottomNavBar` | Controlled one-to-five destination glass bottom-navigation bar | Public |
-| `TsaiBottomSheetSize` | Half and full Penpot sheet heights | Public |
-| `TsaiBottomSheet` | Composable rounded sheet surface with glow, app bar, content, and actions | Public |
+| `TsaiBottomSheetSize` | Content, half, and full sheet sizing policies | Public |
+| `TsaiBottomSheet` | Content-sized by default; composable rounded sheet surface with glow, app bar, content, and actions | Public |
 | `showTsaiBottomSheet<T>` | Theme-aware modal route for `TsaiBottomSheet` | Public |
 | `TsaiModalDialogActionsLayout` | Row and stacked dialog action arrangements | Public |
 | `TsaiModalDialog` | Compact icon, message, and action dialog surface | Public |
 | `showTsaiModalDialog<T>` | Theme-aware modal route for `TsaiModalDialog` | Public |
+| `TsaiToastVariant` | Undo, action, and informational Toast compositions | Public |
+| `TsaiToast` | Compact glass notification with action, dismissal, or countdown affordances | Public |
+| `TsaiInlineAlertTone` | Info, success, error, and warning alert tones | Public |
+| `TsaiInlineAlert` | Dismissible token-backed inline status message | Public |
+| `TsaiProgressBarState` | Default, success, and error progress states | Public |
+| `TsaiProgressBarLabelPosition` | Left, right, top, and both-label progress layouts | Public |
+| `TsaiProgressBar` | Determinate four-pixel progress track with Penpot label arrangements | Public |
+| `TsaiSpinnerSize` | 16, 24, and 32-pixel spinner sizes | Public |
+| `TsaiSpinner` | Animated accent loading indicator | Public |
+| `TsaiCard` | Token-backed card surface with optional header and arbitrary content | Public |
 | `LucideIcons` | Opt-in icon catalog re-export | External contract |
 
 ## Internal
@@ -107,3 +117,6 @@ import 'package:tsai_ui/tsai_icons.dart';
 
 No generated Penpot model, router, state-management API, or application service
 is exported.
+
+The color-token contract exposes only `accentSuccess` and `accentError`; no
+compatibility aliases or migration shims are part of the public surface.

@@ -47,6 +47,10 @@ its live Flutter web example.
 
 - [TsaiGlow](tsai-glow.md)
 - [Tsai UI Blocks](tsai-ui-blocks.md)
+- [TsaiToast](tsai-toast.md)
+- [TsaiInlineAlert](tsai-inline-alert.md)
+- [TsaiProgressBar and TsaiSpinner](tsai-progress.md)
+- [TsaiCard](tsai-card.md)
 
 ## Layout
 

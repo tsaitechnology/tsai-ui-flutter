@@ -311,7 +311,7 @@ class _TsaiInputState extends State<TsaiInput> {
       return tokens.colors.contentTertiary;
     }
     if (widget.errorText != null) {
-      return tokens.colors.negative;
+      return tokens.colors.accentError;
     }
     return tokens.colors.contentSecondary;
   }

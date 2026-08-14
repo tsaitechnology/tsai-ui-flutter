@@ -27,7 +27,7 @@ abstract final class TsaiTheme {
         onPrimary: colors.contentOnActionPrimary,
         surface: colors.surface,
         onSurface: colors.contentPrimary,
-        error: colors.negative,
+        error: colors.accentError,
         outline: colors.borderStrong,
         outlineVariant: colors.borderSubtle,
       ),

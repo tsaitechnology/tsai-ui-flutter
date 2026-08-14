@@ -27,6 +27,47 @@ void main() {
       const BorderRadius.vertical(top: Radius.circular(32)),
     );
     expect(find.byType(TsaiGlow), findsOneWidget);
+
+    final sheetRect = tester.getRect(find.byType(TsaiBottomSheet));
+    final appBarTitleRect = tester.getRect(find.text('Half'));
+    expect(appBarTitleRect.center.dx, sheetRect.center.dx);
+    expect(
+      tester.getRect(find.byType(TsaiGlow)).center.dx,
+      sheetRect.center.dx,
+    );
+  });
+
+  testWidgets('sizes to content by default', (tester) async {
+    await tester.pumpWidget(const _ContentLauncher());
+
+    await tester.tap(find.text('Open content sheet'));
+    await tester.pumpAndSettle();
+
+    expect(tester.getSize(find.byType(TsaiBottomSheet)).height, 190);
+    expect(
+      tester.getSize(find.byKey(const ValueKey('sheet-content'))).height,
+      80,
+    );
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('limits content sizing to the available viewport', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(390, 300);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    await tester.pumpWidget(const _ContentLauncher(contentHeight: 500));
+
+    await tester.tap(find.text('Open content sheet'));
+    await tester.pumpAndSettle();
+
+    expect(
+      tester.getSize(find.byType(TsaiBottomSheet)).height,
+      lessThanOrEqualTo(300),
+    );
+    expect(tester.takeException(), isNull);
   });
 
   testWidgets('shows a modal route, actions, and closes', (tester) async {
@@ -41,6 +82,21 @@ void main() {
       find.byKey(const ValueKey('tsai-bottom-sheet-actions')),
       findsOneWidget,
     );
+    final sheetRect = tester.getRect(find.byType(TsaiBottomSheet));
+    final actionsRect = tester.getRect(
+      find.byKey(const ValueKey('tsai-bottom-sheet-actions')),
+    );
+    expect(actionsRect.bottom, closeTo(sheetRect.bottom - 42, 0.01));
+
+    final closeIconRect = tester.getRect(
+      find.descendant(
+        of: find.byTooltip('Close'),
+        matching: find.byType(TsaiIcon),
+      ),
+    );
+    expect(closeIconRect.size, const Size.square(24));
+    expect(closeIconRect.top, closeTo(sheetRect.top + 28, 0.01));
+    expect(closeIconRect.right, closeTo(sheetRect.right - 20, 0.01));
 
     await tester.tap(find.byTooltip('Close'));
     await tester.pumpAndSettle();
@@ -84,6 +140,29 @@ class _Launcher extends StatelessWidget {
           primaryAction: const TsaiButton(label: 'Confirm', onPressed: null),
         ),
         child: const Text('Open'),
+      ),
+    ),
+  );
+}
+
+class _ContentLauncher extends StatelessWidget {
+  const _ContentLauncher({this.contentHeight = 80});
+
+  final double contentHeight;
+
+  @override
+  Widget build(BuildContext context) => _TestApp(
+    child: Builder(
+      builder: (context) => TextButton(
+        onPressed: () => showTsaiBottomSheet<void>(
+          context: context,
+          title: 'Content sheet',
+          child: SizedBox(
+            key: const ValueKey<String>('sheet-content'),
+            height: contentHeight,
+          ),
+        ),
+        child: const Text('Open content sheet'),
       ),
     ),
   );

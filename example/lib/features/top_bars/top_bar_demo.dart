@@ -119,30 +119,38 @@ class _PageTopBarDemoState extends State<PageTopBarDemo> {
     key: const ValueKey<String>('page-top-bar-demo'),
     variants: [
       const _SectionLabel('Title with two edge actions'),
-      PageTopBar(
-        leading: [
-          PageTopBarAction(
-            icon: const TsaiIcon(LucideIcons.arrow_left),
-            semanticLabel: 'Back',
-            onPressed: () {},
-          ),
-        ],
-        title: 'Card details',
-        trailing: [
-          PageTopBarAction(
-            icon: const TsaiIcon(LucideIcons.plus),
-            semanticLabel: 'Add',
-            onPressed: () {},
-          ),
-          PageTopBarAction(
-            icon: const TsaiIcon(LucideIcons.ellipsis),
-            semanticLabel: 'More',
-            onPressed: () {},
-          ),
-        ],
+      PlaygroundColorBackdrop(
+        height: 96,
+        alignment: Alignment.topCenter,
+        child: PageTopBar(
+          leading: [
+            PageTopBarAction(
+              icon: const TsaiIcon(LucideIcons.arrow_left),
+              semanticLabel: 'Back',
+              onPressed: () {},
+            ),
+          ],
+          title: 'Card details',
+          trailing: [
+            PageTopBarAction(
+              icon: const TsaiIcon(LucideIcons.plus),
+              semanticLabel: 'Add',
+              onPressed: () {},
+            ),
+            PageTopBarAction(
+              icon: const TsaiIcon(LucideIcons.ellipsis),
+              semanticLabel: 'More',
+              onPressed: () {},
+            ),
+          ],
+        ),
       ),
       const _SectionLabel('Title only'),
-      const PageTopBar(title: 'Activity'),
+      const PlaygroundColorBackdrop(
+        height: 96,
+        alignment: Alignment.topCenter,
+        child: PageTopBar(title: 'Activity'),
+      ),
     ],
     playground: ComponentPlayground(
       controls: [
@@ -166,10 +174,14 @@ class _PageTopBarDemoState extends State<PageTopBarDemo> {
           onChanged: (value) => setState(() => _trailing = value),
         ),
       ],
-      preview: PageTopBar(
-        leading: _pageLeading(_leading),
-        title: _title,
-        trailing: _pageTrailing(_trailing),
+      preview: PlaygroundColorBackdrop(
+        height: 96,
+        alignment: Alignment.topCenter,
+        child: PageTopBar(
+          leading: _pageLeading(_leading),
+          title: _title,
+          trailing: _pageTrailing(_trailing),
+        ),
       ),
     ),
   );
@@ -434,12 +446,12 @@ class _HomeTopBarBackdrop extends StatelessWidget {
               ),
               Expanded(
                 child: SizedBox.expand(
-                  child: ColoredBox(color: colors.positive),
+                  child: ColoredBox(color: colors.accentSuccess),
                 ),
               ),
               Expanded(
                 child: SizedBox.expand(
-                  child: ColoredBox(color: colors.negative),
+                  child: ColoredBox(color: colors.accentError),
                 ),
               ),
               Expanded(

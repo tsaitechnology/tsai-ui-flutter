@@ -443,7 +443,7 @@ List<TsaiListItem> _transactionItems() => [
     subtitle: 'Incoming · Jul 28',
     value: r'+$4,800.00',
     subValue: '10:00',
-    positive: true,
+    success: true,
   ),
   _transactionItem(
     icon: LucideIcons.credit_card,
@@ -461,12 +461,12 @@ TsaiListItem _transactionItem({
   required String value,
   required String subValue,
   bool active = false,
-  bool positive = false,
+  bool success = false,
 }) => TsaiListItem(
   active: active,
   icon: TsaiIcon(icon, size: 20),
   content: _content(title, subtitle),
-  trailing: _trailing(value, subValue, positive: positive),
+  trailing: _trailing(value, subValue, success: success),
 );
 
 Widget _content(String title, String subtitle) => Builder(
@@ -497,7 +497,7 @@ Widget _content(String title, String subtitle) => Builder(
   },
 );
 
-Widget _trailing(String value, String subValue, {bool positive = false}) =>
+Widget _trailing(String value, String subValue, {bool success = false}) =>
     Builder(
       builder: (context) {
         final tokens = TsaiThemeTokens.of(context);
@@ -508,8 +508,8 @@ Widget _trailing(String value, String subValue, {bool positive = false}) =>
             TsaiTextMonoBody(
               value,
               size: TsaiBodySize.medium,
-              color: positive
-                  ? tokens.colors.positive
+              color: success
+                  ? tokens.colors.accentSuccess
                   : tokens.colors.contentPrimary,
             ),
             SizedBox(height: tokens.spacing.space2),

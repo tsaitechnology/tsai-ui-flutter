@@ -1,8 +1,8 @@
 # TsaiBottomSheet
 
-A rounded, glow-backed bottom-sheet surface with half and full Penpot heights,
-a centered app bar, composable content and actions, and an optional close
-button.
+A rounded, glow-backed bottom-sheet surface that sizes to its content by
+default, with optional half and full Penpot heights, a centered app bar,
+composable content and actions, and an optional close button.
 
 [Open live example](https://tsaitechnology.github.io/tsai-ui-flutter/example/#/bottom-sheet){ target="_blank" rel="noopener" .md-button }
 
@@ -10,7 +10,6 @@ button.
 final result = await showTsaiBottomSheet<bool>(
   context: context,
   title: 'Confirm transfer',
-  size: TsaiBottomSheetSize.half,
   child: const TransferSummary(),
   secondaryAction: Builder(
     builder: (context) => TsaiButton(
@@ -28,7 +27,7 @@ final result = await showTsaiBottomSheet<bool>(
 );
 ```
 
-Use `TsaiBottomSheet` directly when another route or scaffold already owns the
-overlay. `showTsaiBottomSheet` installs the theme-aware modal barrier, clamps
-the design height to the viewport, supports drag and outside dismissal, and
-returns the value passed to `Navigator.pop`.
+Use `TsaiBottomSheetSize.half` or `TsaiBottomSheetSize.full` only when the flow
+requires a fixed design height. `showTsaiBottomSheet` installs the theme-aware
+modal barrier, limits content-sized sheets to the available viewport, supports
+drag and outside dismissal, and returns the value passed to `Navigator.pop`.

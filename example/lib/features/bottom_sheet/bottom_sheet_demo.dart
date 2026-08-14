@@ -11,7 +11,7 @@ class BottomSheetDemo extends StatefulWidget {
 }
 
 class _BottomSheetDemoState extends State<BottomSheetDemo> {
-  TsaiBottomSheetSize _size = TsaiBottomSheetSize.half;
+  TsaiBottomSheetSize _size = TsaiBottomSheetSize.content;
   bool _showCloseButton = false;
   String _result = 'No result';
 
@@ -38,11 +38,10 @@ class _BottomSheetDemoState extends State<BottomSheetDemo> {
         ),
         PlaygroundOutput(label: 'result', value: _result),
       ],
-      preview: SizedBox(
-        height: 424,
+      preview: ConstrainedBox(
+        constraints: const BoxConstraints(maxHeight: 424),
         child: TsaiBottomSheet(
           title: 'Title',
-          height: 424,
           size: _size,
           showCloseButton: _showCloseButton,
           secondaryAction: TsaiButton(
@@ -51,10 +50,13 @@ class _BottomSheetDemoState extends State<BottomSheetDemo> {
             onPressed: () {},
           ),
           primaryAction: TsaiButton(label: 'Confirm', onPressed: () {}),
-          child: const DecoratedBox(
-            decoration: BoxDecoration(
-              color: Color(0x14111111),
-              borderRadius: BorderRadius.all(Radius.circular(10)),
+          child: const SizedBox(
+            height: 80,
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                color: Color(0x14111111),
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+              ),
             ),
           ),
         ),
@@ -68,10 +70,13 @@ class _BottomSheetDemoState extends State<BottomSheetDemo> {
       title: 'Title',
       size: _size,
       showCloseButton: _showCloseButton,
-      child: const DecoratedBox(
-        decoration: BoxDecoration(
-          color: Color(0x14111111),
-          borderRadius: BorderRadius.all(Radius.circular(10)),
+      child: const SizedBox(
+        height: 80,
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            color: Color(0x14111111),
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
         ),
       ),
       secondaryAction: Builder(

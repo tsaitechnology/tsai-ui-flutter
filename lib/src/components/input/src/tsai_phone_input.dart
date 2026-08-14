@@ -357,7 +357,7 @@ class _TsaiPhoneInputState extends State<TsaiPhoneInput> {
       return tokens.colors.contentTertiary;
     }
     if (widget.errorText != null) {
-      return tokens.colors.negative;
+      return tokens.colors.accentError;
     }
     return tokens.colors.contentSecondary;
   }

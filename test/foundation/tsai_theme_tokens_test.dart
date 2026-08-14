@@ -43,6 +43,57 @@ void main() {
       expect(TsaiThemeTokens.light.colors.accentGlow, const Color(0x33C7D2FE));
       expect(TsaiThemeTokens.dark.colors.accentGlow, const Color(0x1A6366F1));
       expect(
+        TsaiThemeTokens.light.colors.surfaceAccentGlassDim,
+        const Color(0x4DE4E7FA),
+      );
+      expect(
+        TsaiThemeTokens.dark.colors.surfaceAccentGlassDim,
+        const Color(0x4D31345E),
+      );
+      expect(TsaiThemeTokens.light.colors.accentInfo, const Color(0xFF3B82F6));
+      expect(TsaiThemeTokens.dark.colors.accentInfo, const Color(0xFF60A5FA));
+      expect(
+        TsaiThemeTokens.light.colors.accentSuccess,
+        const Color(0xFF10B981),
+      );
+      expect(TsaiThemeTokens.dark.colors.accentError, const Color(0xFFF87171));
+      expect(
+        TsaiThemeTokens.light.colors.accentWarning,
+        const Color(0xFFF59E0B),
+      );
+      expect(
+        TsaiThemeTokens.dark.colors.statusSurfaceInfo,
+        const Color(0xFF141D28),
+      );
+      expect(
+        TsaiThemeTokens.light.colors.statusSurfaceSuccess,
+        const Color(0xFFE8F5F1),
+      );
+      expect(
+        TsaiThemeTokens.dark.colors.statusSurfaceError,
+        const Color(0xFF271717),
+      );
+      expect(
+        TsaiThemeTokens.light.colors.statusSurfaceWarning,
+        const Color(0xFFFAF3E7),
+      );
+      expect(
+        TsaiThemeTokens.light.colors.statusBorderInfo,
+        const Color(0xFFC8DAF9),
+      );
+      expect(
+        TsaiThemeTokens.dark.colors.statusBorderSuccess,
+        const Color(0xFF184C3A),
+      );
+      expect(
+        TsaiThemeTokens.light.colors.statusBorderError,
+        const Color(0xFFF7CACA),
+      );
+      expect(
+        TsaiThemeTokens.dark.colors.statusBorderWarning,
+        const Color(0xFF5A4613),
+      );
+      expect(
         TsaiThemeTokens.light.colors.contentAccent,
         const Color(0xFF4F46E5),
       );

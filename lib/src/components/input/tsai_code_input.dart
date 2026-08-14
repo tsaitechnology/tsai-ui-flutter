@@ -415,10 +415,10 @@ class _TsaiCodeInputState extends State<_TsaiCodeInput> {
 
   Color _otpBorderColor(TsaiThemeTokens tokens, {required bool active}) {
     if (widget.isError) {
-      return tokens.colors.negative;
+      return tokens.colors.accentError;
     }
     if (widget.isSuccess) {
-      return tokens.colors.positive;
+      return tokens.colors.accentSuccess;
     }
     if (active) {
       return tokens.colors.actionPrimarySoft;
@@ -431,10 +431,10 @@ class _TsaiCodeInputState extends State<_TsaiCodeInput> {
       return tokens.colors.contentTertiary;
     }
     if (widget.isError) {
-      return tokens.colors.negative;
+      return tokens.colors.accentError;
     }
     if (widget.isSuccess) {
-      return tokens.colors.positive;
+      return tokens.colors.accentSuccess;
     }
     return filled ? tokens.colors.iconBright : tokens.colors.borderSubtle;
   }

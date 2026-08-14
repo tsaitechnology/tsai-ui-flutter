@@ -81,6 +81,10 @@ nav:
       - UI Blocks:
           - Section, empty state, and lists: widgets/tsai-ui-blocks.md
           - TsaiGlow: widgets/tsai-glow.md
+          - TsaiToast: widgets/tsai-toast.md
+          - TsaiInlineAlert: widgets/tsai-inline-alert.md
+          - TsaiProgressBar and TsaiSpinner: widgets/tsai-progress.md
+          - TsaiCard: widgets/tsai-card.md
       - Layout:
           - TsaiTabs: widgets/tsai-tabs.md
           - BottomNavBar: widgets/tsai-bottom-nav-bar.md

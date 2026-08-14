@@ -210,6 +210,11 @@ void main() {
       findsOneWidget,
     );
     expect(tester.getCenter(find.text('Card details')).dx, closeTo(400, 0.01));
+    final barRect = tester.getRect(find.byType(PageTopBar));
+    final leadingRect = tester.getRect(find.bySemanticsLabel('Back'));
+    final trailingRect = tester.getRect(find.bySemanticsLabel('More'));
+    expect(leadingRect.left, closeTo(barRect.left + 16, 0.01));
+    expect(trailingRect.right, closeTo(barRect.right - 16, 0.01));
   });
 
   testWidgets('PageTopBar constrains its title between external text slots', (

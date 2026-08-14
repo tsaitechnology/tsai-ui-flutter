@@ -74,12 +74,12 @@ class _BackdropExample extends StatelessWidget {
                 ),
                 Expanded(
                   child: SizedBox.expand(
-                    child: ColoredBox(color: tokens.colors.positive),
+                    child: ColoredBox(color: tokens.colors.accentSuccess),
                   ),
                 ),
                 Expanded(
                   child: SizedBox.expand(
-                    child: ColoredBox(color: tokens.colors.negative),
+                    child: ColoredBox(color: tokens.colors.accentError),
                   ),
                 ),
                 Expanded(

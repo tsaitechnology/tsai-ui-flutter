@@ -158,6 +158,7 @@ final class TsaiThemeTokens extends ThemeExtension<TsaiThemeTokens> {
       surfaceAccent: colors.surfaceIndigo,
       surfaceAccentPressed: colors.surfaceIndigoDeep,
       surfaceAccentGlass: colors.surfaceIndigoGlass,
+      surfaceAccentGlassDim: colors.surfaceIndigoGlassDim,
       overlayScrim: colors.backgroundOverlay,
       accentGlow: colors.accentGlow,
       contentPrimary: colors.textPrimary,
@@ -169,8 +170,18 @@ final class TsaiThemeTokens extends ThemeExtension<TsaiThemeTokens> {
       actionPrimary: colors.accent,
       actionPrimaryPressed: colors.accentDeep,
       actionPrimarySoft: colors.accentLight,
-      positive: colors.gain,
-      negative: colors.loss,
+      accentInfo: colors.semanticAccentInfo,
+      accentSuccess: colors.semanticAccentSuccess,
+      accentError: colors.semanticAccentError,
+      accentWarning: colors.semanticAccentWarning,
+      statusSurfaceInfo: colors.semanticSurfaceInfo,
+      statusSurfaceSuccess: colors.semanticSurfaceSuccess,
+      statusSurfaceError: colors.semanticSurfaceError,
+      statusSurfaceWarning: colors.semanticSurfaceWarning,
+      statusBorderInfo: colors.semanticBorderInfo,
+      statusBorderSuccess: colors.semanticBorderSuccess,
+      statusBorderError: colors.semanticBorderError,
+      statusBorderWarning: colors.semanticBorderWarning,
       borderSubtle: colors.borderHairline,
       borderStrong: colors.borderStrong,
       iconPrimary: colors.iconPrimary,
@@ -215,8 +226,8 @@ final class TsaiColorTokens {
     required this.actionPrimary,
     required this.actionPrimaryPressed,
     required this.actionPrimarySoft,
-    required this.positive,
-    required this.negative,
+    required this.accentSuccess,
+    required this.accentError,
     required this.borderSubtle,
     required this.borderStrong,
     required this.iconPrimary,
@@ -224,6 +235,17 @@ final class TsaiColorTokens {
     required this.iconTertiary,
     required this.iconOnAction,
     required this.iconBright,
+    this.surfaceAccentGlassDim = const Color(0x4D31345E),
+    this.accentInfo = const Color(0xFF60A5FA),
+    this.accentWarning = const Color(0xFFFBBF24),
+    this.statusSurfaceInfo = const Color(0xFF141D28),
+    this.statusSurfaceSuccess = const Color(0xFF0F221C),
+    this.statusSurfaceError = const Color(0xFF271717),
+    this.statusSurfaceWarning = const Color(0xFF27200E),
+    this.statusBorderInfo = const Color(0xFF263E5A),
+    this.statusBorderSuccess = const Color(0xFF184C3A),
+    this.statusBorderError = const Color(0xFF592D2D),
+    this.statusBorderWarning = const Color(0xFF5A4613),
     this.overlayScrim = const Color(0x66000000),
     this.accentGlow = const Color(0x33C7D2FE),
   });
@@ -252,6 +274,9 @@ final class TsaiColorTokens {
   /// Translucent accent-tinted surface used inside glass surfaces.
   final Color surfaceAccentGlass;
 
+  /// Dim translucent accent surface used by Toast.
+  final Color surfaceAccentGlassDim;
+
   /// Primary text content.
   final Color contentPrimary;
 
@@ -279,11 +304,41 @@ final class TsaiColorTokens {
   /// Lighter accent used for focus and emphasis.
   final Color actionPrimarySoft;
 
-  /// Positive status.
-  final Color positive;
+  /// Informational status accent.
+  final Color accentInfo;
 
-  /// Negative or error status.
-  final Color negative;
+  /// Success status accent.
+  final Color accentSuccess;
+
+  /// Error status accent.
+  final Color accentError;
+
+  /// Warning status accent.
+  final Color accentWarning;
+
+  /// Informational status surface.
+  final Color statusSurfaceInfo;
+
+  /// Success status surface.
+  final Color statusSurfaceSuccess;
+
+  /// Error status surface.
+  final Color statusSurfaceError;
+
+  /// Warning status surface.
+  final Color statusSurfaceWarning;
+
+  /// Informational status border.
+  final Color statusBorderInfo;
+
+  /// Success status border.
+  final Color statusBorderSuccess;
+
+  /// Error status border.
+  final Color statusBorderError;
+
+  /// Warning status border.
+  final Color statusBorderWarning;
 
   /// Subtle border.
   final Color borderSubtle;
@@ -330,6 +385,11 @@ final class TsaiColorTokens {
       other.surfaceAccentGlass,
       t,
     )!,
+    surfaceAccentGlassDim: Color.lerp(
+      surfaceAccentGlassDim,
+      other.surfaceAccentGlassDim,
+      t,
+    )!,
     contentPrimary: Color.lerp(contentPrimary, other.contentPrimary, t)!,
     contentAccent: Color.lerp(contentAccent, other.contentAccent, t)!,
     contentSecondary: Color.lerp(contentSecondary, other.contentSecondary, t)!,
@@ -355,8 +415,46 @@ final class TsaiColorTokens {
       other.actionPrimarySoft,
       t,
     )!,
-    positive: Color.lerp(positive, other.positive, t)!,
-    negative: Color.lerp(negative, other.negative, t)!,
+    accentInfo: Color.lerp(accentInfo, other.accentInfo, t)!,
+    accentSuccess: Color.lerp(accentSuccess, other.accentSuccess, t)!,
+    accentError: Color.lerp(accentError, other.accentError, t)!,
+    accentWarning: Color.lerp(accentWarning, other.accentWarning, t)!,
+    statusSurfaceInfo: Color.lerp(
+      statusSurfaceInfo,
+      other.statusSurfaceInfo,
+      t,
+    )!,
+    statusSurfaceSuccess: Color.lerp(
+      statusSurfaceSuccess,
+      other.statusSurfaceSuccess,
+      t,
+    )!,
+    statusSurfaceError: Color.lerp(
+      statusSurfaceError,
+      other.statusSurfaceError,
+      t,
+    )!,
+    statusSurfaceWarning: Color.lerp(
+      statusSurfaceWarning,
+      other.statusSurfaceWarning,
+      t,
+    )!,
+    statusBorderInfo: Color.lerp(statusBorderInfo, other.statusBorderInfo, t)!,
+    statusBorderSuccess: Color.lerp(
+      statusBorderSuccess,
+      other.statusBorderSuccess,
+      t,
+    )!,
+    statusBorderError: Color.lerp(
+      statusBorderError,
+      other.statusBorderError,
+      t,
+    )!,
+    statusBorderWarning: Color.lerp(
+      statusBorderWarning,
+      other.statusBorderWarning,
+      t,
+    )!,
     borderSubtle: Color.lerp(borderSubtle, other.borderSubtle, t)!,
     borderStrong: Color.lerp(borderStrong, other.borderStrong, t)!,
     iconPrimary: Color.lerp(iconPrimary, other.iconPrimary, t)!,

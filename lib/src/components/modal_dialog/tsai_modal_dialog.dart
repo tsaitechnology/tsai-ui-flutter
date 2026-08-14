@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 import '../../foundation/semantic/tsai_theme_tokens.dart';
@@ -50,66 +52,83 @@ class TsaiModalDialog extends StatelessWidget {
       namesRoute: true,
       explicitChildNodes: true,
       label: title,
-      child: Material(
-        key: const ValueKey<String>('tsai-modal-dialog-surface'),
-        color: tokens.colors.surfaceGlass,
-        elevation: 0,
-        shadowColor: Colors.transparent,
+      child: ClipRRect(
         borderRadius: BorderRadius.circular(tokens.radii.extraLarge),
-        clipBehavior: Clip.antiAlias,
-        child: Container(
-          width: 320,
-          padding: EdgeInsets.all(tokens.spacing.space24),
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: tokens.colors.borderSubtle,
-              width: tokens.borders.hairline,
-            ),
-            borderRadius: BorderRadius.circular(tokens.radii.extraLarge),
-            boxShadow: [tokens.shadows.soft],
+        child: BackdropFilter(
+          key: const ValueKey<String>('tsai-modal-dialog-filter'),
+          filter: ImageFilter.blur(
+            sigmaX: tokens.effects.glassBlur,
+            sigmaY: tokens.effects.glassBlur,
           ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                key: const ValueKey<String>('tsai-modal-dialog-icon'),
-                width: 48,
-                height: 48,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: tokens.colors.surfaceRaised,
-                  shape: BoxShape.circle,
+          child: Material(
+            key: const ValueKey<String>('tsai-modal-dialog-surface'),
+            color: Colors.transparent,
+            borderRadius: BorderRadius.circular(tokens.radii.extraLarge),
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                color: tokens.colors.surfaceGlass,
+                border: Border.all(
+                  color: tokens.colors.borderSubtle,
+                  width: tokens.borders.hairline,
                 ),
-                child: icon,
+                borderRadius: BorderRadius.circular(tokens.radii.extraLarge),
+                boxShadow: [tokens.shadows.soft],
               ),
-              SizedBox(height: tokens.spacing.space8),
-              Semantics(
-                header: true,
-                child: Text(
-                  title,
-                  textAlign: TextAlign.center,
-                  style: tokens.typography.headingSmall.copyWith(
-                    color: tokens.colors.contentPrimary,
+              child: SizedBox(
+                width: 320,
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(
+                    tokens.spacing.space24,
+                    tokens.spacing.space24,
+                    tokens.spacing.space24,
+                    tokens.spacing.space24 + tokens.spacing.space16,
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        key: const ValueKey<String>('tsai-modal-dialog-icon'),
+                        width: 48,
+                        height: 48,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: tokens.colors.surfaceRaised,
+                          shape: BoxShape.circle,
+                        ),
+                        child: icon,
+                      ),
+                      SizedBox(height: tokens.spacing.space8),
+                      Semantics(
+                        header: true,
+                        child: Text(
+                          title,
+                          textAlign: TextAlign.center,
+                          style: tokens.typography.headingSmall.copyWith(
+                            color: tokens.colors.contentPrimary,
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: tokens.spacing.space8),
+                      Text(
+                        message,
+                        textAlign: TextAlign.center,
+                        style: tokens.typography.bodyMedium.copyWith(
+                          color: tokens.colors.contentSecondary,
+                        ),
+                      ),
+                      if (primaryAction != null || secondaryAction != null) ...[
+                        SizedBox(height: tokens.spacing.space24),
+                        _DialogActions(
+                          layout: actionsLayout,
+                          primaryAction: primaryAction,
+                          secondaryAction: secondaryAction,
+                        ),
+                      ],
+                    ],
                   ),
                 ),
               ),
-              SizedBox(height: tokens.spacing.space8),
-              Text(
-                message,
-                textAlign: TextAlign.center,
-                style: tokens.typography.bodyMedium.copyWith(
-                  color: tokens.colors.contentSecondary,
-                ),
-              ),
-              if (primaryAction != null || secondaryAction != null) ...[
-                SizedBox(height: tokens.spacing.space24),
-                _DialogActions(
-                  layout: actionsLayout,
-                  primaryAction: primaryAction,
-                  secondaryAction: secondaryAction,
-                ),
-              ],
-            ],
+            ),
           ),
         ),
       ),
