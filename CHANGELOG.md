@@ -1,3 +1,9 @@
+## 0.4.8 - 2026-08-14
+
+### Features
+
+- sync Penpot feedback and layout components ([339644d](https://github.com/tsaitechnology/tsai-ui-flutter/commit/339644d098e4681d1b749da1e5ca2ea72fcab354))
+
 ## 0.4.7 - 2026-08-08
 
 ### Features
