@@ -47,6 +47,13 @@ void main() {
     );
     expect(controls.spacing, 12);
     expect(controls.runSpacing, 12);
+    expect(find.text('checkerboardBackground'), findsOneWidget);
+    expect(find.byType(TsaiSwitch), findsOneWidget);
+
+    final checkerboard = find.byKey(
+      const ValueKey<String>('component-playground-checkerboard'),
+    );
+    expect(tester.widget<CustomPaint>(checkerboard).painter, isNotNull);
 
     final radioOptions = tester.widget<Wrap>(
       find.byKey(const ValueKey('playground-radio-options')),
@@ -60,6 +67,10 @@ void main() {
       const Size(766, 96),
     );
     expect(tester.getSize(find.byKey(previewKey)), const Size.square(32));
+
+    await tester.tap(find.byType(TsaiSwitch));
+    await tester.pump();
+    expect(tester.widget<CustomPaint>(checkerboard).painter, isNull);
   });
 }
 

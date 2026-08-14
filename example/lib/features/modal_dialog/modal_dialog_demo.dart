@@ -43,24 +43,21 @@ class _ModalDialogDemoState extends State<ModalDialogDemo> {
         TsaiButton(label: 'Open modal dialog', onPressed: () => _open(context)),
         PlaygroundOutput(label: 'result', value: _result),
       ],
-      preview: PlaygroundContrastBackdrop(
-        height: _layout == TsaiModalDialogActionsLayout.row ? 360 : 410,
-        child: TsaiModalDialog(
-          title: _title,
-          message: _message,
-          icon: const TsaiIcon(LucideIcons.bell),
-          actionsLayout: _layout,
-          secondaryAction: TsaiButton(
-            label: 'Cancel',
-            size: TsaiButtonSize.medium,
-            variant: TsaiButtonVariant.secondary,
-            onPressed: () {},
-          ),
-          primaryAction: TsaiButton(
-            label: 'Confirm',
-            size: TsaiButtonSize.medium,
-            onPressed: () {},
-          ),
+      preview: TsaiModalDialog(
+        title: _title,
+        message: _message,
+        icon: const TsaiIcon(LucideIcons.bell),
+        actionsLayout: _layout,
+        secondaryAction: TsaiButton(
+          label: 'Cancel',
+          size: TsaiButtonSize.medium,
+          variant: TsaiButtonVariant.secondary,
+          onPressed: () {},
+        ),
+        primaryAction: TsaiButton(
+          label: 'Confirm',
+          size: TsaiButtonSize.medium,
+          onPressed: () {},
         ),
       ),
     ),

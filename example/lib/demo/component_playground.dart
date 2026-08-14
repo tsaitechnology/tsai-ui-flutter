@@ -1,39 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tsai_ui/tsai_ui.dart';
 
-/// A sharp token-backed pattern for previewing blur and shadow effects.
-class PlaygroundContrastBackdrop extends StatelessWidget {
-  const PlaygroundContrastBackdrop({
-    required this.child,
-    required this.height,
-    super.key,
-    this.alignment = Alignment.center,
-  });
-
-  final Widget child;
-  final double height;
-  final AlignmentGeometry alignment;
-
-  @override
-  Widget build(BuildContext context) {
-    final tokens = TsaiThemeTokens.of(context);
-    return SizedBox(
-      width: double.infinity,
-      height: height,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(tokens.radii.innerMedium),
-        child: CustomPaint(
-          painter: _ContrastPatternPainter(
-            baseColor: tokens.colors.canvas,
-            accentColor: tokens.colors.actionPrimary,
-          ),
-          child: Align(alignment: alignment, child: child),
-        ),
-      ),
-    );
-  }
-}
-
 class _ContrastPatternPainter extends CustomPainter {
   const _ContrastPatternPainter({
     required this.baseColor,
@@ -61,7 +28,7 @@ class _ContrastPatternPainter extends CustomPainter {
       accentColor != oldDelegate.accentColor;
 }
 
-class ComponentPlayground extends StatelessWidget {
+class ComponentPlayground extends StatefulWidget {
   const ComponentPlayground({
     required this.preview,
     required this.controls,
@@ -70,6 +37,13 @@ class ComponentPlayground extends StatelessWidget {
 
   final Widget preview;
   final List<Widget> controls;
+
+  @override
+  State<ComponentPlayground> createState() => _ComponentPlaygroundState();
+}
+
+class _ComponentPlaygroundState extends State<ComponentPlayground> {
+  bool _checkerboardBackground = true;
 
   @override
   Widget build(BuildContext context) {
@@ -101,7 +75,16 @@ class ComponentPlayground extends StatelessWidget {
               key: const ValueKey<String>('component-playground-controls-wrap'),
               spacing: 12,
               runSpacing: 12,
-              children: controls,
+              children: [
+                ...widget.controls,
+                PlaygroundToggleControl(
+                  label: 'checkerboardBackground',
+                  value: _checkerboardBackground,
+                  width: 200,
+                  onChanged: (value) =>
+                      setState(() => _checkerboardBackground = value),
+                ),
+              ],
             ),
           ),
           Container(
@@ -131,12 +114,29 @@ class ComponentPlayground extends StatelessWidget {
                   width: double.infinity,
                   constraints: const BoxConstraints(minHeight: 96),
                   alignment: AlignmentDirectional.centerStart,
-                  child: LayoutBuilder(
-                    builder: (context, constraints) => SizedBox(
-                      width: constraints.maxWidth.clamp(0, 360),
-                      child: Align(
-                        alignment: AlignmentDirectional.centerStart,
-                        child: preview,
+                  clipBehavior: Clip.antiAlias,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(
+                      tokens.radii.innerMedium,
+                    ),
+                  ),
+                  child: CustomPaint(
+                    key: const ValueKey<String>(
+                      'component-playground-checkerboard',
+                    ),
+                    painter: _checkerboardBackground
+                        ? _ContrastPatternPainter(
+                            baseColor: tokens.colors.canvas,
+                            accentColor: tokens.colors.actionPrimary,
+                          )
+                        : null,
+                    child: LayoutBuilder(
+                      builder: (context, constraints) => SizedBox(
+                        width: constraints.maxWidth.clamp(0, 360),
+                        child: Align(
+                          alignment: AlignmentDirectional.centerStart,
+                          child: widget.preview,
+                        ),
                       ),
                     ),
                   ),

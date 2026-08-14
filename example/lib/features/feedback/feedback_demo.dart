@@ -46,18 +46,15 @@ class _FeedbackDemoState extends State<FeedbackDemo> {
         onChanged: (value) => setState(() => _toastVariant = value),
       ),
     ],
-    preview: PlaygroundContrastBackdrop(
-      height: 112,
-      child: TsaiToast(
-        variant: _toastVariant,
-        message: _toastVariant == TsaiToastVariant.info
-            ? 'Settings updated'
-            : 'Item deleted',
-        actionLabel: _toastVariant == TsaiToastVariant.undo ? 'Undo' : 'View',
-        secondsRemaining: 7,
-        onAction: () {},
-        onDismiss: () {},
-      ),
+    preview: TsaiToast(
+      variant: _toastVariant,
+      message: _toastVariant == TsaiToastVariant.info
+          ? 'Settings updated'
+          : 'Item deleted',
+      actionLabel: _toastVariant == TsaiToastVariant.undo ? 'Undo' : 'View',
+      secondsRemaining: 7,
+      onAction: () {},
+      onDismiss: () {},
     ),
   );
 
