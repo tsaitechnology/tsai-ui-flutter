@@ -1,3 +1,9 @@
+## 0.4.9 - 2026-08-14
+
+### Bug Fixes
+
+- clarify blur in component playgrounds ([e81010e](https://github.com/tsaitechnology/tsai-ui-flutter/commit/e81010ed3f76d7585d293a70313b103911867475))
+
 ## 0.4.8 - 2026-08-14
 
 ### Features
