@@ -119,7 +119,7 @@ class _PageTopBarDemoState extends State<PageTopBarDemo> {
     key: const ValueKey<String>('page-top-bar-demo'),
     variants: [
       const _SectionLabel('Title with two edge actions'),
-      PlaygroundColorBackdrop(
+      PlaygroundContrastBackdrop(
         height: 96,
         alignment: Alignment.topCenter,
         child: PageTopBar(
@@ -146,7 +146,7 @@ class _PageTopBarDemoState extends State<PageTopBarDemo> {
         ),
       ),
       const _SectionLabel('Title only'),
-      const PlaygroundColorBackdrop(
+      const PlaygroundContrastBackdrop(
         height: 96,
         alignment: Alignment.topCenter,
         child: PageTopBar(title: 'Activity'),
@@ -174,7 +174,7 @@ class _PageTopBarDemoState extends State<PageTopBarDemo> {
           onChanged: (value) => setState(() => _trailing = value),
         ),
       ],
-      preview: PlaygroundColorBackdrop(
+      preview: PlaygroundContrastBackdrop(
         height: 96,
         alignment: Alignment.topCenter,
         child: PageTopBar(

@@ -73,7 +73,7 @@ class _UserPillExample extends StatelessWidget {
     title: 'UserPill',
     child: PenpotBoard(
       padding: EdgeInsets.zero,
-      child: PlaygroundColorBackdrop(
+      child: PlaygroundContrastBackdrop(
         height: 96,
         child: UserPill(
           name: 'Ilona T.',
@@ -172,7 +172,7 @@ class _UserPillPlaygroundState extends State<_UserPillPlayground> {
       ),
       PlaygroundOutput(label: 'presses', value: '$_presses'),
     ],
-    preview: PlaygroundColorBackdrop(
+    preview: PlaygroundContrastBackdrop(
       height: 96,
       child: UserPill(
         name: _name.isEmpty ? 'Ilona T.' : _name,

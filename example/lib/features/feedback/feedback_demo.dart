@@ -46,7 +46,7 @@ class _FeedbackDemoState extends State<FeedbackDemo> {
         onChanged: (value) => setState(() => _toastVariant = value),
       ),
     ],
-    preview: PlaygroundColorBackdrop(
+    preview: PlaygroundContrastBackdrop(
       height: 112,
       child: TsaiToast(
         variant: _toastVariant,

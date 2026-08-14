@@ -43,7 +43,7 @@ class _ModalDialogDemoState extends State<ModalDialogDemo> {
         TsaiButton(label: 'Open modal dialog', onPressed: () => _open(context)),
         PlaygroundOutput(label: 'result', value: _result),
       ],
-      preview: PlaygroundColorBackdrop(
+      preview: PlaygroundContrastBackdrop(
         height: _layout == TsaiModalDialogActionsLayout.row ? 360 : 410,
         child: TsaiModalDialog(
           title: _title,

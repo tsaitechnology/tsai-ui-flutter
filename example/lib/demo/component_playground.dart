@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:tsai_ui/tsai_ui.dart';
 
-/// A vivid token-backed surface for previewing blur and shadow effects.
-class PlaygroundColorBackdrop extends StatelessWidget {
-  const PlaygroundColorBackdrop({
+/// A sharp token-backed pattern for previewing blur and shadow effects.
+class PlaygroundContrastBackdrop extends StatelessWidget {
+  const PlaygroundContrastBackdrop({
     required this.child,
     required this.height,
     super.key,
@@ -18,27 +18,47 @@ class PlaygroundColorBackdrop extends StatelessWidget {
   Widget build(BuildContext context) {
     final tokens = TsaiThemeTokens.of(context);
     return SizedBox(
+      width: double.infinity,
       height: height,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(tokens.radii.innerMedium),
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: AlignmentDirectional.centerStart,
-              end: AlignmentDirectional.centerEnd,
-              colors: [
-                tokens.colors.actionPrimary,
-                tokens.colors.accentSuccess,
-                tokens.colors.accentError,
-                tokens.colors.surfaceAccentPressed,
-              ],
-            ),
+        child: CustomPaint(
+          painter: _ContrastPatternPainter(
+            baseColor: tokens.colors.canvas,
+            accentColor: tokens.colors.actionPrimary,
           ),
           child: Align(alignment: alignment, child: child),
         ),
       ),
     );
   }
+}
+
+class _ContrastPatternPainter extends CustomPainter {
+  const _ContrastPatternPainter({
+    required this.baseColor,
+    required this.accentColor,
+  });
+
+  final Color baseColor;
+  final Color accentColor;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    const tileExtent = 32.0;
+    final paint = Paint();
+    for (var y = 0.0, row = 0; y < size.height; y += tileExtent, row++) {
+      for (var x = 0.0, column = 0; x < size.width; x += tileExtent, column++) {
+        paint.color = (row + column).isEven ? baseColor : accentColor;
+        canvas.drawRect(Rect.fromLTWH(x, y, tileExtent, tileExtent), paint);
+      }
+    }
+  }
+
+  @override
+  bool shouldRepaint(_ContrastPatternPainter oldDelegate) =>
+      baseColor != oldDelegate.baseColor ||
+      accentColor != oldDelegate.accentColor;
 }
 
 class ComponentPlayground extends StatelessWidget {
