@@ -1,3 +1,9 @@
+## 0.4.10 - 2026-08-14
+
+### Maintenance
+
+- unify playground preview backgrounds ([eaf5ccd](https://github.com/tsaitechnology/tsai-ui-flutter/commit/eaf5ccd05d3c626c03e5cce2db354a8d509d8ce8))
+
 ## 0.4.9 - 2026-08-14
 
 ### Bug Fixes
