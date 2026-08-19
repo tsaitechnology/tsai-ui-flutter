@@ -1,3 +1,9 @@
+## 0.4.11 - 2026-08-19
+
+### Features
+
+- complete design system feedback updates ([b3dc6b7](https://github.com/tsaitechnology/tsai-ui-flutter/commit/b3dc6b714b486977b582d431e3406154532c5f29))
+
 ## 0.4.10 - 2026-08-14
 
 ### Maintenance
