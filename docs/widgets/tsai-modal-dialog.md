@@ -24,3 +24,5 @@ await showTsaiModalDialog<void>(
 Use the stacked action layout for narrow or long labels. The modal helper uses
 the theme overlay token, traps keyboard traversal inside the route, supports
 Escape/back dismissal, and returns values passed to `Navigator.pop`.
+The content uses 24-pixel outer padding, 16 pixels between icon and title, and
+32 pixels between the message and action block.

@@ -23,16 +23,17 @@ enum TsaiInlineAlertTone {
 class TsaiInlineAlert extends StatelessWidget {
   /// Creates an Inline Alert.
   const TsaiInlineAlert({
-    required this.title,
     required this.message,
-    required this.onDismiss,
     super.key,
+    this.title,
+    this.onDismiss,
     this.tone = TsaiInlineAlertTone.info,
     this.icon,
+    this.showDismiss = true,
   });
 
   /// Short alert heading.
-  final String title;
+  final String? title;
 
   /// Supporting explanation and next step.
   final String message;
@@ -45,6 +46,9 @@ class TsaiInlineAlert extends StatelessWidget {
 
   /// Optional replacement for the tone's default 20-pixel icon.
   final Widget? icon;
+
+  /// Whether the close control is shown.
+  final bool showDismiss;
 
   @override
   Widget build(BuildContext context) {
@@ -86,16 +90,18 @@ class TsaiInlineAlert extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Semantics(
-                      header: true,
-                      child: Text(
-                        title,
-                        style: tokens.typography.bodyMediumMedium.copyWith(
-                          color: tokens.colors.contentPrimary,
+                    if (title case final title?) ...[
+                      Semantics(
+                        header: true,
+                        child: Text(
+                          title,
+                          style: tokens.typography.bodyMediumMedium.copyWith(
+                            color: tokens.colors.contentPrimary,
+                          ),
                         ),
                       ),
-                    ),
-                    SizedBox(height: tokens.spacing.space2),
+                      SizedBox(height: tokens.spacing.space2),
+                    ],
                     Text(
                       message,
                       style: tokens.typography.captionMediumRegular.copyWith(
@@ -105,11 +111,13 @@ class TsaiInlineAlert extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(width: tokens.spacing.space4),
-              Transform.translate(
-                offset: const Offset(0, -6),
-                child: _AlertClose(onPressed: onDismiss),
-              ),
+              if (showDismiss) ...[
+                SizedBox(width: tokens.spacing.space4),
+                Transform.translate(
+                  offset: const Offset(0, -6),
+                  child: _AlertClose(onPressed: onDismiss),
+                ),
+              ],
             ],
           ),
         ),

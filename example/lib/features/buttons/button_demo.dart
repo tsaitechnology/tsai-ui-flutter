@@ -17,6 +17,7 @@ class ButtonDemo extends StatefulWidget {
 class _ButtonDemoState extends State<ButtonDemo> {
   TsaiButtonSize _size = TsaiButtonSize.large;
   TsaiButtonVariant _variant = TsaiButtonVariant.primary;
+  TsaiButtonTone _tone = TsaiButtonTone.standard;
   String _label = 'Button';
   String _semanticLabel = '';
   String _loadingSemanticLabel = 'Loading';
@@ -99,6 +100,12 @@ class _ButtonDemoState extends State<ButtonDemo> {
                 values: TsaiButtonSize.values,
                 onChanged: (value) => setState(() => _size = value),
               ),
+              PlaygroundSelectControl<TsaiButtonTone>(
+                label: 'tone',
+                value: _tone,
+                values: TsaiButtonTone.values,
+                onChanged: (value) => setState(() => _tone = value),
+              ),
               PlaygroundToggleControl(
                 label: 'enabled',
                 value: _enabled,
@@ -132,6 +139,7 @@ class _ButtonDemoState extends State<ButtonDemo> {
             preview: TsaiButton(
               label: _label,
               variant: _variant,
+              tone: _tone,
               size: _size,
               leadingIcon: _showIcon
                   ? const TsaiIcon(LucideIcons.plus, size: 16)

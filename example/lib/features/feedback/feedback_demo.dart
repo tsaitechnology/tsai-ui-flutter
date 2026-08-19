@@ -21,8 +21,12 @@ class _FeedbackDemoState extends State<FeedbackDemo> {
   TsaiProgressBarLabelPosition _labelPosition =
       TsaiProgressBarLabelPosition.top;
   TsaiSpinnerSize _spinnerSize = TsaiSpinnerSize.medium;
+  TsaiSkeletonSize _skeletonSize = TsaiSkeletonSize.medium;
   double _progress = 0.6;
   bool _showCardHeader = true;
+  bool _showAlertTitle = true;
+  bool _showAlertDismiss = true;
+  bool _animateSkeleton = true;
 
   @override
   Widget build(BuildContext context) => SingleChildScrollView(
@@ -32,6 +36,7 @@ class _FeedbackDemoState extends State<FeedbackDemo> {
       ComponentDemoSection.toast => _toastPlayground(),
       ComponentDemoSection.inlineAlert => _alertPlayground(),
       ComponentDemoSection.progress => _progressPlayground(),
+      ComponentDemoSection.skeleton => _skeletonPlayground(),
       ComponentDemoSection.card => _cardPlayground(),
       _ => const SizedBox.shrink(),
     },
@@ -66,12 +71,25 @@ class _FeedbackDemoState extends State<FeedbackDemo> {
         values: TsaiInlineAlertTone.values,
         onChanged: (value) => setState(() => _alertTone = value),
       ),
+      PlaygroundToggleControl(
+        label: 'title',
+        value: _showAlertTitle,
+        onChanged: (value) => setState(() => _showAlertTitle = value),
+      ),
+      PlaygroundToggleControl(
+        label: 'dismiss',
+        value: _showAlertDismiss,
+        onChanged: (value) => setState(() => _showAlertDismiss = value),
+      ),
     ],
     preview: TsaiInlineAlert(
       tone: _alertTone,
-      title: _alertTone.name[0].toUpperCase() + _alertTone.name.substring(1),
+      title: _showAlertTitle
+          ? _alertTone.name[0].toUpperCase() + _alertTone.name.substring(1)
+          : null,
       message: 'A concise status message with a clear next step.',
-      onDismiss: () {},
+      showDismiss: _showAlertDismiss,
+      onDismiss: _showAlertDismiss ? () {} : null,
     ),
   );
 
@@ -132,6 +150,65 @@ class _FeedbackDemoState extends State<FeedbackDemo> {
       title: _showCardHeader ? 'Card title' : null,
       trailing: _showCardHeader ? const Icon(LucideIcons.ellipsis) : null,
       child: const _CardContentExample(),
+    ),
+  );
+
+  Widget _skeletonPlayground() => ComponentPlayground(
+    controls: [
+      PlaygroundSelectControl<TsaiSkeletonSize>(
+        label: 'size',
+        value: _skeletonSize,
+        values: TsaiSkeletonSize.values,
+        onChanged: (value) => setState(() => _skeletonSize = value),
+      ),
+      PlaygroundToggleControl(
+        label: 'animate',
+        value: _animateSkeleton,
+        onChanged: (value) => setState(() => _animateSkeleton = value),
+      ),
+    ],
+    preview: SizedBox(
+      width: 342,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            children: [
+              TsaiSkeletonAvatar(
+                size: _skeletonSize,
+                animate: _animateSkeleton,
+                semanticLabel: 'Loading avatar',
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  children: [
+                    TsaiSkeletonText(
+                      size: _skeletonSize,
+                      animate: _animateSkeleton,
+                    ),
+                    const SizedBox(height: 8),
+                    FractionallySizedBox(
+                      widthFactor: 0.65,
+                      alignment: AlignmentDirectional.centerStart,
+                      child: TsaiSkeletonText(
+                        size: TsaiSkeletonSize.small,
+                        animate: _animateSkeleton,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 24),
+          TsaiSkeletonCard(
+            size: _skeletonSize,
+            animate: _animateSkeleton,
+            semanticLabel: 'Loading card',
+          ),
+        ],
+      ),
     ),
   );
 }

@@ -15,3 +15,5 @@ TsaiInlineAlert(
 
 Each tone uses its corresponding semantic accent, surface, and border tokens.
 Pass a custom `icon` only when the status meaning remains unambiguous.
+Omit `title` for a compact message-only alert. Set `showDismiss` to `false` to
+remove the close control while retaining the same tone and layout.

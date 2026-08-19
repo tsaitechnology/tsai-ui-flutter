@@ -90,6 +90,34 @@ void main() {
       greaterThan(74),
     );
   });
+
+  testWidgets('supports titleless, single-line, and hidden-dismiss variants', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      const _TestApp(
+        child: SizedBox(
+          width: 342,
+          child: TsaiInlineAlert(
+            message: 'Settings updated.',
+            showDismiss: false,
+          ),
+        ),
+      ),
+    );
+
+    expect(find.text('Settings updated.'), findsOneWidget);
+    expect(find.bySemanticsLabel('Settings updated.'), findsOneWidget);
+    expect(
+      find.byKey(const ValueKey<String>('tsai-inline-alert-close')),
+      findsNothing,
+    );
+    expect(
+      tester.widget<Text>(find.text('Settings updated.')).maxLines,
+      isNull,
+    );
+    expect(tester.takeException(), isNull);
+  });
 }
 
 Color _surface(TsaiColorTokens colors, TsaiInlineAlertTone tone) =>

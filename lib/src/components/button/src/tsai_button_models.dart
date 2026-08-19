@@ -15,6 +15,15 @@ enum TsaiButtonVariant {
   ghost,
 }
 
+/// Semantic color treatments supported by every button variant.
+enum TsaiButtonTone {
+  /// Standard accent or neutral treatment.
+  standard,
+
+  /// Destructive treatment for irreversible or high-risk actions.
+  danger,
+}
+
 /// Visual sizes defined by the Penpot button component.
 enum TsaiButtonSize {
   /// A 40-pixel visual control with a padded touch target.

@@ -2,7 +2,7 @@
 
 A token-driven action button with primary, secondary, outline, and ghost
 variants; medium and large sizes; loading, disabled, expanded, focus, and icon
-states.
+states. Every variant supports standard and danger tones.
 
 The medium size uses the 12-pixel `type.button.m` typography role. The outline
 variant uses the semantic `borderSubtle` hairline color.
@@ -13,6 +13,7 @@ variant uses the semantic `borderSubtle` hairline color.
 TsaiButton(
   label: 'Create account',
   variant: TsaiButtonVariant.primary,
+  tone: TsaiButtonTone.danger,
   size: TsaiButtonSize.large,
   leadingIcon: const TsaiIcon(LucideIcons.plus, size: 16),
   isLoading: saving,
@@ -25,3 +26,5 @@ activation and replaces the leading icon with a progress indicator. Use
 `semanticLabel` and `loadingSemanticLabel` when visible text is not sufficient.
 
 Variant defaults can be overridden globally with `TsaiButtonTheme`.
+Danger buttons use neutral disabled and loading colors so unavailable actions do
+not retain destructive emphasis.

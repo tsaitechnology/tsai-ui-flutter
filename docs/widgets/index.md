@@ -50,6 +50,7 @@ its live Flutter web example.
 - [TsaiToast](tsai-toast.md)
 - [TsaiInlineAlert](tsai-inline-alert.md)
 - [TsaiProgressBar and TsaiSpinner](tsai-progress.md)
+- [Tsai Skeleton](tsai-skeleton.md)
 - [TsaiCard](tsai-card.md)
 
 ## Layout

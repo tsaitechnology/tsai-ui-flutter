@@ -8,20 +8,23 @@ void main() {
   testWidgets('renders all variants in both sizes and themes', (tester) async {
     for (final theme in [TsaiTheme.light(), TsaiTheme.dark()]) {
       for (final variant in TsaiButtonVariant.values) {
-        for (final size in TsaiButtonSize.values) {
-          await _pump(
-            tester,
-            theme: theme,
-            child: TsaiButton(
-              label: 'Action',
-              variant: variant,
-              size: size,
-              onPressed: () {},
-            ),
-          );
+        for (final tone in TsaiButtonTone.values) {
+          for (final size in TsaiButtonSize.values) {
+            await _pump(
+              tester,
+              theme: theme,
+              child: TsaiButton(
+                label: 'Action',
+                variant: variant,
+                tone: tone,
+                size: size,
+                onPressed: () {},
+              ),
+            );
 
-          expect(find.text('Action'), findsOneWidget);
-          expect(tester.takeException(), isNull);
+            expect(find.text('Action'), findsOneWidget);
+            expect(tester.takeException(), isNull);
+          }
         }
       }
     }
@@ -82,6 +85,78 @@ void main() {
       ),
     );
   });
+
+  testWidgets(
+    'danger tone resolves every variant and neutral unavailable states',
+    (tester) async {
+      final colors = TsaiThemeTokens.dark.colors;
+      for (final variant in TsaiButtonVariant.values) {
+        await _pump(
+          tester,
+          child: TsaiButton(
+            key: ValueKey(variant),
+            label: variant.name,
+            variant: variant,
+            tone: TsaiButtonTone.danger,
+            onPressed: () {},
+          ),
+        );
+
+        final button = tester.widget<TextButton>(find.byType(TextButton));
+        expect(
+          button.style!.foregroundColor!.resolve({}),
+          variant == TsaiButtonVariant.primary
+              ? colors.contentOnActionPrimary
+              : colors.contentDanger,
+        );
+        expect(
+          _animatedBackgroundColor(
+            tester,
+            const ValueKey<String>('tsai-button-animated-background'),
+          ),
+          switch (variant) {
+            TsaiButtonVariant.primary => colors.actionDanger,
+            TsaiButtonVariant.secondary => colors.statusSurfaceError,
+            TsaiButtonVariant.outline ||
+            TsaiButtonVariant.ghost => colors.surface.withValues(alpha: 0),
+          },
+        );
+        if (variant == TsaiButtonVariant.outline) {
+          expect(
+            button.style!.side!.resolve({}),
+            BorderSide(
+              color: colors.statusBorderError,
+              width: TsaiThemeTokens.dark.borders.hairline,
+            ),
+          );
+        }
+      }
+
+      for (final loading in [false, true]) {
+        await _pump(
+          tester,
+          child: TsaiButton(
+            label: 'Unavailable',
+            tone: TsaiButtonTone.danger,
+            isLoading: loading,
+            onPressed: loading ? () {} : null,
+          ),
+        );
+        final button = tester.widget<TextButton>(find.byType(TextButton));
+        expect(
+          button.style!.foregroundColor!.resolve({WidgetState.disabled}),
+          colors.contentTertiary,
+        );
+        expect(
+          _animatedBackgroundColor(
+            tester,
+            const ValueKey<String>('tsai-button-animated-background'),
+          ),
+          colors.surfaceRaised,
+        );
+      }
+    },
+  );
 
   testWidgets('uses the Penpot icon gaps for both sizes', (tester) async {
     const gapKey = ValueKey<String>('tsai-button-layout-gap');

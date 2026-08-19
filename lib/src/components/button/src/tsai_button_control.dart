@@ -12,6 +12,7 @@ class TsaiButton extends StatelessWidget {
     required this.onPressed,
     super.key,
     this.variant = TsaiButtonVariant.primary,
+    this.tone = TsaiButtonTone.standard,
     this.size = TsaiButtonSize.large,
     this.leadingIcon,
     this.isLoading = false,
@@ -30,6 +31,9 @@ class TsaiButton extends StatelessWidget {
 
   /// Visual emphasis.
   final TsaiButtonVariant variant;
+
+  /// Semantic color treatment.
+  final TsaiButtonTone tone;
 
   /// Visual size.
   final TsaiButtonSize size;
@@ -162,6 +166,9 @@ class TsaiButton extends StatelessWidget {
 
   Color _backgroundColor(Set<WidgetState> states, TsaiColorTokens colors) {
     if (isLoading) {
+      if (tone == TsaiButtonTone.danger) {
+        return colors.surfaceRaised;
+      }
       return switch (variant) {
         TsaiButtonVariant.primary ||
         TsaiButtonVariant.secondary => colors.surfaceRaised,
@@ -170,6 +177,9 @@ class TsaiButton extends StatelessWidget {
       };
     }
     if (states.contains(WidgetState.disabled)) {
+      if (tone == TsaiButtonTone.danger) {
+        return colors.surfaceRaised;
+      }
       return switch (variant) {
         TsaiButtonVariant.primary ||
         TsaiButtonVariant.secondary => colors.surfaceRaised,
@@ -180,6 +190,18 @@ class TsaiButton extends StatelessWidget {
     final active =
         states.contains(WidgetState.pressed) ||
         states.contains(WidgetState.hovered);
+    if (tone == TsaiButtonTone.danger) {
+      return switch (variant) {
+        TsaiButtonVariant.primary =>
+          active ? colors.actionDangerPressed : colors.actionDanger,
+        TsaiButtonVariant.secondary =>
+          active ? colors.statusBorderError : colors.statusSurfaceError,
+        TsaiButtonVariant.outline || TsaiButtonVariant.ghost =>
+          active
+              ? colors.statusSurfaceError
+              : colors.surface.withValues(alpha: 0),
+      };
+    }
     return switch (variant) {
       TsaiButtonVariant.primary =>
         active ? colors.actionPrimaryPressed : colors.actionPrimary,
@@ -191,11 +213,20 @@ class TsaiButton extends StatelessWidget {
   }
 
   Color _foregroundColor(Set<WidgetState> states, TsaiColorTokens colors) {
+    if (tone == TsaiButtonTone.danger &&
+        (isLoading || states.contains(WidgetState.disabled))) {
+      return colors.contentTertiary;
+    }
     if (states.contains(WidgetState.disabled) && !isLoading) {
       return colors.contentTertiary;
     }
     if (isLoading) {
       return colors.contentPrimary;
+    }
+    if (tone == TsaiButtonTone.danger) {
+      return variant == TsaiButtonVariant.primary
+          ? colors.contentOnActionPrimary
+          : colors.contentDanger;
     }
     return variant == TsaiButtonVariant.primary
         ? colors.contentOnActionPrimary
@@ -211,7 +242,12 @@ class TsaiButton extends StatelessWidget {
       return BorderSide(color: colors.actionPrimarySoft, width: width * 2);
     }
     if (variant == TsaiButtonVariant.outline) {
-      return BorderSide(color: colors.borderSubtle, width: width);
+      return BorderSide(
+        color: tone == TsaiButtonTone.danger
+            ? colors.statusBorderError
+            : colors.borderSubtle,
+        width: width,
+      );
     }
     return BorderSide.none;
   }

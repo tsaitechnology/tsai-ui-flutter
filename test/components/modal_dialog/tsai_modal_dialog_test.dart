@@ -41,10 +41,10 @@ void main() {
       find.byKey(const ValueKey('tsai-modal-dialog-actions-row')),
     );
     expect(iconRect.top - dialogRect.top, 24);
-    expect(titleRect.top - iconRect.bottom, 8);
+    expect(titleRect.top - iconRect.bottom, 16);
     expect(messageRect.top - titleRect.bottom, 8);
-    expect(actionsRect.top - messageRect.bottom, 24);
-    expect(dialogRect.bottom - actionsRect.bottom, 40);
+    expect(actionsRect.top - messageRect.bottom, 32);
+    expect(dialogRect.bottom - actionsRect.bottom, 24);
     expect(
       find.byKey(const ValueKey('tsai-modal-dialog-filter')),
       findsOneWidget,
@@ -74,7 +74,7 @@ void main() {
     final stackedActionsRect = tester.getRect(
       find.byKey(const ValueKey('tsai-modal-dialog-actions-stacked')),
     );
-    expect(stackedDialogRect.bottom - stackedActionsRect.bottom, 40);
+    expect(stackedDialogRect.bottom - stackedActionsRect.bottom, 24);
   });
 
   testWidgets('modal helper opens and Escape dismisses the route', (

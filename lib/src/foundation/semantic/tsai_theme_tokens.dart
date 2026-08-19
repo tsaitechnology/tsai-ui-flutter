@@ -154,6 +154,7 @@ final class TsaiThemeTokens extends ThemeExtension<TsaiThemeTokens> {
       canvasGlass: colors.backgroundGlass,
       surface: colors.surface1,
       surfaceRaised: colors.surface2,
+      surfaceSkeleton: colors.surfaceSkeleton,
       surfaceGlass: colors.surfaceGlass,
       surfaceAccent: colors.surfaceIndigo,
       surfaceAccentPressed: colors.surfaceIndigoDeep,
@@ -170,6 +171,9 @@ final class TsaiThemeTokens extends ThemeExtension<TsaiThemeTokens> {
       actionPrimary: colors.accent,
       actionPrimaryPressed: colors.accentDeep,
       actionPrimarySoft: colors.accentLight,
+      actionDanger: colors.semanticSolidError,
+      actionDangerPressed: colors.semanticSolidErrorDeep,
+      contentDanger: colors.semanticTextError,
       accentInfo: colors.semanticAccentInfo,
       accentSuccess: colors.semanticAccentSuccess,
       accentError: colors.semanticAccentError,
@@ -236,6 +240,10 @@ final class TsaiColorTokens {
     required this.iconOnAction,
     required this.iconBright,
     this.surfaceAccentGlassDim = const Color(0x4D31345E),
+    this.surfaceSkeleton = const Color(0xFF1C1C20),
+    this.actionDanger = const Color(0xFFEF4444),
+    this.actionDangerPressed = const Color(0xFFDC2626),
+    this.contentDanger = const Color(0xFFFCA5A5),
     this.accentInfo = const Color(0xFF60A5FA),
     this.accentWarning = const Color(0xFFFBBF24),
     this.statusSurfaceInfo = const Color(0xFF141D28),
@@ -277,6 +285,9 @@ final class TsaiColorTokens {
   /// Dim translucent accent surface used by Toast.
   final Color surfaceAccentGlassDim;
 
+  /// Neutral placeholder surface used by Skeleton components.
+  final Color surfaceSkeleton;
+
   /// Primary text content.
   final Color contentPrimary;
 
@@ -303,6 +314,15 @@ final class TsaiColorTokens {
 
   /// Lighter accent used for focus and emphasis.
   final Color actionPrimarySoft;
+
+  /// Destructive primary action.
+  final Color actionDanger;
+
+  /// Pressed destructive primary action.
+  final Color actionDangerPressed;
+
+  /// Destructive text and icon content.
+  final Color contentDanger;
 
   /// Informational status accent.
   final Color accentInfo;
@@ -390,6 +410,7 @@ final class TsaiColorTokens {
       other.surfaceAccentGlassDim,
       t,
     )!,
+    surfaceSkeleton: Color.lerp(surfaceSkeleton, other.surfaceSkeleton, t)!,
     contentPrimary: Color.lerp(contentPrimary, other.contentPrimary, t)!,
     contentAccent: Color.lerp(contentAccent, other.contentAccent, t)!,
     contentSecondary: Color.lerp(contentSecondary, other.contentSecondary, t)!,
@@ -415,6 +436,13 @@ final class TsaiColorTokens {
       other.actionPrimarySoft,
       t,
     )!,
+    actionDanger: Color.lerp(actionDanger, other.actionDanger, t)!,
+    actionDangerPressed: Color.lerp(
+      actionDangerPressed,
+      other.actionDangerPressed,
+      t,
+    )!,
+    contentDanger: Color.lerp(contentDanger, other.contentDanger, t)!,
     accentInfo: Color.lerp(accentInfo, other.accentInfo, t)!,
     accentSuccess: Color.lerp(accentSuccess, other.accentSuccess, t)!,
     accentError: Color.lerp(accentError, other.accentError, t)!,

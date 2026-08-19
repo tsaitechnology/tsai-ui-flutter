@@ -50,6 +50,30 @@ void main() {
         TsaiThemeTokens.dark.colors.surfaceAccentGlassDim,
         const Color(0x4D31345E),
       );
+      expect(
+        TsaiThemeTokens.light.colors.surfaceSkeleton,
+        const Color(0xFFE6E7EE),
+      );
+      expect(
+        TsaiThemeTokens.dark.colors.surfaceSkeleton,
+        const Color(0xFF1C1C20),
+      );
+      expect(
+        TsaiThemeTokens.light.colors.actionDanger,
+        const Color(0xFFEF4444),
+      );
+      expect(
+        TsaiThemeTokens.dark.colors.actionDangerPressed,
+        const Color(0xFFDC2626),
+      );
+      expect(
+        TsaiThemeTokens.light.colors.contentDanger,
+        const Color(0xFFDC2626),
+      );
+      expect(
+        TsaiThemeTokens.dark.colors.contentDanger,
+        const Color(0xFFFCA5A5),
+      );
       expect(TsaiThemeTokens.light.colors.accentInfo, const Color(0xFF3B82F6));
       expect(TsaiThemeTokens.dark.colors.accentInfo, const Color(0xFF60A5FA));
       expect(

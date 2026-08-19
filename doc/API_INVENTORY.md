@@ -18,7 +18,7 @@ import 'package:tsai_ui/tsai_icons.dart';
 | --- | --- | --- |
 | `TsaiTheme` | Installs light/dark themes | Public |
 | `TsaiThemeTokens` | Complete semantic schema | Public |
-| `TsaiColorTokens` | Semantic color roles, including status accents/surfaces/borders, glass surfaces, modal scrim, and background glow | Public |
+| `TsaiColorTokens` | Semantic color roles, including danger actions/content, Skeleton surfaces, status accents/surfaces/borders, glass surfaces, modal scrim, and background glow | Public |
 | `TsaiGradientTokens` | Theme-aware top and bottom scrim assets | Public |
 | `TsaiTypographyTokens` | Typography roles | Public |
 | `TsaiSpacingTokens` | Spacing scale | Public |
@@ -39,6 +39,7 @@ import 'package:tsai_ui/tsai_icons.dart';
 | Typography size and weight enums | Restrict widgets to valid Penpot roles | Public |
 | `TsaiButton` | Action component | Public |
 | `TsaiButtonVariant` | Primary/secondary/outline/ghost | Public |
+| `TsaiButtonTone` | Standard/danger semantic color treatment | Public |
 | `TsaiButtonSize` | Medium/large | Public |
 | `TsaiButtonTheme` | Global Flutter-native overrides | Public |
 | `TsaiLink` | Compact inline action with optional leading/trailing icons | Public |
@@ -91,12 +92,16 @@ import 'package:tsai_ui/tsai_icons.dart';
 | `TsaiToastVariant` | Undo, action, and informational Toast compositions | Public |
 | `TsaiToast` | Compact glass notification with action, dismissal, or countdown affordances | Public |
 | `TsaiInlineAlertTone` | Info, success, error, and warning alert tones | Public |
-| `TsaiInlineAlert` | Dismissible token-backed inline status message | Public |
+| `TsaiInlineAlert` | Token-backed inline status message with optional title and dismiss control | Public |
 | `TsaiProgressBarState` | Default, success, and error progress states | Public |
 | `TsaiProgressBarLabelPosition` | Left, right, top, and both-label progress layouts | Public |
 | `TsaiProgressBar` | Determinate four-pixel progress track with Penpot label arrangements | Public |
 | `TsaiSpinnerSize` | 16, 24, and 32-pixel spinner sizes | Public |
 | `TsaiSpinner` | Animated accent loading indicator | Public |
+| `TsaiSkeletonSize` | Small, medium, and large placeholder sizes | Public |
+| `TsaiSkeletonText` | Flexible-width text loading placeholder | Public |
+| `TsaiSkeletonAvatar` | Circular avatar loading placeholder | Public |
+| `TsaiSkeletonCard` | Flexible-width card loading placeholder | Public |
 | `TsaiCard` | Token-backed card surface with optional header and arbitrary content | Public |
 | `LucideIcons` | Opt-in icon catalog re-export | External contract |
 

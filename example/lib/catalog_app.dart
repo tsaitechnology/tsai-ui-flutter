@@ -172,6 +172,7 @@ class _CatalogAppState extends State<CatalogApp> {
         ComponentDemoSection.toast,
         ComponentDemoSection.inlineAlert,
         ComponentDemoSection.progress,
+        ComponentDemoSection.skeleton,
         ComponentDemoSection.card,
       ])
         section.route: (context) => FeedbackDemoScreen(

@@ -34,6 +34,7 @@ abstract final class TsaiReferenceTokens {
     backgroundGlass: Color(0xCCFAFAFA),
     surface1: Color(0xFFFFFFFF),
     surface2: Color(0xFFF4F4F5),
+    surfaceSkeleton: Color(0xFFE6E7EE),
     surfaceGlass: Color(0xCCEFEFF1),
     textPrimary: Color(0xFF1D1D1E),
     textAccent: Color(0xFF4F46E5),
@@ -47,6 +48,9 @@ abstract final class TsaiReferenceTokens {
     semanticAccentInfo: Color(0xFF3B82F6),
     semanticAccentSuccess: Color(0xFF10B981),
     semanticAccentError: Color(0xFFEF4444),
+    semanticSolidError: Color(0xFFEF4444),
+    semanticSolidErrorDeep: Color(0xFFDC2626),
+    semanticTextError: Color(0xFFDC2626),
     semanticAccentWarning: Color(0xFFF59E0B),
     semanticSurfaceInfo: Color(0xFFEBF0FA),
     semanticSurfaceSuccess: Color(0xFFE8F5F1),
@@ -76,6 +80,7 @@ abstract final class TsaiReferenceTokens {
     backgroundGlass: Color(0xCC0A0A0B),
     surface1: Color(0xFF15161F),
     surface2: Color(0xFF1C1C20),
+    surfaceSkeleton: Color(0xFF1C1C20),
     surfaceGlass: Color(0xCC141416),
     textPrimary: Color(0xFFECECEC),
     textAccent: Color(0xFFA5B4FC),
@@ -89,6 +94,9 @@ abstract final class TsaiReferenceTokens {
     semanticAccentInfo: Color(0xFF60A5FA),
     semanticAccentSuccess: Color(0xFF34D399),
     semanticAccentError: Color(0xFFF87171),
+    semanticSolidError: Color(0xFFEF4444),
+    semanticSolidErrorDeep: Color(0xFFDC2626),
+    semanticTextError: Color(0xFFFCA5A5),
     semanticAccentWarning: Color(0xFFFBBF24),
     semanticSurfaceInfo: Color(0xFF141D28),
     semanticSurfaceSuccess: Color(0xFF0F221C),
@@ -121,6 +129,7 @@ final class TsaiReferenceColors {
     required this.backgroundGlass,
     required this.surface1,
     required this.surface2,
+    required this.surfaceSkeleton,
     required this.surfaceGlass,
     required this.textPrimary,
     required this.textAccent,
@@ -134,6 +143,9 @@ final class TsaiReferenceColors {
     required this.semanticAccentInfo,
     required this.semanticAccentSuccess,
     required this.semanticAccentError,
+    required this.semanticSolidError,
+    required this.semanticSolidErrorDeep,
+    required this.semanticTextError,
     required this.semanticAccentWarning,
     required this.semanticSurfaceInfo,
     required this.semanticSurfaceSuccess,
@@ -162,6 +174,7 @@ final class TsaiReferenceColors {
   final Color backgroundGlass;
   final Color surface1;
   final Color surface2;
+  final Color surfaceSkeleton;
   final Color surfaceGlass;
   final Color textPrimary;
   final Color textAccent;
@@ -175,6 +188,9 @@ final class TsaiReferenceColors {
   final Color semanticAccentInfo;
   final Color semanticAccentSuccess;
   final Color semanticAccentError;
+  final Color semanticSolidError;
+  final Color semanticSolidErrorDeep;
+  final Color semanticTextError;
   final Color semanticAccentWarning;
   final Color semanticSurfaceInfo;
   final Color semanticSurfaceSuccess;

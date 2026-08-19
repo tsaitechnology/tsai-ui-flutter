@@ -18,6 +18,7 @@ export 'src/components/modal_dialog/tsai_modal_dialog.dart';
 export 'src/components/progress/tsai_progress.dart';
 export 'src/components/select/tsai_select.dart';
 export 'src/components/selection/tsai_selection_controls.dart';
+export 'src/components/skeleton/tsai_skeleton.dart';
 export 'src/components/tabs/tsai_tabs.dart';
 export 'src/components/toast/tsai_toast.dart';
 export 'src/components/top_bar/tsai_top_bar.dart';

@@ -81,7 +81,7 @@ class TsaiModalDialog extends StatelessWidget {
                     tokens.spacing.space24,
                     tokens.spacing.space24,
                     tokens.spacing.space24,
-                    tokens.spacing.space24 + tokens.spacing.space16,
+                    tokens.spacing.space24,
                   ),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -97,7 +97,7 @@ class TsaiModalDialog extends StatelessWidget {
                         ),
                         child: icon,
                       ),
-                      SizedBox(height: tokens.spacing.space8),
+                      SizedBox(height: tokens.spacing.space16),
                       Semantics(
                         header: true,
                         child: Text(
@@ -117,7 +117,10 @@ class TsaiModalDialog extends StatelessWidget {
                         ),
                       ),
                       if (primaryAction != null || secondaryAction != null) ...[
-                        SizedBox(height: tokens.spacing.space24),
+                        SizedBox(
+                          height:
+                              tokens.spacing.space24 + tokens.spacing.space8,
+                        ),
                         _DialogActions(
                           layout: actionsLayout,
                           primaryAction: primaryAction,

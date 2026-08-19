@@ -207,6 +207,7 @@ void main() {
     ComponentDemoSection.toast,
     ComponentDemoSection.inlineAlert,
     ComponentDemoSection.progress,
+    ComponentDemoSection.skeleton,
     ComponentDemoSection.card,
   ]) {
     testWidgets('opens ${section.label} in its playground', (tester) async {

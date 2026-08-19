@@ -175,6 +175,11 @@ enum ComponentDemoSection {
     route: '/feedback/progress',
     category: ComponentDemoCategory.uiBlocks,
   ),
+  skeleton(
+    label: 'Skeleton',
+    route: '/feedback/skeleton',
+    category: ComponentDemoCategory.uiBlocks,
+  ),
   card(
     label: 'Card',
     route: '/ui-blocks/card',
