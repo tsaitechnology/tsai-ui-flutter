@@ -130,6 +130,39 @@ void main() {
     await tester.pump();
     expect(find.text('Mobile control'), findsOneWidget);
   });
+
+  testWidgets('uses floating placeholders for input and select controls', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: TsaiTheme.dark(),
+        home: Scaffold(
+          body: ComponentPlayground(
+            controls: [
+              PlaygroundTextControl(
+                label: 'fieldName',
+                value: '',
+                onChanged: _noopString,
+              ),
+              PlaygroundSelectControl<String>(
+                label: 'displayMode',
+                value: 'compact',
+                values: const ['compact', 'expanded'],
+                onChanged: _noopString,
+              ),
+            ],
+            preview: const SizedBox.shrink(),
+          ),
+        ),
+      ),
+    );
+
+    expect(find.text('Field Name'), findsOneWidget);
+    expect(find.text('Display Mode'), findsOneWidget);
+    expect(find.byType(TsaiInput), findsOneWidget);
+    expect(find.byType(TsaiSelect<String>), findsOneWidget);
+  });
 }
 
 void _noopString(String value) {}

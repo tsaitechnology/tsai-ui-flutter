@@ -284,7 +284,7 @@ class PlaygroundField extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            _humanizeLabel(label),
+            humanize(label),
             style: tokens.typography.captionMediumRegular.copyWith(
               color: tokens.colors.contentSecondary,
             ),
@@ -296,7 +296,7 @@ class PlaygroundField extends StatelessWidget {
     );
   }
 
-  static String _humanizeLabel(String value) {
+  static String humanize(String value) {
     final words = value
         .replaceAllMapped(
           RegExp(r'([a-z])([A-Z])'),
@@ -326,14 +326,12 @@ class PlaygroundTextControl extends StatelessWidget {
   final ValueChanged<String> onChanged;
 
   @override
-  Widget build(BuildContext context) => PlaygroundField(
-    label: label,
-    child: TsaiInput(
-      controller: controller,
-      initialValue: controller == null ? value : null,
-      showClearButton: false,
-      onChanged: onChanged,
-    ),
+  Widget build(BuildContext context) => TsaiInput(
+    placeholder: PlaygroundField.humanize(label),
+    controller: controller,
+    initialValue: controller == null ? value : null,
+    showClearButton: false,
+    onChanged: onChanged,
   );
 }
 
@@ -354,25 +352,23 @@ class PlaygroundSelectControl<T> extends StatelessWidget {
   final ValueChanged<T> onChanged;
 
   @override
-  Widget build(BuildContext context) => PlaygroundField(
-    label: label,
-    child: TsaiSelect<T>(
-      value: value,
-      options: [
-        for (var index = 0; index < values.length; index++)
-          TsaiSelectOption<T>(
-            value: values[index],
-            label: labels?[index] ?? _defaultLabel(values[index]),
-          ),
-      ],
-      showClearButton: false,
-      presentation: TsaiSelectPresentation.menu,
-      onChanged: (value) {
-        if (value != null) {
-          onChanged(value);
-        }
-      },
-    ),
+  Widget build(BuildContext context) => TsaiSelect<T>(
+    placeholder: PlaygroundField.humanize(label),
+    value: value,
+    options: [
+      for (var index = 0; index < values.length; index++)
+        TsaiSelectOption<T>(
+          value: values[index],
+          label: labels?[index] ?? _defaultLabel(values[index]),
+        ),
+    ],
+    showClearButton: false,
+    presentation: TsaiSelectPresentation.menu,
+    onChanged: (value) {
+      if (value != null) {
+        onChanged(value);
+      }
+    },
   );
 
   static String _defaultLabel(Object? value) =>
