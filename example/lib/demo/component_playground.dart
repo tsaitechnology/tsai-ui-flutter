@@ -238,8 +238,8 @@ class _ComponentPlaygroundState extends State<ComponentPlayground> {
                         baseColor: tokens.colors.surface,
                         accentColor: Color.lerp(
                           tokens.colors.surface,
-                          tokens.colors.borderStrong,
-                          0.35,
+                          tokens.colors.contentPrimary,
+                          0.14,
                         )!,
                       )
                     : null,
