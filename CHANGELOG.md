@@ -1,3 +1,10 @@
+## 0.6.2 - 2026-08-21
+
+### Maintenance
+
+- fix example playground layout constraints ([09341f5](https://github.com/tsaitechnology/tsai-ui-flutter/commit/09341f540c8bdcab6a275a29bcb0ca595fed8115))
+- simplify bottom navigation playground preview ([c1bfdb8](https://github.com/tsaitechnology/tsai-ui-flutter/commit/c1bfdb8c592950793ebb385a783d9536e89b1037))
+
 ## 0.6.1 - 2026-08-21
 
 ### Maintenance
