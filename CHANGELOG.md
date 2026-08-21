@@ -1,3 +1,9 @@
+## 0.5.0 - 2026-08-21
+
+### Maintenance
+
+- Redesign examples playground experience ([a442e47](https://github.com/tsaitechnology/tsai-ui-flutter/commit/a442e47e0d89e022c764068e5fcab7b1309052ce))
+
 ## 0.4.11 - 2026-08-19
 
 ### Features
