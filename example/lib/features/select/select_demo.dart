@@ -11,47 +11,17 @@ class SelectDemo extends StatefulWidget {
 }
 
 class _SelectDemoState extends State<SelectDemo> {
-  static const _penpotOptions = [
-    TsaiSelectOption(value: 'option', label: 'Option'),
-    TsaiSelectOption(value: 'second', label: 'Second option'),
-  ];
-  static const _countryOptions = [
-    TsaiSelectOption(
-      value: 'us',
-      label: 'United States',
-      icon: TsaiIcon.emoji('🇺🇸', size: 20),
-    ),
-    TsaiSelectOption(
-      value: 'uy',
-      label: 'Uruguay',
-      icon: TsaiIcon.emoji('🇺🇾', size: 20),
-    ),
-    TsaiSelectOption(
-      value: 'br',
-      label: 'Brazil',
-      icon: TsaiIcon.emoji('🇧🇷', size: 20),
-    ),
-    TsaiSelectOption(
-      value: 'ar',
-      label: 'Argentina',
-      icon: TsaiIcon.emoji('🇦🇷', size: 20),
-    ),
-  ];
-
   String? _value;
-  String? _country = 'us';
   String _firstOption = 'Option';
   String _secondOption = 'Second option';
   String _thirdOption = 'Disabled option';
   String _placeholder = 'Label';
   String _description = 'Description';
   String _errorText = '';
-  String _semanticLabel = '';
   bool _enabled = true;
   bool _showClear = true;
   bool _showIcons = false;
   bool _thirdOptionEnabled = false;
-  bool _autofocus = false;
   bool _labeledPlaceholder = true;
   double _menuMaxHeight = 320;
   TsaiSelectPresentation _presentation = TsaiSelectPresentation.adaptive;
@@ -83,44 +53,6 @@ class _SelectDemoState extends State<SelectDemo> {
       key: const ValueKey<String>('select-demo'),
       padding: EdgeInsets.all(tokens.spacing.space24),
       children: [
-        const TsaiTextHeading('Variants', size: TsaiHeadingSize.small),
-        SizedBox(height: tokens.spacing.space16),
-        PenpotExample(
-          title: 'Select',
-          child: PenpotBoard(
-            width: 380,
-            padding: const EdgeInsets.all(28),
-            child: Column(
-              children: [
-                _variant(value: null),
-                _gap26,
-                _variant(value: null),
-                _gap26,
-                _variant(value: null),
-                _gap26,
-                _variant(value: 'option'),
-                _gap26,
-                _variant(value: 'option', error: true),
-                _gap26,
-                _variant(value: 'option', enabled: false),
-              ],
-            ),
-          ),
-        ),
-        SizedBox(height: tokens.spacing.space24),
-        PenpotExample(
-          title: 'Country select',
-          child: PenpotBoard(
-            width: 380,
-            padding: const EdgeInsets.all(28),
-            child: TsaiSelect<String>(
-              options: _countryOptions,
-              value: _country,
-              placeholder: 'Country',
-              onChanged: (value) => setState(() => _country = value),
-            ),
-          ),
-        ),
         ComponentPlayground(
           controls: [
             _TextProperty(
@@ -139,22 +71,17 @@ class _SelectDemoState extends State<SelectDemo> {
               onChanged: (value) => setState(() => _errorText = value),
             ),
             _TextProperty(
-              label: 'semanticLabel',
-              value: _semanticLabel,
-              onChanged: (value) => setState(() => _semanticLabel = value),
-            ),
-            _TextProperty(
-              label: 'options[0].label',
+              label: 'First option label',
               value: _firstOption,
               onChanged: (value) => setState(() => _firstOption = value),
             ),
             _TextProperty(
-              label: 'options[1].label',
+              label: 'Second option label',
               value: _secondOption,
               onChanged: (value) => setState(() => _secondOption = value),
             ),
             _TextProperty(
-              label: 'options[2].label',
+              label: 'Disabled option label',
               value: _thirdOption,
               onChanged: (value) => setState(() => _thirdOption = value),
             ),
@@ -208,19 +135,14 @@ class _SelectDemoState extends State<SelectDemo> {
               onChanged: (value) => setState(() => _showClear = value),
             ),
             _Toggle(
-              label: 'option.icon',
+              label: 'Show option icons',
               value: _showIcons,
               onChanged: (value) => setState(() => _showIcons = value),
             ),
             _Toggle(
-              label: 'options[2].enabled',
+              label: 'Enable third option',
               value: _thirdOptionEnabled,
               onChanged: (value) => setState(() => _thirdOptionEnabled = value),
-            ),
-            _Toggle(
-              label: 'autofocus',
-              value: _autofocus,
-              onChanged: (value) => setState(() => _autofocus = value),
             ),
             _EventProperty(_event),
           ],
@@ -231,9 +153,7 @@ class _SelectDemoState extends State<SelectDemo> {
             labeledPlaceholder: _labeledPlaceholder,
             description: _emptyToNull(_description),
             errorText: _emptyToNull(_errorText),
-            semanticLabel: _emptyToNull(_semanticLabel),
             showClearButton: _showClear,
-            autofocus: _autofocus,
             menuMaxHeight: _menuMaxHeight,
             presentation: _presentation,
             onFocusChange: (value) =>
@@ -251,43 +171,6 @@ class _SelectDemoState extends State<SelectDemo> {
       ],
     );
   }
-
-  Widget _variant({
-    required String? value,
-    bool enabled = true,
-    bool error = false,
-  }) => _SelectVariant(initialValue: value, enabled: enabled, error: error);
-}
-
-class _SelectVariant extends StatefulWidget {
-  const _SelectVariant({
-    required this.initialValue,
-    required this.enabled,
-    required this.error,
-  });
-
-  final String? initialValue;
-  final bool enabled;
-  final bool error;
-
-  @override
-  State<_SelectVariant> createState() => _SelectVariantState();
-}
-
-class _SelectVariantState extends State<_SelectVariant> {
-  late String? _value = widget.initialValue;
-
-  @override
-  Widget build(BuildContext context) => TsaiSelect<String>(
-    options: _SelectDemoState._penpotOptions,
-    value: _value,
-    placeholder: 'Label',
-    description: 'Description',
-    errorText: widget.error ? 'Description' : null,
-    onChanged: widget.enabled
-        ? (value) => setState(() => _value = value)
-        : null,
-  );
 }
 
 class _TextProperty extends StatelessWidget {
@@ -332,7 +215,5 @@ class _EventProperty extends StatelessWidget {
   Widget build(BuildContext context) =>
       PlaygroundOutput(label: 'Last callback', value: value);
 }
-
-const _gap26 = SizedBox(height: 26);
 
 String? _emptyToNull(String value) => value.isEmpty ? null : value;

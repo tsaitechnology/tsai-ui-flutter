@@ -72,12 +72,12 @@ class _FeedbackDemoState extends State<FeedbackDemo> {
         onChanged: (value) => setState(() => _alertTone = value),
       ),
       PlaygroundToggleControl(
-        label: 'title',
+        label: 'Show title',
         value: _showAlertTitle,
         onChanged: (value) => setState(() => _showAlertTitle = value),
       ),
       PlaygroundToggleControl(
-        label: 'dismiss',
+        label: 'Dismissible',
         value: _showAlertDismiss,
         onChanged: (value) => setState(() => _showAlertDismiss = value),
       ),
@@ -109,13 +109,13 @@ class _FeedbackDemoState extends State<FeedbackDemo> {
         onChanged: (value) => setState(() => _progressState = value),
       ),
       PlaygroundSelectControl<TsaiProgressBarLabelPosition>(
-        label: 'labelPosition',
+        label: 'Label position',
         value: _labelPosition,
         values: TsaiProgressBarLabelPosition.values,
         onChanged: (value) => setState(() => _labelPosition = value),
       ),
       PlaygroundSelectControl<TsaiSpinnerSize>(
-        label: 'spinnerSize',
+        label: 'Spinner size',
         value: _spinnerSize,
         values: TsaiSpinnerSize.values,
         onChanged: (value) => setState(() => _spinnerSize = value),

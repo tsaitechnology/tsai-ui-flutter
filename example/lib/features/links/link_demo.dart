@@ -25,25 +25,6 @@ class _LinkDemoState extends State<LinkDemo> {
       key: const ValueKey<String>('link-demo'),
       padding: EdgeInsets.all(tokens.spacing.space24),
       children: [
-        const TsaiTextHeading('Variants', size: TsaiHeadingSize.small),
-        SizedBox(height: tokens.spacing.space16),
-        Wrap(
-          spacing: tokens.spacing.space24,
-          runSpacing: tokens.spacing.space16,
-          children: [
-            TsaiLink(
-              label: 'Default',
-              leadingIcon: const TsaiIcon(LucideIcons.plus, size: 16),
-              onPressed: () {},
-            ),
-            const TsaiLink(
-              label: 'Disabled',
-              trailingIcon: TsaiIcon(LucideIcons.chevron_right, size: 16),
-              onPressed: null,
-            ),
-          ],
-        ),
-        SizedBox(height: tokens.spacing.space32),
         ComponentPlayground(
           controls: [
             PlaygroundTextControl(
@@ -57,17 +38,17 @@ class _LinkDemoState extends State<LinkDemo> {
               onChanged: (value) => setState(() => _enabled = value),
             ),
             PlaygroundToggleControl(
-              label: 'leadingIcon',
+              label: 'Leading icon',
               value: _leadingIcon,
               onChanged: (value) => setState(() => _leadingIcon = value),
             ),
             PlaygroundToggleControl(
-              label: 'trailingIcon',
+              label: 'Trailing icon',
               value: _trailingIcon,
               onChanged: (value) => setState(() => _trailingIcon = value),
             ),
             PlaygroundOutput(
-              label: 'onPressed',
+              label: 'Press count',
               value: 'Called $_pressCount times',
             ),
           ],

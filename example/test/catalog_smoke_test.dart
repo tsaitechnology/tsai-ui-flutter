@@ -3,14 +3,14 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:tsai_ui/tsai_ui.dart';
 import 'package:tsai_ui_example/catalog_app.dart';
 import 'package:tsai_ui_example/demo/component_demo_window.dart';
-import 'package:tsai_ui_example/features/app_examples/app_with_two_pages_example.dart';
+import 'package:tsai_ui_example/demo/component_playground.dart';
+import 'package:tsai_ui_example/features/app_examples/multi_screen_app_example.dart';
 import 'package:tsai_ui_example/features/buttons/button_demo.dart';
 import 'package:tsai_ui_example/features/bottom_nav_bar/bottom_nav_bar_demo.dart';
 import 'package:tsai_ui_example/features/inputs/input_demo.dart';
 import 'package:tsai_ui_example/features/links/link_demo.dart';
 import 'package:tsai_ui_example/features/select/select_demo.dart';
 import 'package:tsai_ui_example/features/selection_controls/selection_controls_demo.dart';
-import 'package:tsai_ui_example/features/tabs/tabs_demo.dart';
 import 'package:tsai_ui_example/features/top_bars/top_bar_demo.dart';
 import 'package:tsai_ui_example/features/typography/typography_demo.dart';
 import 'package:tsai_ui_example/features/typography/typography_widget_demo_screen.dart';
@@ -47,7 +47,7 @@ void main() {
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 400));
     expect(find.text('Buttons'), findsOneWidget);
-    expect(find.text('Default'), findsOneWidget);
+    expect(find.text('Playground'), findsOneWidget);
 
     await tester.tap(find.byTooltip('Open component menu').last);
     await tester.pump();
@@ -72,7 +72,7 @@ void main() {
     await tester.pumpWidget(const CatalogApp());
 
     expect(find.text('Buttons'), findsOneWidget);
-    expect(find.text('Default'), findsOneWidget);
+    expect(find.text('Playground'), findsOneWidget);
     expect(find.byType(HomeTopBar), findsOneWidget);
 
     await tester.tap(find.byTooltip('Use light theme'));
@@ -126,6 +126,36 @@ void main() {
     await tester.pump(const Duration(milliseconds: 400));
     expect(find.byType(Drawer), findsOneWidget);
     expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('every component route has one desktop playground', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(1280, 900);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await _verifyComponentRoutes(
+      tester,
+      sizeLabel: 'desktop',
+      controlsVisible: true,
+    );
+  });
+
+  testWidgets('every component route has one mobile playground', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(390, 844);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await _verifyComponentRoutes(
+      tester,
+      sizeLabel: 'mobile',
+      controlsVisible: false,
+    );
   });
 
   for (final role in TypographyWidgetRole.values) {
@@ -246,37 +276,37 @@ void main() {
     expect(find.byType(PageWithTopBar), findsWidgets);
   });
 
-  testWidgets('opens five bottom-nav-bar backdrop examples', (tester) async {
+  testWidgets('opens the configurable bottom-nav-bar playground', (
+    tester,
+  ) async {
     await tester.pumpWidget(const CatalogApp(initialRoute: '/bottom-nav-bar'));
     await tester.pumpAndSettle();
 
     expect(find.byType(BottomNavBarDemo), findsOneWidget);
-    expect(find.text('1 destination'), findsOneWidget);
-    expect(find.byType(BottomNavBar), findsWidgets);
-
-    await tester.scrollUntilVisible(
-      find.text('5 destinations'),
-      300,
-      scrollable: find.byType(Scrollable).last,
+    expect(find.byType(ComponentPlayground), findsOneWidget);
+    expect(find.byType(BottomNavBar), findsOneWidget);
+    final countControl = tester.widget<PlaygroundSelectControl<int>>(
+      find.byType(PlaygroundSelectControl<int>),
     );
-    expect(find.text('5 destinations'), findsOneWidget);
-    expect(find.byType(BottomNavBar), findsWidgets);
+    expect(countControl.values, const [1, 2, 3, 4, 5]);
   });
 
-  testWidgets('app example overlays navigation and switches two pages', (
-    tester,
-  ) async {
+  testWidgets('multi-screen app showcases complete UI flows', (tester) async {
     tester.view.physicalSize = const Size(390, 844);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.resetPhysicalSize);
     addTearDown(tester.view.resetDevicePixelRatio);
+    Future<void> pumpUi() async {
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
+    }
 
     await tester.pumpWidget(
-      const CatalogApp(initialRoute: '/app-examples/two-pages'),
+      const CatalogApp(initialRoute: '/app-examples/multi-screen'),
     );
-    await tester.pumpAndSettle();
+    await pumpUi();
 
-    expect(find.byType(AppWithTwoPagesExample), findsOneWidget);
+    expect(find.byType(MultiScreenAppExample), findsOneWidget);
     expect(find.byType(HomeScreenExample), findsOneWidget);
     expect(find.byType(BottomNavBar), findsOneWidget);
     expect(find.byType(TsaiList), findsOneWidget);
@@ -295,6 +325,19 @@ void main() {
       find.byKey(const ValueKey<String>('home-country-select')),
     );
     expect(homeSelect.presentation, TsaiSelectPresentation.cupertinoPicker);
+
+    await tester.tap(find.byKey(const ValueKey<String>('quick-transfer')));
+    await pumpUi();
+    expect(find.text('Transfer money'), findsOneWidget);
+    await tester.tap(find.text('Cancel'));
+    await pumpUi();
+
+    await tester.tap(find.byKey(const ValueKey<String>('quick-pay')));
+    await pumpUi();
+    expect(find.text('Schedule a payment'), findsOneWidget);
+    await tester.tap(find.text('Cancel'));
+    await pumpUi();
+
     await tester.drag(
       find.byKey(const ValueKey<String>('home-screen-scroll')),
       const Offset(0, -360),
@@ -306,14 +349,14 @@ void main() {
     expect(balance.top, lessThan(homeBar.bottom));
     expect(balance.bottom, greaterThan(homeBar.top));
     await tester.tap(find.byKey(const ValueKey<String>('home-country-select')));
-    await tester.pumpAndSettle();
+    await pumpUi();
     expect(
       find.byKey(const ValueKey<String>('tsai-select-cupertino-picker')),
       findsOneWidget,
     );
     expect(find.byType(BottomNavBar), findsOneWidget);
     await tester.tap(find.text('Cancel'));
-    await tester.pumpAndSettle();
+    await pumpUi();
 
     await tester.tap(find.bySemanticsLabel('Form'));
     await tester.pump();
@@ -329,6 +372,17 @@ void main() {
     expect(formSelect.presentation, TsaiSelectPresentation.cupertinoPicker);
     expect(find.byType(BottomNavBar), findsOneWidget);
     expect(tester.takeException(), isNull);
+
+    await tester.tap(find.bySemanticsLabel('Showcase'));
+    await tester.pump();
+    expect(find.byType(ShowcaseScreenExample), findsOneWidget);
+    expect(find.byType(TsaiCard), findsNWidgets(2));
+    expect(find.byType(TsaiInlineAlert), findsOneWidget);
+    expect(find.byType(TsaiProgressBar), findsOneWidget);
+    expect(find.byType(TsaiSkeletonAvatar), findsOneWidget);
+    expect(find.text('Danger'), findsOneWidget);
+    expect(find.byType(BottomNavBar), findsOneWidget);
+    expect(tester.takeException(), isNull);
   });
 
   testWidgets('lists the composed app example in the catalog drawer', (
@@ -340,7 +394,7 @@ void main() {
     await tester.pump(const Duration(milliseconds: 400));
 
     await tester.scrollUntilVisible(
-      find.text('App with 2 pages'),
+      find.text('Multi-screen app example'),
       300,
       scrollable: find.descendant(
         of: find.byType(Drawer),
@@ -348,7 +402,7 @@ void main() {
       ),
     );
     expect(find.text('App examples'), findsOneWidget);
-    expect(find.text('App with 2 pages'), findsOneWidget);
+    expect(find.text('Multi-screen app example'), findsOneWidget);
   });
 
   testWidgets('renders the typography demo without the catalog window', (
@@ -359,11 +413,11 @@ void main() {
 
     await _pumpEmbedded(tester, child: TypographyDemo(controller: controller));
 
-    expect(find.text('Inter / Heading'), findsOneWidget);
+    expect(find.byType(ComponentPlayground), findsOneWidget);
     expect(find.text('Typography'), findsNothing);
     expect(
       tester
-          .widget<CustomScrollView>(
+          .widget<ListView>(
             find.byKey(const ValueKey<String>('typography-demo')),
           )
           .controller,
@@ -384,13 +438,11 @@ void main() {
 
     await _pumpEmbedded(tester, child: ButtonDemo(controller: controller));
 
-    expect(find.text('Default'), findsOneWidget);
+    expect(find.byType(ComponentPlayground), findsOneWidget);
     expect(find.text('Typography'), findsNothing);
     expect(
       tester
-          .widget<CustomScrollView>(
-            find.byKey(const ValueKey<String>('button-demo')),
-          )
+          .widget<ListView>(find.byKey(const ValueKey<String>('button-demo')))
           .controller,
       same(controller),
     );
@@ -406,63 +458,17 @@ void main() {
   ) async {
     await _pumpEmbedded(tester, child: const LinkDemo());
 
-    expect(find.byType(TsaiLink), findsWidgets);
-    expect(find.text('Default'), findsOneWidget);
-    expect(find.text('Disabled'), findsOneWidget);
-  });
-
-  testWidgets('renders document-owned tab content independently', (
-    tester,
-  ) async {
-    await _pumpEmbedded(tester, child: const TabsDocumentDemo());
-
-    expect(
-      find.byKey(const ValueKey<String>('tabs-document-demo')),
-      findsOneWidget,
-    );
-    expect(find.byType(TsaiTabs), findsOneWidget);
-    expect(find.byType(SingleChildScrollView), findsOneWidget);
-  });
-
-  testWidgets('renders internally scrolling tab content independently', (
-    tester,
-  ) async {
-    await _pumpEmbedded(tester, child: const TabsViewportDemo());
-
-    expect(
-      find.byKey(const ValueKey<String>('tabs-viewport-demo')),
-      findsOneWidget,
-    );
-    expect(find.byType(TabBarView), findsOneWidget);
-    expect(find.byType(ListView), findsWidgets);
-  });
-
-  testWidgets('renders the sticky tabs composition independently', (
-    tester,
-  ) async {
-    await _pumpEmbedded(tester, child: const TabsStickyDemo());
-
-    expect(
-      find.byKey(const ValueKey<String>('tabs-sticky-demo')),
-      findsOneWidget,
-    );
-    expect(find.byType(TsaiSliverTabBar), findsOneWidget);
-    expect(find.byType(CustomScrollView), findsOneWidget);
+    expect(find.byType(ComponentPlayground), findsOneWidget);
+    expect(find.byType(TsaiLink), findsOneWidget);
   });
 
   testWidgets('renders the checkbox demo with a playground', (tester) async {
     await _pumpEmbedded(tester, child: const CheckboxDemo());
-
-    await tester.scrollUntilVisible(
-      find.text('Checkbox Multiline (example)'),
-      400,
-      scrollable: find.byType(Scrollable),
+    expect(
+      find.byKey(const ValueKey<String>('component-playground')),
+      findsOneWidget,
     );
-    final multilineLabel = find.text(
-      'I agree to the Terms of Service and acknowledge the Privacy Policy',
-    );
-    expect(tester.getSize(multilineLabel).height, greaterThan(20));
-    expect(tester.getSize(multilineLabel).height, lessThan(40));
+    expect(find.textContaining('(example)'), findsNothing);
 
     await _scrollToPlayground(tester);
     expect(
@@ -534,7 +540,13 @@ void main() {
     await _pumpEmbedded(tester, child: const PhoneInputDemo());
 
     expect(find.byType(TsaiPhoneInput), findsWidgets);
-    expect(find.byType(TsaiInput), findsNothing);
+    expect(
+      find.descendant(
+        of: find.byKey(const ValueKey<String>('component-playground-preview')),
+        matching: find.byType(TsaiInput),
+      ),
+      findsNothing,
+    );
   });
 
   testWidgets('configures OTP length 4 and 6 in the playground', (
@@ -623,6 +635,42 @@ void main() {
       expect(find.byKey(ValueKey<String>(demo.$2)), findsOneWidget);
       expect(tester.takeException(), isNull);
     });
+  }
+}
+
+Future<void> _verifyComponentRoutes(
+  WidgetTester tester, {
+  required String sizeLabel,
+  required bool controlsVisible,
+}) async {
+  final sections = ComponentDemoSection.values.where(
+    (section) => section.category != ComponentDemoCategory.appExamples,
+  );
+  for (final section in sections) {
+    await tester.pumpWidget(
+      CatalogApp(
+        key: ValueKey<String>('$sizeLabel-${section.name}'),
+        initialRoute: section.route,
+      ),
+    );
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 50));
+
+    expect(
+      find.byType(ComponentPlayground),
+      findsOneWidget,
+      reason: '${section.label} must contain exactly one playground',
+    );
+    expect(
+      find.byKey(const ValueKey<String>('component-playground-controls')),
+      controlsVisible ? findsOneWidget : findsNothing,
+      reason: '${section.label} has the wrong default controls state',
+    );
+    expect(
+      tester.takeException(),
+      isNull,
+      reason: '${section.label} must render at the $sizeLabel size',
+    );
   }
 }
 

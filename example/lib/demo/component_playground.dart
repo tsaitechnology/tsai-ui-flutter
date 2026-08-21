@@ -43,111 +43,239 @@ class ComponentPlayground extends StatefulWidget {
 }
 
 class _ComponentPlaygroundState extends State<ComponentPlayground> {
-  bool _checkerboardBackground = true;
+  bool _checkerboardBackground = false;
+  bool? _controlsVisible;
 
   @override
   Widget build(BuildContext context) {
     final tokens = TsaiThemeTokens.of(context);
-    return Container(
-      key: const ValueKey<String>('component-playground'),
-      width: double.infinity,
-      clipBehavior: Clip.antiAlias,
-      decoration: BoxDecoration(
-        color: tokens.colors.surface,
-        border: Border.all(
-          color: tokens.colors.borderSubtle,
-          width: tokens.borders.hairline,
-        ),
-        borderRadius: BorderRadius.circular(tokens.radii.medium),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            child: TsaiTextHeading('Playground', size: TsaiHeadingSize.small),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isCompact = constraints.maxWidth < 720;
+        final showControls = _controlsVisible ?? !isCompact;
+        return Container(
+          key: widget.key ?? const ValueKey<String>('component-playground'),
+          width: double.infinity,
+          clipBehavior: Clip.antiAlias,
+          decoration: BoxDecoration(
+            color: tokens.colors.surface,
+            border: Border.all(
+              color: tokens.colors.borderSubtle,
+              width: tokens.borders.hairline,
+            ),
+            borderRadius: BorderRadius.circular(tokens.radii.medium),
           ),
-          Container(
-            key: const ValueKey<String>('component-playground-controls'),
-            width: double.infinity,
-            padding: const EdgeInsets.fromLTRB(16, 4, 16, 16),
-            child: Wrap(
-              key: const ValueKey<String>('component-playground-controls-wrap'),
-              spacing: 12,
-              runSpacing: 12,
-              children: [
-                ...widget.controls,
-                PlaygroundToggleControl(
-                  label: 'checkerboardBackground',
-                  value: _checkerboardBackground,
-                  width: 200,
-                  onChanged: (value) =>
-                      setState(() => _checkerboardBackground = value),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildHeader(showControls),
+              if (isCompact)
+                Column(
+                  children: [
+                    _buildPreview(tokens),
+                    if (showControls) _buildControls(tokens, isCompact: true),
+                  ],
+                )
+              else
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(child: _buildPreview(tokens)),
+                    if (showControls)
+                      SizedBox(
+                        width: 336,
+                        child: _buildControls(tokens, isCompact: false),
+                      )
+                    else
+                      _buildCollapsedControlsRail(tokens),
+                  ],
                 ),
-              ],
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildHeader(bool showControls) => Padding(
+    padding: const EdgeInsets.fromLTRB(16, 12, 12, 12),
+    child: Row(
+      children: [
+        const Expanded(
+          child: TsaiTextHeading('Playground', size: TsaiHeadingSize.small),
+        ),
+        Tooltip(
+          message: _checkerboardBackground
+              ? 'Hide contrast background'
+              : 'Show contrast background',
+          child: IconButton(
+            key: const ValueKey<String>(
+              'component-playground-checkerboard-toggle',
+            ),
+            icon: Icon(
+              _checkerboardBackground
+                  ? Icons.grid_on_rounded
+                  : Icons.grid_off_rounded,
+            ),
+            onPressed: () => setState(
+              () => _checkerboardBackground = !_checkerboardBackground,
             ),
           ),
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
-            decoration: BoxDecoration(
-              color: tokens.colors.surfaceRaised,
-              border: Border(
+        ),
+        IconButton(
+          key: const ValueKey<String>('component-playground-controls-toggle'),
+          tooltip: showControls ? 'Hide controls' : 'Show controls',
+          icon: Icon(showControls ? Icons.tune : Icons.tune_outlined),
+          onPressed: () => setState(() => _controlsVisible = !showControls),
+        ),
+      ],
+    ),
+  );
+
+  Widget _buildControls(TsaiThemeTokens tokens, {required bool isCompact}) {
+    final groups = <String, List<Widget>>{};
+    for (final control in widget.controls) {
+      groups.putIfAbsent(_controlGroup(control), () => []).add(control);
+    }
+    return Container(
+      key: const ValueKey<String>('component-playground-controls'),
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 20),
+      decoration: BoxDecoration(
+        color: tokens.colors.surfaceRaised,
+        border: isCompact
+            ? Border(
                 top: BorderSide(
                   color: tokens.colors.borderSubtle,
                   width: tokens.borders.hairline,
                 ),
+              )
+            : Border(
+                left: BorderSide(
+                  color: tokens.colors.borderSubtle,
+                  width: tokens.borders.hairline,
+                ),
               ),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Preview',
-                  style: tokens.typography.captionMediumRegular.copyWith(
-                    color: tokens.colors.contentSecondary,
+      ),
+      child: SingleChildScrollView(
+        child: Column(
+          key: const ValueKey<String>('component-playground-controls-wrap'),
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const TsaiTextHeading('Customize', size: TsaiHeadingSize.small),
+            SizedBox(height: tokens.spacing.space16),
+            for (final entry in groups.entries) ...[
+              TsaiTextCaption(
+                entry.key,
+                size: TsaiCaptionSize.small,
+                weight: TsaiTextWeight.medium,
+                color: tokens.colors.contentTertiary,
+              ),
+              SizedBox(height: tokens.spacing.space8),
+              for (final control in entry.value)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 12),
+                  child: control,
+                ),
+              if (entry.key != groups.keys.last)
+                Padding(
+                  padding: EdgeInsets.only(bottom: tokens.spacing.space16),
+                  child: Divider(
+                    height: tokens.borders.hairline,
+                    color: tokens.colors.borderSubtle,
                   ),
                 ),
-                SizedBox(height: tokens.spacing.space8),
-                Container(
-                  key: const ValueKey<String>('component-playground-preview'),
-                  width: double.infinity,
-                  constraints: const BoxConstraints(minHeight: 96),
-                  alignment: AlignmentDirectional.centerStart,
-                  clipBehavior: Clip.antiAlias,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(
-                      tokens.radii.innerMedium,
-                    ),
-                  ),
-                  child: CustomPaint(
-                    key: const ValueKey<String>(
-                      'component-playground-checkerboard',
-                    ),
-                    painter: _checkerboardBackground
-                        ? _ContrastPatternPainter(
-                            baseColor: tokens.colors.canvas,
-                            accentColor: tokens.colors.actionPrimary,
-                          )
-                        : null,
-                    child: LayoutBuilder(
-                      builder: (context, constraints) => SizedBox(
-                        width: constraints.maxWidth.clamp(0, 360),
-                        child: Align(
-                          alignment: AlignmentDirectional.centerStart,
-                          child: widget.preview,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
+            ],
+          ],
+        ),
       ),
     );
   }
+
+  String _controlGroup(Widget control) {
+    final type = control.runtimeType.toString().toLowerCase();
+    if (control is PlaygroundTextControl || type.contains('textproperty')) {
+      return 'CONTENT';
+    }
+    if (control is PlaygroundToggleControl || type.contains('toggle')) {
+      return 'BEHAVIOR';
+    }
+    if (control is PlaygroundOutput || type.contains('event')) {
+      return 'EVENTS';
+    }
+    return 'OPTIONS';
+  }
+
+  Widget _buildCollapsedControlsRail(TsaiThemeTokens tokens) => Container(
+    key: const ValueKey<String>('component-playground-controls-collapsed'),
+    width: 52,
+    decoration: BoxDecoration(
+      color: tokens.colors.surfaceRaised,
+      border: Border(
+        left: BorderSide(
+          color: tokens.colors.borderSubtle,
+          width: tokens.borders.hairline,
+        ),
+      ),
+    ),
+    child: IconButton(
+      tooltip: 'Show controls',
+      icon: const Icon(Icons.tune_outlined),
+      onPressed: () => setState(() => _controlsVisible = true),
+    ),
+  );
+
+  Widget _buildPreview(TsaiThemeTokens tokens) => Container(
+    padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
+    decoration: BoxDecoration(
+      color: tokens.colors.surfaceRaised,
+      border: Border(
+        top: BorderSide(
+          color: tokens.colors.borderSubtle,
+          width: tokens.borders.hairline,
+        ),
+      ),
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Component preview',
+          style: tokens.typography.captionMediumRegular.copyWith(
+            color: tokens.colors.contentSecondary,
+          ),
+        ),
+        SizedBox(height: tokens.spacing.space8),
+        Container(
+          key: const ValueKey<String>('component-playground-preview'),
+          width: double.infinity,
+          constraints: const BoxConstraints(minHeight: 160),
+          alignment: AlignmentDirectional.center,
+          clipBehavior: Clip.antiAlias,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(tokens.radii.innerMedium),
+          ),
+          child: CustomPaint(
+            key: const ValueKey<String>('component-playground-checkerboard'),
+            painter: _checkerboardBackground
+                ? _ContrastPatternPainter(
+                    baseColor: tokens.colors.canvas,
+                    accentColor: tokens.colors.actionPrimary,
+                  )
+                : null,
+            child: LayoutBuilder(
+              builder: (context, constraints) => SizedBox(
+                width: constraints.maxWidth.clamp(0, 480),
+                child: Align(
+                  alignment: AlignmentDirectional.center,
+                  child: widget.preview,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
 }
 
 class PlaygroundField extends StatelessWidget {
@@ -171,7 +299,7 @@ class PlaygroundField extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            label,
+            _humanizeLabel(label),
             style: tokens.typography.captionMediumRegular.copyWith(
               color: tokens.colors.contentSecondary,
             ),
@@ -181,6 +309,20 @@ class PlaygroundField extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  static String _humanizeLabel(String value) {
+    final words = value
+        .replaceAllMapped(
+          RegExp(r'([a-z])([A-Z])'),
+          (match) => '${match.group(1)} ${match.group(2)}',
+        )
+        .replaceAll('_', ' ')
+        .split(' ')
+        .where((word) => word.isNotEmpty)
+        .map((word) => '${word[0].toUpperCase()}${word.substring(1)}')
+        .join(' ');
+    return words;
   }
 }
 
@@ -337,57 +479,4 @@ class PlaygroundOutput extends StatelessWidget {
       showClearButton: false,
     ),
   );
-}
-
-class PenpotBoard extends StatelessWidget {
-  const PenpotBoard({
-    required this.child,
-    super.key,
-    this.width,
-    this.padding = const EdgeInsets.all(28),
-  });
-
-  final Widget child;
-  final double? width;
-  final EdgeInsetsGeometry padding;
-
-  @override
-  Widget build(BuildContext context) {
-    final tokens = TsaiThemeTokens.of(context);
-    return Align(
-      alignment: AlignmentDirectional.centerStart,
-      child: Container(
-        width: width,
-        padding: padding,
-        decoration: BoxDecoration(
-          border: Border.all(color: tokens.colors.actionPrimarySoft, width: 2),
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: child,
-      ),
-    );
-  }
-}
-
-class PenpotExample extends StatelessWidget {
-  const PenpotExample({required this.title, required this.child, super.key});
-
-  final String title;
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    final tokens = TsaiThemeTokens.of(context);
-    return Padding(
-      padding: EdgeInsets.only(bottom: tokens.spacing.space32),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          TsaiTextHeading(title, size: TsaiHeadingSize.small),
-          SizedBox(height: tokens.spacing.space16),
-          child,
-        ],
-      ),
-    );
-  }
 }

@@ -61,95 +61,9 @@ class _TypographyWidgetDemo extends StatelessWidget {
     return ListView(
       key: ValueKey<String>('${role.name}-widget-demo'),
       padding: EdgeInsets.all(tokens.spacing.space24),
-      children: [
-        PenpotExample(
-          title: 'Variants',
-          child: PenpotBoard(
-            child: Wrap(
-              spacing: tokens.spacing.space24,
-              runSpacing: tokens.spacing.space24,
-              crossAxisAlignment: WrapCrossAlignment.center,
-              children: _samples,
-            ),
-          ),
-        ),
-        _TypographyPlayground(role: role),
-      ],
+      children: [_TypographyPlayground(role: role)],
     );
   }
-
-  List<Widget> get _samples => switch (role) {
-    TypographyWidgetRole.title => const [
-      TsaiTitle('Title'),
-      TsaiTitle('Title', subtitle: 'Supporting description'),
-    ],
-    TypographyWidgetRole.heading => const [
-      TsaiTextHeading('Extra large heading', size: TsaiHeadingSize.extraLarge),
-      TsaiTextHeading('Large heading', size: TsaiHeadingSize.large),
-      TsaiTextHeading('Medium heading', size: TsaiHeadingSize.medium),
-      TsaiTextHeading('Small heading', size: TsaiHeadingSize.small),
-    ],
-    TypographyWidgetRole.body => const [
-      TsaiTextBody(
-        'Large regular body',
-        size: TsaiBodySize.large,
-        weight: TsaiTextWeight.regular,
-      ),
-      TsaiTextBody(
-        'Large medium body',
-        size: TsaiBodySize.large,
-        weight: TsaiTextWeight.medium,
-      ),
-      TsaiTextBody(
-        'Medium regular body',
-        size: TsaiBodySize.medium,
-        weight: TsaiTextWeight.regular,
-      ),
-      TsaiTextBody(
-        'Medium medium body',
-        size: TsaiBodySize.medium,
-        weight: TsaiTextWeight.medium,
-      ),
-    ],
-    TypographyWidgetRole.buttonText => const [
-      TsaiTextButton('Large button label', size: TsaiButtonTextSize.large),
-      TsaiTextButton('Medium button label', size: TsaiButtonTextSize.medium),
-    ],
-    TypographyWidgetRole.caption => const [
-      TsaiTextCaption(
-        'Medium regular caption',
-        size: TsaiCaptionSize.medium,
-        weight: TsaiTextWeight.regular,
-      ),
-      TsaiTextCaption(
-        'Medium caption',
-        size: TsaiCaptionSize.medium,
-        weight: TsaiTextWeight.medium,
-      ),
-      TsaiTextCaption(
-        'Small regular caption',
-        size: TsaiCaptionSize.small,
-        weight: TsaiTextWeight.regular,
-      ),
-      TsaiTextCaption(
-        'Small caption',
-        size: TsaiCaptionSize.small,
-        weight: TsaiTextWeight.medium,
-      ),
-    ],
-    TypographyWidgetRole.monoHeading => const [
-      TsaiTextMonoHeading('24,891.42', size: TsaiMonoHeadingSize.extraLarge),
-      TsaiTextMonoHeading('24,891.42', size: TsaiMonoHeadingSize.large),
-    ],
-    TypographyWidgetRole.monoBody => const [
-      TsaiTextMonoBody('ETH / USD  +4.81%', size: TsaiBodySize.large),
-      TsaiTextMonoBody('ETH / USD  +4.81%', size: TsaiBodySize.medium),
-    ],
-    TypographyWidgetRole.monoCaption => const [
-      TsaiTextMonoCaption('09:41:27 UTC', weight: TsaiTextWeight.medium),
-      TsaiTextMonoCaption('09:41:27 UTC', weight: TsaiTextWeight.regular),
-    ],
-  };
 }
 
 class _TypographyPlayground extends StatefulWidget {
@@ -185,7 +99,7 @@ class _TypographyPlaygroundState extends State<_TypographyPlayground> {
           )
         else ...[
           PlaygroundSelectControl<TextAlign>(
-            label: 'textAlign',
+            label: 'Text alignment',
             value: _textAlign,
             values: const [TextAlign.start, TextAlign.center, TextAlign.end],
             onChanged: (value) => setState(() => _textAlign = value),

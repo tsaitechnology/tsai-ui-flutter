@@ -114,12 +114,14 @@ class TsaiToast extends StatelessWidget {
                             icon ?? const TsaiIcon(LucideIcons.info, size: 20),
                       ),
                       SizedBox(width: tokens.spacing.space8),
-                      Text(
-                        message,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: tokens.typography.bodyMediumMedium.copyWith(
-                          color: tokens.colors.contentPrimary,
+                      Flexible(
+                        child: Text(
+                          message,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: tokens.typography.bodyMediumMedium.copyWith(
+                            color: tokens.colors.contentPrimary,
+                          ),
                         ),
                       ),
                       if (resolvedActionLabel case final label?) ...[

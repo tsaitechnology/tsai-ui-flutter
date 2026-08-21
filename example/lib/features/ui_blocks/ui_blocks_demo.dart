@@ -18,14 +18,6 @@ class UIBlocksDemo extends StatelessWidget {
       padding: EdgeInsets.all(tokens.spacing.space24),
       children: [
         switch (section) {
-          ComponentDemoSection.sectionHeader => const _SectionHeaderExample(),
-          ComponentDemoSection.emptyState => const _EmptyStateExample(),
-          ComponentDemoSection.listItem => const _ListItemExample(),
-          ComponentDemoSection.list => const _ListExample(),
-          _ => throw ArgumentError.value(section, 'section'),
-        },
-        SizedBox(height: tokens.spacing.space32),
-        switch (section) {
           ComponentDemoSection.sectionHeader =>
             const _SectionHeaderPlayground(),
           ComponentDemoSection.emptyState => const _EmptyStatePlayground(),
@@ -36,135 +28,6 @@ class UIBlocksDemo extends StatelessWidget {
       ],
     );
   }
-}
-
-class _SectionHeaderExample extends StatelessWidget {
-  const _SectionHeaderExample();
-
-  @override
-  Widget build(BuildContext context) => const PenpotExample(
-    title: 'Section Header',
-    child: PenpotBoard(
-      width: 402,
-      padding: EdgeInsets.all(30),
-      child: TsaiSectionHeader(
-        title: 'Transactions',
-        trailingIcon: TsaiIcon(LucideIcons.search),
-        trailingIconSemanticLabel: 'Search transactions',
-        onTrailingIconPressed: _noop,
-      ),
-    ),
-  );
-}
-
-class _EmptyStateExample extends StatelessWidget {
-  const _EmptyStateExample();
-
-  @override
-  Widget build(BuildContext context) => PenpotExample(
-    title: 'Empty State',
-    child: PenpotBoard(
-      width: 422,
-      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 60),
-      child: TsaiEmptyState(
-        icon: const TsaiIcon(LucideIcons.coffee, size: 28),
-        title: 'No transactions yet',
-        description: 'When you spend or receive money,\nit will show up here.',
-        button: TsaiButton(
-          label: 'Add money',
-          size: TsaiButtonSize.medium,
-          variant: TsaiButtonVariant.secondary,
-          leadingIcon: const TsaiIcon(LucideIcons.plus, size: 16),
-          onPressed: () {},
-        ),
-      ),
-    ),
-  );
-}
-
-class _ListItemExample extends StatelessWidget {
-  const _ListItemExample();
-
-  @override
-  Widget build(BuildContext context) => PenpotExample(
-    title: 'List Item',
-    child: Wrap(
-      spacing: 56,
-      runSpacing: 40,
-      crossAxisAlignment: WrapCrossAlignment.start,
-      children: [
-        PenpotBoard(
-          width: 402,
-          padding: const EdgeInsets.all(30),
-          child: Column(
-            children: [
-              _transactionItem(
-                icon: LucideIcons.coffee,
-                title: 'Blue Bottle',
-                subtitle: 'Coffee · Yesterday',
-                value: r'-$4.50',
-                subValue: '09:41',
-              ),
-              const SizedBox(height: 32),
-              _transactionItem(
-                icon: LucideIcons.coffee,
-                title: 'Blue Bottle',
-                subtitle: 'Coffee · Yesterday',
-                value: r'-$4.50',
-                subValue: '09:41',
-                active: true,
-              ),
-            ],
-          ),
-        ),
-        SizedBox(
-          width: 342,
-          child: TsaiListItem(
-            icon: const TsaiIcon(LucideIcons.bell, size: 20),
-            content: _content('Notifications', 'Push · Email · SMS'),
-            showChevron: true,
-            onTap: () {},
-          ),
-        ),
-      ],
-    ),
-  );
-}
-
-class _ListExample extends StatelessWidget {
-  const _ListExample();
-
-  @override
-  Widget build(BuildContext context) => PenpotExample(
-    title: 'List',
-    child: PenpotBoard(
-      padding: const EdgeInsets.all(30),
-      child: Wrap(
-        spacing: 56,
-        runSpacing: 32,
-        crossAxisAlignment: WrapCrossAlignment.start,
-        children: [
-          SizedBox(width: 342, child: _transactionList()),
-          SizedBox(
-            width: 342,
-            child: TsaiEmptyState(
-              icon: const TsaiIcon(LucideIcons.coffee, size: 28),
-              title: 'No transactions yet',
-              description:
-                  'When you spend or receive money,\nit will show up here.',
-              button: TsaiButton(
-                label: 'Add money',
-                size: TsaiButtonSize.medium,
-                variant: TsaiButtonVariant.secondary,
-                leadingIcon: const TsaiIcon(LucideIcons.plus, size: 16),
-                onPressed: () {},
-              ),
-            ),
-          ),
-        ],
-      ),
-    ),
-  );
 }
 
 class _SectionHeaderPlayground extends StatefulWidget {
@@ -196,7 +59,7 @@ class _SectionHeaderPlaygroundState extends State<_SectionHeaderPlayground> {
         onChanged: (value) => setState(() => _title = value),
       ),
       PlaygroundToggleControl(
-        label: 'trailingIcon',
+        label: 'Show trailing icon',
         value: _showTrailingIcon,
         onChanged: (value) => setState(() => _showTrailingIcon = value),
       ),
@@ -260,7 +123,7 @@ class _EmptyStatePlaygroundState extends State<_EmptyStatePlayground> {
         onChanged: (value) => setState(() => _description = value),
       ),
       PlaygroundToggleControl(
-        label: 'button',
+        label: 'Show button',
         value: _showButton,
         onChanged: (value) => setState(() => _showButton = value),
       ),
@@ -318,26 +181,26 @@ class _ListItemPlaygroundState extends State<_ListItemPlayground> {
         onChanged: (value) => setState(() => _active = value),
       ),
       PlaygroundToggleControl(
-        label: 'icon',
+        label: 'Show icon',
         value: _showIcon,
         onChanged: (value) => setState(() => _showIcon = value),
       ),
       PlaygroundToggleControl(
-        label: 'subtitle',
+        label: 'Show subtitle',
         value: _showSubtitle,
         onChanged: (value) => setState(() => _showSubtitle = value),
       ),
       PlaygroundToggleControl(
-        label: 'trailing',
+        label: 'Show trailing content',
         value: _showTrailing,
         onChanged: (value) => setState(() => _showTrailing = value),
       ),
       PlaygroundToggleControl(
-        label: 'showChevron',
+        label: 'Show chevron',
         value: _showChevron,
         onChanged: (value) => setState(() => _showChevron = value),
       ),
-      PlaygroundOutput(label: 'onTap', value: '$_tapCount'),
+      PlaygroundOutput(label: 'Tap count', value: '$_tapCount'),
     ],
   );
 }
@@ -382,18 +245,18 @@ class _ListPlaygroundState extends State<_ListPlayground> {
           onChanged: (value) => setState(() => _title = value),
         ),
         PlaygroundSelectControl<int>(
-          label: 'items',
+          label: 'Number of items',
           value: _itemCount,
           values: const [1, 3, 5],
           onChanged: (value) => setState(() => _itemCount = value),
         ),
         PlaygroundToggleControl(
-          label: 'headerTrailingIcon',
+          label: 'Show header action',
           value: _showHeaderIcon,
           onChanged: (value) => setState(() => _showHeaderIcon = value),
         ),
         PlaygroundToggleControl(
-          label: 'button',
+          label: 'Show button',
           value: _showButton,
           onChanged: (value) => setState(() => _showButton = value),
         ),
@@ -401,19 +264,6 @@ class _ListPlaygroundState extends State<_ListPlayground> {
     );
   }
 }
-
-Widget _transactionList() => TsaiList(
-  title: 'Transactions',
-  headerTrailingIcon: const TsaiIcon(LucideIcons.search),
-  items: _transactionItems(),
-  button: TsaiButton(
-    label: 'Show all',
-    size: TsaiButtonSize.medium,
-    variant: TsaiButtonVariant.outline,
-    isExpanded: true,
-    onPressed: () {},
-  ),
-);
 
 List<TsaiListItem> _transactionItems() => [
   _transactionItem(

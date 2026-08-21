@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tsai_ui/tsai_ui.dart';
 
 import 'demo/component_demo_window.dart';
-import 'features/app_examples/app_with_two_pages_example.dart';
+import 'features/app_examples/multi_screen_app_example.dart';
 import 'features/avatars/avatar_demo_screen.dart';
 import 'features/buttons/button_demo_screen.dart';
 import 'features/effects/glow_demo_screen.dart';
@@ -60,18 +60,6 @@ class _CatalogAppState extends State<CatalogApp> {
         themeMode: _themeMode,
         onThemeModeChanged: _setThemeMode,
       ),
-      '/tabs-document': (context) => TabsDocumentDemoScreen(
-        themeMode: _themeMode,
-        onThemeModeChanged: _setThemeMode,
-      ),
-      '/tabs-viewport': (context) => TabsViewportDemoScreen(
-        themeMode: _themeMode,
-        onThemeModeChanged: _setThemeMode,
-      ),
-      '/tabs-sticky': (context) => TabsStickyDemoScreen(
-        themeMode: _themeMode,
-        onThemeModeChanged: _setThemeMode,
-      ),
       '/bottom-nav-bar': (context) => BottomNavBarDemoScreen(
         themeMode: _themeMode,
         onThemeModeChanged: _setThemeMode,
@@ -84,7 +72,7 @@ class _CatalogAppState extends State<CatalogApp> {
         themeMode: _themeMode,
         onThemeModeChanged: _setThemeMode,
       ),
-      '/app-examples/two-pages': (context) => AppWithTwoPagesExampleScreen(
+      '/app-examples/multi-screen': (context) => MultiScreenAppExampleScreen(
         themeMode: _themeMode,
         onThemeModeChanged: _setThemeMode,
       ),

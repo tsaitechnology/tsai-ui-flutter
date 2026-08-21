@@ -16,13 +16,11 @@ class _InputDemoState extends State<InputDemo> {
   String _placeholder = 'Label';
   String _description = 'Description';
   String _errorText = '';
-  String _semanticLabel = '';
   bool _enabled = true;
   bool _readOnly = false;
   bool _obscure = false;
   bool _showVisibility = false;
   bool _clear = true;
-  bool _autofocus = false;
   bool _labeledPlaceholder = true;
   bool _digitsOnly = false;
   int _maxLength = 32;
@@ -62,11 +60,6 @@ class _InputDemoState extends State<InputDemo> {
           label: 'errorText',
           value: _errorText,
           onChanged: (value) => setState(() => _errorText = value),
-        ),
-        _TextProperty(
-          label: 'semanticLabel',
-          value: _semanticLabel,
-          onChanged: (value) => setState(() => _semanticLabel = value),
         ),
         _EnumProperty<TextInputType>(
           label: 'keyboardType',
@@ -147,11 +140,6 @@ class _InputDemoState extends State<InputDemo> {
           onChanged: (value) => setState(() => _clear = value),
         ),
         _Toggle(
-          label: 'autofocus',
-          value: _autofocus,
-          onChanged: (value) => setState(() => _autofocus = value),
-        ),
-        _Toggle(
           label: 'digitsOnly formatter',
           value: _digitsOnly,
           onChanged: (value) => setState(() => _digitsOnly = value),
@@ -164,13 +152,11 @@ class _InputDemoState extends State<InputDemo> {
         labeledPlaceholder: _labeledPlaceholder,
         description: _emptyToNull(_description),
         errorText: _emptyToNull(_errorText),
-        semanticLabel: _emptyToNull(_semanticLabel),
         enabled: _enabled,
         readOnly: _readOnly,
         obscureText: _obscure,
         showVisibilityButton: _showVisibility,
         showClearButton: _clear,
-        autofocus: _autofocus,
         keyboardType: _keyboardType,
         textInputAction: _inputAction,
         textCapitalization: _capitalization,
@@ -196,76 +182,6 @@ class _InputDemoState extends State<InputDemo> {
             setState(() => _event = 'onObscureChanged($value)'),
       ),
     ),
-    examples: [
-      PenpotExample(
-        title: 'Input',
-        child: PenpotBoard(
-          width: 380,
-          child: Column(
-            children: [
-              const TsaiInput(
-                placeholder: 'Label',
-                description: 'Description',
-                showVisibilityButton: true,
-              ),
-              _gap26,
-              const TsaiInput(
-                placeholder: 'Label',
-                labeledPlaceholder: false,
-                description: 'Description',
-                showVisibilityButton: true,
-              ),
-              _gap26,
-              const TsaiInput(
-                placeholder: 'Label',
-                initialValue: 'Value',
-                description: 'Description',
-                showVisibilityButton: true,
-              ),
-              _gap26,
-              const TsaiInput(
-                placeholder: 'Label',
-                labeledPlaceholder: false,
-                initialValue: 'Value',
-                description: 'Description',
-                showVisibilityButton: true,
-              ),
-              _gap26,
-              const TsaiInput(
-                placeholder: 'Label',
-                initialValue: 'Value',
-                errorText: 'Description',
-                showVisibilityButton: true,
-              ),
-              _gap26,
-              const TsaiInput(
-                placeholder: 'Label',
-                initialValue: 'Value',
-                description: 'Description',
-                enabled: false,
-                showVisibilityButton: true,
-              ),
-            ],
-          ),
-        ),
-      ),
-      PenpotExample(
-        title: 'Input + Button',
-        child: PenpotBoard(
-          width: 380,
-          child: TsaiInput(
-            placeholder: 'Promo code',
-            showClearButton: false,
-            trailingAction: TsaiButton(
-              label: 'Apply',
-              size: TsaiButtonSize.medium,
-              variant: TsaiButtonVariant.secondary,
-              onPressed: () {},
-            ),
-          ),
-        ),
-      ),
-    ],
   );
 }
 
@@ -279,10 +195,8 @@ class SearchInputDemo extends StatefulWidget {
 class _SearchInputDemoState extends State<SearchInputDemo> {
   final _controller = TextEditingController();
   String _placeholder = 'Search';
-  String _semanticLabel = '';
   bool _enabled = true;
   bool _showClearButton = true;
-  bool _autofocus = false;
   String _event = 'No events';
 
   @override
@@ -306,11 +220,6 @@ class _SearchInputDemoState extends State<SearchInputDemo> {
           value: _placeholder,
           onChanged: (value) => setState(() => _placeholder = value),
         ),
-        _TextProperty(
-          label: 'semanticLabel',
-          value: _semanticLabel,
-          onChanged: (value) => setState(() => _semanticLabel = value),
-        ),
         _Toggle(
           label: 'enabled',
           value: _enabled,
@@ -321,19 +230,12 @@ class _SearchInputDemoState extends State<SearchInputDemo> {
           value: _showClearButton,
           onChanged: (value) => setState(() => _showClearButton = value),
         ),
-        _Toggle(
-          label: 'autofocus',
-          value: _autofocus,
-          onChanged: (value) => setState(() => _autofocus = value),
-        ),
         _EventProperty(_event),
       ],
       preview: TsaiSearchInput(
         controller: _controller,
         placeholder: _placeholder,
-        semanticLabel: _emptyToNull(_semanticLabel),
         enabled: _enabled,
-        autofocus: _autofocus,
         showClearButton: _showClearButton,
         onChanged: (value) => setState(() => _event = 'onChanged($value)'),
         onSubmitted: (value) => setState(() => _event = 'onSubmitted($value)'),
@@ -342,23 +244,6 @@ class _SearchInputDemoState extends State<SearchInputDemo> {
         onCleared: () => setState(() => _event = 'onCleared()'),
       ),
     ),
-    examples: const [
-      PenpotExample(
-        title: 'Input Search states',
-        child: PenpotBoard(
-          width: 352,
-          child: Column(
-            children: [
-              TsaiSearchInput(),
-              SizedBox(height: 20),
-              TsaiSearchInput(initialValue: 'Query'),
-              SizedBox(height: 20),
-              TsaiSearchInput(enabled: false),
-            ],
-          ),
-        ),
-      ),
-    ],
   );
 }
 
@@ -375,12 +260,10 @@ class _PhoneInputDemoState extends State<PhoneInputDemo> {
   String _label = 'Phone number';
   String _description = 'Description';
   String _errorText = '';
-  String _semanticLabel = '';
   String _mask = '### ### ## ##';
   bool _enabled = true;
   bool _readOnly = false;
   bool _clear = true;
-  bool _autofocus = false;
   String _autofillHint = 'telephoneNumberNational';
   TextInputAction _inputAction = TextInputAction.done;
   String _event = 'No events';
@@ -421,11 +304,6 @@ class _PhoneInputDemoState extends State<PhoneInputDemo> {
           label: 'errorText',
           value: _errorText,
           onChanged: (value) => setState(() => _errorText = value),
-        ),
-        _TextProperty(
-          label: 'semanticLabel',
-          value: _semanticLabel,
-          onChanged: (value) => setState(() => _semanticLabel = value),
         ),
         _EnumProperty<String>(
           label: 'mask',
@@ -470,11 +348,6 @@ class _PhoneInputDemoState extends State<PhoneInputDemo> {
           value: _clear,
           onChanged: (value) => setState(() => _clear = value),
         ),
-        _Toggle(
-          label: 'autofocus',
-          value: _autofocus,
-          onChanged: (value) => setState(() => _autofocus = value),
-        ),
         _EventProperty(_event),
       ],
       preview: TsaiPhoneInput(
@@ -484,12 +357,10 @@ class _PhoneInputDemoState extends State<PhoneInputDemo> {
         label: _emptyToNull(_label),
         description: _emptyToNull(_description),
         errorText: _emptyToNull(_errorText),
-        semanticLabel: _emptyToNull(_semanticLabel),
         mask: _mask,
         enabled: _enabled,
         readOnly: _readOnly,
         showClearButton: _clear,
-        autofocus: _autofocus,
         textInputAction: _inputAction,
         autofillHints: switch (_autofillHint) {
           'telephoneNumberNational' => const [
@@ -508,44 +379,6 @@ class _PhoneInputDemoState extends State<PhoneInputDemo> {
         onCleared: () => setState(() => _event = 'onCleared()'),
       ),
     ),
-    examples: [
-      PenpotExample(
-        title: 'Input Phone',
-        child: PenpotBoard(
-          width: 380,
-          child: Column(
-            children: [
-              const TsaiPhoneInput(description: 'Description'),
-              _gap26,
-              const TsaiPhoneInput(description: 'Description'),
-              _gap26,
-              const TsaiPhoneInput(description: 'Description'),
-              _gap26,
-              const TsaiPhoneInput(
-                initialValue: '555123',
-                description: 'Description',
-              ),
-              _gap26,
-              const TsaiPhoneInput(
-                initialValue: '5551234567',
-                description: 'Description',
-              ),
-              _gap26,
-              const TsaiPhoneInput(
-                initialValue: '5551234567',
-                errorText: 'Description',
-              ),
-              _gap26,
-              const TsaiPhoneInput(
-                initialValue: '5551234567',
-                description: 'Description',
-                enabled: false,
-              ),
-            ],
-          ),
-        ),
-      ),
-    ],
   );
 }
 
@@ -560,10 +393,8 @@ class _OtpInputDemoState extends State<OtpInputDemo> {
   final _controller = TextEditingController();
   int _length = 4;
   bool _enabled = true;
-  bool _autofocus = false;
   bool _error = false;
   bool _success = false;
-  String _semanticLabel = 'One-time password';
   String _event = 'No events';
 
   @override
@@ -582,11 +413,6 @@ class _OtpInputDemoState extends State<OtpInputDemo> {
           controller: _controller,
           onChanged: (_) => setState(() {}),
         ),
-        _TextProperty(
-          label: 'semanticLabel',
-          value: _semanticLabel,
-          onChanged: (value) => setState(() => _semanticLabel = value),
-        ),
         _LengthProperty(
           value: _length,
           onChanged: (value) {
@@ -598,11 +424,6 @@ class _OtpInputDemoState extends State<OtpInputDemo> {
           label: 'enabled',
           value: _enabled,
           onChanged: (value) => setState(() => _enabled = value),
-        ),
-        _Toggle(
-          label: 'autofocus',
-          value: _autofocus,
-          onChanged: (value) => setState(() => _autofocus = value),
         ),
         _StatusToggles(
           error: _error,
@@ -622,10 +443,9 @@ class _OtpInputDemoState extends State<OtpInputDemo> {
         controller: _controller,
         length: _length,
         enabled: _enabled,
-        autofocus: _autofocus,
         isError: _error,
         isSuccess: _success,
-        semanticLabel: _semanticLabel,
+        semanticLabel: 'One-time password',
         onChanged: (value) => setState(() => _event = 'onChanged($value)'),
         onCompleted: (value) => setState(() => _event = 'onCompleted($value)'),
         onSubmitted: (value) => setState(() => _event = 'onSubmitted($value)'),
@@ -633,31 +453,6 @@ class _OtpInputDemoState extends State<OtpInputDemo> {
             setState(() => _event = 'onFocusChange($value)'),
       ),
     ),
-    examples: [
-      PenpotExample(
-        title: 'Input OTP',
-        child: PenpotBoard(
-          width: 308,
-          child: Column(
-            children: const [
-              TsaiOtpInput(),
-              _gap24,
-              TsaiOtpInput(),
-              _gap24,
-              TsaiOtpInput(initialValue: '12'),
-              _gap24,
-              TsaiOtpInput(initialValue: '1234'),
-              _gap24,
-              TsaiOtpInput(initialValue: '1234', isError: true),
-              _gap24,
-              TsaiOtpInput(initialValue: '1234', enabled: false),
-              _gap24,
-              TsaiOtpInput(initialValue: '1234', isSuccess: true),
-            ],
-          ),
-        ),
-      ),
-    ],
   );
 }
 
@@ -672,10 +467,8 @@ class _PinInputDemoState extends State<PinInputDemo> {
   final _controller = TextEditingController();
   int _length = 4;
   bool _enabled = true;
-  bool _autofocus = false;
   bool _error = false;
   bool _success = false;
-  String _semanticLabel = 'PIN';
   String _event = 'No events';
 
   @override
@@ -694,11 +487,6 @@ class _PinInputDemoState extends State<PinInputDemo> {
           controller: _controller,
           onChanged: (_) => setState(() {}),
         ),
-        _TextProperty(
-          label: 'semanticLabel',
-          value: _semanticLabel,
-          onChanged: (value) => setState(() => _semanticLabel = value),
-        ),
         _LengthProperty(
           value: _length,
           onChanged: (value) {
@@ -710,11 +498,6 @@ class _PinInputDemoState extends State<PinInputDemo> {
           label: 'enabled',
           value: _enabled,
           onChanged: (value) => setState(() => _enabled = value),
-        ),
-        _Toggle(
-          label: 'autofocus',
-          value: _autofocus,
-          onChanged: (value) => setState(() => _autofocus = value),
         ),
         _StatusToggles(
           error: _error,
@@ -734,10 +517,9 @@ class _PinInputDemoState extends State<PinInputDemo> {
         controller: _controller,
         length: _length,
         enabled: _enabled,
-        autofocus: _autofocus,
         isError: _error,
         isSuccess: _success,
-        semanticLabel: _semanticLabel,
+        semanticLabel: 'PIN',
         onChanged: (value) => setState(() => _event = 'onChanged($value)'),
         onCompleted: (value) => setState(() => _event = 'onCompleted($value)'),
         onSubmitted: (value) => setState(() => _event = 'onSubmitted($value)'),
@@ -745,41 +527,13 @@ class _PinInputDemoState extends State<PinInputDemo> {
             setState(() => _event = 'onFocusChange($value)'),
       ),
     ),
-    examples: [
-      PenpotExample(
-        title: 'Input PIN',
-        child: PenpotBoard(
-          width: 156,
-          child: Column(
-            children: const [
-              TsaiPinInput(),
-              _gap68,
-              TsaiPinInput(initialValue: '12'),
-              _gap68,
-              TsaiPinInput(initialValue: '1234'),
-              _gap68,
-              TsaiPinInput(initialValue: '1234', isError: true),
-              _gap68,
-              TsaiPinInput(initialValue: '1234', isSuccess: true),
-              _gap68,
-              TsaiPinInput(initialValue: '1234', enabled: false),
-            ],
-          ),
-        ),
-      ),
-    ],
   );
 }
 
 class _DemoPage extends StatelessWidget {
-  const _DemoPage({
-    required this.pageKey,
-    required this.playground,
-    required this.examples,
-  });
+  const _DemoPage({required this.pageKey, required this.playground});
   final String pageKey;
   final Widget playground;
-  final List<Widget> examples;
 
   @override
   Widget build(BuildContext context) {
@@ -787,12 +541,7 @@ class _DemoPage extends StatelessWidget {
     return ListView(
       key: ValueKey<String>(pageKey),
       padding: EdgeInsets.all(tokens.spacing.space24),
-      children: [
-        const TsaiTextHeading('Variants', size: TsaiHeadingSize.small),
-        SizedBox(height: tokens.spacing.space16),
-        ...examples,
-        playground,
-      ],
+      children: [playground],
     );
   }
 }
@@ -885,16 +634,17 @@ class _StatusToggles extends StatelessWidget {
   final ValueChanged<bool> onSuccess;
 
   @override
-  Widget build(BuildContext context) => Row(
-    mainAxisSize: MainAxisSize.min,
+  Widget build(BuildContext context) => Wrap(
+    spacing: 8,
+    runSpacing: 8,
     children: [
       PlaygroundToggleControl(
-        label: 'isError',
+        label: 'Error state',
         value: error,
         onChanged: onError,
       ),
       PlaygroundToggleControl(
-        label: 'isSuccess',
+        label: 'Success state',
         value: success,
         onChanged: onSuccess,
       ),
@@ -910,9 +660,5 @@ class _EventProperty extends StatelessWidget {
   Widget build(BuildContext context) =>
       PlaygroundOutput(label: 'Last callback', value: value);
 }
-
-const _gap24 = SizedBox(height: 24);
-const _gap26 = SizedBox(height: 26);
-const _gap68 = SizedBox(height: 68);
 
 String? _emptyToNull(String value) => value.isEmpty ? null : value;

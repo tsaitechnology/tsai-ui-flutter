@@ -14,17 +14,17 @@ lib/
     component_playground.dart            # Shared preview and parameter controls
   features/
     app_examples/
-      app_with_two_pages_example.dart     # Composed Home/Form app shell
+      multi_screen_app_example.dart       # Complete multi-screen app shell
     bottom_nav_bar/
-      bottom_nav_bar_demo.dart            # One-to-five item glass/backdrop examples
+      bottom_nav_bar_demo.dart            # Configurable navigation playground
       bottom_nav_bar_demo_screen.dart
     buttons/
       button_demo.dart                   # Embeddable button demo
       button_demo_screen.dart            # Full-page composition
     avatars/
-      avatar_demo_screen.dart             # Avatar and UserPill examples
+      avatar_demo_screen.dart             # Avatar and UserPill playgrounds
     icons/
-      icon_demo_screen.dart               # TsaiIcon, HitIcon, and CircleIcon examples
+      icon_demo_screen.dart               # Icon playgrounds
     inputs/
       input_demo.dart                    # Separate Input, Phone, OTP, and PIN demos
       input_demo_screen.dart
@@ -38,10 +38,10 @@ lib/
       selection_controls_demo.dart       # Separate Checkbox, Radio, and Switch demos
       selection_controls_demo_screen.dart
     tabs/
-      tabs_demo.dart                      # Document, viewport, and sticky compositions
-      tabs_demo_screen.dart               # Separate full-page scenario screens
+      tabs_demo.dart                      # Configurable tabs playground
+      tabs_demo_screen.dart               # Full-page composition
     ui_blocks/
-      ui_blocks_demo.dart                 # Section Header, Empty State, List Item, and List examples
+      ui_blocks_demo.dart                 # UI-block playgrounds
       ui_blocks_demo_screen.dart
     typography/
       typography_demo.dart               # Embeddable typography demo
@@ -65,7 +65,7 @@ CatalogApp
 - `ComponentDemoWindow` owns the common scaffold, entity navigation, and theme
   switch UI. It does not know how an entity demo is implemented.
 - An entity screen only composes its demo with `ComponentDemoWindow`.
-- An entity demo renders the component matrix without creating a
+- An entity demo renders one configurable playground without creating a
   `MaterialApp`, `Scaffold`, route, or theme state.
 - An app example composes several library components into a stateful screen
   shell. It has no component playground and remains internal to the catalog.
@@ -87,11 +87,9 @@ Render one full entity page by opening its route:
 /          Typography
 /#/buttons Buttons on Flutter web
 /#/links Links
-/#/tabs-document Tabs in a document-owned scroll view
-/#/tabs-viewport Fixed tabs with section-owned scrolling
-/#/tabs-sticky Tabs pinned after the page header
-/#/bottom-nav-bar Bottom Nav Bar with 1-5 destinations
-/#/app-examples/two-pages App shell with Home and Form pages
+/#/tabs Tabs playground
+/#/bottom-nav-bar Bottom Nav Bar playground
+/#/app-examples/multi-screen Complete multi-screen app example
 /#/icons/tsai-icon TsaiIcon
 /#/icons/hit-icon HitIcon
 /#/icons/circle-icon CircleIcon

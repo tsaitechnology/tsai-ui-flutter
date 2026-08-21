@@ -35,7 +35,7 @@ class _ModalDialogDemoState extends State<ModalDialogDemo> {
           onChanged: (value) => setState(() => _message = value),
         ),
         PlaygroundSelectControl<TsaiModalDialogActionsLayout>(
-          label: 'actionsLayout',
+          label: 'Actions layout',
           value: _layout,
           values: TsaiModalDialogActionsLayout.values,
           onChanged: (value) => setState(() => _layout = value),

@@ -27,49 +27,6 @@ class _HomeTopBarDemoState extends State<HomeTopBarDemo> {
   @override
   Widget build(BuildContext context) => _LayoutDocument(
     key: const ValueKey<String>('home-top-bar-demo'),
-    variants: [
-      const _SectionLabel('Title and menu'),
-      _HomeTopBarPreview(
-        child: HomeTopBar(
-          leading: const [
-            TsaiTextHeading('Dashboard', size: TsaiHeadingSize.small),
-          ],
-          trailing: [
-            HomeTopBarAction(
-              icon: const TsaiIcon(LucideIcons.menu),
-              semanticLabel: 'Menu',
-              onPressed: () {},
-            ),
-          ],
-        ),
-      ),
-      const _SectionLabel('User and actions'),
-      _HomeTopBarPreview(
-        child: HomeTopBar(
-          leading: [
-            UserPill(
-              name: 'Ilona T.',
-              initials: 'IT',
-              semanticLabel: 'Open profile',
-              onPressed: () {},
-            ),
-          ],
-          trailing: [
-            HomeTopBarAction(
-              icon: const TsaiIcon(LucideIcons.scan_line),
-              semanticLabel: 'Scan',
-              onPressed: () {},
-            ),
-            HomeTopBarAction(
-              icon: const TsaiIcon(LucideIcons.bell),
-              semanticLabel: 'Notifications',
-              showIndicator: true,
-              onPressed: () {},
-            ),
-          ],
-        ),
-      ),
-    ],
     playground: ComponentPlayground(
       controls: [
         PlaygroundSelectControl<_HomeLeadingContent>(
@@ -117,33 +74,6 @@ class _PageTopBarDemoState extends State<PageTopBarDemo> {
   @override
   Widget build(BuildContext context) => _LayoutDocument(
     key: const ValueKey<String>('page-top-bar-demo'),
-    variants: [
-      const _SectionLabel('Title with two edge actions'),
-      PageTopBar(
-        leading: [
-          PageTopBarAction(
-            icon: const TsaiIcon(LucideIcons.arrow_left),
-            semanticLabel: 'Back',
-            onPressed: () {},
-          ),
-        ],
-        title: 'Card details',
-        trailing: [
-          PageTopBarAction(
-            icon: const TsaiIcon(LucideIcons.plus),
-            semanticLabel: 'Add',
-            onPressed: () {},
-          ),
-          PageTopBarAction(
-            icon: const TsaiIcon(LucideIcons.ellipsis),
-            semanticLabel: 'More',
-            onPressed: () {},
-          ),
-        ],
-      ),
-      const _SectionLabel('Title only'),
-      const PageTopBar(title: 'Activity'),
-    ],
     playground: ComponentPlayground(
       controls: [
         PlaygroundTextControl(
@@ -196,10 +126,6 @@ class _PageWithTopBarDemoState extends State<PageWithTopBarDemo> {
   @override
   Widget build(BuildContext context) => _LayoutDocument(
     key: const ValueKey<String>('page-with-top-bar-demo'),
-    variants: [
-      const _SectionLabel('Scrolling composition'),
-      const SizedBox(height: 420, child: _PortfolioPage()),
-    ],
     playground: ComponentPlayground(
       controls: [
         PlaygroundTextControl(
@@ -280,36 +206,6 @@ class _PageWithSearchTopBarDemoState extends State<PageWithSearchTopBarDemo> {
   @override
   Widget build(BuildContext context) => _LayoutDocument(
     key: const ValueKey<String>('page-with-search-top-bar-demo'),
-    variants: [
-      const _SectionLabel('Pinned glass app bar and search'),
-      SizedBox(
-        height: 420,
-        child: PageWithSearchTopBar(
-          title: 'Card details',
-          search: const TsaiSearchInput(),
-          leading: [
-            PageTopBarAction(
-              icon: const TsaiIcon(LucideIcons.arrow_left),
-              semanticLabel: 'Back',
-              onPressed: () {},
-            ),
-          ],
-          trailing: [
-            PageTopBarAction(
-              icon: const TsaiIcon(LucideIcons.plus),
-              semanticLabel: 'Add',
-              onPressed: () {},
-            ),
-            PageTopBarAction(
-              icon: const TsaiIcon(LucideIcons.ellipsis),
-              semanticLabel: 'More',
-              onPressed: () {},
-            ),
-          ],
-          body: _body(_BodyContent.list),
-        ),
-      ),
-    ],
     playground: ComponentPlayground(
       controls: [
         PlaygroundTextControl(
@@ -343,7 +239,7 @@ class _PageWithSearchTopBarDemoState extends State<PageWithSearchTopBarDemo> {
           labels: const ['None', 'Two actions', 'One action', 'Text'],
           onChanged: (value) => setState(() => _trailing = value),
         ),
-        PlaygroundOutput(label: 'event', value: _event),
+        PlaygroundOutput(label: 'Last action', value: _event),
       ],
       preview: SizedBox(
         height: 320,
@@ -365,48 +261,16 @@ class _PageWithSearchTopBarDemoState extends State<PageWithSearchTopBarDemo> {
 }
 
 class _LayoutDocument extends StatelessWidget {
-  const _LayoutDocument({
-    required this.variants,
-    required this.playground,
-    super.key,
-  });
+  const _LayoutDocument({required this.playground, super.key});
 
-  final List<Widget> variants;
   final Widget playground;
 
   @override
   Widget build(BuildContext context) {
     final tokens = TsaiThemeTokens.of(context);
     return ListView(
-      padding: EdgeInsets.only(bottom: tokens.spacing.space24),
-      children: [
-        const _SectionLabel('Variants'),
-        ...variants,
-        Padding(
-          padding: EdgeInsets.all(tokens.spacing.space16),
-          child: playground,
-        ),
-      ],
-    );
-  }
-}
-
-class _SectionLabel extends StatelessWidget {
-  const _SectionLabel(this.label);
-
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    final tokens = TsaiThemeTokens.of(context);
-    return Padding(
-      padding: EdgeInsets.fromLTRB(
-        tokens.spacing.space16,
-        tokens.spacing.space24,
-        tokens.spacing.space16,
-        tokens.spacing.space8,
-      ),
-      child: TsaiTextHeading(label, size: TsaiHeadingSize.small),
+      padding: EdgeInsets.all(tokens.spacing.space16),
+      children: [playground],
     );
   }
 }
@@ -421,31 +285,6 @@ class _HomeTopBarPreview extends StatelessWidget {
     key: const ValueKey<String>('home-top-bar-preview'),
     height: 112,
     child: Align(alignment: Alignment.topCenter, child: child),
-  );
-}
-
-class _PortfolioPage extends StatelessWidget {
-  const _PortfolioPage();
-
-  @override
-  Widget build(BuildContext context) => PageWithTopBar(
-    heading: 'Portfolio',
-    subtitle: 'Main account',
-    leading: [
-      PageTopBarAction(
-        icon: const TsaiIcon(LucideIcons.arrow_left),
-        semanticLabel: 'Back',
-        onPressed: () {},
-      ),
-    ],
-    trailing: [
-      PageTopBarAction(
-        icon: const TsaiIcon(LucideIcons.plus),
-        semanticLabel: 'Add',
-        onPressed: () {},
-      ),
-    ],
-    body: const _PortfolioBody(),
   );
 }
 

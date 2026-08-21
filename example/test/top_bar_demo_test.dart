@@ -21,7 +21,7 @@ void main() {
       findsOneWidget,
     );
     expect(find.text('title content'), findsNothing);
-    expect(find.text('title'), findsOneWidget);
+    expect(find.text('Title'), findsOneWidget);
     expect(find.text('Two actions'), findsOneWidget);
 
     await tester.enterText(

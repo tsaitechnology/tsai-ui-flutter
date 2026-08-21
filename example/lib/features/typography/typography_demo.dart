@@ -10,223 +10,23 @@ class TypographyDemo extends StatelessWidget {
   final ScrollPhysics? physics;
 
   @override
-  Widget build(BuildContext context) => CustomScrollView(
+  Widget build(BuildContext context) => ListView(
     key: const ValueKey<String>('typography-demo'),
     controller: controller,
     physics: physics,
-    slivers: [
-      const SliverToBoxAdapter(
-        child: _TypographySection(
-          title: 'Inter / Heading',
-          samples: [
-            _TypographySample(
-              name: 'headingExtraLarge',
-              sample: TsaiTextHeading(
-                'Make every decision visible',
-                size: TsaiHeadingSize.extraLarge,
-              ),
-            ),
-            _TypographySample(
-              name: 'headingLarge',
-              sample: TsaiTextHeading(
-                'Make every decision visible',
-                size: TsaiHeadingSize.large,
-              ),
-            ),
-            _TypographySample(
-              name: 'headingMedium',
-              sample: TsaiTextHeading(
-                'Make every decision visible',
-                size: TsaiHeadingSize.medium,
-              ),
-            ),
-            _TypographySample(
-              name: 'headingSmall',
-              sample: TsaiTextHeading(
-                'Make every decision visible',
-                size: TsaiHeadingSize.small,
-              ),
-            ),
-          ],
-        ),
-      ),
-      const SliverToBoxAdapter(
-        child: _TypographySection(
-          title: 'Inter / Body',
-          samples: [
-            _TypographySample(
-              name: 'bodyLargeMedium',
-              sample: TsaiTextBody(
-                'Clear interfaces turn complex work into focused action.',
-                size: TsaiBodySize.large,
-                weight: TsaiTextWeight.medium,
-              ),
-            ),
-            _TypographySample(
-              name: 'bodyLarge',
-              sample: TsaiTextBody(
-                'Clear interfaces turn complex work into focused action.',
-                size: TsaiBodySize.large,
-                weight: TsaiTextWeight.regular,
-              ),
-            ),
-            _TypographySample(
-              name: 'bodyMediumMedium',
-              sample: TsaiTextBody(
-                'Clear interfaces turn complex work into focused action.',
-                size: TsaiBodySize.medium,
-                weight: TsaiTextWeight.medium,
-              ),
-            ),
-            _TypographySample(
-              name: 'bodyMedium',
-              sample: TsaiTextBody(
-                'Clear interfaces turn complex work into focused action.',
-                size: TsaiBodySize.medium,
-                weight: TsaiTextWeight.regular,
-              ),
-            ),
-          ],
-        ),
-      ),
-      const SliverToBoxAdapter(
-        child: _TypographySection(
-          title: 'Inter / Button',
-          samples: [
-            _TypographySample(
-              name: 'buttonLarge',
-              sample: TsaiTextButton(
-                'Continue',
-                size: TsaiButtonTextSize.large,
-              ),
-            ),
-            _TypographySample(
-              name: 'buttonMedium',
-              sample: TsaiTextButton(
-                'Continue',
-                size: TsaiButtonTextSize.medium,
-              ),
-            ),
-          ],
-        ),
-      ),
-      const SliverToBoxAdapter(
-        child: _TypographySection(
-          title: 'Inter / Caption',
-          samples: [
-            _TypographySample(
-              name: 'captionMedium',
-              sample: TsaiTextCaption(
-                'Updated a moment ago',
-                size: TsaiCaptionSize.medium,
-                weight: TsaiTextWeight.medium,
-              ),
-            ),
-            _TypographySample(
-              name: 'captionMediumRegular',
-              sample: TsaiTextCaption(
-                'Updated a moment ago',
-                size: TsaiCaptionSize.medium,
-                weight: TsaiTextWeight.regular,
-              ),
-            ),
-            _TypographySample(
-              name: 'captionSmall',
-              sample: TsaiTextCaption(
-                'Updated a moment ago',
-                size: TsaiCaptionSize.small,
-                weight: TsaiTextWeight.medium,
-              ),
-            ),
-            _TypographySample(
-              name: 'captionSmallRegular',
-              sample: TsaiTextCaption(
-                'Updated a moment ago',
-                size: TsaiCaptionSize.small,
-                weight: TsaiTextWeight.regular,
-              ),
-            ),
-          ],
-        ),
-      ),
-      const SliverToBoxAdapter(
-        child: _TypographySection(
-          title: 'JetBrains Mono',
-          samples: [
-            _TypographySample(
-              name: 'monoHeadingExtraLarge',
-              sample: TsaiTextMonoHeading(
-                '24,891.42',
-                size: TsaiMonoHeadingSize.extraLarge,
-              ),
-            ),
-            _TypographySample(
-              name: 'monoHeadingLarge',
-              sample: TsaiTextMonoHeading(
-                '24,891.42',
-                size: TsaiMonoHeadingSize.large,
-              ),
-            ),
-            _TypographySample(
-              name: 'monoBodyLarge',
-              sample: TsaiTextMonoBody(
-                'ETH / USD  +4.81%',
-                size: TsaiBodySize.large,
-              ),
-            ),
-            _TypographySample(
-              name: 'monoBodyMedium',
-              sample: TsaiTextMonoBody(
-                'ETH / USD  +4.81%',
-                size: TsaiBodySize.medium,
-              ),
-            ),
-            _TypographySample(
-              name: 'monoCaption',
-              sample: TsaiTextMonoCaption(
-                '09:41:27 UTC',
-                weight: TsaiTextWeight.medium,
-              ),
-            ),
-            _TypographySample(
-              name: 'monoCaptionRegular',
-              sample: TsaiTextMonoCaption(
-                '09:41:27 UTC',
-                weight: TsaiTextWeight.regular,
-              ),
-            ),
-          ],
-        ),
-      ),
-      SliverPadding(
-        padding: EdgeInsets.all(TsaiThemeTokens.of(context).spacing.space24),
-        sliver: const SliverToBoxAdapter(child: _TypographyPlayground()),
-      ),
-    ],
+    padding: EdgeInsets.all(TsaiThemeTokens.of(context).spacing.space24),
+    children: const [_TypographyPlayground()],
   );
 }
 
 enum _TypographyRole {
-  headingExtraLarge,
-  headingLarge,
-  headingMedium,
-  headingSmall,
-  bodyLargeMedium,
-  bodyLarge,
-  bodyMediumMedium,
-  bodyMedium,
-  buttonLarge,
-  buttonMedium,
-  captionMedium,
-  captionMediumRegular,
-  captionSmall,
-  captionSmallRegular,
-  monoHeadingExtraLarge,
-  monoHeadingLarge,
-  monoBodyLarge,
-  monoBodyMedium,
+  heading,
+  body,
+  button,
+  caption,
+  monoHeading,
+  monoBody,
   monoCaption,
-  monoCaptionRegular,
 }
 
 enum _TypographyColor { defaultColor, secondary, error, success }
@@ -239,9 +39,8 @@ class _TypographyPlayground extends StatefulWidget {
 }
 
 class _TypographyPlaygroundState extends State<_TypographyPlayground> {
-  String _data = 'Typography preview';
-  String _semanticsLabel = '';
-  _TypographyRole _role = _TypographyRole.headingExtraLarge;
+  String _text = 'Typography preview';
+  _TypographyRole _role = _TypographyRole.heading;
   _TypographyColor _color = _TypographyColor.defaultColor;
   TextAlign _textAlign = TextAlign.start;
   TextOverflow _overflow = TextOverflow.clip;
@@ -261,41 +60,48 @@ class _TypographyPlaygroundState extends State<_TypographyPlayground> {
     return ComponentPlayground(
       controls: [
         PlaygroundTextControl(
-          label: 'data',
-          value: _data,
-          onChanged: (value) => setState(() => _data = value),
-        ),
-        PlaygroundTextControl(
-          label: 'semanticsLabel',
-          value: _semanticsLabel,
-          onChanged: (value) => setState(() => _semanticsLabel = value),
+          label: 'Text',
+          value: _text,
+          onChanged: (value) => setState(() => _text = value),
         ),
         PlaygroundSelectControl<_TypographyRole>(
-          label: 'role',
+          label: 'Text style',
           value: _role,
           values: _TypographyRole.values,
+          labels: const [
+            'Heading',
+            'Body',
+            'Button',
+            'Caption',
+            'Mono heading',
+            'Mono body',
+            'Mono caption',
+          ],
           onChanged: (value) => setState(() => _role = value),
         ),
         PlaygroundSelectControl<_TypographyColor>(
-          label: 'color',
+          label: 'Color',
           value: _color,
           values: _TypographyColor.values,
+          labels: const ['Default', 'Secondary', 'Error', 'Success'],
           onChanged: (value) => setState(() => _color = value),
         ),
         PlaygroundSelectControl<TextAlign>(
-          label: 'textAlign',
+          label: 'Text alignment',
           value: _textAlign,
           values: const [TextAlign.start, TextAlign.center, TextAlign.end],
+          labels: const ['Start', 'Center', 'End'],
           onChanged: (value) => setState(() => _textAlign = value),
         ),
         PlaygroundSelectControl<TextOverflow>(
-          label: 'overflow',
+          label: 'Overflow behavior',
           value: _overflow,
           values: TextOverflow.values,
+          labels: const ['Clip', 'Fade', 'Ellipsis', 'Visible'],
           onChanged: (value) => setState(() => _overflow = value),
         ),
         PlaygroundField(
-          label: 'maxLines: ${_maxLines == 0 ? 'null' : _maxLines}',
+          label: 'Maximum lines: ${_maxLines == 0 ? 'Unlimited' : _maxLines}',
           child: Slider(
             value: _maxLines.toDouble(),
             min: 0,
@@ -305,7 +111,7 @@ class _TypographyPlaygroundState extends State<_TypographyPlayground> {
           ),
         ),
         PlaygroundField(
-          label: 'textScaler: ${_textScale.toStringAsFixed(1)}',
+          label: 'Text scale: ${_textScale.toStringAsFixed(1)}×',
           child: Slider(
             value: _textScale,
             min: 0.8,
@@ -315,338 +121,91 @@ class _TypographyPlaygroundState extends State<_TypographyPlayground> {
           ),
         ),
         PlaygroundToggleControl(
-          label: 'softWrap',
+          label: 'Wrap text',
           value: _softWrap,
           onChanged: (value) => setState(() => _softWrap = value),
         ),
       ],
-      preview: _buildText(
-        color: color,
-        maxLines: _maxLines == 0 ? null : _maxLines,
-      ),
+      preview: _buildText(color: color),
     );
   }
 
-  TsaiText _buildText({required Color? color, required int? maxLines}) {
-    final common = (
-      color: color,
-      textAlign: _textAlign,
-      overflow: _overflow,
-      maxLines: maxLines,
-      softWrap: _softWrap,
-      textScaler: TextScaler.linear(_textScale),
-      semanticsLabel: _emptyToNull(_semanticsLabel),
-    );
+  TsaiText _buildText({required Color? color}) {
+    final maxLines = _maxLines == 0 ? null : _maxLines;
+    final scaler = TextScaler.linear(_textScale);
     return switch (_role) {
-      _TypographyRole.headingExtraLarge => TsaiTextHeading(
-        _data,
+      _TypographyRole.heading => TsaiTextHeading(
+        _text,
         size: TsaiHeadingSize.extraLarge,
-        color: common.color,
-        textAlign: common.textAlign,
-        overflow: common.overflow,
-        maxLines: common.maxLines,
-        softWrap: common.softWrap,
-        textScaler: common.textScaler,
-        semanticsLabel: common.semanticsLabel,
+        color: color,
+        textAlign: _textAlign,
+        overflow: _overflow,
+        maxLines: maxLines,
+        softWrap: _softWrap,
+        textScaler: scaler,
       ),
-      _TypographyRole.headingLarge => TsaiTextHeading(
-        _data,
-        size: TsaiHeadingSize.large,
-        color: common.color,
-        textAlign: common.textAlign,
-        overflow: common.overflow,
-        maxLines: common.maxLines,
-        softWrap: common.softWrap,
-        textScaler: common.textScaler,
-        semanticsLabel: common.semanticsLabel,
-      ),
-      _TypographyRole.headingMedium => TsaiTextHeading(
-        _data,
-        size: TsaiHeadingSize.medium,
-        color: common.color,
-        textAlign: common.textAlign,
-        overflow: common.overflow,
-        maxLines: common.maxLines,
-        softWrap: common.softWrap,
-        textScaler: common.textScaler,
-        semanticsLabel: common.semanticsLabel,
-      ),
-      _TypographyRole.headingSmall => TsaiTextHeading(
-        _data,
-        size: TsaiHeadingSize.small,
-        color: common.color,
-        textAlign: common.textAlign,
-        overflow: common.overflow,
-        maxLines: common.maxLines,
-        softWrap: common.softWrap,
-        textScaler: common.textScaler,
-        semanticsLabel: common.semanticsLabel,
-      ),
-      _TypographyRole.bodyLargeMedium => TsaiTextBody(
-        _data,
-        size: TsaiBodySize.large,
-        weight: TsaiTextWeight.medium,
-        color: common.color,
-        textAlign: common.textAlign,
-        overflow: common.overflow,
-        maxLines: common.maxLines,
-        softWrap: common.softWrap,
-        textScaler: common.textScaler,
-        semanticsLabel: common.semanticsLabel,
-      ),
-      _TypographyRole.bodyLarge => TsaiTextBody(
-        _data,
+      _TypographyRole.body => TsaiTextBody(
+        _text,
         size: TsaiBodySize.large,
         weight: TsaiTextWeight.regular,
-        color: common.color,
-        textAlign: common.textAlign,
-        overflow: common.overflow,
-        maxLines: common.maxLines,
-        softWrap: common.softWrap,
-        textScaler: common.textScaler,
-        semanticsLabel: common.semanticsLabel,
+        color: color,
+        textAlign: _textAlign,
+        overflow: _overflow,
+        maxLines: maxLines,
+        softWrap: _softWrap,
+        textScaler: scaler,
       ),
-      _TypographyRole.bodyMediumMedium => TsaiTextBody(
-        _data,
-        size: TsaiBodySize.medium,
-        weight: TsaiTextWeight.medium,
-        color: common.color,
-        textAlign: common.textAlign,
-        overflow: common.overflow,
-        maxLines: common.maxLines,
-        softWrap: common.softWrap,
-        textScaler: common.textScaler,
-        semanticsLabel: common.semanticsLabel,
-      ),
-      _TypographyRole.bodyMedium => TsaiTextBody(
-        _data,
-        size: TsaiBodySize.medium,
-        weight: TsaiTextWeight.regular,
-        color: common.color,
-        textAlign: common.textAlign,
-        overflow: common.overflow,
-        maxLines: common.maxLines,
-        softWrap: common.softWrap,
-        textScaler: common.textScaler,
-        semanticsLabel: common.semanticsLabel,
-      ),
-      _TypographyRole.buttonLarge => TsaiTextButton(
-        _data,
+      _TypographyRole.button => TsaiTextButton(
+        _text,
         size: TsaiButtonTextSize.large,
-        color: common.color,
-        textAlign: common.textAlign,
-        overflow: common.overflow,
-        maxLines: common.maxLines,
-        softWrap: common.softWrap,
-        textScaler: common.textScaler,
-        semanticsLabel: common.semanticsLabel,
+        color: color,
+        textAlign: _textAlign,
+        overflow: _overflow,
+        maxLines: maxLines,
+        softWrap: _softWrap,
+        textScaler: scaler,
       ),
-      _TypographyRole.buttonMedium => TsaiTextButton(
-        _data,
-        size: TsaiButtonTextSize.medium,
-        color: common.color,
-        textAlign: common.textAlign,
-        overflow: common.overflow,
-        maxLines: common.maxLines,
-        softWrap: common.softWrap,
-        textScaler: common.textScaler,
-        semanticsLabel: common.semanticsLabel,
-      ),
-      _TypographyRole.captionMedium => TsaiTextCaption(
-        _data,
-        size: TsaiCaptionSize.medium,
-        weight: TsaiTextWeight.medium,
-        color: common.color,
-        textAlign: common.textAlign,
-        overflow: common.overflow,
-        maxLines: common.maxLines,
-        softWrap: common.softWrap,
-        textScaler: common.textScaler,
-        semanticsLabel: common.semanticsLabel,
-      ),
-      _TypographyRole.captionMediumRegular => TsaiTextCaption(
-        _data,
+      _TypographyRole.caption => TsaiTextCaption(
+        _text,
         size: TsaiCaptionSize.medium,
         weight: TsaiTextWeight.regular,
-        color: common.color,
-        textAlign: common.textAlign,
-        overflow: common.overflow,
-        maxLines: common.maxLines,
-        softWrap: common.softWrap,
-        textScaler: common.textScaler,
-        semanticsLabel: common.semanticsLabel,
+        color: color,
+        textAlign: _textAlign,
+        overflow: _overflow,
+        maxLines: maxLines,
+        softWrap: _softWrap,
+        textScaler: scaler,
       ),
-      _TypographyRole.captionSmall => TsaiTextCaption(
-        _data,
-        size: TsaiCaptionSize.small,
-        weight: TsaiTextWeight.medium,
-        color: common.color,
-        textAlign: common.textAlign,
-        overflow: common.overflow,
-        maxLines: common.maxLines,
-        softWrap: common.softWrap,
-        textScaler: common.textScaler,
-        semanticsLabel: common.semanticsLabel,
-      ),
-      _TypographyRole.captionSmallRegular => TsaiTextCaption(
-        _data,
-        size: TsaiCaptionSize.small,
-        weight: TsaiTextWeight.regular,
-        color: common.color,
-        textAlign: common.textAlign,
-        overflow: common.overflow,
-        maxLines: common.maxLines,
-        softWrap: common.softWrap,
-        textScaler: common.textScaler,
-        semanticsLabel: common.semanticsLabel,
-      ),
-      _TypographyRole.monoHeadingExtraLarge => TsaiTextMonoHeading(
-        _data,
+      _TypographyRole.monoHeading => TsaiTextMonoHeading(
+        _text,
         size: TsaiMonoHeadingSize.extraLarge,
-        color: common.color,
-        textAlign: common.textAlign,
-        overflow: common.overflow,
-        maxLines: common.maxLines,
-        softWrap: common.softWrap,
-        textScaler: common.textScaler,
-        semanticsLabel: common.semanticsLabel,
+        color: color,
+        textAlign: _textAlign,
+        overflow: _overflow,
+        maxLines: maxLines,
+        softWrap: _softWrap,
+        textScaler: scaler,
       ),
-      _TypographyRole.monoHeadingLarge => TsaiTextMonoHeading(
-        _data,
-        size: TsaiMonoHeadingSize.large,
-        color: common.color,
-        textAlign: common.textAlign,
-        overflow: common.overflow,
-        maxLines: common.maxLines,
-        softWrap: common.softWrap,
-        textScaler: common.textScaler,
-        semanticsLabel: common.semanticsLabel,
-      ),
-      _TypographyRole.monoBodyLarge => TsaiTextMonoBody(
-        _data,
+      _TypographyRole.monoBody => TsaiTextMonoBody(
+        _text,
         size: TsaiBodySize.large,
-        color: common.color,
-        textAlign: common.textAlign,
-        overflow: common.overflow,
-        maxLines: common.maxLines,
-        softWrap: common.softWrap,
-        textScaler: common.textScaler,
-        semanticsLabel: common.semanticsLabel,
-      ),
-      _TypographyRole.monoBodyMedium => TsaiTextMonoBody(
-        _data,
-        size: TsaiBodySize.medium,
-        color: common.color,
-        textAlign: common.textAlign,
-        overflow: common.overflow,
-        maxLines: common.maxLines,
-        softWrap: common.softWrap,
-        textScaler: common.textScaler,
-        semanticsLabel: common.semanticsLabel,
+        color: color,
+        textAlign: _textAlign,
+        overflow: _overflow,
+        maxLines: maxLines,
+        softWrap: _softWrap,
+        textScaler: scaler,
       ),
       _TypographyRole.monoCaption => TsaiTextMonoCaption(
-        _data,
-        weight: TsaiTextWeight.medium,
-        color: common.color,
-        textAlign: common.textAlign,
-        overflow: common.overflow,
-        maxLines: common.maxLines,
-        softWrap: common.softWrap,
-        textScaler: common.textScaler,
-        semanticsLabel: common.semanticsLabel,
-      ),
-      _TypographyRole.monoCaptionRegular => TsaiTextMonoCaption(
-        _data,
+        _text,
         weight: TsaiTextWeight.regular,
-        color: common.color,
-        textAlign: common.textAlign,
-        overflow: common.overflow,
-        maxLines: common.maxLines,
-        softWrap: common.softWrap,
-        textScaler: common.textScaler,
-        semanticsLabel: common.semanticsLabel,
+        color: color,
+        textAlign: _textAlign,
+        overflow: _overflow,
+        maxLines: maxLines,
+        softWrap: _softWrap,
+        textScaler: scaler,
       ),
     };
-  }
-}
-
-String? _emptyToNull(String value) => value.isEmpty ? null : value;
-
-class _TypographySection extends StatelessWidget {
-  const _TypographySection({required this.title, required this.samples});
-
-  final String title;
-  final List<_TypographySample> samples;
-
-  @override
-  Widget build(BuildContext context) {
-    final tokens = TsaiThemeTokens.of(context);
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        border: Border(bottom: BorderSide(color: tokens.colors.borderSubtle)),
-      ),
-      child: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 1120),
-          child: Padding(
-            padding: EdgeInsets.all(tokens.spacing.space24),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                TsaiTextHeading(title, size: TsaiHeadingSize.small),
-                SizedBox(height: tokens.spacing.space16),
-                ...samples,
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _TypographySample extends StatelessWidget {
-  const _TypographySample({required this.name, required this.sample});
-
-  final String name;
-  final TsaiText sample;
-
-  @override
-  Widget build(BuildContext context) {
-    final tokens = TsaiThemeTokens.of(context);
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        border: Border(top: BorderSide(color: tokens.colors.borderSubtle)),
-      ),
-      child: Padding(
-        padding: EdgeInsets.symmetric(vertical: tokens.spacing.space16),
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            final label = TsaiTextMonoCaption(
-              name,
-              weight: TsaiTextWeight.regular,
-              color: tokens.colors.contentSecondary,
-            );
-            if (constraints.maxWidth < 680) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  label,
-                  SizedBox(height: tokens.spacing.space16),
-                  sample,
-                ],
-              );
-            }
-            return Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SizedBox(width: 232, child: label),
-                Expanded(child: sample),
-              ],
-            );
-          },
-        ),
-      ),
-    );
   }
 }

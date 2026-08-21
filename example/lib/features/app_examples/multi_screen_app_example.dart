@@ -4,8 +4,8 @@ import 'package:tsai_ui/tsai_ui.dart';
 
 import '../../demo/component_demo_window.dart';
 
-class AppWithTwoPagesExampleScreen extends StatelessWidget {
-  const AppWithTwoPagesExampleScreen({
+class MultiScreenAppExampleScreen extends StatelessWidget {
+  const MultiScreenAppExampleScreen({
     required this.themeMode,
     required this.onThemeModeChanged,
     super.key,
@@ -16,8 +16,8 @@ class AppWithTwoPagesExampleScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => AppExampleWindow(
-    section: ComponentDemoSection.appWithTwoPages,
-    builder: (context, openCatalog) => AppWithTwoPagesExample(
+    section: ComponentDemoSection.multiScreenApp,
+    builder: (context, openCatalog) => MultiScreenAppExample(
       themeMode: themeMode,
       onThemeModeChanged: onThemeModeChanged,
       onOpenCatalog: openCatalog,
@@ -25,8 +25,8 @@ class AppWithTwoPagesExampleScreen extends StatelessWidget {
   );
 }
 
-class AppWithTwoPagesExample extends StatefulWidget {
-  const AppWithTwoPagesExample({
+class MultiScreenAppExample extends StatefulWidget {
+  const MultiScreenAppExample({
     required this.themeMode,
     required this.onThemeModeChanged,
     required this.onOpenCatalog,
@@ -38,10 +38,10 @@ class AppWithTwoPagesExample extends StatefulWidget {
   final VoidCallback onOpenCatalog;
 
   @override
-  State<AppWithTwoPagesExample> createState() => _AppWithTwoPagesExampleState();
+  State<MultiScreenAppExample> createState() => _MultiScreenAppExampleState();
 }
 
-class _AppWithTwoPagesExampleState extends State<AppWithTwoPagesExample> {
+class _MultiScreenAppExampleState extends State<MultiScreenAppExample> {
   static const _navigationItems = [
     BottomNavBarItem(
       icon: TsaiIcon(LucideIcons.house, size: 20),
@@ -51,13 +51,17 @@ class _AppWithTwoPagesExampleState extends State<AppWithTwoPagesExample> {
       icon: TsaiIcon(LucideIcons.file_text, size: 20),
       label: 'Form',
     ),
+    BottomNavBarItem(
+      icon: TsaiIcon(LucideIcons.layout_grid, size: 20),
+      label: 'Showcase',
+    ),
   ];
 
   var _selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) => Stack(
-    key: const ValueKey<String>('app-with-two-pages-example'),
+    key: const ValueKey<String>('multi-screen-app-example'),
     fit: StackFit.expand,
     children: [
       IndexedStack(
@@ -74,6 +78,11 @@ class _AppWithTwoPagesExampleState extends State<AppWithTwoPagesExample> {
             onThemeModeChanged: widget.onThemeModeChanged,
             onOpenCatalog: widget.onOpenCatalog,
             onShowHome: () => setState(() => _selectedIndex = 0),
+          ),
+          ShowcaseScreenExample(
+            themeMode: widget.themeMode,
+            onThemeModeChanged: widget.onThemeModeChanged,
+            onOpenCatalog: widget.onOpenCatalog,
           ),
         ],
       ),
@@ -157,27 +166,40 @@ class _HomeScreenExampleState extends State<HomeScreenExample> {
                         size: TsaiHeadingSize.small,
                       ),
                       SizedBox(height: tokens.spacing.space12),
-                      const Row(
+                      Wrap(
+                        spacing: tokens.spacing.space8,
+                        runSpacing: tokens.spacing.space8,
                         children: [
-                          Expanded(
-                            child: _QuickAction(
-                              icon: LucideIcons.send,
-                              label: 'Transfer',
+                          TsaiButton(
+                            key: const ValueKey<String>('quick-transfer'),
+                            label: 'Transfer',
+                            size: TsaiButtonSize.medium,
+                            leadingIcon: const TsaiIcon(
+                              LucideIcons.send,
+                              size: 16,
                             ),
+                            onPressed: () => _openTransfer(context),
                           ),
-                          SizedBox(width: 8),
-                          Expanded(
-                            child: _QuickAction(
-                              icon: LucideIcons.receipt,
-                              label: 'Pay',
+                          TsaiButton(
+                            key: const ValueKey<String>('quick-pay'),
+                            label: 'Pay',
+                            size: TsaiButtonSize.medium,
+                            variant: TsaiButtonVariant.secondary,
+                            leadingIcon: const TsaiIcon(
+                              LucideIcons.receipt,
+                              size: 16,
                             ),
+                            onPressed: () => _openPayment(context),
                           ),
-                          SizedBox(width: 8),
-                          Expanded(
-                            child: _QuickAction(
-                              icon: LucideIcons.wallet_cards,
-                              label: 'Cards',
+                          TsaiButton(
+                            label: 'Cards',
+                            size: TsaiButtonSize.medium,
+                            variant: TsaiButtonVariant.outline,
+                            leadingIcon: const TsaiIcon(
+                              LucideIcons.wallet_cards,
+                              size: 16,
                             ),
+                            onPressed: () {},
                           ),
                         ],
                       ),
@@ -232,6 +254,54 @@ class _HomeScreenExampleState extends State<HomeScreenExample> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Future<void> _openTransfer(BuildContext context) async {
+    await showTsaiBottomSheet<void>(
+      context: context,
+      title: 'Transfer money',
+      size: TsaiBottomSheetSize.half,
+      child: const TsaiTextBody(
+        'Choose a recipient and amount to move money between accounts.',
+        size: TsaiBodySize.medium,
+        weight: TsaiTextWeight.regular,
+      ),
+      secondaryAction: Builder(
+        builder: (sheetContext) => TsaiButton(
+          label: 'Cancel',
+          variant: TsaiButtonVariant.secondary,
+          onPressed: () => Navigator.of(sheetContext).pop(),
+        ),
+      ),
+      primaryAction: Builder(
+        builder: (sheetContext) => TsaiButton(
+          label: 'Continue',
+          onPressed: () => Navigator.of(sheetContext).pop(),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _openPayment(BuildContext context) async {
+    await showTsaiModalDialog<void>(
+      context: context,
+      title: 'Schedule a payment',
+      message: 'Review your payment details before confirming the transaction.',
+      icon: const TsaiIcon(LucideIcons.receipt),
+      secondaryAction: Builder(
+        builder: (dialogContext) => TsaiButton(
+          label: 'Cancel',
+          variant: TsaiButtonVariant.secondary,
+          onPressed: () => Navigator.of(dialogContext).pop(),
+        ),
+      ),
+      primaryAction: Builder(
+        builder: (dialogContext) => TsaiButton(
+          label: 'Confirm',
+          onPressed: () => Navigator.of(dialogContext).pop(),
+        ),
       ),
     );
   }
@@ -400,6 +470,175 @@ class _FormScreenExampleState extends State<FormScreenExample> {
   }
 }
 
+class ShowcaseScreenExample extends StatefulWidget {
+  const ShowcaseScreenExample({
+    required this.themeMode,
+    required this.onThemeModeChanged,
+    required this.onOpenCatalog,
+    super.key,
+  });
+
+  final ThemeMode themeMode;
+  final ValueChanged<ThemeMode> onThemeModeChanged;
+  final VoidCallback onOpenCatalog;
+
+  @override
+  State<ShowcaseScreenExample> createState() => _ShowcaseScreenExampleState();
+}
+
+class _ShowcaseScreenExampleState extends State<ShowcaseScreenExample> {
+  String _plan = 'pro';
+  bool _notificationsEnabled = true;
+
+  @override
+  Widget build(BuildContext context) {
+    final tokens = TsaiThemeTokens.of(context);
+    return PageWithTopBar(
+      key: const ValueKey<String>('showcase-screen-page'),
+      heading: 'UI kit showcase',
+      subtitle: 'Production-ready components in one flow',
+      trailing: [
+        PageTopBarAction(
+          icon: TsaiIcon(_themeIcon(widget.themeMode)),
+          semanticLabel: _themeLabel(widget.themeMode),
+          onPressed: () =>
+              _toggleTheme(widget.themeMode, widget.onThemeModeChanged),
+        ),
+        PageTopBarAction(
+          icon: const TsaiIcon(LucideIcons.menu),
+          semanticLabel: 'Open component menu',
+          onPressed: widget.onOpenCatalog,
+        ),
+      ],
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 720),
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(
+              tokens.spacing.space16,
+              tokens.spacing.space24,
+              tokens.spacing.space16,
+              tokens.spacing.space64 + 62,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const TsaiInlineAlert(
+                  tone: TsaiInlineAlertTone.success,
+                  title: 'Everything is connected',
+                  message:
+                      'The dashboard is using the same tokens and components across every screen.',
+                ),
+                SizedBox(height: tokens.spacing.space20),
+                TsaiCard(
+                  title: 'Button variants',
+                  trailing: const TsaiIcon(LucideIcons.mouse_pointer_click),
+                  child: Wrap(
+                    spacing: tokens.spacing.space8,
+                    runSpacing: tokens.spacing.space8,
+                    children: [
+                      TsaiButton(label: 'Primary', onPressed: () {}),
+                      TsaiButton(
+                        label: 'Secondary',
+                        variant: TsaiButtonVariant.secondary,
+                        onPressed: () {},
+                      ),
+                      TsaiButton(
+                        label: 'Outline',
+                        variant: TsaiButtonVariant.outline,
+                        onPressed: () {},
+                      ),
+                      TsaiButton(
+                        label: 'Ghost',
+                        variant: TsaiButtonVariant.ghost,
+                        onPressed: () {},
+                      ),
+                      TsaiButton(
+                        label: 'Danger',
+                        tone: TsaiButtonTone.danger,
+                        onPressed: () {},
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: tokens.spacing.space16),
+                TsaiCard(
+                  title: 'Preferences',
+                  trailing: const TsaiIcon(LucideIcons.sliders_horizontal),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      TsaiRadio<String>(
+                        value: 'starter',
+                        groupValue: _plan,
+                        label: 'Starter plan',
+                        description: 'For personal projects and prototypes.',
+                        onChanged: (value) => setState(() => _plan = value!),
+                      ),
+                      SizedBox(height: tokens.spacing.space12),
+                      TsaiRadio<String>(
+                        value: 'pro',
+                        groupValue: _plan,
+                        label: 'Pro plan',
+                        description: 'For teams shipping production apps.',
+                        onChanged: (value) => setState(() => _plan = value!),
+                      ),
+                      SizedBox(height: tokens.spacing.space16),
+                      TsaiSwitch(
+                        value: _notificationsEnabled,
+                        label: 'Release notifications',
+                        description:
+                            'Get notified when a new version is ready.',
+                        onChanged: (value) =>
+                            setState(() => _notificationsEnabled = value),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: tokens.spacing.space16),
+                const TsaiProgressBar(
+                  value: 0.72,
+                  label: 'Workspace setup',
+                  labelPosition: TsaiProgressBarLabelPosition.top,
+                ),
+                SizedBox(height: tokens.spacing.space20),
+                const TsaiToast(
+                  variant: TsaiToastVariant.info,
+                  message: 'Changes saved',
+                ),
+                SizedBox(height: tokens.spacing.space20),
+                Row(
+                  children: [
+                    const TsaiSkeletonAvatar(size: TsaiSkeletonSize.medium),
+                    SizedBox(width: tokens.spacing.space12),
+                    Expanded(
+                      child: Column(
+                        children: [
+                          const TsaiSkeletonText(size: TsaiSkeletonSize.medium),
+                          SizedBox(height: tokens.spacing.space8),
+                          const FractionallySizedBox(
+                            widthFactor: 0.62,
+                            alignment: AlignmentDirectional.centerStart,
+                            child: TsaiSkeletonText(
+                              size: TsaiSkeletonSize.small,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(width: tokens.spacing.space16),
+                    const TsaiSpinner(size: TsaiSpinnerSize.small),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class _BalanceSummary extends StatelessWidget {
   const _BalanceSummary({required this.tokens, super.key});
 
@@ -457,44 +696,6 @@ class _BalanceSummary extends StatelessWidget {
       ],
     ),
   );
-}
-
-class _QuickAction extends StatelessWidget {
-  const _QuickAction({required this.icon, required this.label});
-
-  final IconData icon;
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    final tokens = TsaiThemeTokens.of(context);
-    return Material(
-      color: tokens.colors.surfaceRaised,
-      borderRadius: BorderRadius.circular(tokens.radii.medium),
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: () {},
-        splashFactory: NoSplash.splashFactory,
-        child: SizedBox(
-          height: 88,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              TsaiIcon(icon, size: 20, color: tokens.colors.iconPrimary),
-              SizedBox(height: tokens.spacing.space8),
-              TsaiTextCaption(
-                label,
-                size: TsaiCaptionSize.medium,
-                weight: TsaiTextWeight.medium,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
 }
 
 class _ActivityList extends StatelessWidget {

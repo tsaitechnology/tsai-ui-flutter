@@ -83,6 +83,28 @@ void main() {
     expect(find.bySemanticsLabel('5 seconds remaining'), findsOneWidget);
     semantics.dispose();
   });
+
+  testWidgets('truncates its message without overflowing narrow hosts', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      const _TestApp(
+        child: SizedBox(
+          width: 280,
+          child: TsaiToast(
+            message: 'A deliberately long notification message',
+            variant: TsaiToastVariant.undo,
+          ),
+        ),
+      ),
+    );
+
+    expect(
+      tester.getSize(find.byKey(const ValueKey('tsai-toast-surface'))).width,
+      280,
+    );
+    expect(tester.takeException(), isNull);
+  });
 }
 
 class _TestApp extends StatelessWidget {

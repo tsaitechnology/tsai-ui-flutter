@@ -28,7 +28,7 @@ class _BottomSheetDemoState extends State<BottomSheetDemo> {
           onChanged: (value) => setState(() => _size = value),
         ),
         PlaygroundToggleControl(
-          label: 'showCloseButton',
+          label: 'Show close button',
           value: _showCloseButton,
           onChanged: (value) => setState(() => _showCloseButton = value),
         ),

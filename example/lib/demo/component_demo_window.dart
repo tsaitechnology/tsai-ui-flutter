@@ -225,9 +225,9 @@ enum ComponentDemoSection {
     route: '/top-bars/page-search-layout',
     category: ComponentDemoCategory.layout,
   ),
-  appWithTwoPages(
-    label: 'App with 2 pages',
-    route: '/app-examples/two-pages',
+  multiScreenApp(
+    label: 'Multi-screen app example',
+    route: '/app-examples/multi-screen',
     category: ComponentDemoCategory.appExamples,
   );
 
@@ -357,13 +357,7 @@ class _ComponentDemoWindowState extends State<ComponentDemoWindow> {
                 ],
               ),
             ),
-            Expanded(
-              child: _DemoBody(
-                edgeToEdge:
-                    widget.section.category == ComponentDemoCategory.layout,
-                child: widget.child,
-              ),
-            ),
+            Expanded(child: _DemoBody(child: widget.child)),
           ],
         ),
       ),
@@ -472,26 +466,20 @@ class _CatalogDrawer extends StatelessWidget {
 }
 
 class _DemoBody extends StatelessWidget {
-  const _DemoBody({required this.edgeToEdge, required this.child});
+  const _DemoBody({required this.child});
 
-  final bool edgeToEdge;
   final Widget child;
 
   @override
-  Widget build(BuildContext context) {
-    if (edgeToEdge) {
-      return child;
-    }
-    return LayoutBuilder(
-      builder: (context, constraints) => Center(
-        child: SizedBox(
-          width: constraints.maxWidth.clamp(0, 1120),
-          height: constraints.maxHeight,
-          child: child,
-        ),
+  Widget build(BuildContext context) => LayoutBuilder(
+    builder: (context, constraints) => Center(
+      child: SizedBox(
+        width: constraints.maxWidth.clamp(0, 1120),
+        height: constraints.maxHeight,
+        child: child,
       ),
-    );
-  }
+    ),
+  );
 }
 
 class _DrawerCategory extends StatelessWidget {

@@ -19,242 +19,82 @@ class _ButtonDemoState extends State<ButtonDemo> {
   TsaiButtonVariant _variant = TsaiButtonVariant.primary;
   TsaiButtonTone _tone = TsaiButtonTone.standard;
   String _label = 'Button';
-  String _semanticLabel = '';
-  String _loadingSemanticLabel = 'Loading';
   bool _enabled = true;
   bool _showIcon = true;
   bool _isLoading = false;
   bool _isExpanded = false;
-  bool _autofocus = false;
   int _pressCount = 0;
 
   @override
-  Widget build(BuildContext context) => CustomScrollView(
+  Widget build(BuildContext context) => ListView(
     key: const ValueKey<String>('button-demo'),
     controller: widget.controller,
     physics: widget.physics,
-    slivers: [
-      SliverPadding(
-        padding: EdgeInsets.fromLTRB(
-          TsaiThemeTokens.of(context).spacing.space24,
-          TsaiThemeTokens.of(context).spacing.space24,
-          TsaiThemeTokens.of(context).spacing.space24,
-          0,
-        ),
-        sliver: const SliverToBoxAdapter(
-          child: TsaiTextHeading('Variants', size: TsaiHeadingSize.small),
-        ),
-      ),
-      SliverList.list(
-        children: [
-          _StateSection(
-            title: 'Default',
-            size: _size,
-            onPressed: () => _showConfirmation(context),
+    padding: EdgeInsets.all(TsaiThemeTokens.of(context).spacing.space24),
+    children: [
+      ComponentPlayground(
+        controls: [
+          PlaygroundTextControl(
+            label: 'label',
+            value: _label,
+            onChanged: (value) => setState(() => _label = value),
           ),
-          _StateSection(
-            title: 'Loading',
-            size: _size,
-            isLoading: true,
-            onPressed: () {},
+          PlaygroundSelectControl<TsaiButtonVariant>(
+            label: 'variant',
+            value: _variant,
+            values: TsaiButtonVariant.values,
+            onChanged: (value) => setState(() => _variant = value),
           ),
-          _StateSection(
-            title: 'Without icon',
-            size: _size,
-            showIcon: false,
-            onPressed: () => _showConfirmation(context),
+          PlaygroundSelectControl<TsaiButtonSize>(
+            label: 'size',
+            value: _size,
+            values: TsaiButtonSize.values,
+            onChanged: (value) => setState(() => _size = value),
           ),
-          _StateSection(title: 'Disabled', size: _size, onPressed: null),
+          PlaygroundSelectControl<TsaiButtonTone>(
+            label: 'tone',
+            value: _tone,
+            values: TsaiButtonTone.values,
+            onChanged: (value) => setState(() => _tone = value),
+          ),
+          PlaygroundToggleControl(
+            label: 'enabled',
+            value: _enabled,
+            onChanged: (value) => setState(() => _enabled = value),
+          ),
+          PlaygroundToggleControl(
+            label: 'Leading icon',
+            value: _showIcon,
+            onChanged: (value) => setState(() => _showIcon = value),
+          ),
+          PlaygroundToggleControl(
+            label: 'Loading',
+            value: _isLoading,
+            onChanged: (value) => setState(() => _isLoading = value),
+          ),
+          PlaygroundToggleControl(
+            label: 'Full width',
+            value: _isExpanded,
+            onChanged: (value) => setState(() => _isExpanded = value),
+          ),
+          PlaygroundOutput(
+            label: 'Press count',
+            value: 'Called $_pressCount times',
+          ),
         ],
-      ),
-      SliverPadding(
-        padding: EdgeInsets.all(TsaiThemeTokens.of(context).spacing.space24),
-        sliver: SliverToBoxAdapter(
-          child: ComponentPlayground(
-            controls: [
-              PlaygroundTextControl(
-                label: 'label',
-                value: _label,
-                onChanged: (value) => setState(() => _label = value),
-              ),
-              PlaygroundTextControl(
-                label: 'semanticLabel',
-                value: _semanticLabel,
-                onChanged: (value) => setState(() => _semanticLabel = value),
-              ),
-              PlaygroundTextControl(
-                label: 'loadingSemanticLabel',
-                value: _loadingSemanticLabel,
-                onChanged: (value) =>
-                    setState(() => _loadingSemanticLabel = value),
-              ),
-              PlaygroundSelectControl<TsaiButtonVariant>(
-                label: 'variant',
-                value: _variant,
-                values: TsaiButtonVariant.values,
-                onChanged: (value) => setState(() => _variant = value),
-              ),
-              PlaygroundSelectControl<TsaiButtonSize>(
-                label: 'size',
-                value: _size,
-                values: TsaiButtonSize.values,
-                onChanged: (value) => setState(() => _size = value),
-              ),
-              PlaygroundSelectControl<TsaiButtonTone>(
-                label: 'tone',
-                value: _tone,
-                values: TsaiButtonTone.values,
-                onChanged: (value) => setState(() => _tone = value),
-              ),
-              PlaygroundToggleControl(
-                label: 'enabled',
-                value: _enabled,
-                onChanged: (value) => setState(() => _enabled = value),
-              ),
-              PlaygroundToggleControl(
-                label: 'leadingIcon',
-                value: _showIcon,
-                onChanged: (value) => setState(() => _showIcon = value),
-              ),
-              PlaygroundToggleControl(
-                label: 'isLoading',
-                value: _isLoading,
-                onChanged: (value) => setState(() => _isLoading = value),
-              ),
-              PlaygroundToggleControl(
-                label: 'isExpanded',
-                value: _isExpanded,
-                onChanged: (value) => setState(() => _isExpanded = value),
-              ),
-              PlaygroundToggleControl(
-                label: 'autofocus',
-                value: _autofocus,
-                onChanged: (value) => setState(() => _autofocus = value),
-              ),
-              PlaygroundOutput(
-                label: 'onPressed',
-                value: 'Called $_pressCount times',
-              ),
-            ],
-            preview: TsaiButton(
-              label: _label,
-              variant: _variant,
-              tone: _tone,
-              size: _size,
-              leadingIcon: _showIcon
-                  ? const TsaiIcon(LucideIcons.plus, size: 16)
-                  : null,
-              isLoading: _isLoading,
-              isExpanded: _isExpanded,
-              autofocus: _autofocus,
-              semanticLabel: _emptyToNull(_semanticLabel),
-              loadingSemanticLabel: _emptyToNull(_loadingSemanticLabel),
-              onPressed: _enabled ? () => setState(() => _pressCount++) : null,
-            ),
-          ),
+        preview: TsaiButton(
+          label: _label,
+          variant: _variant,
+          tone: _tone,
+          size: _size,
+          leadingIcon: _showIcon
+              ? const TsaiIcon(LucideIcons.plus, size: 16)
+              : null,
+          isLoading: _isLoading,
+          isExpanded: _isExpanded,
+          onPressed: _enabled ? () => setState(() => _pressCount++) : null,
         ),
       ),
     ],
   );
-
-  void _showConfirmation(BuildContext context) {
-    ScaffoldMessenger.maybeOf(context)
-      ?..clearSnackBars()
-      ..showSnackBar(const SnackBar(content: Text('Action activated')));
-  }
 }
-
-class _StateSection extends StatelessWidget {
-  const _StateSection({
-    required this.title,
-    required this.size,
-    required this.onPressed,
-    this.isLoading = false,
-    this.showIcon = true,
-  });
-
-  final String title;
-  final TsaiButtonSize size;
-  final VoidCallback? onPressed;
-  final bool isLoading;
-  final bool showIcon;
-
-  @override
-  Widget build(BuildContext context) {
-    final tokens = TsaiThemeTokens.of(context);
-    return Padding(
-      padding: EdgeInsets.all(tokens.spacing.space24),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          TsaiTextHeading(title, size: TsaiHeadingSize.small),
-          SizedBox(height: tokens.spacing.space16),
-          Wrap(
-            spacing: tokens.spacing.space24,
-            runSpacing: tokens.spacing.space24,
-            children: TsaiButtonVariant.values
-                .map(
-                  (variant) => _VariantSample(
-                    variant: variant,
-                    size: size,
-                    isLoading: isLoading,
-                    showIcon: showIcon,
-                    onPressed: onPressed,
-                  ),
-                )
-                .toList(growable: false),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _VariantSample extends StatelessWidget {
-  const _VariantSample({
-    required this.variant,
-    required this.size,
-    required this.isLoading,
-    required this.showIcon,
-    required this.onPressed,
-  });
-
-  final TsaiButtonVariant variant;
-  final TsaiButtonSize size;
-  final bool isLoading;
-  final bool showIcon;
-  final VoidCallback? onPressed;
-
-  @override
-  Widget build(BuildContext context) {
-    final tokens = TsaiThemeTokens.of(context);
-    return SizedBox(
-      width: 180,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          TsaiTextCaption(
-            variant.name,
-            size: TsaiCaptionSize.medium,
-            weight: TsaiTextWeight.medium,
-            color: tokens.colors.contentSecondary,
-          ),
-          SizedBox(height: tokens.spacing.space8),
-          TsaiButton(
-            label: 'Button',
-            variant: variant,
-            size: size,
-            isLoading: isLoading,
-            loadingSemanticLabel: 'Loading',
-            onPressed: onPressed,
-            leadingIcon: showIcon
-                ? const TsaiIcon(LucideIcons.plus, size: 16)
-                : null,
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-String? _emptyToNull(String value) => value.isEmpty ? null : value;

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:tsai_ui/tsai_icons.dart';
 import 'package:tsai_ui/tsai_ui.dart';
 
+import '../../demo/component_playground.dart';
+
 class BottomNavBarDemo extends StatefulWidget {
   const BottomNavBarDemo({super.key});
 
@@ -10,42 +12,45 @@ class BottomNavBarDemo extends StatefulWidget {
 }
 
 class _BottomNavBarDemoState extends State<BottomNavBarDemo> {
-  final _selectedIndices = [0, 0, 0, 0, 0];
+  var _destinationCount = 3;
+  var _selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     final tokens = TsaiThemeTokens.of(context);
     return ListView(
       key: const ValueKey<String>('bottom-nav-bar-demo'),
-      padding: EdgeInsets.only(
-        top: tokens.spacing.space32,
-        bottom: tokens.spacing.space64,
-      ),
+      padding: EdgeInsets.all(tokens.spacing.space24),
       children: [
-        for (var count = 1; count <= 5; count++) ...[
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: tokens.spacing.space24),
-            child: TsaiTextHeading(
-              '$count ${count == 1 ? 'destination' : 'destinations'}',
-              size: TsaiHeadingSize.small,
+        ComponentPlayground(
+          controls: [
+            PlaygroundSelectControl<int>(
+              label: 'Number of destinations',
+              value: _destinationCount,
+              values: const [1, 2, 3, 4, 5],
+              onChanged: (value) => setState(() {
+                _destinationCount = value;
+                _selectedIndex = _selectedIndex.clamp(0, value - 1);
+              }),
             ),
+            PlaygroundOutput(
+              label: 'Selected destination',
+              value: _items[_selectedIndex].label,
+            ),
+          ],
+          preview: _BackdropPreview(
+            count: _destinationCount,
+            selectedIndex: _selectedIndex,
+            onSelected: (index) => setState(() => _selectedIndex = index),
           ),
-          SizedBox(height: tokens.spacing.space16),
-          _BackdropExample(
-            count: count,
-            selectedIndex: _selectedIndices[count - 1],
-            onSelected: (index) =>
-                setState(() => _selectedIndices[count - 1] = index),
-          ),
-          if (count < 5) SizedBox(height: tokens.spacing.space32),
-        ],
+        ),
       ],
     );
   }
 }
 
-class _BackdropExample extends StatelessWidget {
-  const _BackdropExample({
+class _BackdropPreview extends StatelessWidget {
+  const _BackdropPreview({
     required this.count,
     required this.selectedIndex,
     required this.onSelected,
