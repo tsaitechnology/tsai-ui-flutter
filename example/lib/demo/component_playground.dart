@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tsai_ui/tsai_icons.dart';
 import 'package:tsai_ui/tsai_ui.dart';
 
 class _ContrastPatternPainter extends CustomPainter {
@@ -58,12 +59,12 @@ class _ComponentPlaygroundState extends State<ComponentPlayground> {
           width: double.infinity,
           clipBehavior: Clip.antiAlias,
           decoration: BoxDecoration(
-            color: tokens.colors.surface,
+            color: tokens.colors.canvas,
             border: Border.all(
               color: tokens.colors.borderSubtle,
               width: tokens.borders.hairline,
             ),
-            borderRadius: BorderRadius.circular(tokens.radii.medium),
+            borderRadius: BorderRadius.circular(tokens.radii.large),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -97,49 +98,63 @@ class _ComponentPlaygroundState extends State<ComponentPlayground> {
     );
   }
 
-  Widget _buildHeader(bool showControls) => Padding(
-    padding: const EdgeInsets.fromLTRB(16, 12, 12, 12),
-    child: Row(
-      children: [
-        const Expanded(
-          child: TsaiTextHeading('Playground', size: TsaiHeadingSize.small),
-        ),
-        Tooltip(
-          message: _checkerboardBackground
-              ? 'Hide contrast background'
-              : 'Show contrast background',
-          child: IconButton(
-            key: const ValueKey<String>(
-              'component-playground-checkerboard-toggle',
-            ),
-            icon: Icon(
-              _checkerboardBackground
-                  ? Icons.grid_on_rounded
-                  : Icons.grid_off_rounded,
-            ),
-            onPressed: () => setState(
-              () => _checkerboardBackground = !_checkerboardBackground,
-            ),
+  Widget _buildHeader(bool showControls) {
+    final tokens = TsaiThemeTokens.of(context);
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: tokens.colors.surfaceRaised,
+        border: Border(
+          bottom: BorderSide(
+            color: tokens.colors.borderSubtle,
+            width: tokens.borders.hairline,
           ),
         ),
-        IconButton(
-          key: const ValueKey<String>('component-playground-controls-toggle'),
-          tooltip: showControls ? 'Hide controls' : 'Show controls',
-          icon: Icon(showControls ? Icons.tune : Icons.tune_outlined),
-          onPressed: () => setState(() => _controlsVisible = !showControls),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 12, 12, 12),
+        child: Row(
+          children: [
+            const Expanded(
+              child: TsaiTextHeading('Playground', size: TsaiHeadingSize.small),
+            ),
+            _PlaygroundIconAction(
+              key: const ValueKey<String>(
+                'component-playground-checkerboard-toggle',
+              ),
+              tooltip: _checkerboardBackground
+                  ? 'Hide contrast background'
+                  : 'Show contrast background',
+              icon: _checkerboardBackground
+                  ? LucideIcons.grid_2x2_check
+                  : LucideIcons.grid_2x2,
+              onPressed: () => setState(
+                () => _checkerboardBackground = !_checkerboardBackground,
+              ),
+            ),
+            const SizedBox(width: 4),
+            _PlaygroundIconAction(
+              key: const ValueKey<String>(
+                'component-playground-controls-toggle',
+              ),
+              tooltip: showControls ? 'Hide controls' : 'Show controls',
+              icon: showControls
+                  ? LucideIcons.sliders_horizontal
+                  : LucideIcons.sliders_horizontal,
+              onPressed: () => setState(() => _controlsVisible = !showControls),
+            ),
+          ],
         ),
-      ],
-    ),
-  );
+      ),
+    );
+  }
 
   Widget _buildControls(TsaiThemeTokens tokens, {required bool isCompact}) {
     final groups = <String, List<Widget>>{};
     for (final control in widget.controls) {
       groups.putIfAbsent(_controlGroup(control), () => []).add(control);
     }
-    return Container(
+    return DecoratedBox(
       key: const ValueKey<String>('component-playground-controls'),
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 20),
       decoration: BoxDecoration(
         color: tokens.colors.surfaceRaised,
         border: isCompact
@@ -156,36 +171,39 @@ class _ComponentPlaygroundState extends State<ComponentPlayground> {
                 ),
               ),
       ),
-      child: SingleChildScrollView(
-        child: Column(
-          key: const ValueKey<String>('component-playground-controls-wrap'),
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const TsaiTextHeading('Customize', size: TsaiHeadingSize.small),
-            SizedBox(height: tokens.spacing.space16),
-            for (final entry in groups.entries) ...[
-              TsaiTextCaption(
-                entry.key,
-                size: TsaiCaptionSize.small,
-                weight: TsaiTextWeight.medium,
-                color: tokens.colors.contentTertiary,
-              ),
-              SizedBox(height: tokens.spacing.space8),
-              for (final control in entry.value)
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 12),
-                  child: control,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 20),
+        child: SingleChildScrollView(
+          child: Column(
+            key: const ValueKey<String>('component-playground-controls-wrap'),
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const TsaiTextHeading('Customize', size: TsaiHeadingSize.small),
+              SizedBox(height: tokens.spacing.space16),
+              for (final entry in groups.entries) ...[
+                TsaiTextCaption(
+                  entry.key,
+                  size: TsaiCaptionSize.small,
+                  weight: TsaiTextWeight.medium,
+                  color: tokens.colors.contentTertiary,
                 ),
-              if (entry.key != groups.keys.last)
-                Padding(
-                  padding: EdgeInsets.only(bottom: tokens.spacing.space16),
-                  child: Divider(
-                    height: tokens.borders.hairline,
-                    color: tokens.colors.borderSubtle,
+                SizedBox(height: tokens.spacing.space8),
+                for (final control in entry.value)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 12),
+                    child: control,
                   ),
-                ),
+                if (entry.key != groups.keys.last)
+                  Padding(
+                    padding: EdgeInsets.only(bottom: tokens.spacing.space16),
+                    child: Divider(
+                      height: tokens.borders.hairline,
+                      color: tokens.colors.borderSubtle,
+                    ),
+                  ),
+              ],
             ],
-          ],
+          ),
         ),
       ),
     );
@@ -205,9 +223,8 @@ class _ComponentPlaygroundState extends State<ComponentPlayground> {
     return 'OPTIONS';
   }
 
-  Widget _buildCollapsedControlsRail(TsaiThemeTokens tokens) => Container(
+  Widget _buildCollapsedControlsRail(TsaiThemeTokens tokens) => DecoratedBox(
     key: const ValueKey<String>('component-playground-controls-collapsed'),
-    width: 52,
     decoration: BoxDecoration(
       color: tokens.colors.surfaceRaised,
       border: Border(
@@ -217,63 +234,93 @@ class _ComponentPlaygroundState extends State<ComponentPlayground> {
         ),
       ),
     ),
-    child: IconButton(
-      tooltip: 'Show controls',
-      icon: const Icon(Icons.tune_outlined),
-      onPressed: () => setState(() => _controlsVisible = true),
-    ),
-  );
-
-  Widget _buildPreview(TsaiThemeTokens tokens) => Container(
-    padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
-    decoration: BoxDecoration(
-      color: tokens.colors.surfaceRaised,
-      border: Border(
-        top: BorderSide(
-          color: tokens.colors.borderSubtle,
-          width: tokens.borders.hairline,
+    child: SizedBox(
+      width: 56,
+      child: Center(
+        child: _PlaygroundIconAction(
+          tooltip: 'Show controls',
+          icon: LucideIcons.sliders_horizontal,
+          onPressed: () => setState(() => _controlsVisible = true),
         ),
       ),
     ),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Component preview',
-          style: tokens.typography.captionMediumRegular.copyWith(
+  );
+
+  Widget _buildPreview(TsaiThemeTokens tokens) => DecoratedBox(
+    decoration: BoxDecoration(color: tokens.colors.canvas),
+    child: Padding(
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          TsaiTextCaption(
+            'Preview',
+            size: TsaiCaptionSize.small,
+            weight: TsaiTextWeight.medium,
             color: tokens.colors.contentSecondary,
           ),
-        ),
-        SizedBox(height: tokens.spacing.space8),
-        Container(
-          key: const ValueKey<String>('component-playground-preview'),
-          width: double.infinity,
-          constraints: const BoxConstraints(minHeight: 160),
-          alignment: AlignmentDirectional.center,
-          clipBehavior: Clip.antiAlias,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(tokens.radii.innerMedium),
-          ),
-          child: CustomPaint(
-            key: const ValueKey<String>('component-playground-checkerboard'),
-            painter: _checkerboardBackground
-                ? _ContrastPatternPainter(
-                    baseColor: tokens.colors.canvas,
-                    accentColor: tokens.colors.actionPrimary,
-                  )
-                : null,
-            child: LayoutBuilder(
-              builder: (context, constraints) => SizedBox(
-                width: constraints.maxWidth.clamp(0, 480),
-                child: Align(
-                  alignment: AlignmentDirectional.center,
-                  child: widget.preview,
+          SizedBox(height: tokens.spacing.space8),
+          DecoratedBox(
+            key: const ValueKey<String>('component-playground-preview'),
+            decoration: BoxDecoration(
+              color: tokens.colors.surface,
+              border: Border.all(
+                color: tokens.colors.borderSubtle,
+                width: tokens.borders.hairline,
+              ),
+              borderRadius: BorderRadius.circular(tokens.radii.medium),
+            ),
+            child: CustomPaint(
+              key: const ValueKey<String>('component-playground-checkerboard'),
+              painter: _checkerboardBackground
+                  ? _ContrastPatternPainter(
+                      baseColor: tokens.colors.canvas,
+                      accentColor: tokens.colors.actionPrimary,
+                    )
+                  : null,
+              child: SizedBox(
+                width: double.infinity,
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(minHeight: 180),
+                  child: LayoutBuilder(
+                    builder: (context, constraints) => SizedBox(
+                      width: constraints.maxWidth.clamp(0, 480),
+                      child: Align(
+                        alignment: AlignmentDirectional.center,
+                        child: widget.preview,
+                      ),
+                    ),
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
+    ),
+  );
+}
+
+class _PlaygroundIconAction extends StatelessWidget {
+  const _PlaygroundIconAction({
+    required this.tooltip,
+    required this.icon,
+    required this.onPressed,
+    super.key,
+  });
+
+  final String tooltip;
+  final IconData icon;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) => Tooltip(
+    message: tooltip,
+    child: HitIcon(
+      icon: TsaiIcon(icon, size: 20),
+      iconSize: 20,
+      semanticLabel: tooltip,
+      onPressed: onPressed,
     ),
   );
 }

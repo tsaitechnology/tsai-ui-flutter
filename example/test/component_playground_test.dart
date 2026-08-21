@@ -40,7 +40,7 @@ void main() {
     );
     final decoration = section.decoration! as BoxDecoration;
     expect(decoration.border, isA<Border>());
-    expect(decoration.borderRadius, BorderRadius.circular(12));
+    expect(decoration.borderRadius, BorderRadius.circular(16));
 
     final controls = tester.widget<Column>(
       find.byKey(const ValueKey('component-playground-controls-wrap')),
@@ -63,7 +63,7 @@ void main() {
       find.byKey(const ValueKey('component-playground-preview')),
     );
     expect(previewSize.width, greaterThan(400));
-    expect(previewSize.height, 160);
+    expect(previewSize.height, 180);
     expect(tester.getSize(find.byKey(previewKey)), const Size.square(32));
 
     await tester.tap(
