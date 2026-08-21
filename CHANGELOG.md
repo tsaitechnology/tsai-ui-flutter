@@ -1,3 +1,10 @@
+## 0.6.1 - 2026-08-21
+
+### Maintenance
+
+- Fix badge counter sizing and overlays ([9e25249](https://github.com/tsaitechnology/tsai-ui-flutter/commit/9e25249663174f43daf72b8eb28b6d5c4eb8e243))
+- Split badge demos into component playgrounds ([232a239](https://github.com/tsaitechnology/tsai-ui-flutter/commit/232a239d6dd645bf0cdd086305c9f3647c0bbaa1))
+
 ## 0.6.0 - 2026-08-21
 
 ### Maintenance
