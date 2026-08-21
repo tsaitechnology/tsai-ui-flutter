@@ -90,18 +90,21 @@ class TsaiBadgeCounter extends StatelessWidget {
     final color = tone == TsaiBadgeTone.error
         ? t.colors.actionDanger
         : t.colors.actionPrimary;
-    return Container(
-      constraints: const BoxConstraints(minWidth: 18, minHeight: 18),
-      padding: const EdgeInsets.symmetric(horizontal: 6),
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(99),
-      ),
-      child: Text(
-        value > 99 ? '99+' : '$value',
-        style: t.typography.captionSmall.copyWith(
-          color: t.colors.contentOnActionPrimary,
+    return IntrinsicWidth(
+      child: Container(
+        constraints: const BoxConstraints(minWidth: 18, minHeight: 18),
+        padding: const EdgeInsets.symmetric(horizontal: 6),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.circular(99),
+        ),
+        child: Text(
+          value > 99 ? '99+' : '$value',
+          maxLines: 1,
+          style: t.typography.captionSmall.copyWith(
+            color: t.colors.contentOnActionPrimary,
+          ),
         ),
       ),
     );

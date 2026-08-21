@@ -59,11 +59,11 @@ class TsaiIconButton extends StatelessWidget {
             ),
           ),
           if (badge case TsaiIconButtonBadgeDot(:final tone))
-            Positioned(top: 2, right: 2, child: TsaiBadgeDot(tone: tone)),
+            Positioned(top: 2.5, right: 3.5, child: TsaiBadgeDot(tone: tone)),
           if (badge case TsaiIconButtonBadgeCount(:final value, :final tone))
             Positioned(
-              top: -2,
-              right: -8,
+              top: 0,
+              right: 0,
               child: TsaiBadgeCounter(value: value, tone: tone),
             ),
         ],

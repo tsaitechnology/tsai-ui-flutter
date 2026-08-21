@@ -19,6 +19,7 @@ void main() {
     expect(find.text('Ready'), findsOneWidget);
     expect(find.text('99+'), findsOneWidget);
     expect(find.byType(TsaiBadgeDot), findsOneWidget);
+    expect(tester.getSize(find.byType(TsaiBadgeCounter)).width, lessThan(50));
   });
 
   testWidgets('chip calls tap and delete callbacks', (tester) async {
