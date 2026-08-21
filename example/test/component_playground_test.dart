@@ -98,7 +98,7 @@ void main() {
       find.byKey(
         const ValueKey<String>('component-playground-controls-collapsed'),
       ),
-      findsOneWidget,
+      findsNothing,
     );
   });
 

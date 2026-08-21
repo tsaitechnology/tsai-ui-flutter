@@ -86,9 +86,7 @@ class _ComponentPlaygroundState extends State<ComponentPlayground> {
                       SizedBox(
                         width: 336,
                         child: _buildControls(tokens, isCompact: false),
-                      )
-                    else
-                      _buildCollapsedControlsRail(tokens),
+                      ),
                   ],
                 ),
             ],
@@ -203,29 +201,6 @@ class _ComponentPlaygroundState extends State<ComponentPlayground> {
     return 'OPTIONS';
   }
 
-  Widget _buildCollapsedControlsRail(TsaiThemeTokens tokens) => DecoratedBox(
-    key: const ValueKey<String>('component-playground-controls-collapsed'),
-    decoration: BoxDecoration(
-      color: tokens.colors.surfaceRaised,
-      border: Border(
-        left: BorderSide(
-          color: tokens.colors.borderSubtle,
-          width: tokens.borders.hairline,
-        ),
-      ),
-    ),
-    child: SizedBox(
-      width: 56,
-      child: Center(
-        child: _PlaygroundIconAction(
-          tooltip: 'Show controls',
-          icon: LucideIcons.sliders_horizontal,
-          onPressed: () => setState(() => _controlsVisible = true),
-        ),
-      ),
-    ),
-  );
-
   Widget _buildPreview(TsaiThemeTokens tokens) => DecoratedBox(
     decoration: BoxDecoration(color: tokens.colors.canvas),
     child: Padding(
@@ -250,24 +225,29 @@ class _ComponentPlaygroundState extends State<ComponentPlayground> {
               ),
               borderRadius: BorderRadius.circular(tokens.radii.medium),
             ),
-            child: CustomPaint(
-              key: const ValueKey<String>('component-playground-checkerboard'),
-              painter: _checkerboardBackground
-                  ? _ContrastPatternPainter(
-                      baseColor: tokens.colors.canvas,
-                      accentColor: tokens.colors.actionPrimary,
-                    )
-                  : null,
-              child: SizedBox(
-                width: double.infinity,
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(minHeight: 180),
-                  child: LayoutBuilder(
-                    builder: (context, constraints) => SizedBox(
-                      width: constraints.maxWidth.clamp(0, 480),
-                      child: Align(
-                        alignment: AlignmentDirectional.center,
-                        child: widget.preview,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(tokens.radii.medium),
+              child: CustomPaint(
+                key: const ValueKey<String>(
+                  'component-playground-checkerboard',
+                ),
+                painter: _checkerboardBackground
+                    ? _ContrastPatternPainter(
+                        baseColor: tokens.colors.surface,
+                        accentColor: tokens.colors.surfaceRaised,
+                      )
+                    : null,
+                child: SizedBox(
+                  width: double.infinity,
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(minHeight: 180),
+                    child: LayoutBuilder(
+                      builder: (context, constraints) => SizedBox(
+                        width: constraints.maxWidth.clamp(0, 480),
+                        child: Align(
+                          alignment: AlignmentDirectional.center,
+                          child: widget.preview,
+                        ),
                       ),
                     ),
                   ),
@@ -277,29 +257,6 @@ class _ComponentPlaygroundState extends State<ComponentPlayground> {
           ),
         ],
       ),
-    ),
-  );
-}
-
-class _PlaygroundIconAction extends StatelessWidget {
-  const _PlaygroundIconAction({
-    required this.tooltip,
-    required this.icon,
-    required this.onPressed,
-  });
-
-  final String tooltip;
-  final IconData icon;
-  final VoidCallback onPressed;
-
-  @override
-  Widget build(BuildContext context) => Tooltip(
-    message: tooltip,
-    child: HitIcon(
-      icon: TsaiIcon(icon, size: 20),
-      iconSize: 20,
-      semanticLabel: tooltip,
-      onPressed: onPressed,
     ),
   );
 }
