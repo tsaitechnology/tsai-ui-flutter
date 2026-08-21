@@ -333,6 +333,7 @@ class _ComponentDemoWindowState extends State<ComponentDemoWindow> {
                 ),
               ),
               child: HomeTopBar(
+                dense: true,
                 leading: [_CatalogTitle(label: widget.section.label)],
                 trailing: [
                   HomeTopBarAction(

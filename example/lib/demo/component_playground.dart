@@ -234,7 +234,11 @@ class _ComponentPlaygroundState extends State<ComponentPlayground> {
                 painter: _checkerboardBackground
                     ? _ContrastPatternPainter(
                         baseColor: tokens.colors.surface,
-                        accentColor: tokens.colors.surfaceRaised,
+                        accentColor: Color.lerp(
+                          tokens.colors.surface,
+                          tokens.colors.borderStrong,
+                          0.35,
+                        )!,
                       )
                     : null,
                 child: SizedBox(

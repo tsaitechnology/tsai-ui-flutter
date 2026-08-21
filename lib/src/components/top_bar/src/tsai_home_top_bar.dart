@@ -95,6 +95,7 @@ class HomeTopBar extends StatelessWidget {
     super.key,
     this.leading = const [],
     this.trailing = const [],
+    this.dense = false,
   });
 
   /// Widgets placed at the directional start.
@@ -103,6 +104,9 @@ class HomeTopBar extends StatelessWidget {
   /// Widgets placed at the directional end.
   final List<Widget> trailing;
 
+  /// Uses a compact 64-pixel header for embedded application chrome.
+  final bool dense;
+
   @override
   Widget build(BuildContext context) {
     final tokens = TsaiThemeTokens.of(context);
@@ -110,15 +114,17 @@ class HomeTopBar extends StatelessWidget {
       decoration: BoxDecoration(gradient: tokens.gradients.topScrim),
       child: SizedBox(
         width: double.infinity,
-        height: tokens.spacing.space64 + tokens.spacing.space12,
+        height: tokens.spacing.space64 + (dense ? 0 : tokens.spacing.space12),
         child: Padding(
           padding: EdgeInsetsDirectional.only(
-            top: tokens.spacing.space12,
+            top: dense ? 0 : tokens.spacing.space12,
             start: tokens.spacing.space16,
             end: tokens.spacing.space16,
           ),
           child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: dense
+                ? CrossAxisAlignment.center
+                : CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
