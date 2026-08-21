@@ -323,7 +323,9 @@ void main() {
     expect(countControl.values, const [1, 2, 3, 4, 5]);
   });
 
-  testWidgets('multi-screen app covers complete business flows', (tester) async {
+  testWidgets('multi-screen app covers complete business flows', (
+    tester,
+  ) async {
     tester.view.physicalSize = const Size(390, 844);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.resetPhysicalSize);
