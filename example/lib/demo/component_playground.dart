@@ -57,7 +57,6 @@ class _ComponentPlaygroundState extends State<ComponentPlayground> {
         return Container(
           key: widget.key ?? const ValueKey<String>('component-playground'),
           width: double.infinity,
-          clipBehavior: Clip.antiAlias,
           decoration: BoxDecoration(
             color: tokens.colors.canvas,
             border: Border.all(
@@ -66,30 +65,33 @@ class _ComponentPlaygroundState extends State<ComponentPlayground> {
             ),
             borderRadius: BorderRadius.circular(tokens.radii.large),
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildHeader(showControls),
-              if (isCompact)
-                Column(
-                  children: [
-                    _buildPreview(tokens),
-                    if (showControls) _buildControls(tokens, isCompact: true),
-                  ],
-                )
-              else
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(child: _buildPreview(tokens)),
-                    if (showControls)
-                      SizedBox(
-                        width: 336,
-                        child: _buildControls(tokens, isCompact: false),
-                      ),
-                  ],
-                ),
-            ],
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(tokens.radii.large),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildHeader(showControls),
+                if (isCompact)
+                  Column(
+                    children: [
+                      _buildPreview(tokens),
+                      if (showControls) _buildControls(tokens, isCompact: true),
+                    ],
+                  )
+                else
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(child: _buildPreview(tokens)),
+                      if (showControls)
+                        SizedBox(
+                          width: 336,
+                          child: _buildControls(tokens, isCompact: false),
+                        ),
+                    ],
+                  ),
+              ],
+            ),
           ),
         );
       },
