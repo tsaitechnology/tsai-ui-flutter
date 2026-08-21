@@ -221,23 +221,6 @@ class _HomeScreenExampleState extends State<HomeScreenExample> {
                         'Quick actions',
                         size: TsaiHeadingSize.small,
                       ),
-                      const SizedBox(height: 12),
-                      const Wrap(
-                        spacing: 8,
-                        children: [
-                          TsaiBadge(
-                            label: 'Account verified',
-                            tone: TsaiBadgeTone.success,
-                            showDot: true,
-                          ),
-                          TsaiBadgeCounter(value: 3),
-                          TsaiChip(
-                            label: 'Personal',
-                            selected: true,
-                            showCheck: true,
-                          ),
-                        ],
-                      ),
                       SizedBox(height: tokens.spacing.space12),
                       Wrap(
                         spacing: tokens.spacing.space8,
@@ -273,6 +256,23 @@ class _HomeScreenExampleState extends State<HomeScreenExample> {
                               size: 16,
                             ),
                             onPressed: () => _openCards(context),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: tokens.spacing.space24),
+                      const Wrap(
+                        spacing: 8,
+                        children: [
+                          TsaiBadge(
+                            label: 'Account verified',
+                            tone: TsaiBadgeTone.success,
+                            showDot: true,
+                          ),
+                          TsaiBadgeCounter(value: 3),
+                          TsaiChip(
+                            label: 'Personal',
+                            selected: true,
+                            showCheck: true,
                           ),
                         ],
                       ),

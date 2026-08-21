@@ -49,6 +49,8 @@ nav:
   - Widgets:
       - Overview: widgets/index.md
       - Common:
+          - TsaiBadge: widgets/tsai-badge.md
+          - TsaiChip: widgets/tsai-chip.md
           - TsaiButton: widgets/tsai-button.md
           - TsaiLink: widgets/tsai-link.md
       - Icons:

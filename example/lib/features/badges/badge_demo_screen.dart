@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tsai_ui/tsai_ui.dart';
 import '../../demo/component_demo_window.dart';
+import '../../demo/component_playground.dart';
 
 /// Interactive catalog page for badges, chips, and icon-button overlays.
 class BadgeDemoScreen extends StatefulWidget {
@@ -23,8 +24,20 @@ class _BadgeDemoScreenState extends State<BadgeDemoScreen> {
     themeMode: widget.themeMode,
     onThemeModeChanged: widget.onThemeModeChanged,
     child: ListView(
+      key: const ValueKey<String>('badges-demo'),
       padding: const EdgeInsets.all(24),
       children: [
+        const ComponentPlayground(
+          preview: Wrap(
+            spacing: 8,
+            children: [
+              TsaiBadge(label: 'Verified', tone: TsaiBadgeTone.success),
+              TsaiBadgeCounter(value: 3),
+              TsaiBadgeDot(),
+            ],
+          ),
+          controls: [],
+        ),
         const TsaiTextHeading('Badges', size: TsaiHeadingSize.large),
         const SizedBox(height: 16),
         const Wrap(
