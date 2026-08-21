@@ -39,9 +39,7 @@ class _GlowDemoState extends State<GlowDemo> {
           ),
         ),
       ],
-      preview: Center(
-        child: TsaiGlow(diameter: _diameter, blurRadius: _blurRadius),
-      ),
+      preview: TsaiGlow(diameter: _diameter, blurRadius: _blurRadius),
     ),
   );
 }

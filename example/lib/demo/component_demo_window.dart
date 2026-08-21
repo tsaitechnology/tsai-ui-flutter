@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:tsai_ui/tsai_icons.dart';
 import 'package:tsai_ui/tsai_ui.dart';
 
+import 'component_playground.dart';
+
 enum ComponentDemoCategory {
   common('Common'),
   icons('Icons'),
@@ -490,10 +492,13 @@ class _DemoBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => LayoutBuilder(
-    builder: (context, constraints) => SizedBox(
-      width: constraints.maxWidth,
+    builder: (context, constraints) => ComponentPlaygroundViewport(
       height: constraints.maxHeight,
-      child: child,
+      child: SizedBox(
+        width: constraints.maxWidth,
+        height: constraints.maxHeight,
+        child: child,
+      ),
     ),
   );
 }

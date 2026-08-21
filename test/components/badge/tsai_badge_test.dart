@@ -22,6 +22,23 @@ void main() {
     expect(tester.getSize(find.byType(TsaiBadgeCounter)).width, lessThan(50));
   });
 
+  testWidgets('counter keeps its compact height in a tall bounded parent', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: TsaiTheme.dark(),
+        home: const Scaffold(
+          body: SizedBox.expand(
+            child: Center(child: TsaiBadgeCounter(value: 3)),
+          ),
+        ),
+      ),
+    );
+
+    expect(tester.getSize(find.byType(TsaiBadgeCounter)).height, 18);
+  });
+
   testWidgets('chip calls tap and delete callbacks', (tester) async {
     var taps = 0;
     var deletes = 0;

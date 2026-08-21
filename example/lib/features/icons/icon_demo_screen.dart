@@ -173,31 +173,11 @@ class _CircleIconPlaygroundState extends State<_CircleIconPlayground> {
         onChanged: (value) => setState(() => _icon = value),
       ),
     ],
-    preview: _CircleIconPreview(
-      icon: CircleIcon(
-        icon: TsaiIcon(_iconData, size: 20),
-        semanticLabel: _icon,
-      ),
+    preview: CircleIcon(
+      icon: TsaiIcon(_iconData, size: 20),
+      semanticLabel: _icon,
     ),
   );
-}
-
-class _CircleIconPreview extends StatelessWidget {
-  const _CircleIconPreview({required this.icon});
-
-  final CircleIcon icon;
-
-  @override
-  Widget build(BuildContext context) {
-    final tokens = TsaiThemeTokens.of(context);
-    return Align(
-      alignment: AlignmentDirectional.centerStart,
-      child: ColoredBox(
-        color: tokens.colors.canvas,
-        child: SizedBox.square(dimension: 72, child: Center(child: icon)),
-      ),
-    );
-  }
 }
 
 class _CryptoIconPlayground extends StatefulWidget {

@@ -92,7 +92,8 @@ class TsaiBadgeCounter extends StatelessWidget {
         : t.colors.actionPrimary;
     return IntrinsicWidth(
       child: Container(
-        constraints: const BoxConstraints(minWidth: 18, minHeight: 18),
+        height: 18,
+        constraints: const BoxConstraints(minWidth: 18),
         padding: const EdgeInsets.symmetric(horizontal: 6),
         alignment: Alignment.center,
         decoration: BoxDecoration(

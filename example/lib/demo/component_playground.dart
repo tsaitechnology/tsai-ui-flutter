@@ -2,6 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:tsai_ui/tsai_icons.dart';
 import 'package:tsai_ui/tsai_ui.dart';
 
+/// Supplies the bounded catalog content height to nested playgrounds.
+class ComponentPlaygroundViewport extends InheritedWidget {
+  /// Creates a viewport contract for a catalog content area.
+  const ComponentPlaygroundViewport({
+    required this.height,
+    required super.child,
+    super.key,
+  });
+
+  /// The vertical extent available below the catalog header.
+  final double height;
+
+  /// Returns the nearest catalog content height, when installed.
+  static double? maybeHeightOf(BuildContext context) => context
+      .dependOnInheritedWidgetOfExactType<ComponentPlaygroundViewport>()
+      ?.height;
+
+  @override
+  bool updateShouldNotify(ComponentPlaygroundViewport oldWidget) =>
+      height != oldWidget.height;
+}
+
 class _ContrastPatternPainter extends CustomPainter {
   const _ContrastPatternPainter({
     required this.baseColor,
@@ -44,6 +66,10 @@ class ComponentPlayground extends StatefulWidget {
 }
 
 class _ComponentPlaygroundState extends State<ComponentPlayground> {
+  static const _compactBreakpoint = 720.0;
+  static const _previewMaxWidth = 390.0;
+  static const _pageVerticalPadding = 48.0;
+
   bool _checkerboardBackground = false;
   bool? _controlsVisible;
 
@@ -52,11 +78,20 @@ class _ComponentPlaygroundState extends State<ComponentPlayground> {
     final tokens = TsaiThemeTokens.of(context);
     return LayoutBuilder(
       builder: (context, constraints) {
-        final isCompact = constraints.maxWidth < 720;
+        final isCompact = constraints.maxWidth < _compactBreakpoint;
         final showControls = _controlsVisible ?? !isCompact;
+        final contentHeight = ComponentPlaygroundViewport.maybeHeightOf(
+          context,
+        );
+        final desktopHeight = constraints.hasBoundedHeight
+            ? constraints.maxHeight
+            : ((contentHeight ?? MediaQuery.sizeOf(context).height) -
+                      _pageVerticalPadding)
+                  .clamp(360.0, double.infinity);
         return Container(
           key: widget.key ?? const ValueKey<String>('component-playground'),
           width: double.infinity,
+          height: isCompact ? null : desktopHeight,
           decoration: BoxDecoration(
             color: tokens.colors.canvas,
             border: Border.all(
@@ -79,16 +114,20 @@ class _ComponentPlaygroundState extends State<ComponentPlayground> {
                     ],
                   )
                 else
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(child: _buildPreview(tokens)),
-                      if (showControls)
-                        SizedBox(
-                          width: 336,
-                          child: _buildControls(tokens, isCompact: false),
+                  Expanded(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Expanded(
+                          child: _buildPreview(tokens, fillHeight: true),
                         ),
-                    ],
+                        if (showControls)
+                          SizedBox(
+                            width: 336,
+                            child: _buildControls(tokens, isCompact: false),
+                          ),
+                      ],
+                    ),
                   ),
               ],
             ),
@@ -203,61 +242,59 @@ class _ComponentPlaygroundState extends State<ComponentPlayground> {
     return 'OPTIONS';
   }
 
-  Widget _buildPreview(TsaiThemeTokens tokens) => DecoratedBox(
-    decoration: BoxDecoration(color: tokens.colors.canvas),
-    child: Padding(
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          TsaiTextCaption(
-            'Preview',
-            size: TsaiCaptionSize.small,
-            weight: TsaiTextWeight.medium,
-            color: tokens.colors.contentSecondary,
+  Widget _buildPreview(TsaiThemeTokens tokens, {bool fillHeight = false}) =>
+      DecoratedBox(
+        decoration: BoxDecoration(color: tokens.colors.canvas),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TsaiTextCaption(
+                'Preview',
+                size: TsaiCaptionSize.small,
+                weight: TsaiTextWeight.medium,
+                color: tokens.colors.contentSecondary,
+              ),
+              SizedBox(height: tokens.spacing.space8),
+              if (fillHeight)
+                Expanded(child: _buildPreviewSurface(tokens))
+              else
+                _buildPreviewSurface(tokens),
+            ],
           ),
-          SizedBox(height: tokens.spacing.space8),
-          DecoratedBox(
-            key: const ValueKey<String>('component-playground-preview'),
-            decoration: BoxDecoration(
-              color: tokens.colors.surface,
-              border: Border.all(
-                color: tokens.colors.borderSubtle,
-                width: tokens.borders.hairline,
-              ),
-              borderRadius: BorderRadius.circular(tokens.radii.medium),
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(tokens.radii.medium),
-              child: CustomPaint(
-                key: const ValueKey<String>(
-                  'component-playground-checkerboard',
-                ),
-                painter: _checkerboardBackground
-                    ? _ContrastPatternPainter(
-                        baseColor: tokens.colors.canvas,
-                        accentColor: tokens.colors.contentPrimary,
-                      )
-                    : null,
-                child: SizedBox(
-                  width: double.infinity,
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(minHeight: 180),
-                    child: LayoutBuilder(
-                      builder: (context, constraints) => SizedBox(
-                        width: constraints.maxWidth.clamp(0, 480),
-                        child: Align(
-                          alignment: AlignmentDirectional.center,
-                          child: widget.preview,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+        ),
+      );
+
+  Widget _buildPreviewSurface(TsaiThemeTokens tokens) => DecoratedBox(
+    key: const ValueKey<String>('component-playground-preview'),
+    decoration: BoxDecoration(
+      color: tokens.colors.surface,
+      border: Border.all(
+        color: tokens.colors.borderSubtle,
+        width: tokens.borders.hairline,
+      ),
+      borderRadius: BorderRadius.circular(tokens.radii.medium),
+    ),
+    child: ClipRRect(
+      borderRadius: BorderRadius.circular(tokens.radii.medium),
+      child: CustomPaint(
+        key: const ValueKey<String>('component-playground-checkerboard'),
+        painter: _checkerboardBackground
+            ? _ContrastPatternPainter(
+                baseColor: tokens.colors.canvas,
+                accentColor: tokens.colors.contentPrimary,
+              )
+            : null,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(minHeight: 180),
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: _previewMaxWidth),
+              child: widget.preview,
             ),
           ),
-        ],
+        ),
       ),
     ),
   );

@@ -109,6 +109,25 @@ void main() {
     expect(find.text('Loading'), findsOneWidget);
   });
 
+  testWidgets('fills the desktop viewport below the catalog header', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(1280, 900);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await tester.pumpWidget(const CatalogApp(initialRoute: '/buttons'));
+    await tester.pump();
+
+    final header = tester.getRect(find.byType(HomeTopBar));
+    final playground = tester.getRect(
+      find.byKey(const ValueKey<String>('component-playground')),
+    );
+    expect(playground.top, header.bottom + 24);
+    expect(playground.bottom, 900 - 24);
+  });
+
   testWidgets('keeps the catalog header usable at 320 pixels', (tester) async {
     tester.view.physicalSize = const Size(320, 640);
     tester.view.devicePixelRatio = 1;

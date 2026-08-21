@@ -73,7 +73,7 @@ void main() {
       find.byKey(const ValueKey('component-playground-preview')),
     );
     expect(previewSize.width, greaterThan(400));
-    expect(previewSize.height, 180);
+    expect(previewSize.height, greaterThan(180));
     expect(tester.getSize(find.byKey(previewKey)), const Size.square(32));
 
     await tester.tap(
@@ -100,6 +100,62 @@ void main() {
       ),
       findsNothing,
     );
+  });
+
+  testWidgets('centers every preview inside a 390 pixel mobile viewport', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: TsaiTheme.dark(),
+        home: const Scaffold(
+          body: ComponentPlayground(
+            controls: [],
+            preview: TsaiInput(placeholder: 'Email'),
+          ),
+        ),
+      ),
+    );
+
+    final surface = tester.getRect(
+      find.byKey(const ValueKey<String>('component-playground-preview')),
+    );
+    final input = tester.getRect(find.byType(TsaiInput));
+    expect(input.width, 390);
+    expect(input.center.dx, closeTo(surface.center.dx, 0.01));
+
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: TsaiTheme.dark(),
+        home: const Scaffold(
+          body: ComponentPlayground(
+            controls: [],
+            preview: CircleIcon(icon: Icon(Icons.coffee)),
+          ),
+        ),
+      ),
+    );
+
+    final circle = tester.getRect(find.byType(CircleIcon));
+    expect(circle.center.dx, closeTo(surface.center.dx, 0.01));
+    expect(circle.center.dy, closeTo(surface.center.dy, 0.01));
+
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: TsaiTheme.dark(),
+        home: const Scaffold(
+          body: ComponentPlayground(
+            controls: [],
+            preview: TsaiBadgeCounter(value: 3),
+          ),
+        ),
+      ),
+    );
+
+    final counter = tester.getRect(find.byType(TsaiBadgeCounter));
+    expect(counter.size.height, 18);
+    expect(counter.center.dx, closeTo(surface.center.dx, 0.01));
+    expect(counter.center.dy, closeTo(surface.center.dy, 0.01));
   });
 
   testWidgets('starts with controls collapsed on mobile', (tester) async {
@@ -129,6 +185,42 @@ void main() {
     );
     await tester.pump();
     expect(find.text('Mobile control'), findsOneWidget);
+  });
+
+  testWidgets('scrolls long desktop controls without moving the preview', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: TsaiTheme.dark(),
+        home: Scaffold(
+          body: ComponentPlayground(
+            controls: [
+              for (var index = 0; index < 16; index++)
+                PlaygroundTextControl(
+                  label: 'field$index',
+                  value: 'Value $index',
+                  onChanged: _noopString,
+                ),
+            ],
+            preview: const Text('Pinned preview'),
+          ),
+        ),
+      ),
+    );
+
+    final preview = find.byKey(
+      const ValueKey<String>('component-playground-preview'),
+    );
+    final before = tester.getRect(preview);
+    await tester.drag(
+      find.byKey(const ValueKey<String>('component-playground-controls')),
+      const Offset(0, -400),
+    );
+    await tester.pump();
+
+    expect(tester.getRect(preview), before);
+    expect(find.text('Pinned preview'), findsOneWidget);
   });
 
   testWidgets('uses floating placeholders for input and select controls', (
