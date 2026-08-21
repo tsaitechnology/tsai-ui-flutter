@@ -465,12 +465,10 @@ class _DemoBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => LayoutBuilder(
-    builder: (context, constraints) => Center(
-      child: SizedBox(
-        width: constraints.maxWidth.clamp(0, 1120),
-        height: constraints.maxHeight,
-        child: child,
-      ),
+    builder: (context, constraints) => SizedBox(
+      width: constraints.maxWidth,
+      height: constraints.maxHeight,
+      child: child,
     ),
   );
 }

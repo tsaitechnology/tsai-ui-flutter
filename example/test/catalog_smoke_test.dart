@@ -323,7 +323,7 @@ void main() {
     expect(countControl.values, const [1, 2, 3, 4, 5]);
   });
 
-  testWidgets('multi-screen app showcases complete UI flows', (tester) async {
+  testWidgets('multi-screen app covers complete business flows', (tester) async {
     tester.view.physicalSize = const Size(390, 844);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.resetPhysicalSize);
@@ -405,15 +405,23 @@ void main() {
     expect(find.byType(BottomNavBar), findsOneWidget);
     expect(tester.takeException(), isNull);
 
-    await tester.tap(find.bySemanticsLabel('Showcase'));
+    await tester.tap(find.bySemanticsLabel('KYC'));
     await tester.pump();
-    expect(find.byType(ShowcaseScreenExample), findsOneWidget);
-    expect(find.byType(TsaiCard), findsNWidgets(2));
+    expect(find.byType(KycScreenExample), findsOneWidget);
+    expect(find.byType(TsaiCard), findsOneWidget);
     expect(find.byType(TsaiInlineAlert), findsOneWidget);
     expect(find.byType(TsaiProgressBar), findsOneWidget);
-    expect(find.byType(TsaiSkeletonAvatar), findsOneWidget);
-    expect(find.text('Danger'), findsOneWidget);
+    expect(find.byType(TsaiPhoneInput), findsOneWidget);
+    expect(find.text('Continue'), findsOneWidget);
     expect(find.byType(BottomNavBar), findsOneWidget);
+    expect(tester.takeException(), isNull);
+
+    await tester.tap(find.bySemanticsLabel('Pay'));
+    await tester.pump();
+    expect(find.byType(PurchaseScreenExample), findsOneWidget);
+    expect(find.text('Pay a merchant'), findsOneWidget);
+    expect(find.byType(TsaiSearchInput), findsOneWidget);
+    expect(find.byType(TsaiLink), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 

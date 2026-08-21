@@ -192,10 +192,9 @@ class _TsaiPhoneInputState extends State<TsaiPhoneInput> {
     final colors = tokens.colors;
     final editable = widget.enabled && !widget.readOnly;
     final placeholder = widget.mask.replaceAll('#', '0');
-    final countryCodeWidth = _textWidth(
-      context,
-      _countryController.text,
-      tokens.typography.bodyLarge,
+    final countryCodeWidth = math.max(
+      _textWidth(context, _countryController.text, tokens.typography.bodyLarge),
+      _textWidth(context, '00', tokens.typography.bodyLarge),
     );
     return MouseRegion(
       onEnter: (_) => setState(() => _hovered = true),

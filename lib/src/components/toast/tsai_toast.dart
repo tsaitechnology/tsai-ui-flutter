@@ -106,7 +106,9 @@ class TsaiToast extends StatelessWidget {
                     end: endPadding,
                   ),
                   child: Row(
-                    mainAxisSize: MainAxisSize.min,
+                    mainAxisSize: variant == TsaiToastVariant.undo
+                        ? MainAxisSize.min
+                        : MainAxisSize.max,
                     children: [
                       IconTheme.merge(
                         data: IconThemeData(color: tokens.colors.iconPrimary),
@@ -114,16 +116,28 @@ class TsaiToast extends StatelessWidget {
                             icon ?? const TsaiIcon(LucideIcons.info, size: 20),
                       ),
                       SizedBox(width: tokens.spacing.space8),
-                      Flexible(
-                        child: Text(
-                          message,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: tokens.typography.bodyMediumMedium.copyWith(
-                            color: tokens.colors.contentPrimary,
+                      if (variant == TsaiToastVariant.undo)
+                        Flexible(
+                          child: Text(
+                            message,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: tokens.typography.bodyMediumMedium.copyWith(
+                              color: tokens.colors.contentPrimary,
+                            ),
+                          ),
+                        )
+                      else
+                        Expanded(
+                          child: Text(
+                            message,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: tokens.typography.bodyMediumMedium.copyWith(
+                              color: tokens.colors.contentPrimary,
+                            ),
                           ),
                         ),
-                      ),
                       if (resolvedActionLabel case final label?) ...[
                         SizedBox(width: tokens.spacing.space8),
                         _ToastAction(label: label, onPressed: onAction),

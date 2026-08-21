@@ -297,6 +297,11 @@ void main() {
       final formatter = TsaiPhoneInputFormatter();
 
       expect(formatter.format('5'), '5');
+      expect(TsaiPhoneInputFormatter(mask: '(###) ###').format('5'), '(5');
+      expect(
+        TsaiPhoneInputFormatter(mask: '(###) ###').format('5551'),
+        '(555) 1',
+      );
       expect(formatter.format('5551'), '555 1');
       expect(formatter.format('+1 (555) 123-4567'), '155 512 34 56');
       expect(

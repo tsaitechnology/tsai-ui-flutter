@@ -90,7 +90,9 @@ class TsaiPhoneInputFormatter extends TextInputFormatter {
         result.write(digits[digitIndex++]);
         continue;
       }
-      if (digitIndex > 0 && digitIndex < digits.length) {
+      if (digitIndex == 0 && digits.isNotEmpty) {
+        result.write(character);
+      } else if (digitIndex > 0 && digitIndex < digits.length) {
         result.write(character);
       }
     }
