@@ -239,7 +239,7 @@ class _ComponentPlaygroundState extends State<ComponentPlayground> {
                         accentColor: Color.lerp(
                           tokens.colors.surface,
                           tokens.colors.contentPrimary,
-                          0.14,
+                          0.28,
                         )!,
                       )
                     : null,
