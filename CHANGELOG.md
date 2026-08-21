@@ -1,3 +1,22 @@
+## 0.6.0 - 2026-08-21
+
+### Maintenance
+
+- Fix shared catalog header layout ([67c9bbc](https://github.com/tsaitechnology/tsai-ui-flutter/commit/67c9bbc88b995f201a048663a3ebca7333b6ccaa))
+- Polish component playground surfaces ([bac9696](https://github.com/tsaitechnology/tsai-ui-flutter/commit/bac96963fcee39c24a5747fdff2e9c28967c0643))
+- Align playground header with UI kit ([1af172a](https://github.com/tsaitechnology/tsai-ui-flutter/commit/1af172a84508511b9fdfb034b7e346401dd35ce6))
+- Keep playground controls consistent when collapsed ([727a10e](https://github.com/tsaitechnology/tsai-ui-flutter/commit/727a10e85c002f16dddad9cec50fc443a165c601))
+- Refine catalog header and checkerboard contrast ([d6847df](https://github.com/tsaitechnology/tsai-ui-flutter/commit/d6847dfe57700070d1c523779fdc686d126cc323))
+- Preserve playground border around clipped content ([ac2f230](https://github.com/tsaitechnology/tsai-ui-flutter/commit/ac2f230058f12dba55bf73f2ed633fb1b36f0961))
+- Increase playground checkerboard contrast ([49bc60c](https://github.com/tsaitechnology/tsai-ui-flutter/commit/49bc60ce91a561a8c83b85cf250cc3c7801f8ea7))
+- Clarify playground checkerboard contrast ([fc8eda3](https://github.com/tsaitechnology/tsai-ui-flutter/commit/fc8eda3f35e1c7103b750012228611f0ad35539e))
+- Use diagnostic contrast for playground background ([4863dae](https://github.com/tsaitechnology/tsai-ui-flutter/commit/4863dae7999df77eed3885377869c8a77577f20c))
+- Use kit floating labels in playground controls ([c75b99b](https://github.com/tsaitechnology/tsai-ui-flutter/commit/c75b99b4424fcc525bcb0c4160160d540cdeac38))
+- Improve multi-screen fintech example flows ([84f2145](https://github.com/tsaitechnology/tsai-ui-flutter/commit/84f21451d678de8e38d8e0193131572d132379b9))
+- Add badge chip and icon button components ([13c9025](https://github.com/tsaitechnology/tsai-ui-flutter/commit/13c9025e8968828be2f2ddffdb2fd5f097378d34))
+- Add badge chip and icon button components ([be08b5e](https://github.com/tsaitechnology/tsai-ui-flutter/commit/be08b5ee8b21eb1d449999114407da72391f82ce))
+- Fix release validation for component examples ([544f172](https://github.com/tsaitechnology/tsai-ui-flutter/commit/544f1723758276562696ecf9215f71043f87151a))
+
 ## 0.5.0 - 2026-08-21
 
 ### Maintenance
