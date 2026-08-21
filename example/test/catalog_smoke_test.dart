@@ -53,6 +53,8 @@ void main() {
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 400));
     expect(find.text('Common'), findsOneWidget);
+    await tester.drag(find.byType(ListView).last, const Offset(0, -400));
+    await tester.pump();
     expect(find.text('Typography'), findsOneWidget);
 
     await tester.ensureVisible(find.text('TsaiTextHeading'));
@@ -84,6 +86,8 @@ void main() {
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 400));
     expect(find.text('Common'), findsOneWidget);
+    await tester.drag(find.byType(ListView).last, const Offset(0, -400));
+    await tester.pump();
     expect(find.text('Typography'), findsOneWidget);
 
     await tester.ensureVisible(find.text('TsaiTextHeading'));

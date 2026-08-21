@@ -5,3 +5,5 @@ Use `TsaiChip` for selectable filters and removable query tokens. The selected s
 ```dart
 TsaiChip(label: 'Income', selected: true, onTap: () {})
 ```
+
+[Open live example](https://tsaitechnology.github.io/tsai-ui-flutter/example/#/chips/chip){ target="_blank" rel="noopener" .md-button }

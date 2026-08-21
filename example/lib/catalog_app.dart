@@ -43,10 +43,18 @@ class _CatalogAppState extends State<CatalogApp> {
     themeMode: _themeMode,
     initialRoute: widget.initialRoute,
     routes: {
-      '/badges': (context) => BadgeDemoScreen(
-        themeMode: _themeMode,
-        onThemeModeChanged: _setThemeMode,
-      ),
+      for (final section in [
+        ComponentDemoSection.badge,
+        ComponentDemoSection.badgeCounter,
+        ComponentDemoSection.badgeDot,
+        ComponentDemoSection.chip,
+        ComponentDemoSection.iconButton,
+      ])
+        section.route: (context) => BadgeDemoScreen(
+          section: section,
+          themeMode: _themeMode,
+          onThemeModeChanged: _setThemeMode,
+        ),
       '/': (context) =>
           widget.home ??
           ButtonDemoScreen(

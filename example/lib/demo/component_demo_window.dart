@@ -18,9 +18,29 @@ enum ComponentDemoCategory {
 }
 
 enum ComponentDemoSection {
-  badges(
-    label: 'Badges & Chips',
-    route: '/badges',
+  badge(
+    label: 'TsaiBadge',
+    route: '/badges/badge',
+    category: ComponentDemoCategory.common,
+  ),
+  badgeCounter(
+    label: 'TsaiBadgeCounter',
+    route: '/badges/counter',
+    category: ComponentDemoCategory.common,
+  ),
+  badgeDot(
+    label: 'TsaiBadgeDot',
+    route: '/badges/dot',
+    category: ComponentDemoCategory.common,
+  ),
+  chip(
+    label: 'TsaiChip',
+    route: '/chips/chip',
+    category: ComponentDemoCategory.common,
+  ),
+  iconButton(
+    label: 'TsaiIconButton',
+    route: '/buttons/icon-button',
     category: ComponentDemoCategory.common,
   ),
   buttons(
