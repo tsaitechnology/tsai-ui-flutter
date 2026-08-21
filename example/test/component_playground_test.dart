@@ -41,6 +41,16 @@ void main() {
     final decoration = section.decoration! as BoxDecoration;
     expect(decoration.border, isA<Border>());
     expect(decoration.borderRadius, BorderRadius.circular(16));
+    expect(find.byType(PageTopBar), findsOneWidget);
+    expect(
+      tester.getSize(find.byType(PageTopBar)).height,
+      TsaiThemeTokens.of(
+            tester.element(find.byType(PageTopBar)),
+          ).spacing.space32 +
+          TsaiThemeTokens.of(
+            tester.element(find.byType(PageTopBar)),
+          ).spacing.space24,
+    );
 
     final controls = tester.widget<Column>(
       find.byKey(const ValueKey('component-playground-controls-wrap')),

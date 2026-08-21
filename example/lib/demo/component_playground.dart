@@ -99,52 +99,32 @@ class _ComponentPlaygroundState extends State<ComponentPlayground> {
   }
 
   Widget _buildHeader(bool showControls) {
-    final tokens = TsaiThemeTokens.of(context);
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: tokens.colors.surfaceRaised,
-        border: Border(
-          bottom: BorderSide(
-            color: tokens.colors.borderSubtle,
-            width: tokens.borders.hairline,
+    return PageTopBar(
+      title: 'Playground',
+      trailing: [
+        PageTopBarAction(
+          key: const ValueKey<String>(
+            'component-playground-checkerboard-toggle',
+          ),
+          icon: TsaiIcon(
+            _checkerboardBackground
+                ? LucideIcons.grid_2x2_check
+                : LucideIcons.grid_2x2,
+          ),
+          semanticLabel: _checkerboardBackground
+              ? 'Hide contrast background'
+              : 'Show contrast background',
+          onPressed: () => setState(
+            () => _checkerboardBackground = !_checkerboardBackground,
           ),
         ),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 12, 12, 12),
-        child: Row(
-          children: [
-            const Expanded(
-              child: TsaiTextHeading('Playground', size: TsaiHeadingSize.small),
-            ),
-            _PlaygroundIconAction(
-              key: const ValueKey<String>(
-                'component-playground-checkerboard-toggle',
-              ),
-              tooltip: _checkerboardBackground
-                  ? 'Hide contrast background'
-                  : 'Show contrast background',
-              icon: _checkerboardBackground
-                  ? LucideIcons.grid_2x2_check
-                  : LucideIcons.grid_2x2,
-              onPressed: () => setState(
-                () => _checkerboardBackground = !_checkerboardBackground,
-              ),
-            ),
-            const SizedBox(width: 4),
-            _PlaygroundIconAction(
-              key: const ValueKey<String>(
-                'component-playground-controls-toggle',
-              ),
-              tooltip: showControls ? 'Hide controls' : 'Show controls',
-              icon: showControls
-                  ? LucideIcons.sliders_horizontal
-                  : LucideIcons.sliders_horizontal,
-              onPressed: () => setState(() => _controlsVisible = !showControls),
-            ),
-          ],
+        PageTopBarAction(
+          key: const ValueKey<String>('component-playground-controls-toggle'),
+          icon: const TsaiIcon(LucideIcons.sliders_horizontal),
+          semanticLabel: showControls ? 'Hide controls' : 'Show controls',
+          onPressed: () => setState(() => _controlsVisible = !showControls),
         ),
-      ),
+      ],
     );
   }
 
@@ -306,7 +286,6 @@ class _PlaygroundIconAction extends StatelessWidget {
     required this.tooltip,
     required this.icon,
     required this.onPressed,
-    super.key,
   });
 
   final String tooltip;
