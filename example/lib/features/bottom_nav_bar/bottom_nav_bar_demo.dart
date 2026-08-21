@@ -38,82 +38,13 @@ class _BottomNavBarDemoState extends State<BottomNavBarDemo> {
               value: _items[_selectedIndex].label,
             ),
           ],
-          preview: _BackdropPreview(
-            count: _destinationCount,
+          preview: BottomNavBar(
+            items: _items.take(_destinationCount).toList(growable: false),
             selectedIndex: _selectedIndex,
             onSelected: (index) => setState(() => _selectedIndex = index),
           ),
         ),
       ],
-    );
-  }
-}
-
-class _BackdropPreview extends StatelessWidget {
-  const _BackdropPreview({
-    required this.count,
-    required this.selectedIndex,
-    required this.onSelected,
-  });
-
-  final int count;
-  final int selectedIndex;
-  final ValueChanged<int> onSelected;
-
-  @override
-  Widget build(BuildContext context) {
-    final tokens = TsaiThemeTokens.of(context);
-    return SizedBox(
-      height: 210,
-      child: Stack(
-        fit: StackFit.expand,
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(tokens.radii.medium),
-            child: Row(
-              children: [
-                Expanded(
-                  child: SizedBox.expand(
-                    child: ColoredBox(color: tokens.colors.actionPrimary),
-                  ),
-                ),
-                Expanded(
-                  child: SizedBox.expand(
-                    child: ColoredBox(color: tokens.colors.accentSuccess),
-                  ),
-                ),
-                Expanded(
-                  child: SizedBox.expand(
-                    child: ColoredBox(color: tokens.colors.accentError),
-                  ),
-                ),
-                Expanded(
-                  child: SizedBox.expand(
-                    child: ColoredBox(
-                      color: tokens.colors.surfaceAccentPressed,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Center(
-            child: TsaiTextHeading(
-              'Content under the bar',
-              size: TsaiHeadingSize.medium,
-              color: tokens.colors.contentOnActionPrimary,
-            ),
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: BottomNavBar(
-              items: _items.take(count).toList(growable: false),
-              selectedIndex: selectedIndex,
-              onSelected: onSelected,
-            ),
-          ),
-        ],
-      ),
     );
   }
 }
