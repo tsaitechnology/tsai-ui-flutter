@@ -4,6 +4,7 @@ import 'package:tsai_ui/tsai_ui.dart';
 import 'demo/component_demo_window.dart';
 import 'features/app_examples/multi_screen_app_example.dart';
 import 'features/avatars/avatar_demo_screen.dart';
+import 'features/badges/badge_demo_screen.dart';
 import 'features/buttons/button_demo_screen.dart';
 import 'features/effects/glow_demo_screen.dart';
 import 'features/feedback/feedback_demo_screen.dart';
@@ -42,6 +43,10 @@ class _CatalogAppState extends State<CatalogApp> {
     themeMode: _themeMode,
     initialRoute: widget.initialRoute,
     routes: {
+      '/badges': (context) => BadgeDemoScreen(
+        themeMode: _themeMode,
+        onThemeModeChanged: _setThemeMode,
+      ),
       '/': (context) =>
           widget.home ??
           ButtonDemoScreen(

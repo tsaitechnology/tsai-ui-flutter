@@ -18,6 +18,11 @@ enum ComponentDemoCategory {
 }
 
 enum ComponentDemoSection {
+  badges(
+    label: 'Badges & Chips',
+    route: '/badges',
+    category: ComponentDemoCategory.common,
+  ),
   buttons(
     label: 'Buttons',
     route: '/buttons',
