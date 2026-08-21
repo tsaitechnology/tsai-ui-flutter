@@ -125,7 +125,10 @@ class HomeTopBar extends StatelessWidget {
                 child: Align(
                   alignment: AlignmentDirectional.centerStart,
                   heightFactor: 1,
-                  child: _SpacedRow(children: leading),
+                  child: _BoundedSpacedRow(
+                    alignment: MainAxisAlignment.start,
+                    children: leading,
+                  ),
                 ),
               ),
               SizedBox(width: tokens.spacing.space8),

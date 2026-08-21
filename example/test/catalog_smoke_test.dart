@@ -128,6 +128,38 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  testWidgets(
+    'aligns the catalog title and theme action in the shared header',
+    (tester) async {
+      tester.view.physicalSize = const Size(320, 640);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+
+      await tester.pumpWidget(const CatalogApp(initialRoute: '/input-phone'));
+      await tester.pump();
+
+      final header = tester.getRect(find.byType(HomeTopBar));
+      final title = tester.getRect(
+        find.descendant(
+          of: find.byType(HomeTopBar),
+          matching: find.text('Phone Input'),
+        ),
+      );
+      expect(title.left, greaterThanOrEqualTo(header.left));
+      expect(title.right, lessThanOrEqualTo(header.right));
+      expect(title.top, greaterThanOrEqualTo(header.top));
+      expect(title.bottom, lessThanOrEqualTo(header.bottom));
+      expect(find.byTooltip('Use light theme'), findsOneWidget);
+      expect(find.byType(TsaiSwitch), findsNothing);
+      expect(tester.takeException(), isNull);
+
+      await tester.tap(find.byTooltip('Use light theme'));
+      await tester.pump();
+      expect(find.byTooltip('Use dark theme'), findsOneWidget);
+    },
+  );
+
   testWidgets('every component route has one desktop playground', (
     tester,
   ) async {

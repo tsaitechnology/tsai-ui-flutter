@@ -335,18 +335,12 @@ class _ComponentDemoWindowState extends State<ComponentDemoWindow> {
               child: HomeTopBar(
                 leading: [_CatalogTitle(label: widget.section.label)],
                 trailing: [
-                  Tooltip(
-                    message: widget.themeMode == ThemeMode.dark
-                        ? 'Use light theme'
-                        : 'Use dark theme',
-                    child: TsaiSwitch(
-                      value: widget.themeMode == ThemeMode.dark,
-                      semanticLabel: widget.themeMode == ThemeMode.dark
-                          ? 'Use light theme'
-                          : 'Use dark theme',
-                      onChanged: (value) => widget.onThemeModeChanged(
-                        value ? ThemeMode.dark : ThemeMode.light,
-                      ),
+                  HomeTopBarAction(
+                    icon: TsaiIcon(_catalogThemeIcon(widget.themeMode)),
+                    semanticLabel: _catalogThemeLabel(widget.themeMode),
+                    onPressed: () => _toggleCatalogTheme(
+                      widget.themeMode,
+                      widget.onThemeModeChanged,
                     ),
                   ),
                   HomeTopBarAction(
@@ -378,24 +372,22 @@ class _CatalogTitle extends StatelessWidget {
   final String label;
 
   @override
-  Widget build(BuildContext context) {
-    final tokens = TsaiThemeTokens.of(context);
-    final reservedWidth =
-        tokens.spacing.space16 * 2 +
-        tokens.spacing.space8 * 2 +
-        tokens.spacing.space48 +
-        (tokens.spacing.space32 + tokens.spacing.space8);
-    return SizedBox(
-      width: (MediaQuery.sizeOf(context).width - reservedWidth).clamp(0, 720),
-      child: TsaiTextHeading(
-        label,
-        size: TsaiHeadingSize.small,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-      ),
-    );
-  }
+  Widget build(BuildContext context) => TsaiTextHeading(
+    label,
+    size: TsaiHeadingSize.small,
+    maxLines: 1,
+    overflow: TextOverflow.ellipsis,
+  );
 }
+
+IconData _catalogThemeIcon(ThemeMode mode) =>
+    mode == ThemeMode.dark ? LucideIcons.sun : LucideIcons.moon;
+
+String _catalogThemeLabel(ThemeMode mode) =>
+    mode == ThemeMode.dark ? 'Use light theme' : 'Use dark theme';
+
+void _toggleCatalogTheme(ThemeMode mode, ValueChanged<ThemeMode> onChanged) =>
+    onChanged(mode == ThemeMode.dark ? ThemeMode.light : ThemeMode.dark);
 
 class _CatalogDrawer extends StatelessWidget {
   const _CatalogDrawer({
