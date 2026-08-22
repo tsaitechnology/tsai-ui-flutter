@@ -164,7 +164,7 @@ void main() {
     expect(find.text('Uruguay'), findsOneWidget);
   });
 
-  testWidgets('bottom sheet presentation supports Android-style selection', (
+  testWidgets('mobile select uses the shared bottom sheet for selection', (
     tester,
   ) async {
     String? selected;
@@ -187,13 +187,17 @@ void main() {
       find.byKey(const ValueKey('tsai-select-bottom-sheet')),
       findsOneWidget,
     );
+    expect(
+      find.byKey(const ValueKey('tsai-bottom-sheet-surface')),
+      findsOneWidget,
+    );
 
     await tester.tap(find.text('Uruguay'));
     await tester.pumpAndSettle();
     expect(selected, 'uy');
   });
 
-  testWidgets('Cupertino presentation supports iOS-style selection', (
+  testWidgets('mobile ignores legacy menu presentation overrides', (
     tester,
   ) async {
     String? selected;
@@ -204,7 +208,7 @@ void main() {
         child: TsaiSelect<String>(
           options: options,
           value: null,
-          presentation: TsaiSelectPresentation.cupertinoPicker,
+          presentation: TsaiSelectPresentation.menu,
           onChanged: (value) => selected = value,
         ),
       ),
@@ -213,11 +217,11 @@ void main() {
     await tester.tap(find.byKey(const ValueKey('tsai-select-field')));
     await tester.pumpAndSettle();
     expect(
-      find.byKey(const ValueKey('tsai-select-cupertino-picker')),
+      find.byKey(const ValueKey('tsai-select-bottom-sheet')),
       findsOneWidget,
     );
 
-    await tester.tap(find.text('Done'));
+    await tester.tap(find.text('Uruguay'));
     await tester.pumpAndSettle();
     expect(selected, 'uy');
   });

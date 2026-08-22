@@ -2,17 +2,16 @@ part of '../tsai_select.dart';
 
 /// Presentation used when a [TsaiSelect] opens.
 enum TsaiSelectPresentation {
-  /// Uses a web/desktop menu, Android bottom sheet, or iOS picker.
+  /// Uses a menu on web and desktop, and [TsaiBottomSheet] on mobile.
   adaptive,
 
-  /// Uses an anchored Flutter menu suited to web and desktop.
+  /// Uses an anchored Flutter menu on web and desktop.
+  ///
+  /// On Android and iOS, selects always use [TsaiBottomSheet].
   menu,
 
-  /// Uses a Material modal bottom sheet suited to Android.
+  /// Uses [TsaiBottomSheet].
   bottomSheet,
-
-  /// Uses a modal [CupertinoPicker] suited to iOS.
-  cupertinoPicker,
 }
 
 /// A selectable value shown by [TsaiSelect].

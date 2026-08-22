@@ -381,7 +381,7 @@ void main() {
     final homeSelect = tester.widget<TsaiSelect<String>>(
       find.byKey(const ValueKey<String>('home-country-select')),
     );
-    expect(homeSelect.presentation, TsaiSelectPresentation.cupertinoPicker);
+    expect(homeSelect.presentation, TsaiSelectPresentation.adaptive);
 
     await tester.tap(find.byKey(const ValueKey<String>('quick-transfer')));
     await pumpUi();
@@ -408,11 +408,11 @@ void main() {
     await tester.tap(find.byKey(const ValueKey<String>('home-country-select')));
     await pumpUi();
     expect(
-      find.byKey(const ValueKey<String>('tsai-select-cupertino-picker')),
+      find.byKey(const ValueKey<String>('tsai-select-bottom-sheet')),
       findsOneWidget,
     );
     expect(find.byType(BottomNavBar), findsOneWidget);
-    await tester.tap(find.text('Cancel'));
+    await tester.tapAt(const Offset(8, 8));
     await pumpUi();
 
     await tester.tap(find.bySemanticsLabel('Form'));
@@ -426,7 +426,7 @@ void main() {
     final formSelect = tester.widget<TsaiSelect<String>>(
       find.byKey(const ValueKey<String>('form-country-select')),
     );
-    expect(formSelect.presentation, TsaiSelectPresentation.cupertinoPicker);
+    expect(formSelect.presentation, TsaiSelectPresentation.adaptive);
     expect(find.byType(BottomNavBar), findsOneWidget);
     expect(tester.takeException(), isNull);
 

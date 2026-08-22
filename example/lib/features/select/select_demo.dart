@@ -100,12 +100,7 @@ class _SelectDemoState extends State<SelectDemo> {
               label: 'presentation',
               value: _presentation,
               values: TsaiSelectPresentation.values,
-              labels: const [
-                'Adaptive',
-                'Menu',
-                'Bottom sheet',
-                'Cupertino picker',
-              ],
+              labels: const ['Adaptive', 'Menu', 'Bottom sheet'],
               onChanged: (value) => setState(() => _presentation = value),
             ),
             PlaygroundField(

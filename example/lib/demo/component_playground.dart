@@ -400,7 +400,6 @@ class PlaygroundSelectControl<T> extends StatelessWidget {
         ),
     ],
     showClearButton: false,
-    presentation: TsaiSelectPresentation.menu,
     onChanged: (value) {
       if (value != null) {
         onChanged(value);

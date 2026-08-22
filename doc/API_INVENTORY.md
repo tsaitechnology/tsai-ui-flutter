@@ -56,7 +56,7 @@ import 'package:tsai_ui/tsai_icons.dart';
 | `TsaiControlLabelPosition` | Label placement for selection controls | Public |
 | `TsaiSelect<T>` | Controlled generic adaptive select | Public |
 | `TsaiSelectOption<T>` | Immutable select option with an optional composed `TsaiIcon` | Public |
-| `TsaiSelectPresentation` | Adaptive/menu/Android/iOS presentation policy | Public |
+| `TsaiSelectPresentation` | Menu on web/desktop; shared bottom sheet on mobile | Public |
 | `TsaiInput` | Text and opt-in password/visibility input | Public |
 | `TsaiSearchInput` | Compact search field with native editing, submission, focus, and clear behavior | Public |
 | `TsaiPhoneInput` | Country-code and masked national-number input | Public |
