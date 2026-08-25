@@ -40,8 +40,8 @@ TsaiEmptyState(
 
 `content` is required. `icon`, `trailing`, and the standard chevron are
 optional. The caller owns typography and layout inside `content` and
-`trailing`. Set `active` to display the selected background and provide
-`onTap` when the row is interactive.
+`trailing`. Set `active` to display the `color.surface.1` pill that bleeds 8
+pixels past the row and provide `onTap` when the row is interactive.
 
 ```dart
 TsaiListItem(

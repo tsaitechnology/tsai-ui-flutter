@@ -160,6 +160,8 @@ void main() {
       expect(light.radii.innerMedium, dark.radii.innerMedium);
       expect(light.radii.extraExtraLarge, 32);
       expect(light.radii.extraExtraLarge, dark.radii.extraExtraLarge);
+      expect(light.radii.card, 20);
+      expect(light.radii.card, dark.radii.card);
       expect(light.borders.hairline, dark.borders.hairline);
       expect(light.effects.glassBlur, 24);
       expect(light.effects.glassBlur, dark.effects.glassBlur);

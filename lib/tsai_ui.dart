@@ -1,10 +1,14 @@
 /// Enterprise Flutter components backed by the Tsai design system.
 library;
 
+export 'src/components/accordion/tsai_accordion.dart';
+export 'src/components/action_tile/tsai_action_tile.dart';
 export 'src/components/alert/tsai_inline_alert.dart';
+export 'src/components/amount_display/tsai_amount_display.dart';
 export 'src/components/avatar/avatar.dart';
 export 'src/components/avatar/user_pill.dart';
 export 'src/components/badge/tsai_badge.dart';
+export 'src/components/bank_card/tsai_bank_card.dart';
 export 'src/components/bottom_nav_bar/tsai_bottom_nav_bar.dart';
 export 'src/components/bottom_sheet/tsai_bottom_sheet.dart';
 export 'src/components/button/tsai_button.dart';
@@ -12,16 +16,21 @@ export 'src/components/button/tsai_button_theme.dart';
 export 'src/components/button/tsai_icon_button.dart';
 export 'src/components/card/tsai_card.dart';
 export 'src/components/chip/tsai_chip.dart';
+export 'src/components/divider/tsai_divider.dart';
 export 'src/components/effects/tsai_glow.dart';
 export 'src/components/input/tsai_code_input.dart';
 export 'src/components/input/tsai_input.dart';
 export 'src/components/input/tsai_search_input.dart';
+export 'src/components/keypad/tsai_numeric_keypad.dart';
 export 'src/components/link/tsai_link.dart';
 export 'src/components/modal_dialog/tsai_modal_dialog.dart';
+export 'src/components/page_indicator/tsai_page_indicator.dart';
 export 'src/components/progress/tsai_progress.dart';
 export 'src/components/select/tsai_select.dart';
 export 'src/components/selection/tsai_selection_controls.dart';
 export 'src/components/skeleton/tsai_skeleton.dart';
+export 'src/components/slider/tsai_slider.dart';
+export 'src/components/stepper/tsai_stepper.dart';
 export 'src/components/tabs/tsai_tabs.dart';
 export 'src/components/toast/tsai_toast.dart';
 export 'src/components/top_bar/tsai_top_bar.dart';

@@ -146,6 +146,21 @@ enum ComponentDemoSection {
     route: '/input-pin',
     category: ComponentDemoCategory.forms,
   ),
+  numericKeypad(
+    label: 'TsaiNumericKeypad',
+    route: '/keypad',
+    category: ComponentDemoCategory.forms,
+  ),
+  slider(
+    label: 'TsaiSlider',
+    route: '/slider',
+    category: ComponentDemoCategory.forms,
+  ),
+  stepper(
+    label: 'TsaiStepper',
+    route: '/stepper',
+    category: ComponentDemoCategory.forms,
+  ),
   select(
     label: 'Select',
     route: '/select',
@@ -212,6 +227,21 @@ enum ComponentDemoSection {
     route: '/ui-blocks/card',
     category: ComponentDemoCategory.uiBlocks,
   ),
+  actionTile(
+    label: 'TsaiActionTile',
+    route: '/action-tile',
+    category: ComponentDemoCategory.uiBlocks,
+  ),
+  bankCard(
+    label: 'TsaiBankCard',
+    route: '/bank-card',
+    category: ComponentDemoCategory.uiBlocks,
+  ),
+  amountDisplay(
+    label: 'TsaiAmountDisplay',
+    route: '/amount-display',
+    category: ComponentDemoCategory.uiBlocks,
+  ),
   tabsDocument(
     label: 'Tabs',
     route: '/tabs',
@@ -230,6 +260,21 @@ enum ComponentDemoSection {
   modalDialog(
     label: 'Modal Dialog',
     route: '/modal-dialog',
+    category: ComponentDemoCategory.layout,
+  ),
+  pageIndicator(
+    label: 'TsaiPageIndicator',
+    route: '/page-indicator',
+    category: ComponentDemoCategory.layout,
+  ),
+  divider(
+    label: 'TsaiDivider',
+    route: '/divider',
+    category: ComponentDemoCategory.layout,
+  ),
+  accordion(
+    label: 'TsaiAccordion',
+    route: '/accordion',
     category: ComponentDemoCategory.layout,
   ),
   homeTopBar(

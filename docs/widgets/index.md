@@ -39,6 +39,9 @@ its live Flutter web example.
 - [TsaiOtpInput](tsai-otp-input.md)
 - [TsaiPinInput](tsai-pin-input.md)
 - [TsaiSelect](tsai-select.md)
+- [TsaiNumericKeypad](tsai-numeric-keypad.md)
+- [TsaiSlider](tsai-slider.md)
+- [TsaiStepper](tsai-stepper.md)
 - [TsaiCheckbox](tsai-checkbox.md)
 - [TsaiRadio](tsai-radio.md)
 - [TsaiSwitch](tsai-switch.md)
@@ -52,6 +55,9 @@ its live Flutter web example.
 - [TsaiProgressBar and TsaiSpinner](tsai-progress.md)
 - [Tsai Skeleton](tsai-skeleton.md)
 - [TsaiCard](tsai-card.md)
+- [TsaiActionTile](tsai-action-tile.md)
+- [TsaiBankCard](tsai-bank-card.md)
+- [TsaiAmountDisplay](tsai-amount-display.md)
 
 ## Layout
 
@@ -60,3 +66,6 @@ its live Flutter web example.
 - [TsaiBottomSheet](tsai-bottom-sheet.md)
 - [TsaiModalDialog](tsai-modal-dialog.md)
 - [Tsai top bars](tsai-top-bars.md)
+- [TsaiPageIndicator](tsai-page-indicator.md)
+- [TsaiDivider](tsai-divider.md)
+- [TsaiAccordion](tsai-accordion.md)

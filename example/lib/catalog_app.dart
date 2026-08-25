@@ -2,20 +2,29 @@ import 'package:flutter/material.dart';
 import 'package:tsai_ui/tsai_ui.dart';
 
 import 'demo/component_demo_window.dart';
+import 'features/accordion/accordion_demo_screen.dart';
+import 'features/action_tile/action_tile_demo_screen.dart';
+import 'features/amount_display/amount_display_demo_screen.dart';
 import 'features/app_examples/multi_screen_app_example.dart';
 import 'features/avatars/avatar_demo_screen.dart';
 import 'features/badges/badge_demo_screen.dart';
+import 'features/bank_card/bank_card_demo_screen.dart';
 import 'features/buttons/button_demo_screen.dart';
 import 'features/effects/glow_demo_screen.dart';
 import 'features/feedback/feedback_demo_screen.dart';
 import 'features/bottom_nav_bar/bottom_nav_bar_demo_screen.dart';
 import 'features/bottom_sheet/bottom_sheet_demo_screen.dart';
+import 'features/divider/divider_demo_screen.dart';
 import 'features/icons/icon_demo_screen.dart';
 import 'features/inputs/input_demo_screen.dart';
+import 'features/keypad/numeric_keypad_demo_screen.dart';
 import 'features/links/link_demo_screen.dart';
 import 'features/modal_dialog/modal_dialog_demo_screen.dart';
+import 'features/page_indicator/page_indicator_demo_screen.dart';
 import 'features/select/select_demo_screen.dart';
 import 'features/selection_controls/selection_controls_demo_screen.dart';
+import 'features/slider/slider_demo_screen.dart';
+import 'features/stepper/stepper_demo_screen.dart';
 import 'features/tabs/tabs_demo_screen.dart';
 import 'features/top_bars/top_bar_demo_screen.dart';
 import 'features/typography/typography_widget_demo_screen.dart';
@@ -190,6 +199,42 @@ class _CatalogAppState extends State<CatalogApp> {
         onThemeModeChanged: _setThemeMode,
       ),
       '/input-pin': (context) => PinInputDemoScreen(
+        themeMode: _themeMode,
+        onThemeModeChanged: _setThemeMode,
+      ),
+      '/page-indicator': (context) => PageIndicatorDemoScreen(
+        themeMode: _themeMode,
+        onThemeModeChanged: _setThemeMode,
+      ),
+      '/keypad': (context) => NumericKeypadDemoScreen(
+        themeMode: _themeMode,
+        onThemeModeChanged: _setThemeMode,
+      ),
+      '/action-tile': (context) => ActionTileDemoScreen(
+        themeMode: _themeMode,
+        onThemeModeChanged: _setThemeMode,
+      ),
+      '/slider': (context) => SliderDemoScreen(
+        themeMode: _themeMode,
+        onThemeModeChanged: _setThemeMode,
+      ),
+      '/stepper': (context) => StepperDemoScreen(
+        themeMode: _themeMode,
+        onThemeModeChanged: _setThemeMode,
+      ),
+      '/bank-card': (context) => BankCardDemoScreen(
+        themeMode: _themeMode,
+        onThemeModeChanged: _setThemeMode,
+      ),
+      '/amount-display': (context) => AmountDisplayDemoScreen(
+        themeMode: _themeMode,
+        onThemeModeChanged: _setThemeMode,
+      ),
+      '/divider': (context) => DividerDemoScreen(
+        themeMode: _themeMode,
+        onThemeModeChanged: _setThemeMode,
+      ),
+      '/accordion': (context) => AccordionDemoScreen(
         themeMode: _themeMode,
         onThemeModeChanged: _setThemeMode,
       ),

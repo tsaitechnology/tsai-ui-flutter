@@ -2,15 +2,13 @@ part of '../tsai_select.dart';
 
 /// Presentation used when a [TsaiSelect] opens.
 enum TsaiSelectPresentation {
-  /// Uses a menu on web and desktop, and [TsaiBottomSheet] on mobile.
+  /// Opens options in a [TsaiBottomSheet].
   adaptive,
 
-  /// Uses an anchored Flutter menu on web and desktop.
-  ///
-  /// On Android and iOS, selects always use [TsaiBottomSheet].
+  /// Legacy value. Options still open in a [TsaiBottomSheet].
   menu,
 
-  /// Uses [TsaiBottomSheet].
+  /// Opens options in a [TsaiBottomSheet].
   bottomSheet,
 }
 

@@ -2,10 +2,9 @@ part of '../tsai_select.dart';
 
 /// A controlled generic select matching the Penpot Select component.
 ///
-/// The options open in [TsaiBottomSheet] on Android and iOS, and in an
-/// anchored menu on web and desktop. Opening the options does not change the
-/// field's 56-pixel visual height. Set [onChanged] to null to disable the
-/// component.
+/// Options always open in a half-height [TsaiBottomSheet]. Opening the options
+/// does not change the field's 56-pixel visual height. Set [onChanged] to null
+/// to disable the component.
 class TsaiSelect<T> extends StatefulWidget {
   /// Creates a Tsai select.
   const TsaiSelect({
@@ -107,19 +106,8 @@ class _TsaiSelectState<T> extends State<TsaiSelect<T>> {
 
   bool get _enabled => widget.onChanged != null;
 
-  TsaiSelectPresentation get _resolvedPresentation {
-    if (!kIsWeb &&
-        switch (defaultTargetPlatform) {
-          TargetPlatform.android || TargetPlatform.iOS => true,
-          _ => false,
-        }) {
-      return TsaiSelectPresentation.bottomSheet;
-    }
-    if (widget.presentation != TsaiSelectPresentation.adaptive) {
-      return widget.presentation;
-    }
-    return TsaiSelectPresentation.menu;
-  }
+  TsaiSelectPresentation get _resolvedPresentation =>
+      TsaiSelectPresentation.bottomSheet;
 
   @override
   void didUpdateWidget(covariant TsaiSelect<T> oldWidget) {

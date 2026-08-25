@@ -176,7 +176,7 @@ class TsaiListItem extends StatelessWidget {
             child: DecoratedBox(
               key: const ValueKey<String>('tsai-list-item-active-background'),
               decoration: BoxDecoration(
-                color: tokens.colors.borderSubtle,
+                color: tokens.colors.surface,
                 borderRadius: BorderRadius.circular(tokens.radii.large),
               ),
             ),

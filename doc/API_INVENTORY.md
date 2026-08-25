@@ -22,7 +22,7 @@ import 'package:tsai_ui/tsai_icons.dart';
 | `TsaiGradientTokens` | Theme-aware top and bottom scrim assets | Public |
 | `TsaiTypographyTokens` | Typography roles | Public |
 | `TsaiSpacingTokens` | Spacing scale | Public |
-| `TsaiRadiusTokens` | Radius scale through the 32-pixel sheet radius | Public |
+| `TsaiRadiusTokens` | Radius scale including the 20-pixel card radius and 32-pixel sheet radius | Public |
 | `TsaiBorderTokens` | Border widths | Public |
 | `TsaiShadowTokens` | Theme-aware shadows | Public |
 | `TsaiEffectTokens` | Semantic backdrop and image effects | Public |
@@ -56,7 +56,7 @@ import 'package:tsai_ui/tsai_icons.dart';
 | `TsaiControlLabelPosition` | Label placement for selection controls | Public |
 | `TsaiSelect<T>` | Controlled generic adaptive select | Public |
 | `TsaiSelectOption<T>` | Immutable select option with an optional composed `TsaiIcon` | Public |
-| `TsaiSelectPresentation` | Menu on web/desktop; shared bottom sheet on mobile | Public |
+| `TsaiSelectPresentation` | Compatibility presentation flag; options always open in a bottom sheet | Public |
 | `TsaiInput` | Text and opt-in password/visibility input | Public |
 | `TsaiSearchInput` | Compact search field with native editing, submission, focus, and clear behavior | Public |
 | `TsaiPhoneInput` | Country-code and masked national-number input | Public |
@@ -103,6 +103,18 @@ import 'package:tsai_ui/tsai_icons.dart';
 | `TsaiSkeletonAvatar` | Circular avatar loading placeholder | Public |
 | `TsaiSkeletonCard` | Flexible-width card loading placeholder | Public |
 | `TsaiCard` | Token-backed card surface with optional header and arbitrary content | Public |
+| `TsaiPageIndicator` | Page dots with one active pill | Public |
+| `TsaiNumericKeypad` | Four-row numeric pad with decimal, integer, and PIN modes | Public |
+| `TsaiKeypadMode` | Decimal, integer, and PIN bottom-left key treatments | Public |
+| `TsaiActionTile` | Home quick-action tile | Public |
+| `TsaiActionTileVariant` | Circle, card, and ghost plates | Public |
+| `TsaiSlider` | Single-thumb continuous slider | Public |
+| `TsaiStepper` | Pill quantity control | Public |
+| `TsaiBankCard` | Dark payment-card face with optional overlays | Public |
+| `TsaiAmountDisplay` | Caption, amount, and subtitle stack | Public |
+| `TsaiAmountAlignment` | Start and center amount stacks | Public |
+| `TsaiDivider` | Hairline separator | Public |
+| `TsaiAccordion` | Expandable title and body row | Public |
 | `LucideIcons` | Opt-in icon catalog re-export | External contract |
 
 ## Internal

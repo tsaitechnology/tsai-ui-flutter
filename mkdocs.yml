@@ -80,6 +80,9 @@ nav:
           - TsaiOtpInput: widgets/tsai-otp-input.md
           - TsaiPinInput: widgets/tsai-pin-input.md
           - TsaiSelect: widgets/tsai-select.md
+          - TsaiNumericKeypad: widgets/tsai-numeric-keypad.md
+          - TsaiSlider: widgets/tsai-slider.md
+          - TsaiStepper: widgets/tsai-stepper.md
           - TsaiCheckbox: widgets/tsai-checkbox.md
           - TsaiRadio: widgets/tsai-radio.md
           - TsaiSwitch: widgets/tsai-switch.md
@@ -91,12 +94,18 @@ nav:
           - TsaiProgressBar and TsaiSpinner: widgets/tsai-progress.md
           - Tsai Skeleton: widgets/tsai-skeleton.md
           - TsaiCard: widgets/tsai-card.md
+          - TsaiActionTile: widgets/tsai-action-tile.md
+          - TsaiBankCard: widgets/tsai-bank-card.md
+          - TsaiAmountDisplay: widgets/tsai-amount-display.md
       - Layout:
           - TsaiTabs: widgets/tsai-tabs.md
           - BottomNavBar: widgets/tsai-bottom-nav-bar.md
           - TsaiBottomSheet: widgets/tsai-bottom-sheet.md
           - TsaiModalDialog: widgets/tsai-modal-dialog.md
           - Tsai top bars: widgets/tsai-top-bars.md
+          - TsaiPageIndicator: widgets/tsai-page-indicator.md
+          - TsaiDivider: widgets/tsai-divider.md
+          - TsaiAccordion: widgets/tsai-accordion.md
   - License: license.md
 
 strict: true

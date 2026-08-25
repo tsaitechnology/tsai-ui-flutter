@@ -902,6 +902,7 @@ final class TsaiRadiusTokens {
     required this.medium,
     required this.large,
     required this.extraLarge,
+    this.card = 20,
     this.extraExtraLarge = 32,
     required this.pill,
   });
@@ -913,6 +914,7 @@ final class TsaiRadiusTokens {
     medium: 12,
     large: 16,
     extraLarge: 24,
+    card: 20,
     extraExtraLarge: 32,
     pill: 999,
   );
@@ -932,6 +934,9 @@ final class TsaiRadiusTokens {
   /// Twenty-four-pixel radius.
   final double extraLarge;
 
+  /// Twenty-pixel radius used by Bank Card.
+  final double card;
+
   /// Thirty-two-pixel radius used by large sheet surfaces.
   final double extraExtraLarge;
 
@@ -945,6 +950,7 @@ final class TsaiRadiusTokens {
     medium: lerpDouble(medium, other.medium, t)!,
     large: lerpDouble(large, other.large, t)!,
     extraLarge: lerpDouble(extraLarge, other.extraLarge, t)!,
+    card: lerpDouble(card, other.card, t)!,
     extraExtraLarge: lerpDouble(extraExtraLarge, other.extraExtraLarge, t)!,
     pill: lerpDouble(pill, other.pill, t)!,
   );

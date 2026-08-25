@@ -294,6 +294,15 @@ void main() {
     ComponentDemoSection.progress,
     ComponentDemoSection.skeleton,
     ComponentDemoSection.card,
+    ComponentDemoSection.pageIndicator,
+    ComponentDemoSection.numericKeypad,
+    ComponentDemoSection.actionTile,
+    ComponentDemoSection.slider,
+    ComponentDemoSection.stepper,
+    ComponentDemoSection.bankCard,
+    ComponentDemoSection.amountDisplay,
+    ComponentDemoSection.divider,
+    ComponentDemoSection.accordion,
   ]) {
     testWidgets('opens ${section.label} in its playground', (tester) async {
       await tester.pumpWidget(CatalogApp(initialRoute: section.route));
