@@ -1,3 +1,9 @@
+## 0.6.6 - 2026-08-25
+
+### Maintenance
+
+- Keep home action tiles compact and unclip the card pager. ([d0f20bc](https://github.com/tsaitechnology/tsai-ui-flutter/commit/d0f20bcaa394792e95e60408824a8ce9342a276e))
+
 ## 0.6.5 - 2026-08-25
 
 ### Maintenance
