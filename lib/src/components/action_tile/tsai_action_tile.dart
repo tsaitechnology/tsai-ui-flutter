@@ -72,21 +72,25 @@ class _TsaiActionTileState extends State<TsaiActionTile> {
         : null;
 
     final child = switch (widget.variant) {
-      TsaiActionTileVariant.circle => Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _Plate(
-            width: 56,
-            height: 56,
-            radius: tokens.radii.pill,
-            color: _plateColor(tokens),
-            child: icon,
-          ),
-          if (caption != null) ...[
-            SizedBox(height: tokens.spacing.space8),
-            caption,
+      TsaiActionTileVariant.circle => SizedBox(
+        width: 56,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            _Plate(
+              width: 56,
+              height: 56,
+              radius: tokens.radii.pill,
+              color: _plateColor(tokens),
+              child: icon,
+            ),
+            if (caption != null) ...[
+              SizedBox(height: tokens.spacing.space8),
+              caption,
+            ],
           ],
-        ],
+        ),
       ),
       TsaiActionTileVariant.card || TsaiActionTileVariant.ghost => _Plate(
         width: 84,

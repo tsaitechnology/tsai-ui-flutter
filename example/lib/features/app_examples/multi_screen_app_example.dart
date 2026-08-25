@@ -215,13 +215,10 @@ class _HomeScreenExampleState extends State<HomeScreenExample> {
               top: tokens.spacing.space64 + tokens.spacing.space12,
               bottom: tokens.spacing.space64 + 62,
             ),
-            child: Center(
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 720),
-                child: Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: tokens.spacing.space16,
-                  ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                _HomeMaxWidth(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
@@ -261,7 +258,7 @@ class _HomeScreenExampleState extends State<HomeScreenExample> {
                       ),
                       SizedBox(height: tokens.spacing.space24),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           TsaiActionTile(
                             key: const ValueKey<String>('quick-transfer'),
@@ -269,17 +266,20 @@ class _HomeScreenExampleState extends State<HomeScreenExample> {
                             label: 'Send',
                             onPressed: () => _openTransfer(context),
                           ),
+                          SizedBox(width: tokens.spacing.space24),
                           TsaiActionTile(
                             key: const ValueKey<String>('quick-pay'),
                             icon: const TsaiIcon(LucideIcons.receipt),
                             label: 'Pay',
                             onPressed: widget.onOpenPay,
                           ),
+                          SizedBox(width: tokens.spacing.space24),
                           TsaiActionTile(
                             icon: const TsaiIcon(LucideIcons.wallet_cards),
                             label: 'Cards',
                             onPressed: widget.onOpenCards,
                           ),
+                          SizedBox(width: tokens.spacing.space24),
                           TsaiActionTile(
                             icon: const TsaiIcon(LucideIcons.plus),
                             label: 'Top up',
@@ -305,19 +305,35 @@ class _HomeScreenExampleState extends State<HomeScreenExample> {
                           ),
                         ],
                       ),
-                      SizedBox(height: tokens.spacing.space24),
-                      SizedBox(
-                        height: 214,
-                        child: PageView(
-                          controller: _cardController,
-                          onPageChanged: (index) =>
-                              setState(() => _cardIndex = index),
-                          children: [
-                            for (final card in _cards) Center(child: card),
-                          ],
+                    ],
+                  ),
+                ),
+                SizedBox(height: tokens.spacing.space24),
+                SizedBox(
+                  height: 214 + tokens.spacing.space20 + tokens.spacing.space48,
+                  child: PageView(
+                    key: const ValueKey<String>('home-card-pager'),
+                    controller: _cardController,
+                    clipBehavior: Clip.none,
+                    onPageChanged: (index) =>
+                        setState(() => _cardIndex = index),
+                    children: [
+                      for (final card in _cards)
+                        Padding(
+                          padding: EdgeInsets.only(
+                            top: tokens.spacing.space20,
+                            bottom: tokens.spacing.space48,
+                          ),
+                          child: Center(child: card),
                         ),
-                      ),
-                      SizedBox(height: tokens.spacing.space16),
+                    ],
+                  ),
+                ),
+                SizedBox(height: tokens.spacing.space16),
+                _HomeMaxWidth(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
                       Center(
                         child: TsaiPageIndicator(
                           count: _cards.length,
@@ -349,7 +365,7 @@ class _HomeScreenExampleState extends State<HomeScreenExample> {
                     ],
                   ),
                 ),
-              ),
+              ],
             ),
           ),
           PositionedDirectional(
@@ -407,6 +423,26 @@ class _HomeScreenExampleState extends State<HomeScreenExample> {
         builder: (sheetContext) => TsaiButton(
           label: 'Start setup',
           onPressed: () => Navigator.of(sheetContext).pop(),
+        ),
+      ),
+    );
+  }
+}
+
+class _HomeMaxWidth extends StatelessWidget {
+  const _HomeMaxWidth({required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final tokens = TsaiThemeTokens.of(context);
+    return Center(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 720),
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: tokens.spacing.space16),
+          child: child,
         ),
       ),
     );

@@ -397,6 +397,28 @@ void main() {
     expect(find.byType(TsaiBankCard), findsWidgets);
     expect(find.byType(TsaiPageIndicator), findsWidgets);
 
+    final tiles = find.byType(TsaiActionTile);
+    expect(tiles, findsNWidgets(4));
+    for (var i = 0; i < 4; i++) {
+      expect(tester.getSize(tiles.at(i)).width, 56);
+    }
+    expect(
+      tester.getRect(tiles.at(1)).left - tester.getRect(tiles.at(0)).right,
+      TsaiThemeTokens.dark.spacing.space24,
+    );
+    final tileRow = tester.getRect(tiles.at(0)).center.dx;
+    final lastTile = tester.getRect(tiles.at(3)).center.dx;
+    final rowMid =
+        (tester.getRect(tiles.at(0)).left + tester.getRect(tiles.at(3)).right) /
+        2;
+    expect(rowMid, closeTo(scroll.center.dx, 1));
+    expect(lastTile, greaterThan(tileRow));
+
+    final pager = find.byKey(const ValueKey<String>('home-card-pager'));
+    expect(tester.widget<PageView>(pager).clipBehavior, Clip.none);
+    expect(tester.getRect(pager).left, scroll.left);
+    expect(tester.getRect(pager).right, scroll.right);
+
     await tester.tap(find.byKey(const ValueKey<String>('quick-transfer')));
     await pumpUi();
     expect(find.text('Transfer money'), findsOneWidget);
