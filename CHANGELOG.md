@@ -1,3 +1,11 @@
+## 0.6.5 - 2026-08-25
+
+### Maintenance
+
+- Hide BottomNavBar while the keyboard is open. ([b0740c1](https://github.com/tsaitechnology/tsai-ui-flutter/commit/b0740c13581b68394fe5b0eb8fb1326082bd898e))
+- Present toasts as a non-blocking overlay matching Penpot. ([6d37549](https://github.com/tsaitechnology/tsai-ui-flutter/commit/6d37549d836bfd6dcaa3f43a0ec8f31f837aa675))
+- Refresh the example lockfile after resolving current test dependencies. ([ab92a13](https://github.com/tsaitechnology/tsai-ui-flutter/commit/ab92a138059912695da820103f4fb6fd907ba38f))
+
 ## 0.6.4 - 2026-08-25
 
 ### Maintenance
