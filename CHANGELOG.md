@@ -1,3 +1,12 @@
+## 0.6.4 - 2026-08-25
+
+### Maintenance
+
+- Add remaining Penpot widgets for page, keypad, tile, slider, stepper, card, amount, divider, and accordion. ([470b4fe](https://github.com/tsaitechnology/tsai-ui-flutter/commit/470b4fed7a2cbee98d54d38ba4d7f5b6d6a97dd0))
+- Rebuild the multi-screen catalog app around the new wallet widgets. ([cd6cd39](https://github.com/tsaitechnology/tsai-ui-flutter/commit/cd6cd3923cff8b203817eeedb1e14d9bb3448be1))
+- Merge branch 'main' of github.com:tsaitechnology/tsai-ui-flutter ([a92e56b](https://github.com/tsaitechnology/tsai-ui-flutter/commit/a92e56bfa3afcd57f07d60c6b26440e87cad4da2))
+- Skip generated platform trees in the analyzer and refresh the example lockfile. ([14f6e56](https://github.com/tsaitechnology/tsai-ui-flutter/commit/14f6e560a1bcb72feadccca157e2c42297db27ba))
+
 ## 0.6.3 - 2026-08-22
 
 ### Maintenance
