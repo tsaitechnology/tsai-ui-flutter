@@ -1,3 +1,9 @@
+## 0.6.3 - 2026-08-22
+
+### Maintenance
+
+- Use bottom sheet for mobile selects ([206336c](https://github.com/tsaitechnology/tsai-ui-flutter/commit/206336c4d71a56d345088d4c159e4ab6f8b142c3))
+
 ## 0.6.2 - 2026-08-21
 
 ### Maintenance
