@@ -41,7 +41,8 @@ class MultiScreenAppExample extends StatefulWidget {
   State<MultiScreenAppExample> createState() => _MultiScreenAppExampleState();
 }
 
-class _MultiScreenAppExampleState extends State<MultiScreenAppExample> {
+class _MultiScreenAppExampleState extends State<MultiScreenAppExample>
+    with WidgetsBindingObserver {
   static const _navigationItems = [
     BottomNavBarItem(
       icon: TsaiIcon(LucideIcons.house, size: 20),
@@ -59,53 +60,86 @@ class _MultiScreenAppExampleState extends State<MultiScreenAppExample> {
   ];
 
   var _selectedIndex = 0;
+  var _keyboardVisible = false;
 
   @override
-  Widget build(BuildContext context) => Stack(
-    key: const ValueKey<String>('multi-screen-app-example'),
-    fit: StackFit.expand,
-    children: [
-      IndexedStack(
-        key: const ValueKey<String>('app-example-pages'),
-        index: _selectedIndex,
-        children: [
-          HomeScreenExample(
-            themeMode: widget.themeMode,
-            onThemeModeChanged: widget.onThemeModeChanged,
-            onOpenCatalog: widget.onOpenCatalog,
-            onOpenPay: () => setState(() => _selectedIndex = 3),
-            onOpenCards: () => setState(() => _selectedIndex = 1),
-          ),
-          FormScreenExample(
-            themeMode: widget.themeMode,
-            onThemeModeChanged: widget.onThemeModeChanged,
-            onOpenCatalog: widget.onOpenCatalog,
-            onShowHome: () => setState(() => _selectedIndex = 0),
-          ),
-          KycScreenExample(
-            themeMode: widget.themeMode,
-            onThemeModeChanged: widget.onThemeModeChanged,
-            onOpenCatalog: widget.onOpenCatalog,
-          ),
-          PurchaseScreenExample(
-            themeMode: widget.themeMode,
-            onThemeModeChanged: widget.onThemeModeChanged,
-            onOpenCatalog: widget.onOpenCatalog,
-          ),
-        ],
-      ),
-      PositionedDirectional(
-        start: 0,
-        end: 0,
-        bottom: 0,
-        child: BottomNavBar(
-          items: _navigationItems,
-          selectedIndex: _selectedIndex,
-          onSelected: (index) => setState(() => _selectedIndex = index),
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeMetrics() {
+    // Read from the FlutterView: a parent Scaffold may already have stripped
+    // ambient MediaQuery.viewInsets for its body, so viewInsetsOf(context)
+    // can stay 0 while the keyboard is open.
+    final next =
+        MediaQueryData.fromView(View.of(context)).viewInsets.bottom > 0;
+    if (next == _keyboardVisible) {
+      return;
+    }
+    setState(() => _keyboardVisible = next);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // Keep the shell's default Scaffold resize behavior so focused fields can
+    // scroll into view. Hide the overlay nav while the keyboard is open so it
+    // does not ride up and cover the active input. iOS and Android both report
+    // keyboard coverage through viewInsets.
+    return Stack(
+      key: const ValueKey<String>('multi-screen-app-example'),
+      fit: StackFit.expand,
+      children: [
+        IndexedStack(
+          key: const ValueKey<String>('app-example-pages'),
+          index: _selectedIndex,
+          children: [
+            HomeScreenExample(
+              themeMode: widget.themeMode,
+              onThemeModeChanged: widget.onThemeModeChanged,
+              onOpenCatalog: widget.onOpenCatalog,
+              onOpenPay: () => setState(() => _selectedIndex = 3),
+              onOpenCards: () => setState(() => _selectedIndex = 1),
+            ),
+            FormScreenExample(
+              themeMode: widget.themeMode,
+              onThemeModeChanged: widget.onThemeModeChanged,
+              onOpenCatalog: widget.onOpenCatalog,
+              onShowHome: () => setState(() => _selectedIndex = 0),
+            ),
+            KycScreenExample(
+              themeMode: widget.themeMode,
+              onThemeModeChanged: widget.onThemeModeChanged,
+              onOpenCatalog: widget.onOpenCatalog,
+            ),
+            PurchaseScreenExample(
+              themeMode: widget.themeMode,
+              onThemeModeChanged: widget.onThemeModeChanged,
+              onOpenCatalog: widget.onOpenCatalog,
+            ),
+          ],
         ),
-      ),
-    ],
-  );
+        if (!_keyboardVisible)
+          PositionedDirectional(
+            start: 0,
+            end: 0,
+            bottom: 0,
+            child: BottomNavBar(
+              items: _navigationItems,
+              selectedIndex: _selectedIndex,
+              onSelected: (index) => setState(() => _selectedIndex = index),
+            ),
+          ),
+      ],
+    );
+  }
 }
 
 class HomeScreenExample extends StatefulWidget {

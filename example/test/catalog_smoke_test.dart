@@ -447,6 +447,16 @@ void main() {
     expect(find.byType(BottomNavBar), findsOneWidget);
     expect(tester.takeException(), isNull);
 
+    // Simulate the on-screen keyboard. The shell must hide BottomNavBar so it
+    // does not ride above the keyboard and cover the focused form field.
+    tester.view.viewInsets = const FakeViewPadding(bottom: 320);
+    addTearDown(tester.view.resetViewInsets);
+    await tester.pump();
+    expect(find.byType(BottomNavBar), findsNothing);
+    tester.view.resetViewInsets();
+    await tester.pump();
+    expect(find.byType(BottomNavBar), findsOneWidget);
+
     await tester.tap(find.bySemanticsLabel('Verify'));
     await tester.pump();
     expect(find.byType(KycScreenExample), findsOneWidget);
