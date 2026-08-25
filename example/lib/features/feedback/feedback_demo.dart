@@ -16,6 +16,7 @@ class FeedbackDemo extends StatefulWidget {
 
 class _FeedbackDemoState extends State<FeedbackDemo> {
   TsaiToastVariant _toastVariant = TsaiToastVariant.undo;
+  String _toastResult = 'No result';
   TsaiInlineAlertTone _alertTone = TsaiInlineAlertTone.info;
   TsaiProgressBarState _progressState = TsaiProgressBarState.normal;
   TsaiProgressBarLabelPosition _labelPosition =
@@ -50,18 +51,40 @@ class _FeedbackDemoState extends State<FeedbackDemo> {
         values: TsaiToastVariant.values,
         onChanged: (value) => setState(() => _toastVariant = value),
       ),
+      TsaiButton(label: 'Show toast', onPressed: () => _showToast(context)),
+      PlaygroundOutput(label: 'result', value: _toastResult),
     ],
     preview: TsaiToast(
       variant: _toastVariant,
-      message: _toastVariant == TsaiToastVariant.info
-          ? 'Settings updated'
-          : 'Item deleted',
-      actionLabel: _toastVariant == TsaiToastVariant.undo ? 'Undo' : 'View',
+      message: _toastMessage,
+      actionLabel: _toastActionLabel,
       secondsRemaining: 7,
       onAction: () {},
       onDismiss: () {},
     ),
   );
+
+  String get _toastMessage => _toastVariant == TsaiToastVariant.info
+      ? 'Settings updated'
+      : 'Item deleted';
+
+  String? get _toastActionLabel => switch (_toastVariant) {
+    TsaiToastVariant.undo => 'Undo',
+    TsaiToastVariant.action => 'View',
+    TsaiToastVariant.info => null,
+  };
+
+  Future<void> _showToast(BuildContext context) async {
+    final result = await showTsaiToast(
+      context: context,
+      variant: _toastVariant,
+      message: _toastMessage,
+      actionLabel: _toastActionLabel,
+    );
+    if (mounted) {
+      setState(() => _toastResult = result.name);
+    }
+  }
 
   Widget _alertPlayground() => ComponentPlayground(
     controls: [

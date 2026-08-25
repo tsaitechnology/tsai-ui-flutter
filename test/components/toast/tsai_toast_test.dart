@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tsai_ui/tsai_ui.dart';
@@ -104,6 +106,169 @@ void main() {
       280,
     );
     expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('overlay helper presents, dismisses, and times out', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(390, 844);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    TsaiToastDismissReason? result;
+    await tester.pumpWidget(
+      _TestApp(
+        child: Builder(
+          builder: (context) => TextButton(
+            onPressed: () {
+              result = null;
+              unawaited(
+                showTsaiToast(
+                  context: context,
+                  message: 'Changes saved',
+                  duration: const Duration(milliseconds: 80),
+                ).then((value) => result = value),
+              );
+            },
+            child: const Text('Show'),
+          ),
+        ),
+      ),
+    );
+
+    await tester.tap(find.text('Show'));
+    await tester.pump();
+    expect(find.byType(TsaiToast), findsOneWidget);
+    expect(find.text('Changes saved'), findsOneWidget);
+
+    final toast = tester.getRect(
+      find.byKey(const ValueKey<String>('tsai-toast-surface')),
+    );
+    expect(toast.height, 48);
+    expect(844 - toast.bottom, 12);
+    expect(toast.center.dx, 195);
+
+    await tester.tap(find.byKey(const ValueKey<String>('tsai-toast-close')));
+    await tester.pump();
+    expect(find.byType(TsaiToast), findsNothing);
+    expect(result, TsaiToastDismissReason.dismiss);
+
+    await tester.tap(find.text('Show'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 80));
+    await tester.pump();
+    expect(find.byType(TsaiToast), findsNothing);
+    expect(result, TsaiToastDismissReason.timeout);
+  });
+
+  testWidgets('overlay sits 12 pixels above supplied bottom clearance', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(390, 844);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await tester.pumpWidget(
+      _TestApp(
+        child: Builder(
+          builder: (context) => TextButton(
+            onPressed: () => unawaited(
+              showTsaiToast(
+                context: context,
+                message: 'Message deleted',
+                variant: TsaiToastVariant.undo,
+                bottomClearance: 94,
+                duration: const Duration(seconds: 30),
+              ),
+            ),
+            child: const Text('Show'),
+          ),
+        ),
+      ),
+    );
+
+    await tester.tap(find.text('Show'));
+    await tester.pump();
+    final toast = tester.getRect(
+      find.byKey(const ValueKey<String>('tsai-toast-surface')),
+    );
+    expect(844 - toast.bottom, 106);
+  });
+
+  testWidgets('overlay action completes and a new toast replaces the last', (
+    tester,
+  ) async {
+    var actions = 0;
+    late TsaiToastDismissReason first;
+    late TsaiToastDismissReason second;
+    await tester.pumpWidget(
+      _TestApp(
+        child: Builder(
+          builder: (context) => Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextButton(
+                onPressed: () {
+                  unawaited(
+                    showTsaiToast(
+                      context: context,
+                      message: 'First',
+                      variant: TsaiToastVariant.action,
+                      duration: const Duration(seconds: 30),
+                    ).then((value) => first = value),
+                  );
+                },
+                child: const Text('First'),
+              ),
+              TextButton(
+                onPressed: () {
+                  unawaited(
+                    showTsaiToast(
+                      context: context,
+                      message: 'Second',
+                      variant: TsaiToastVariant.action,
+                      actionLabel: 'Retry',
+                      duration: const Duration(seconds: 30),
+                      onAction: () => actions++,
+                    ).then((value) => second = value),
+                  );
+                },
+                child: const Text('Second'),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+
+    await tester.tap(find.text('First'));
+    await tester.pump();
+    expect(
+      find.descendant(of: find.byType(TsaiToast), matching: find.text('First')),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Second'));
+    await tester.pump();
+    expect(
+      find.descendant(of: find.byType(TsaiToast), matching: find.text('First')),
+      findsNothing,
+    );
+    expect(
+      find.descendant(
+        of: find.byType(TsaiToast),
+        matching: find.text('Second'),
+      ),
+      findsOneWidget,
+    );
+    expect(first, TsaiToastDismissReason.dismiss);
+
+    await tester.tap(find.byKey(const ValueKey<String>('tsai-toast-action')));
+    await tester.pump();
+    expect(actions, 1);
+    expect(second, TsaiToastDismissReason.action);
+    expect(find.byType(TsaiToast), findsNothing);
   });
 }
 

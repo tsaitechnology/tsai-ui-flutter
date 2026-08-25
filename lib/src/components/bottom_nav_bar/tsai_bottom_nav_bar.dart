@@ -54,6 +54,15 @@ class BottomNavBar extends StatelessWidget {
   /// Called with the activated destination index.
   final ValueChanged<int> onSelected;
 
+  /// Outer bar height including the bottom scrim, 94 pixels in the default theme.
+  static double barHeightOf(BuildContext context) {
+    final tokens = TsaiThemeTokens.of(context);
+    final itemHeight =
+        tokens.spacing.space32 + tokens.spacing.space16 + tokens.spacing.space6;
+    final pillHeight = itemHeight + tokens.spacing.space4 * 2;
+    return pillHeight + tokens.spacing.space32;
+  }
+
   @override
   Widget build(BuildContext context) {
     final tokens = TsaiThemeTokens.of(context);

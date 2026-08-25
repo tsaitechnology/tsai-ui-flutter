@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:tsai_ui/tsai_icons.dart';
 import 'package:tsai_ui/tsai_ui.dart';
@@ -115,6 +117,7 @@ class _MultiScreenAppExampleState extends State<MultiScreenAppExample>
               onShowHome: () => setState(() => _selectedIndex = 0),
             ),
             KycScreenExample(
+              isActive: _selectedIndex == 2,
               themeMode: widget.themeMode,
               onThemeModeChanged: widget.onThemeModeChanged,
               onOpenCatalog: widget.onOpenCatalog,
@@ -795,12 +798,14 @@ class _FormScreenExampleState extends State<FormScreenExample> {
 
 class KycScreenExample extends StatefulWidget {
   const KycScreenExample({
+    required this.isActive,
     required this.themeMode,
     required this.onThemeModeChanged,
     required this.onOpenCatalog,
     super.key,
   });
 
+  final bool isActive;
   final ThemeMode themeMode;
   final ValueChanged<ThemeMode> onThemeModeChanged;
   final VoidCallback onOpenCatalog;
@@ -810,11 +815,15 @@ class KycScreenExample extends StatefulWidget {
 }
 
 class _KycScreenExampleState extends State<KycScreenExample> {
+  static const _loadDuration = Duration(seconds: 3);
+
   var _step = 0;
   var _documentUploaded = false;
   var _consentGiven = false;
   var _documentType = 'passport';
   var _yearsAtAddress = 3;
+  var _isLoading = true;
+  Timer? _loadTimer;
 
   void _advanceKyc() {
     if (_step < 2) {
@@ -833,6 +842,52 @@ class _KycScreenExampleState extends State<KycScreenExample> {
           onPressed: () => Navigator.of(dialogContext).pop(),
         ),
       ),
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.isActive) {
+      _startLoad();
+    }
+  }
+
+  @override
+  void didUpdateWidget(KycScreenExample oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.isActive && !oldWidget.isActive && _isLoading) {
+      _startLoad();
+    }
+  }
+
+  @override
+  void dispose() {
+    _loadTimer?.cancel();
+    super.dispose();
+  }
+
+  void _startLoad() {
+    if (_loadTimer != null) {
+      return;
+    }
+    _loadTimer = Timer(_loadDuration, () {
+      if (!mounted) {
+        return;
+      }
+      setState(() => _isLoading = false);
+    });
+  }
+
+  Future<void> _uploadDocument() async {
+    setState(() => _documentUploaded = true);
+    await showTsaiToast(
+      context: context,
+      variant: TsaiToastVariant.action,
+      message: 'Document ready to review',
+      actionLabel: 'Review',
+      bottomClearance: _toastBottomClearance(context),
+      onAction: () => setState(() => _step = 2),
     );
   }
 
@@ -870,176 +925,202 @@ class _KycScreenExampleState extends State<KycScreenExample> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Center(child: TsaiPageIndicator(count: 3, index: _step)),
-                  SizedBox(height: tokens.spacing.space16),
-                  TsaiProgressBar(
-                    value: (_step + 1) / 3,
-                    label: 'Verification progress',
-                    labelPosition: TsaiProgressBarLabelPosition.top,
-                  ),
-                  SizedBox(height: tokens.spacing.space16),
-                  TsaiInlineAlert(
-                    tone: _step == 2
-                        ? TsaiInlineAlertTone.success
-                        : TsaiInlineAlertTone.info,
-                    title: 'Step ${_step + 1} of 3',
-                    message: switch (_step) {
-                      0 => 'Confirm the mobile number we should text.',
-                      1 => 'Upload one government-issued document.',
-                      _ => 'Review details and consent to continue.',
-                    },
-                  ),
-                  SizedBox(height: tokens.spacing.space20),
-                  TsaiCard(
-                    title: switch (_step) {
-                      0 => 'Contact details',
-                      1 => 'Identity document',
-                      _ => 'Final review',
-                    },
-                    trailing: const TsaiIcon(LucideIcons.badge_check),
-                    child: switch (_step) {
-                      0 => Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          const TsaiPhoneInput(
-                            initialValue: '099 123 45 67',
-                            initialCountryCode: '598',
-                            description:
-                                'We will send a one-time verification code.',
-                          ),
-                          SizedBox(height: tokens.spacing.space16),
-                          Row(
-                            children: [
-                              const Expanded(
-                                child: TsaiTextBody(
-                                  'Years at current address',
-                                  size: TsaiBodySize.medium,
-                                  weight: TsaiTextWeight.medium,
+                  if (_isLoading)
+                    _KycLoadingState()
+                  else ...[
+                    Center(child: TsaiPageIndicator(count: 3, index: _step)),
+                    SizedBox(height: tokens.spacing.space16),
+                    TsaiProgressBar(
+                      value: (_step + 1) / 3,
+                      label: 'Verification progress',
+                      labelPosition: TsaiProgressBarLabelPosition.top,
+                    ),
+                    SizedBox(height: tokens.spacing.space16),
+                    TsaiInlineAlert(
+                      tone: _step == 2
+                          ? TsaiInlineAlertTone.success
+                          : TsaiInlineAlertTone.info,
+                      title: 'Step ${_step + 1} of 3',
+                      message: switch (_step) {
+                        0 => 'Confirm the mobile number we should text.',
+                        1 => 'Upload one government-issued document.',
+                        _ => 'Review details and consent to continue.',
+                      },
+                    ),
+                    SizedBox(height: tokens.spacing.space20),
+                    TsaiCard(
+                      title: switch (_step) {
+                        0 => 'Contact details',
+                        1 => 'Identity document',
+                        _ => 'Final review',
+                      },
+                      trailing: const TsaiIcon(LucideIcons.badge_check),
+                      child: switch (_step) {
+                        0 => Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            const TsaiPhoneInput(
+                              initialValue: '099 123 45 67',
+                              initialCountryCode: '598',
+                              description:
+                                  'We will send a one-time verification code.',
+                            ),
+                            SizedBox(height: tokens.spacing.space16),
+                            Row(
+                              children: [
+                                const Expanded(
+                                  child: TsaiTextBody(
+                                    'Years at current address',
+                                    size: TsaiBodySize.medium,
+                                    weight: TsaiTextWeight.medium,
+                                  ),
                                 ),
-                              ),
-                              TsaiStepper(
-                                value: _yearsAtAddress,
-                                min: 0,
-                                max: 20,
-                                onChanged: (value) =>
-                                    setState(() => _yearsAtAddress = value),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: tokens.spacing.space16),
-                          const TsaiOtpInput(
-                            initialValue: '4821',
-                            isSuccess: true,
-                            semanticLabel: 'Verification code',
-                          ),
-                          SizedBox(height: tokens.spacing.space16),
-                          const TsaiPinInput(
-                            initialValue: '1234',
-                            semanticLabel: 'App PIN',
-                          ),
-                        ],
-                      ),
-                      1 => Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          TsaiSelect<String>(
-                            options: const [
-                              TsaiSelectOption(
-                                value: 'passport',
-                                label: 'Passport',
-                              ),
-                              TsaiSelectOption(
-                                value: 'id',
-                                label: 'National ID',
-                              ),
-                            ],
-                            value: _documentType,
-                            placeholder: 'Document type',
-                            onChanged: (value) =>
-                                setState(() => _documentType = value!),
-                          ),
-                          SizedBox(height: tokens.spacing.space16),
-                          TsaiButton(
-                            label: _documentUploaded
-                                ? 'Document uploaded'
-                                : 'Upload document',
-                            variant: _documentUploaded
-                                ? TsaiButtonVariant.secondary
-                                : TsaiButtonVariant.outline,
-                            leadingIcon: TsaiIcon(
-                              _documentUploaded
-                                  ? LucideIcons.check
-                                  : LucideIcons.upload,
+                                TsaiStepper(
+                                  value: _yearsAtAddress,
+                                  min: 0,
+                                  max: 20,
+                                  onChanged: (value) =>
+                                      setState(() => _yearsAtAddress = value),
+                                ),
+                              ],
                             ),
-                            onPressed: () =>
-                                setState(() => _documentUploaded = true),
-                          ),
-                          SizedBox(height: tokens.spacing.space16),
-                          if (!_documentUploaded)
-                            const TsaiSkeletonCard(
-                              size: TsaiSkeletonSize.small,
-                              semanticLabel: 'Waiting for document upload',
+                            SizedBox(height: tokens.spacing.space16),
+                            const TsaiOtpInput(
+                              initialValue: '4821',
+                              isSuccess: true,
+                              semanticLabel: 'Verification code',
                             ),
-                        ],
-                      ),
-                      _ => Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          TsaiTextBody(
-                            '$_documentType on file · $_yearsAtAddress years at current address.',
-                            size: TsaiBodySize.medium,
-                            weight: TsaiTextWeight.regular,
-                          ),
-                          SizedBox(height: tokens.spacing.space16),
-                          TsaiCheckbox(
-                            value: _consentGiven,
-                            label: 'I consent to identity verification',
-                            onChanged: (value) =>
-                                setState(() => _consentGiven = value ?? false),
-                          ),
-                        ],
-                      ),
-                    },
-                  ),
-                  SizedBox(height: tokens.spacing.space16),
-                  Row(
-                    children: [
-                      const TsaiSkeletonAvatar(size: TsaiSkeletonSize.small),
-                      SizedBox(width: tokens.spacing.space12),
-                      const Expanded(
-                        child: TsaiSkeletonText(size: TsaiSkeletonSize.small),
-                      ),
-                      SizedBox(width: tokens.spacing.space12),
-                      const TsaiSpinner(size: TsaiSpinnerSize.small),
-                    ],
-                  ),
-                  SizedBox(height: tokens.spacing.space20),
-                  TsaiToast(
-                    variant: TsaiToastVariant.info,
-                    message: _documentUploaded
-                        ? 'Document ready to review'
-                        : 'Secure verification session',
-                    actionLabel: _documentUploaded ? 'Review' : null,
-                    onAction: _documentUploaded
-                        ? () => setState(() => _step = 2)
-                        : null,
-                  ),
-                  SizedBox(height: tokens.spacing.space20),
-                  TsaiButton(
-                    label: _step == 2 ? 'Submit verification' : 'Continue',
-                    isExpanded: true,
-                    onPressed:
-                        _step == 1 && !_documentUploaded ||
-                            _step == 2 && !_consentGiven
-                        ? null
-                        : _advanceKyc,
-                  ),
+                            SizedBox(height: tokens.spacing.space16),
+                            const TsaiPinInput(
+                              initialValue: '1234',
+                              semanticLabel: 'App PIN',
+                            ),
+                          ],
+                        ),
+                        1 => Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            TsaiSelect<String>(
+                              options: const [
+                                TsaiSelectOption(
+                                  value: 'passport',
+                                  label: 'Passport',
+                                ),
+                                TsaiSelectOption(
+                                  value: 'id',
+                                  label: 'National ID',
+                                ),
+                              ],
+                              value: _documentType,
+                              placeholder: 'Document type',
+                              onChanged: (value) =>
+                                  setState(() => _documentType = value!),
+                            ),
+                            SizedBox(height: tokens.spacing.space16),
+                            TsaiButton(
+                              label: _documentUploaded
+                                  ? 'Document uploaded'
+                                  : 'Upload document',
+                              variant: _documentUploaded
+                                  ? TsaiButtonVariant.secondary
+                                  : TsaiButtonVariant.outline,
+                              leadingIcon: TsaiIcon(
+                                _documentUploaded
+                                    ? LucideIcons.check
+                                    : LucideIcons.upload,
+                              ),
+                              onPressed: _documentUploaded
+                                  ? null
+                                  : _uploadDocument,
+                            ),
+                          ],
+                        ),
+                        _ => Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            TsaiTextBody(
+                              '$_documentType on file · $_yearsAtAddress years at current address.',
+                              size: TsaiBodySize.medium,
+                              weight: TsaiTextWeight.regular,
+                            ),
+                            SizedBox(height: tokens.spacing.space16),
+                            TsaiCheckbox(
+                              value: _consentGiven,
+                              label: 'I consent to identity verification',
+                              onChanged: (value) => setState(
+                                () => _consentGiven = value ?? false,
+                              ),
+                            ),
+                          ],
+                        ),
+                      },
+                    ),
+                    SizedBox(height: tokens.spacing.space20),
+                    TsaiButton(
+                      label: _step == 2 ? 'Submit verification' : 'Continue',
+                      isExpanded: true,
+                      onPressed:
+                          _step == 1 && !_documentUploaded ||
+                              _step == 2 && !_consentGiven
+                          ? null
+                          : _advanceKyc,
+                    ),
+                  ],
                 ],
               ),
             ),
           ),
         ),
       ),
+    );
+  }
+}
+
+class _KycLoadingState extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final tokens = TsaiThemeTokens.of(context);
+    return Column(
+      key: const ValueKey<String>('kyc-loading-state'),
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Row(
+          children: [
+            const TsaiSpinner(
+              size: TsaiSpinnerSize.medium,
+              semanticLabel: 'Loading verification status',
+            ),
+            SizedBox(width: tokens.spacing.space12),
+            const Expanded(
+              child: TsaiTextBody(
+                'Checking verification status',
+                size: TsaiBodySize.medium,
+                weight: TsaiTextWeight.medium,
+              ),
+            ),
+          ],
+        ),
+        SizedBox(height: tokens.spacing.space24),
+        const TsaiSkeletonCard(semanticLabel: 'Loading verification details'),
+        SizedBox(height: tokens.spacing.space16),
+        Row(
+          children: [
+            const TsaiSkeletonAvatar(size: TsaiSkeletonSize.small),
+            SizedBox(width: tokens.spacing.space12),
+            const Expanded(
+              child: TsaiSkeletonText(size: TsaiSkeletonSize.small),
+            ),
+          ],
+        ),
+        SizedBox(height: tokens.spacing.space8),
+        const TsaiSkeletonText(size: TsaiSkeletonSize.small),
+        SizedBox(height: tokens.spacing.space8),
+        const FractionallySizedBox(
+          widthFactor: 0.7,
+          alignment: AlignmentDirectional.centerStart,
+          child: TsaiSkeletonText(size: TsaiSkeletonSize.small),
+        ),
+      ],
     );
   }
 }
@@ -1078,6 +1159,33 @@ class _PurchaseScreenExampleState extends State<PurchaseScreenExample> {
         total: _total,
         onAuthorized: () => setState(() => _authorized = true),
       ),
+    );
+    if (!mounted || !_authorized) {
+      return;
+    }
+    final formatted = '\$${_total.toStringAsFixed(2)}';
+    await showTsaiToast(
+      context: context,
+      variant: TsaiToastVariant.action,
+      message: 'Receipt saved',
+      actionLabel: 'View',
+      bottomClearance: _toastBottomClearance(context),
+      onAction: () {
+        unawaited(
+          showTsaiModalDialog<void>(
+            context: context,
+            title: 'Receipt',
+            message: 'Coffee House Montevideo · $formatted',
+            icon: const TsaiIcon(LucideIcons.receipt_text),
+            primaryAction: Builder(
+              builder: (dialogContext) => TsaiButton(
+                label: 'Close',
+                onPressed: () => Navigator.of(dialogContext).pop(),
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -1213,31 +1321,6 @@ class _PurchaseScreenExampleState extends State<PurchaseScreenExample> {
                   label: _authorized ? 'Payment sent' : 'Authorize payment',
                   isExpanded: true,
                   onPressed: _authorized ? null : _authorizePayment,
-                ),
-                SizedBox(height: tokens.spacing.space12),
-                TsaiToast(
-                  variant: _authorized
-                      ? TsaiToastVariant.action
-                      : TsaiToastVariant.info,
-                  message: _authorized
-                      ? 'Receipt saved'
-                      : 'Ready for secure checkout',
-                  actionLabel: _authorized ? 'View' : null,
-                  onAction: _authorized
-                      ? () => showTsaiModalDialog<void>(
-                          context: context,
-                          title: 'Receipt',
-                          message: 'Coffee House Montevideo · $formatted',
-                          icon: const TsaiIcon(LucideIcons.receipt_text),
-                          primaryAction: Builder(
-                            builder: (dialogContext) => TsaiButton(
-                              label: 'Close',
-                              onPressed: () =>
-                                  Navigator.of(dialogContext).pop(),
-                            ),
-                          ),
-                        )
-                      : null,
                 ),
                 SizedBox(height: tokens.spacing.space12),
                 TsaiLink(
@@ -1564,3 +1647,10 @@ String _themeLabel(ThemeMode mode) =>
 
 void _toggleTheme(ThemeMode mode, ValueChanged<ThemeMode> onChanged) =>
     onChanged(mode == ThemeMode.dark ? ThemeMode.light : ThemeMode.dark);
+
+double _toastBottomClearance(BuildContext context) {
+  if (MediaQuery.viewInsetsOf(context).bottom > 0) {
+    return 0;
+  }
+  return BottomNavBar.barHeightOf(context);
+}

@@ -57,7 +57,9 @@ one to five destinations.
 
 The full-width outer bar is 94 pixels high and uses the theme's bottom scrim
 asset. It does not add a system safe area. Width is resolved from parent layout
-constraints rather than the global screen size.
+constraints rather than the global screen size. Read that height from
+`BottomNavBar.barHeightOf` when reserving space or placing a Toast above the
+bar.
 
 ## App Shell Integration
 

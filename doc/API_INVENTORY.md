@@ -83,6 +83,7 @@ import 'package:tsai_ui/tsai_icons.dart';
 | `PageWithSearchTopBar` | Scroll composition with a pinned 112-pixel glass app bar and search field | Public |
 | `BottomNavBarItem` | Immutable icon, label, and optional semantic label for a bottom destination | Public |
 | `BottomNavBar` | Controlled one-to-five destination glass bottom-navigation bar | Public |
+| `BottomNavBar.barHeightOf` | Theme-resolved 94-pixel overlay bar height | Public |
 | `TsaiBottomSheetSize` | Content, half, and full sheet sizing policies | Public |
 | `TsaiBottomSheet` | Content-sized by default; composable rounded sheet surface with glow, app bar, content, and actions | Public |
 | `showTsaiBottomSheet<T>` | Theme-aware modal route for `TsaiBottomSheet` | Public |
@@ -90,7 +91,9 @@ import 'package:tsai_ui/tsai_icons.dart';
 | `TsaiModalDialog` | Compact icon, message, and action dialog surface | Public |
 | `showTsaiModalDialog<T>` | Theme-aware modal route for `TsaiModalDialog` | Public |
 | `TsaiToastVariant` | Undo, action, and informational Toast compositions | Public |
+| `TsaiToastDismissReason` | Timeout, dismiss, and action results from `showTsaiToast` | Public |
 | `TsaiToast` | Compact glass notification with action, dismissal, or countdown affordances | Public |
+| `showTsaiToast` | Theme-aware non-blocking overlay for `TsaiToast` | Public |
 | `TsaiInlineAlertTone` | Info, success, error, and warning alert tones | Public |
 | `TsaiInlineAlert` | Token-backed inline status message with optional title and dismiss control | Public |
 | `TsaiProgressBarState` | Default, success, and error progress states | Public |

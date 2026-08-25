@@ -27,6 +27,7 @@ void main() {
       final bar = tester.getRect(find.byType(BottomNavBar));
       expect(pill.width, expectedPillWidths[count]);
       expect(pill.height, 62);
+      expect(bar.height, 94);
       expect(pill.center.dx, bar.center.dx);
 
       for (final item in _items.take(count)) {

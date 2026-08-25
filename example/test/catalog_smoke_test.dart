@@ -460,6 +460,19 @@ void main() {
     await tester.tap(find.bySemanticsLabel('Verify'));
     await tester.pump();
     expect(find.byType(KycScreenExample), findsOneWidget);
+    expect(
+      find.byKey(const ValueKey<String>('kyc-loading-state')),
+      findsOneWidget,
+    );
+    expect(find.byType(TsaiSpinner), findsWidgets);
+    expect(find.byType(TsaiSkeletonCard), findsOneWidget);
+    expect(find.byType(TsaiPhoneInput), findsNothing);
+    expect(find.byType(TsaiToast), findsNothing);
+    await tester.pump(const Duration(seconds: 3));
+    expect(
+      find.byKey(const ValueKey<String>('kyc-loading-state')),
+      findsNothing,
+    );
     expect(find.byType(TsaiCard), findsOneWidget);
     expect(find.byType(TsaiInlineAlert), findsWidgets);
     expect(find.byType(TsaiProgressBar), findsOneWidget);
@@ -476,6 +489,7 @@ void main() {
     expect(find.byType(TsaiSearchInput), findsOneWidget);
     expect(find.byType(TsaiNumericKeypad), findsWidgets);
     expect(find.byType(TsaiLink), findsOneWidget);
+    expect(find.byType(TsaiToast), findsNothing);
     expect(tester.takeException(), isNull);
   });
 

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math' as math;
 import 'dart:ui';
 
@@ -17,6 +18,18 @@ enum TsaiToastVariant {
 
   /// Shows only the message and close control.
   info,
+}
+
+/// Why a presented Toast overlay was removed.
+enum TsaiToastDismissReason {
+  /// The Toast reached the end of [showTsaiToast] duration.
+  timeout,
+
+  /// The close control was activated, or a newer Toast replaced it.
+  dismiss,
+
+  /// The Toast action control was activated.
+  action,
 }
 
 /// A compact glass notification matching the Penpot Toast component.
@@ -290,4 +303,191 @@ class _CountdownPainter extends CustomPainter {
   @override
   bool shouldRepaint(_CountdownPainter oldDelegate) =>
       color != oldDelegate.color || progress != oldDelegate.progress;
+}
+
+OverlayEntry? _activeToastEntry;
+Completer<TsaiToastDismissReason>? _activeToastCompleter;
+
+/// Shows a non-blocking [TsaiToast] overlay and returns why it was dismissed.
+///
+/// The overlay does not install a modal barrier, so the rest of the UI stays
+/// interactive. Presenting a new Toast replaces any Toast already shown.
+///
+/// The pill is centered horizontally and sits 12 pixels above [bottomClearance]
+/// or, when that clearance is zero, above the system bottom safe area. Pass
+/// [BottomNavBar.barHeightOf] as [bottomClearance] when a bottom navigation
+/// bar overlays the screen, matching the Penpot Toast screens.
+Future<TsaiToastDismissReason> showTsaiToast({
+  required BuildContext context,
+  required String message,
+  TsaiToastVariant variant = TsaiToastVariant.info,
+  Widget? icon,
+  String? actionLabel,
+  VoidCallback? onAction,
+  Duration duration = const Duration(seconds: 5),
+  double bottomClearance = 0,
+  bool useRootOverlay = true,
+}) {
+  assert(duration > Duration.zero);
+  assert(bottomClearance >= 0);
+  final overlay = Overlay.of(context, rootOverlay: useRootOverlay);
+  _dismissActiveToast(TsaiToastDismissReason.dismiss);
+
+  final completer = Completer<TsaiToastDismissReason>();
+  late final OverlayEntry entry;
+  entry = OverlayEntry(
+    builder: (overlayContext) => _ToastOverlay(
+      bottomClearance: bottomClearance,
+      child: _PresentedToast(
+        message: message,
+        variant: variant,
+        icon: icon,
+        actionLabel: actionLabel,
+        duration: duration,
+        onAction: () {
+          onAction?.call();
+          _finishToast(entry, completer, TsaiToastDismissReason.action);
+        },
+        onDismiss: () =>
+            _finishToast(entry, completer, TsaiToastDismissReason.dismiss),
+        onTimeout: () =>
+            _finishToast(entry, completer, TsaiToastDismissReason.timeout),
+      ),
+    ),
+  );
+  _activeToastEntry = entry;
+  _activeToastCompleter = completer;
+  overlay.insert(entry);
+  return completer.future;
+}
+
+class _ToastOverlay extends StatelessWidget {
+  const _ToastOverlay({required this.bottomClearance, required this.child});
+
+  final double bottomClearance;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final tokens = TsaiThemeTokens.of(context);
+    final media = MediaQuery.of(context);
+    final reservedBelow = bottomClearance > 0
+        ? bottomClearance
+        : media.padding.bottom;
+    return Padding(
+      key: const ValueKey<String>('tsai-toast-overlay'),
+      padding: EdgeInsets.fromLTRB(
+        tokens.spacing.space16,
+        tokens.spacing.space16,
+        tokens.spacing.space16,
+        tokens.spacing.space12 + reservedBelow + media.viewInsets.bottom,
+      ),
+      child: Align(
+        alignment: Alignment.bottomCenter,
+        child: Material(
+          type: MaterialType.transparency,
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 390),
+            child: child,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+void _dismissActiveToast(TsaiToastDismissReason reason) {
+  final entry = _activeToastEntry;
+  final completer = _activeToastCompleter;
+  _activeToastEntry = null;
+  _activeToastCompleter = null;
+  if (entry != null && entry.mounted) {
+    entry.remove();
+  }
+  if (completer != null && !completer.isCompleted) {
+    completer.complete(reason);
+  }
+}
+
+void _finishToast(
+  OverlayEntry entry,
+  Completer<TsaiToastDismissReason> completer,
+  TsaiToastDismissReason reason,
+) {
+  if (_activeToastEntry == entry) {
+    _activeToastEntry = null;
+    _activeToastCompleter = null;
+  }
+  if (entry.mounted) {
+    entry.remove();
+  }
+  if (!completer.isCompleted) {
+    completer.complete(reason);
+  }
+}
+
+class _PresentedToast extends StatefulWidget {
+  const _PresentedToast({
+    required this.message,
+    required this.variant,
+    required this.icon,
+    required this.actionLabel,
+    required this.duration,
+    required this.onAction,
+    required this.onDismiss,
+    required this.onTimeout,
+  });
+
+  final String message;
+  final TsaiToastVariant variant;
+  final Widget? icon;
+  final String? actionLabel;
+  final Duration duration;
+  final VoidCallback onAction;
+  final VoidCallback onDismiss;
+  final VoidCallback onTimeout;
+
+  @override
+  State<_PresentedToast> createState() => _PresentedToastState();
+}
+
+class _PresentedToastState extends State<_PresentedToast>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+  Timer? _timeout;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(vsync: this, duration: widget.duration)
+      ..forward();
+    _timeout = Timer(widget.duration, widget.onTimeout);
+  }
+
+  @override
+  void dispose() {
+    _timeout?.cancel();
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => AnimatedBuilder(
+    animation: _controller,
+    builder: (context, _) {
+      final remaining = widget.duration * (1 - _controller.value);
+      return TsaiToast(
+        message: widget.message,
+        variant: widget.variant,
+        icon: widget.icon,
+        actionLabel: widget.actionLabel,
+        secondsRemaining: remaining.inMilliseconds == 0
+            ? 0
+            : (remaining.inMilliseconds / 1000).ceil(),
+        countdownProgress: 1 - _controller.value,
+        onAction: widget.onAction,
+        onDismiss: widget.onDismiss,
+      );
+    },
+  );
 }
