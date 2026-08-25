@@ -392,16 +392,22 @@ void main() {
     );
     expect(homeSelect.presentation, TsaiSelectPresentation.adaptive);
 
+    expect(find.byType(TsaiAmountDisplay), findsWidgets);
+    expect(find.byType(TsaiActionTile), findsWidgets);
+    expect(find.byType(TsaiBankCard), findsWidgets);
+    expect(find.byType(TsaiPageIndicator), findsWidgets);
+
     await tester.tap(find.byKey(const ValueKey<String>('quick-transfer')));
     await pumpUi();
     expect(find.text('Transfer money'), findsOneWidget);
+    expect(find.byType(TsaiNumericKeypad), findsWidgets);
     await tester.tap(find.text('Cancel'));
     await pumpUi();
 
     await tester.tap(find.byKey(const ValueKey<String>('quick-pay')));
     await pumpUi();
-    expect(find.text('Schedule a payment'), findsOneWidget);
-    await tester.tap(find.text('Cancel'));
+    expect(find.byType(PurchaseScreenExample), findsOneWidget);
+    await tester.tap(find.bySemanticsLabel('Home'));
     await pumpUi();
 
     await tester.drag(
@@ -424,10 +430,12 @@ void main() {
     await tester.tapAt(const Offset(8, 8));
     await pumpUi();
 
-    await tester.tap(find.bySemanticsLabel('Form'));
+    await tester.tap(find.bySemanticsLabel('Account'));
     await tester.pump();
     expect(find.byType(FormScreenExample), findsOneWidget);
     expect(find.byType(PageWithTopBar), findsOneWidget);
+    expect(find.byType(TsaiAccordion), findsWidgets);
+    expect(find.byType(TsaiSlider), findsWidgets);
     expect(
       find.byKey(const ValueKey<String>('first-name-input')),
       findsOneWidget,
@@ -439,13 +447,14 @@ void main() {
     expect(find.byType(BottomNavBar), findsOneWidget);
     expect(tester.takeException(), isNull);
 
-    await tester.tap(find.bySemanticsLabel('KYC'));
+    await tester.tap(find.bySemanticsLabel('Verify'));
     await tester.pump();
     expect(find.byType(KycScreenExample), findsOneWidget);
     expect(find.byType(TsaiCard), findsOneWidget);
-    expect(find.byType(TsaiInlineAlert), findsOneWidget);
+    expect(find.byType(TsaiInlineAlert), findsWidgets);
     expect(find.byType(TsaiProgressBar), findsOneWidget);
     expect(find.byType(TsaiPhoneInput), findsOneWidget);
+    expect(find.byType(TsaiStepper), findsWidgets);
     expect(find.text('Continue'), findsOneWidget);
     expect(find.byType(BottomNavBar), findsOneWidget);
     expect(tester.takeException(), isNull);
@@ -453,8 +462,9 @@ void main() {
     await tester.tap(find.bySemanticsLabel('Pay'));
     await tester.pump();
     expect(find.byType(PurchaseScreenExample), findsOneWidget);
-    expect(find.text('Pay a merchant'), findsOneWidget);
+    expect(find.text('Send money'), findsOneWidget);
     expect(find.byType(TsaiSearchInput), findsOneWidget);
+    expect(find.byType(TsaiNumericKeypad), findsWidgets);
     expect(find.byType(TsaiLink), findsOneWidget);
     expect(tester.takeException(), isNull);
   });

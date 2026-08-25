@@ -48,17 +48,14 @@ class _MultiScreenAppExampleState extends State<MultiScreenAppExample> {
       label: 'Home',
     ),
     BottomNavBarItem(
-      icon: TsaiIcon(LucideIcons.file_text, size: 20),
-      label: 'Form',
+      icon: TsaiIcon(LucideIcons.user_round, size: 20),
+      label: 'Account',
     ),
     BottomNavBarItem(
       icon: TsaiIcon(LucideIcons.badge_check, size: 20),
-      label: 'KYC',
+      label: 'Verify',
     ),
-    BottomNavBarItem(
-      icon: TsaiIcon(LucideIcons.shopping_bag, size: 20),
-      label: 'Pay',
-    ),
+    BottomNavBarItem(icon: TsaiIcon(LucideIcons.send, size: 20), label: 'Pay'),
   ];
 
   var _selectedIndex = 0;
@@ -76,6 +73,8 @@ class _MultiScreenAppExampleState extends State<MultiScreenAppExample> {
             themeMode: widget.themeMode,
             onThemeModeChanged: widget.onThemeModeChanged,
             onOpenCatalog: widget.onOpenCatalog,
+            onOpenPay: () => setState(() => _selectedIndex = 3),
+            onOpenCards: () => setState(() => _selectedIndex = 1),
           ),
           FormScreenExample(
             themeMode: widget.themeMode,
@@ -114,40 +113,43 @@ class HomeScreenExample extends StatefulWidget {
     required this.themeMode,
     required this.onThemeModeChanged,
     required this.onOpenCatalog,
+    required this.onOpenPay,
+    required this.onOpenCards,
     super.key,
   });
 
   final ThemeMode themeMode;
   final ValueChanged<ThemeMode> onThemeModeChanged;
   final VoidCallback onOpenCatalog;
+  final VoidCallback onOpenPay;
+  final VoidCallback onOpenCards;
 
   @override
   State<HomeScreenExample> createState() => _HomeScreenExampleState();
 }
 
 class _HomeScreenExampleState extends State<HomeScreenExample> {
-  String? _country = 'uy';
+  final _cardController = PageController();
+  String? _currency = 'usd';
+  var _cardIndex = 0;
+  var _balanceHidden = false;
 
-  void _openCards(BuildContext context) => showTsaiBottomSheet<void>(
-    context: context,
-    title: 'Your cards',
-    child: const TsaiEmptyState(
-      icon: TsaiIcon(LucideIcons.wallet_cards),
-      title: 'No virtual cards yet',
-      description: 'Create a card to start paying online.',
-    ),
-    primaryAction: Builder(
-      builder: (sheetContext) => TsaiButton(
-        label: 'Create virtual card',
-        onPressed: () => Navigator.of(sheetContext).pop(),
-      ),
-    ),
-  );
+  static const _cards = [
+    TsaiBankCard(number: '•••• 4821', network: 'VISA'),
+    TsaiBankCard(wordmark: 'tsaitech', number: '•••• 9033', network: 'MC'),
+    TsaiBankCard(wordmark: 'virtual', number: '•••• 1174', network: 'VISA'),
+  ];
+
+  @override
+  void dispose() {
+    _cardController.dispose();
+    super.dispose();
+  }
 
   void _openNotifications(BuildContext context) => showTsaiModalDialog<void>(
     context: context,
     title: 'Notifications',
-    message: 'Your identity review is ready to continue.',
+    message: 'Identity review is waiting on one supporting document.',
     icon: const TsaiIcon(LucideIcons.bell),
     primaryAction: Builder(
       builder: (dialogContext) => TsaiButton(
@@ -187,81 +189,71 @@ class _HomeScreenExampleState extends State<HomeScreenExample> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       SizedBox(height: tokens.spacing.space24),
-                      const TsaiTextHeading(
-                        'Good morning',
-                        size: TsaiHeadingSize.large,
+                      Row(
+                        children: [
+                          const Expanded(
+                            child: TsaiTextHeading(
+                              'Good morning, Ilona',
+                              size: TsaiHeadingSize.large,
+                            ),
+                          ),
+                          TsaiIconButton(
+                            icon: TsaiIcon(
+                              _balanceHidden
+                                  ? LucideIcons.eye_off
+                                  : LucideIcons.eye,
+                            ),
+                            onPressed: () => setState(
+                              () => _balanceHidden = !_balanceHidden,
+                            ),
+                          ),
+                        ],
                       ),
                       SizedBox(height: tokens.spacing.space4),
                       TsaiTextBody(
-                        'Your accounts and recent activity are up to date.',
+                        'Everyday account · Montevideo',
                         size: TsaiBodySize.large,
                         weight: TsaiTextWeight.regular,
                         color: tokens.colors.contentSecondary,
                       ),
                       SizedBox(height: tokens.spacing.space24),
-                      _BalanceSummary(
+                      _BalanceHero(
                         key: const ValueKey<String>('home-balance-summary'),
-                        tokens: tokens,
+                        hidden: _balanceHidden,
+                        currency: _currency,
                       ),
                       SizedBox(height: tokens.spacing.space24),
-                      TsaiTabs(
-                        sections: [
-                          TsaiTabSection.text(
-                            label: 'Overview',
-                            content: const _OverviewTabContent(),
-                          ),
-                          TsaiTabSection.text(
-                            label: 'Investments',
-                            content: _InvestmentTabContent(),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: tokens.spacing.space24),
-                      const TsaiTextHeading(
-                        'Quick actions',
-                        size: TsaiHeadingSize.small,
-                      ),
-                      SizedBox(height: tokens.spacing.space12),
-                      Wrap(
-                        spacing: tokens.spacing.space8,
-                        runSpacing: tokens.spacing.space8,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          TsaiButton(
+                          TsaiActionTile(
                             key: const ValueKey<String>('quick-transfer'),
-                            label: 'Transfer',
-                            size: TsaiButtonSize.medium,
-                            leadingIcon: const TsaiIcon(
-                              LucideIcons.send,
-                              size: 16,
-                            ),
+                            icon: const TsaiIcon(LucideIcons.send),
+                            label: 'Send',
                             onPressed: () => _openTransfer(context),
                           ),
-                          TsaiButton(
+                          TsaiActionTile(
                             key: const ValueKey<String>('quick-pay'),
+                            icon: const TsaiIcon(LucideIcons.receipt),
                             label: 'Pay',
-                            size: TsaiButtonSize.medium,
-                            variant: TsaiButtonVariant.secondary,
-                            leadingIcon: const TsaiIcon(
-                              LucideIcons.receipt,
-                              size: 16,
-                            ),
-                            onPressed: () => _openPayment(context),
+                            onPressed: widget.onOpenPay,
                           ),
-                          TsaiButton(
+                          TsaiActionTile(
+                            icon: const TsaiIcon(LucideIcons.wallet_cards),
                             label: 'Cards',
-                            size: TsaiButtonSize.medium,
-                            variant: TsaiButtonVariant.outline,
-                            leadingIcon: const TsaiIcon(
-                              LucideIcons.wallet_cards,
-                              size: 16,
-                            ),
-                            onPressed: () => _openCards(context),
+                            onPressed: widget.onOpenCards,
+                          ),
+                          TsaiActionTile(
+                            icon: const TsaiIcon(LucideIcons.plus),
+                            label: 'Top up',
+                            onPressed: () => _openTopUp(context),
                           ),
                         ],
                       ),
                       SizedBox(height: tokens.spacing.space24),
                       const Wrap(
                         spacing: 8,
+                        runSpacing: 8,
                         children: [
                           TsaiBadge(
                             label: 'Account verified',
@@ -277,21 +269,46 @@ class _HomeScreenExampleState extends State<HomeScreenExample> {
                         ],
                       ),
                       SizedBox(height: tokens.spacing.space24),
-                      const TsaiTextHeading(
-                        'Spending region',
-                        size: TsaiHeadingSize.small,
+                      SizedBox(
+                        height: 214,
+                        child: PageView(
+                          controller: _cardController,
+                          onPageChanged: (index) =>
+                              setState(() => _cardIndex = index),
+                          children: [
+                            for (final card in _cards) Center(child: card),
+                          ],
+                        ),
                       ),
-                      SizedBox(height: tokens.spacing.space12),
-                      TsaiSelect<String>(
-                        key: const ValueKey<String>('home-country-select'),
-                        options: _countryOptions,
-                        value: _country,
-                        placeholder: 'Country',
-                        description: 'Used for regional account insights.',
-                        onChanged: (value) => setState(() => _country = value),
+                      SizedBox(height: tokens.spacing.space16),
+                      Center(
+                        child: TsaiPageIndicator(
+                          count: _cards.length,
+                          index: _cardIndex,
+                        ),
                       ),
                       SizedBox(height: tokens.spacing.space24),
-                      const _ActivityList(),
+                      TsaiSelect<String>(
+                        key: const ValueKey<String>('home-country-select'),
+                        options: _currencyOptions,
+                        value: _currency,
+                        placeholder: 'Display currency',
+                        description: 'Balances convert using midday rates.',
+                        onChanged: (value) => setState(() => _currency = value),
+                      ),
+                      SizedBox(height: tokens.spacing.space24),
+                      TsaiTabs(
+                        sections: [
+                          TsaiTabSection.text(
+                            label: 'Activity',
+                            content: const _ActivityList(),
+                          ),
+                          TsaiTabSection.text(
+                            label: 'Investments',
+                            content: _InvestmentTabContent(),
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                 ),
@@ -334,47 +351,149 @@ class _HomeScreenExampleState extends State<HomeScreenExample> {
     await showTsaiBottomSheet<void>(
       context: context,
       title: 'Transfer money',
+      size: TsaiBottomSheetSize.full,
+      child: const _TransferComposer(),
+    );
+  }
+
+  Future<void> _openTopUp(BuildContext context) async {
+    await showTsaiBottomSheet<void>(
+      context: context,
+      title: 'Add funds',
       size: TsaiBottomSheetSize.half,
       child: const TsaiTextBody(
-        'Choose a recipient and amount to move money between accounts.',
+        'Link a bank account or debit card to add funds the same day.',
         size: TsaiBodySize.medium,
         weight: TsaiTextWeight.regular,
       ),
-      secondaryAction: Builder(
-        builder: (sheetContext) => TsaiButton(
-          label: 'Cancel',
-          variant: TsaiButtonVariant.secondary,
-          onPressed: () => Navigator.of(sheetContext).pop(),
-        ),
-      ),
       primaryAction: Builder(
         builder: (sheetContext) => TsaiButton(
-          label: 'Continue',
+          label: 'Start setup',
           onPressed: () => Navigator.of(sheetContext).pop(),
         ),
       ),
     );
   }
+}
 
-  Future<void> _openPayment(BuildContext context) async {
-    await showTsaiModalDialog<void>(
-      context: context,
-      title: 'Schedule a payment',
-      message: 'Review your payment details before confirming the transaction.',
-      icon: const TsaiIcon(LucideIcons.receipt),
-      secondaryAction: Builder(
-        builder: (dialogContext) => TsaiButton(
+class _BalanceHero extends StatelessWidget {
+  const _BalanceHero({required this.hidden, required this.currency, super.key});
+
+  final bool hidden;
+  final String? currency;
+
+  @override
+  Widget build(BuildContext context) {
+    final tokens = TsaiThemeTokens.of(context);
+    final value = switch (currency) {
+      'uyu' => r'$U 978,420.00',
+      'eur' => r'€22,410.18',
+      _ => r'$24,562.80',
+    };
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        TsaiAmountDisplay(
+          caption: 'Total balance',
+          value: hidden ? '••••••••' : value,
+          subtitle: hidden ? 'Hidden' : '+2.2% this month',
+          subtitleColor: hidden
+              ? tokens.colors.contentTertiary
+              : tokens.colors.accentSuccess,
+        ),
+        SizedBox(height: tokens.spacing.space16),
+        Row(
+          children: const [
+            CircleIcon(
+              icon: TsaiIcon(LucideIcons.coins),
+              semanticLabel: 'Account balance',
+            ),
+            SizedBox(width: 8),
+            Avatar(initials: 'IT', semanticLabel: 'Ilona Taylor'),
+            SizedBox(width: 8),
+            TsaiCryptoIcon(TsaiCryptoAsset.usdc, size: 24),
+            SizedBox(width: 12),
+            Expanded(
+              child: TsaiTextBody(
+                'USD · USDC pocket',
+                size: TsaiBodySize.medium,
+                weight: TsaiTextWeight.medium,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class _TransferComposer extends StatefulWidget {
+  const _TransferComposer();
+
+  @override
+  State<_TransferComposer> createState() => _TransferComposerState();
+}
+
+class _TransferComposerState extends State<_TransferComposer> {
+  var _amount = '120.00';
+
+  void _append(String digit) {
+    setState(() {
+      final next = _amount == '0' ? digit : '$_amount$digit';
+      if (next.replaceAll('.', '').length > 8) {
+        return;
+      }
+      _amount = next;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final tokens = TsaiThemeTokens.of(context);
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        TsaiAmountDisplay(
+          caption: 'You send',
+          value: '\$$_amount',
+          subtitle: 'From everyday account',
+          alignment: TsaiAmountAlignment.center,
+        ),
+        SizedBox(height: tokens.spacing.space24),
+        FittedBox(
+          child: TsaiNumericKeypad(
+            onDigit: _append,
+            onDecimal: () {
+              if (_amount.contains('.')) {
+                return;
+              }
+              setState(() => _amount = '$_amount.');
+            },
+            onBackspace: () {
+              setState(() {
+                if (_amount.length <= 1) {
+                  _amount = '0';
+                  return;
+                }
+                _amount = _amount.substring(0, _amount.length - 1);
+              });
+            },
+          ),
+        ),
+        SizedBox(height: tokens.spacing.space16),
+        TsaiButton(
+          label: 'Continue',
+          isExpanded: true,
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        SizedBox(height: tokens.spacing.space8),
+        TsaiButton(
           label: 'Cancel',
-          variant: TsaiButtonVariant.secondary,
-          onPressed: () => Navigator.of(dialogContext).pop(),
+          isExpanded: true,
+          variant: TsaiButtonVariant.ghost,
+          onPressed: () => Navigator.of(context).pop(),
         ),
-      ),
-      primaryAction: Builder(
-        builder: (dialogContext) => TsaiButton(
-          label: 'Confirm',
-          onPressed: () => Navigator.of(dialogContext).pop(),
-        ),
-      ),
+      ],
     );
   }
 }
@@ -401,12 +520,15 @@ class _FormScreenExampleState extends State<FormScreenExample> {
   String? _country = 'uy';
   bool? _updatesEnabled = true;
   String _accountType = 'personal';
-  bool _twoFactorEnabled = true;
+  var _twoFactorEnabled = true;
+  var _contactless = true;
+  var _spendLimit = 2500.0;
+  String? _faq = 'limits';
 
   void _saveProfile() => showTsaiModalDialog<void>(
     context: context,
     title: 'Profile saved',
-    message: 'Your account details and security preferences are up to date.',
+    message: 'Your card controls and personal details are up to date.',
     icon: const TsaiIcon(LucideIcons.circle_check),
     primaryAction: Builder(
       builder: (dialogContext) => TsaiButton(
@@ -421,8 +543,8 @@ class _FormScreenExampleState extends State<FormScreenExample> {
     final tokens = TsaiThemeTokens.of(context);
     return PageWithTopBar(
       key: const ValueKey<String>('form-screen-page'),
-      heading: 'Profile details',
-      subtitle: 'Personal and account information',
+      heading: 'Account',
+      subtitle: 'Profile, cards, and limits',
       leading: [
         PageTopBarAction(
           icon: const TsaiIcon(LucideIcons.arrow_left),
@@ -443,151 +565,192 @@ class _FormScreenExampleState extends State<FormScreenExample> {
           onPressed: widget.onOpenCatalog,
         ),
       ],
-      body: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 720),
-          child: Padding(
-            key: const ValueKey<String>('form-screen-content'),
-            padding: EdgeInsets.fromLTRB(
-              tokens.spacing.space16,
-              tokens.spacing.space24,
-              tokens.spacing.space16,
-              tokens.spacing.space64 + 62,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const TsaiTextHeading(
-                  'Personal information',
-                  size: TsaiHeadingSize.small,
-                ),
-                SizedBox(height: tokens.spacing.space16),
-                const TsaiInput(
-                  key: ValueKey<String>('first-name-input'),
-                  initialValue: 'Ilona',
-                  placeholder: 'First name',
-                  textCapitalization: TextCapitalization.words,
-                ),
-                SizedBox(height: tokens.spacing.space16),
-                const TsaiInput(
-                  key: ValueKey<String>('last-name-input'),
-                  initialValue: 'Taylor',
-                  placeholder: 'Last name',
-                  textCapitalization: TextCapitalization.words,
-                ),
-                SizedBox(height: tokens.spacing.space16),
-                const TsaiInput(
-                  initialValue: 'ilona@example.com',
-                  placeholder: 'Email address',
-                  keyboardType: TextInputType.emailAddress,
-                  description: 'Account notifications are sent here.',
-                ),
-                SizedBox(height: tokens.spacing.space24),
-                const TsaiTextHeading(
-                  'Account access',
-                  size: TsaiHeadingSize.small,
-                ),
-                SizedBox(height: tokens.spacing.space16),
-                TsaiRadio<String>(
-                  value: 'personal',
-                  groupValue: _accountType,
-                  label: 'Personal account',
-                  description: 'For everyday spending and transfers.',
-                  onChanged: (value) => setState(() => _accountType = value!),
-                ),
-                SizedBox(height: tokens.spacing.space8),
-                TsaiRadio<String>(
-                  value: 'business',
-                  groupValue: _accountType,
-                  label: 'Business account',
-                  description: 'For invoices and team payments.',
-                  onChanged: (value) => setState(() => _accountType = value!),
-                ),
-                SizedBox(height: tokens.spacing.space16),
-                const TsaiOtpInput(
-                  initialValue: '4821',
-                  isSuccess: true,
-                  semanticLabel: 'Verification code',
-                ),
-                SizedBox(height: tokens.spacing.space16),
-                const TsaiPinInput(
-                  initialValue: '1234',
-                  semanticLabel: 'Transaction PIN',
-                ),
-                SizedBox(height: tokens.spacing.space24),
-                const TsaiTextHeading(
-                  'Location and work',
-                  size: TsaiHeadingSize.small,
-                ),
-                SizedBox(height: tokens.spacing.space16),
-                TsaiSelect<String>(
-                  key: const ValueKey<String>('form-country-select'),
-                  options: _countryOptions,
-                  value: _country,
-                  placeholder: 'Country',
-                  onChanged: (value) => setState(() => _country = value),
-                ),
-                SizedBox(height: tokens.spacing.space16),
-                const TsaiInput(
-                  initialValue: 'Montevideo',
-                  placeholder: 'City',
-                  textCapitalization: TextCapitalization.words,
-                ),
-                SizedBox(height: tokens.spacing.space16),
-                const TsaiInput(
-                  initialValue: 'Tsai Technology',
-                  placeholder: 'Company',
-                  textCapitalization: TextCapitalization.words,
-                ),
-                SizedBox(height: tokens.spacing.space16),
-                const TsaiInput(
-                  initialValue: 'Product designer',
-                  placeholder: 'Role',
-                  textCapitalization: TextCapitalization.sentences,
-                ),
-                SizedBox(height: tokens.spacing.space24),
-                const TsaiTextHeading('Security', size: TsaiHeadingSize.small),
-                SizedBox(height: tokens.spacing.space16),
-                const TsaiInput(
-                  initialValue: 'correct horse battery staple',
-                  placeholder: 'Password',
-                  obscureText: true,
-                  showVisibilityButton: true,
-                  description: 'Use at least 12 characters.',
-                ),
-                SizedBox(height: tokens.spacing.space20),
-                TsaiCheckbox(
-                  value: _updatesEnabled,
-                  label: 'Product updates',
-                  description: 'Receive occasional account and product news.',
-                  onChanged: (value) => setState(() => _updatesEnabled = value),
-                ),
-                SizedBox(height: tokens.spacing.space16),
-                TsaiSwitch(
-                  value: _twoFactorEnabled,
-                  label: 'Require two-step approval',
-                  description: 'Protect outgoing payments with an extra check.',
-                  onChanged: (value) =>
-                      setState(() => _twoFactorEnabled = value),
-                ),
-                SizedBox(height: tokens.spacing.space24),
-                TsaiButton(
-                  label: 'Save changes',
-                  isExpanded: true,
-                  leadingIcon: const TsaiIcon(
-                    LucideIcons.circle_check,
-                    size: 16,
+      body: SingleChildScrollView(
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 720),
+            child: Padding(
+              key: const ValueKey<String>('form-screen-content'),
+              padding: EdgeInsets.fromLTRB(
+                tokens.spacing.space16,
+                tokens.spacing.space24,
+                tokens.spacing.space16,
+                tokens.spacing.space64 + 62,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const Center(
+                    child: TsaiBankCard(number: '•••• 4821', network: 'VISA'),
                   ),
-                  onPressed: _saveProfile,
-                ),
-                SizedBox(height: tokens.spacing.space12),
-                TsaiButton(
-                  label: 'Cancel',
-                  isExpanded: true,
-                  variant: TsaiButtonVariant.ghost,
-                  onPressed: widget.onShowHome,
-                ),
-              ],
+                  SizedBox(height: tokens.spacing.space24),
+                  TsaiSectionHeader(
+                    title: 'Daily spend limit',
+                    trailingIcon: const TsaiIcon(LucideIcons.info),
+                    trailingIconSemanticLabel: 'Limit details',
+                    onTrailingIconPressed: () => showTsaiModalDialog<void>(
+                      context: context,
+                      title: 'Daily limit',
+                      message:
+                          'Contactless payments pause automatically when the limit is reached.',
+                      icon: const TsaiIcon(LucideIcons.shield_check),
+                      primaryAction: Builder(
+                        builder: (dialogContext) => TsaiButton(
+                          label: 'Close',
+                          onPressed: () => Navigator.of(dialogContext).pop(),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: tokens.spacing.space8),
+                  TsaiTextMonoBody(
+                    '\$${_spendLimit.round()}',
+                    size: TsaiBodySize.large,
+                  ),
+                  SizedBox(height: tokens.spacing.space12),
+                  TsaiSlider(
+                    value: _spendLimit,
+                    min: 200,
+                    max: 5000,
+                    semanticLabel: 'Daily spend limit',
+                    onChanged: (value) => setState(() => _spendLimit = value),
+                  ),
+                  SizedBox(height: tokens.spacing.space20),
+                  TsaiSwitch(
+                    value: _contactless,
+                    label: 'Contactless payments',
+                    description: 'Tap to pay with this physical card.',
+                    onChanged: (value) => setState(() => _contactless = value),
+                  ),
+                  SizedBox(height: tokens.spacing.space24),
+                  const TsaiTextHeading(
+                    'Card help',
+                    size: TsaiHeadingSize.small,
+                  ),
+                  TsaiAccordion(
+                    title: 'What counts toward the limit?',
+                    body:
+                        'In-store, online, and wallet taps share the same daily cap. Bank transfers do not.',
+                    expanded: _faq == 'limits',
+                    showDivider: true,
+                    onChanged: (open) =>
+                        setState(() => _faq = open ? 'limits' : null),
+                  ),
+                  TsaiAccordion(
+                    title: 'How do I freeze a card?',
+                    body:
+                        'Open the card, turn off contactless, then use Freeze card from the overflow menu. You can unfreeze instantly.',
+                    expanded: _faq == 'freeze',
+                    showDivider: true,
+                    onChanged: (open) =>
+                        setState(() => _faq = open ? 'freeze' : null),
+                  ),
+                  TsaiAccordion(
+                    title: 'Virtual cards',
+                    body:
+                        'Create a virtual card for subscriptions. It uses the same balance and can be deleted without replacing the physical card.',
+                    expanded: _faq == 'virtual',
+                    onChanged: (open) =>
+                        setState(() => _faq = open ? 'virtual' : null),
+                  ),
+                  SizedBox(height: tokens.spacing.space24),
+                  const TsaiDivider(),
+                  SizedBox(height: tokens.spacing.space24),
+                  const TsaiTextHeading(
+                    'Personal information',
+                    size: TsaiHeadingSize.small,
+                  ),
+                  SizedBox(height: tokens.spacing.space16),
+                  const TsaiInput(
+                    key: ValueKey<String>('first-name-input'),
+                    initialValue: 'Ilona',
+                    placeholder: 'First name',
+                    textCapitalization: TextCapitalization.words,
+                  ),
+                  SizedBox(height: tokens.spacing.space16),
+                  const TsaiInput(
+                    key: ValueKey<String>('last-name-input'),
+                    initialValue: 'Taylor',
+                    placeholder: 'Last name',
+                    textCapitalization: TextCapitalization.words,
+                  ),
+                  SizedBox(height: tokens.spacing.space16),
+                  const TsaiInput(
+                    initialValue: 'ilona@example.com',
+                    placeholder: 'Email address',
+                    keyboardType: TextInputType.emailAddress,
+                    description: 'Statements and security alerts go here.',
+                  ),
+                  SizedBox(height: tokens.spacing.space24),
+                  const TsaiTextHeading(
+                    'Account type',
+                    size: TsaiHeadingSize.small,
+                  ),
+                  SizedBox(height: tokens.spacing.space16),
+                  TsaiRadio<String>(
+                    value: 'personal',
+                    groupValue: _accountType,
+                    label: 'Personal account',
+                    description: 'Everyday spending and transfers.',
+                    onChanged: (value) => setState(() => _accountType = value!),
+                  ),
+                  SizedBox(height: tokens.spacing.space8),
+                  TsaiRadio<String>(
+                    value: 'business',
+                    groupValue: _accountType,
+                    label: 'Business account',
+                    description: 'Invoices and team payments.',
+                    onChanged: (value) => setState(() => _accountType = value!),
+                  ),
+                  SizedBox(height: tokens.spacing.space16),
+                  TsaiSelect<String>(
+                    key: const ValueKey<String>('form-country-select'),
+                    options: _countryOptions,
+                    value: _country,
+                    placeholder: 'Country of residence',
+                    onChanged: (value) => setState(() => _country = value),
+                  ),
+                  SizedBox(height: tokens.spacing.space24),
+                  const TsaiTextHeading(
+                    'Security',
+                    size: TsaiHeadingSize.small,
+                  ),
+                  SizedBox(height: tokens.spacing.space16),
+                  const TsaiInput(
+                    initialValue: 'correct horse battery staple',
+                    placeholder: 'Password',
+                    obscureText: true,
+                    showVisibilityButton: true,
+                    description: 'Use at least 12 characters.',
+                  ),
+                  SizedBox(height: tokens.spacing.space20),
+                  TsaiCheckbox(
+                    value: _updatesEnabled,
+                    label: 'Product updates',
+                    description: 'Occasional account and product news.',
+                    onChanged: (value) =>
+                        setState(() => _updatesEnabled = value),
+                  ),
+                  SizedBox(height: tokens.spacing.space16),
+                  TsaiSwitch(
+                    value: _twoFactorEnabled,
+                    label: 'Require two-step approval',
+                    description: 'Confirm outgoing payments on this device.',
+                    onChanged: (value) =>
+                        setState(() => _twoFactorEnabled = value),
+                  ),
+                  SizedBox(height: tokens.spacing.space24),
+                  TsaiButton(
+                    label: 'Save changes',
+                    isExpanded: true,
+                    leadingIcon: const TsaiIcon(
+                      LucideIcons.circle_check,
+                      size: 16,
+                    ),
+                    onPressed: _saveProfile,
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -613,10 +776,11 @@ class KycScreenExample extends StatefulWidget {
 }
 
 class _KycScreenExampleState extends State<KycScreenExample> {
-  int _step = 0;
-  bool _documentUploaded = false;
-  bool _consentGiven = false;
-  String _documentType = 'passport';
+  var _step = 0;
+  var _documentUploaded = false;
+  var _consentGiven = false;
+  var _documentType = 'passport';
+  var _yearsAtAddress = 3;
 
   void _advanceKyc() {
     if (_step < 2) {
@@ -644,7 +808,7 @@ class _KycScreenExampleState extends State<KycScreenExample> {
     return PageWithTopBar(
       key: const ValueKey<String>('kyc-screen-page'),
       heading: 'Verify your identity',
-      subtitle: 'Complete your account verification',
+      subtitle: 'Required to raise your transfer limits',
       trailing: [
         PageTopBarAction(
           icon: TsaiIcon(_themeIcon(widget.themeMode)),
@@ -658,143 +822,186 @@ class _KycScreenExampleState extends State<KycScreenExample> {
           onPressed: widget.onOpenCatalog,
         ),
       ],
-      body: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 720),
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(
-              tokens.spacing.space16,
-              tokens.spacing.space24,
-              tokens.spacing.space16,
-              tokens.spacing.space64 + 62,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                TsaiInlineAlert(
-                  tone: _step == 2
-                      ? TsaiInlineAlertTone.success
-                      : TsaiInlineAlertTone.info,
-                  title: 'Step ${_step + 1} of 3',
-                  message: switch (_step) {
-                    0 => 'Tell us where to send your verification code.',
-                    1 => 'Upload one government-issued document.',
-                    _ => 'Review your details and give consent to continue.',
-                  },
-                ),
-                SizedBox(height: tokens.spacing.space20),
-                TsaiCard(
-                  title: switch (_step) {
-                    0 => 'Contact details',
-                    1 => 'Identity document',
-                    _ => 'Final review',
-                  },
-                  trailing: const TsaiIcon(LucideIcons.badge_check),
-                  child: switch (_step) {
-                    0 => const TsaiPhoneInput(
-                      initialValue: '099 123 45 67',
-                      initialCountryCode: '598',
-                      description: 'We will send a one-time verification code.',
-                    ),
-                    1 => Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        TsaiSelect<String>(
-                          options: const [
-                            TsaiSelectOption(
-                              value: 'passport',
-                              label: 'Passport',
+      body: SingleChildScrollView(
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 720),
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(
+                tokens.spacing.space16,
+                tokens.spacing.space24,
+                tokens.spacing.space16,
+                tokens.spacing.space64 + 62,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Center(child: TsaiPageIndicator(count: 3, index: _step)),
+                  SizedBox(height: tokens.spacing.space16),
+                  TsaiProgressBar(
+                    value: (_step + 1) / 3,
+                    label: 'Verification progress',
+                    labelPosition: TsaiProgressBarLabelPosition.top,
+                  ),
+                  SizedBox(height: tokens.spacing.space16),
+                  TsaiInlineAlert(
+                    tone: _step == 2
+                        ? TsaiInlineAlertTone.success
+                        : TsaiInlineAlertTone.info,
+                    title: 'Step ${_step + 1} of 3',
+                    message: switch (_step) {
+                      0 => 'Confirm the mobile number we should text.',
+                      1 => 'Upload one government-issued document.',
+                      _ => 'Review details and consent to continue.',
+                    },
+                  ),
+                  SizedBox(height: tokens.spacing.space20),
+                  TsaiCard(
+                    title: switch (_step) {
+                      0 => 'Contact details',
+                      1 => 'Identity document',
+                      _ => 'Final review',
+                    },
+                    trailing: const TsaiIcon(LucideIcons.badge_check),
+                    child: switch (_step) {
+                      0 => Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          const TsaiPhoneInput(
+                            initialValue: '099 123 45 67',
+                            initialCountryCode: '598',
+                            description:
+                                'We will send a one-time verification code.',
+                          ),
+                          SizedBox(height: tokens.spacing.space16),
+                          Row(
+                            children: [
+                              const Expanded(
+                                child: TsaiTextBody(
+                                  'Years at current address',
+                                  size: TsaiBodySize.medium,
+                                  weight: TsaiTextWeight.medium,
+                                ),
+                              ),
+                              TsaiStepper(
+                                value: _yearsAtAddress,
+                                min: 0,
+                                max: 20,
+                                onChanged: (value) =>
+                                    setState(() => _yearsAtAddress = value),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: tokens.spacing.space16),
+                          const TsaiOtpInput(
+                            initialValue: '4821',
+                            isSuccess: true,
+                            semanticLabel: 'Verification code',
+                          ),
+                          SizedBox(height: tokens.spacing.space16),
+                          const TsaiPinInput(
+                            initialValue: '1234',
+                            semanticLabel: 'App PIN',
+                          ),
+                        ],
+                      ),
+                      1 => Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          TsaiSelect<String>(
+                            options: const [
+                              TsaiSelectOption(
+                                value: 'passport',
+                                label: 'Passport',
+                              ),
+                              TsaiSelectOption(
+                                value: 'id',
+                                label: 'National ID',
+                              ),
+                            ],
+                            value: _documentType,
+                            placeholder: 'Document type',
+                            onChanged: (value) =>
+                                setState(() => _documentType = value!),
+                          ),
+                          SizedBox(height: tokens.spacing.space16),
+                          TsaiButton(
+                            label: _documentUploaded
+                                ? 'Document uploaded'
+                                : 'Upload document',
+                            variant: _documentUploaded
+                                ? TsaiButtonVariant.secondary
+                                : TsaiButtonVariant.outline,
+                            leadingIcon: TsaiIcon(
+                              _documentUploaded
+                                  ? LucideIcons.check
+                                  : LucideIcons.upload,
                             ),
-                            TsaiSelectOption(value: 'id', label: 'National ID'),
-                          ],
-                          value: _documentType,
-                          placeholder: 'Document type',
-                          onChanged: (value) =>
-                              setState(() => _documentType = value!),
-                        ),
-                        SizedBox(height: tokens.spacing.space16),
-                        TsaiButton(
-                          label: _documentUploaded
-                              ? 'Document uploaded'
-                              : 'Upload document',
-                          variant: _documentUploaded
-                              ? TsaiButtonVariant.secondary
-                              : TsaiButtonVariant.outline,
-                          leadingIcon: TsaiIcon(
-                            _documentUploaded
-                                ? LucideIcons.check
-                                : LucideIcons.upload,
+                            onPressed: () =>
+                                setState(() => _documentUploaded = true),
                           ),
-                          onPressed: () =>
-                              setState(() => _documentUploaded = true),
-                        ),
-                        SizedBox(height: tokens.spacing.space16),
-                        if (!_documentUploaded)
-                          const TsaiSkeletonCard(
-                            size: TsaiSkeletonSize.small,
-                            semanticLabel: 'Waiting for document upload',
+                          SizedBox(height: tokens.spacing.space16),
+                          if (!_documentUploaded)
+                            const TsaiSkeletonCard(
+                              size: TsaiSkeletonSize.small,
+                              semanticLabel: 'Waiting for document upload',
+                            ),
+                        ],
+                      ),
+                      _ => Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          TsaiTextBody(
+                            '$_documentType on file · $_yearsAtAddress years at current address.',
+                            size: TsaiBodySize.medium,
+                            weight: TsaiTextWeight.regular,
                           ),
-                      ],
-                    ),
-                    _ => Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        const TsaiTextBody(
-                          'We use your document only to verify your identity.',
-                          size: TsaiBodySize.medium,
-                          weight: TsaiTextWeight.regular,
-                        ),
-                        SizedBox(height: tokens.spacing.space16),
-                        TsaiCheckbox(
-                          value: _consentGiven,
-                          label: 'I consent to identity verification',
-                          onChanged: (value) =>
-                              setState(() => _consentGiven = value ?? false),
-                        ),
-                      ],
-                    ),
-                  },
-                ),
-                SizedBox(height: tokens.spacing.space16),
-                TsaiProgressBar(
-                  value: (_step + 1) / 3,
-                  label: 'Workspace setup',
-                  labelPosition: TsaiProgressBarLabelPosition.top,
-                ),
-                SizedBox(height: tokens.spacing.space20),
-                Row(
-                  children: [
-                    const TsaiSkeletonAvatar(size: TsaiSkeletonSize.small),
-                    SizedBox(width: tokens.spacing.space12),
-                    const Expanded(
-                      child: TsaiSkeletonText(size: TsaiSkeletonSize.small),
-                    ),
-                    SizedBox(width: tokens.spacing.space12),
-                    const TsaiSpinner(size: TsaiSpinnerSize.small),
-                  ],
-                ),
-                SizedBox(height: tokens.spacing.space20),
-                TsaiToast(
-                  variant: TsaiToastVariant.info,
-                  message: _documentUploaded
-                      ? 'Document ready to review'
-                      : 'Secure verification session',
-                  actionLabel: _documentUploaded ? 'Review' : null,
-                  onAction: _documentUploaded
-                      ? () => setState(() => _step = 2)
-                      : null,
-                ),
-                SizedBox(height: tokens.spacing.space20),
-                TsaiButton(
-                  label: _step == 2 ? 'Submit verification' : 'Continue',
-                  isExpanded: true,
-                  onPressed:
-                      _step == 1 && !_documentUploaded ||
-                          _step == 2 && !_consentGiven
-                      ? null
-                      : _advanceKyc,
-                ),
-              ],
+                          SizedBox(height: tokens.spacing.space16),
+                          TsaiCheckbox(
+                            value: _consentGiven,
+                            label: 'I consent to identity verification',
+                            onChanged: (value) =>
+                                setState(() => _consentGiven = value ?? false),
+                          ),
+                        ],
+                      ),
+                    },
+                  ),
+                  SizedBox(height: tokens.spacing.space16),
+                  Row(
+                    children: [
+                      const TsaiSkeletonAvatar(size: TsaiSkeletonSize.small),
+                      SizedBox(width: tokens.spacing.space12),
+                      const Expanded(
+                        child: TsaiSkeletonText(size: TsaiSkeletonSize.small),
+                      ),
+                      SizedBox(width: tokens.spacing.space12),
+                      const TsaiSpinner(size: TsaiSpinnerSize.small),
+                    ],
+                  ),
+                  SizedBox(height: tokens.spacing.space20),
+                  TsaiToast(
+                    variant: TsaiToastVariant.info,
+                    message: _documentUploaded
+                        ? 'Document ready to review'
+                        : 'Secure verification session',
+                    actionLabel: _documentUploaded ? 'Review' : null,
+                    onAction: _documentUploaded
+                        ? () => setState(() => _step = 2)
+                        : null,
+                  ),
+                  SizedBox(height: tokens.spacing.space20),
+                  TsaiButton(
+                    label: _step == 2 ? 'Submit verification' : 'Continue',
+                    isExpanded: true,
+                    onPressed:
+                        _step == 1 && !_documentUploaded ||
+                            _step == 2 && !_consentGiven
+                        ? null
+                        : _advanceKyc,
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -820,33 +1027,22 @@ class PurchaseScreenExample extends StatefulWidget {
 }
 
 class _PurchaseScreenExampleState extends State<PurchaseScreenExample> {
-  bool _authorized = false;
+  var _authorized = false;
+  var _quantity = 2;
+  var _tip = 0.12;
+  var _amount = '9.00';
+
+  double get _base => (double.tryParse(_amount) ?? 0) * _quantity;
+  double get _total => _base * (1 + _tip);
 
   Future<void> _authorizePayment() async {
     await showTsaiBottomSheet<void>(
       context: context,
-      title: 'Confirm purchase',
-      size: TsaiBottomSheetSize.half,
-      child: const TsaiTextBody(
-        'Authorize a payment of \$12.40 to Coffee House Montevideo?',
-        size: TsaiBodySize.medium,
-        weight: TsaiTextWeight.regular,
-      ),
-      secondaryAction: Builder(
-        builder: (sheetContext) => TsaiButton(
-          label: 'Cancel',
-          variant: TsaiButtonVariant.secondary,
-          onPressed: () => Navigator.of(sheetContext).pop(),
-        ),
-      ),
-      primaryAction: Builder(
-        builder: (sheetContext) => TsaiButton(
-          label: 'Authorize',
-          onPressed: () {
-            setState(() => _authorized = true);
-            Navigator.of(sheetContext).pop();
-          },
-        ),
+      title: 'Confirm with PIN',
+      size: TsaiBottomSheetSize.full,
+      child: _PinSheet(
+        total: _total,
+        onAuthorized: () => setState(() => _authorized = true),
       ),
     );
   }
@@ -854,10 +1050,11 @@ class _PurchaseScreenExampleState extends State<PurchaseScreenExample> {
   @override
   Widget build(BuildContext context) {
     final tokens = TsaiThemeTokens.of(context);
+    final formatted = '\$${_total.toStringAsFixed(2)}';
     return PageWithTopBar(
       key: const ValueKey<String>('purchase-screen-page'),
-      heading: 'Pay a merchant',
-      subtitle: 'Review and authorize a purchase',
+      heading: 'Send money',
+      subtitle: 'Pay a person or a saved merchant',
       trailing: [
         PageTopBarAction(
           icon: TsaiIcon(_themeIcon(widget.themeMode)),
@@ -884,62 +1081,102 @@ class _PurchaseScreenExampleState extends State<PurchaseScreenExample> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                TsaiCard(
-                  title: _authorized
-                      ? 'Payment complete'
-                      : 'Coffee House Montevideo',
-                  trailing: TsaiIcon(LucideIcons.store),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      TsaiTextBody(
-                        _authorized
-                            ? 'Receipt saved to activity'
-                            : 'Flat white and pastry',
-                        size: TsaiBodySize.medium,
-                        weight: TsaiTextWeight.regular,
-                      ),
-                      TsaiTextMonoHeading(
-                        '\$12.40',
-                        size: TsaiMonoHeadingSize.large,
-                      ),
-                    ],
-                  ),
+                TsaiAmountDisplay(
+                  caption: _authorized ? 'Paid' : 'Amount due',
+                  value: formatted,
+                  subtitle: _authorized
+                      ? 'Receipt saved to activity'
+                      : 'Coffee House · $_quantity items',
+                  alignment: TsaiAmountAlignment.center,
+                ),
+                SizedBox(height: tokens.spacing.space20),
+                const TsaiSearchInput(
+                  placeholder: 'Search people or merchants',
                 ),
                 SizedBox(height: tokens.spacing.space16),
-                const TsaiSearchInput(placeholder: 'Search saved merchants'),
+                Row(
+                  children: [
+                    const Expanded(
+                      child: TsaiTextBody(
+                        'Items',
+                        size: TsaiBodySize.medium,
+                        weight: TsaiTextWeight.medium,
+                      ),
+                    ),
+                    TsaiStepper(
+                      value: _quantity,
+                      min: 1,
+                      max: 12,
+                      onChanged: (value) => setState(() => _quantity = value),
+                    ),
+                  ],
+                ),
+                SizedBox(height: tokens.spacing.space16),
+                TsaiTextCaption(
+                  'Tip ${(_tip * 100).round()}%',
+                  size: TsaiCaptionSize.medium,
+                  weight: TsaiTextWeight.medium,
+                  color: tokens.colors.contentSecondary,
+                ),
+                SizedBox(height: tokens.spacing.space8),
+                TsaiSlider(
+                  value: _tip,
+                  min: 0,
+                  max: 0.25,
+                  semanticLabel: 'Tip percent',
+                  onChanged: _authorized
+                      ? null
+                      : (value) => setState(() => _tip = value),
+                ),
+                SizedBox(height: tokens.spacing.space20),
+                FittedBox(
+                  child: TsaiNumericKeypad(
+                    onDigit: _authorized
+                        ? null
+                        : (digit) {
+                            setState(() {
+                              final next = _amount == '0'
+                                  ? digit
+                                  : '$_amount$digit';
+                              if (next.replaceAll('.', '').length > 6) {
+                                return;
+                              }
+                              _amount = next;
+                            });
+                          },
+                    onDecimal: _authorized
+                        ? null
+                        : () {
+                            if (_amount.contains('.')) {
+                              return;
+                            }
+                            setState(() => _amount = '$_amount.');
+                          },
+                    onBackspace: _authorized
+                        ? null
+                        : () {
+                            setState(() {
+                              if (_amount.length <= 1) {
+                                _amount = '0';
+                                return;
+                              }
+                              _amount = _amount.substring(
+                                0,
+                                _amount.length - 1,
+                              );
+                            });
+                          },
+                  ),
+                ),
                 SizedBox(height: tokens.spacing.space16),
                 const TsaiInlineAlert(
                   tone: TsaiInlineAlertTone.info,
                   title: 'Secure checkout',
-                  message: 'Your payment is protected by device verification.',
+                  message: 'Payments stay on this device until you confirm.',
                 ),
                 SizedBox(height: tokens.spacing.space16),
-                TsaiSectionHeader(
-                  title: 'Payment method',
-                  trailingIcon: const TsaiIcon(LucideIcons.chevron_down),
-                  trailingIconSemanticLabel: 'Change payment method',
-                  onTrailingIconPressed: () => showTsaiBottomSheet<void>(
-                    context: context,
-                    title: 'Payment method',
-                    child: const TsaiTextBody(
-                      'Debit card ending in 4821',
-                      size: TsaiBodySize.medium,
-                      weight: TsaiTextWeight.regular,
-                    ),
-                    primaryAction: Builder(
-                      builder: (sheetContext) => TsaiButton(
-                        label: 'Use this card',
-                        onPressed: () => Navigator.of(sheetContext).pop(),
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(height: tokens.spacing.space12),
                 TsaiButton(
-                  label: _authorized
-                      ? 'Payment authorized'
-                      : 'Authorize payment',
+                  label: _authorized ? 'Payment sent' : 'Authorize payment',
                   isExpanded: true,
                   onPressed: _authorized ? null : _authorizePayment,
                 ),
@@ -956,8 +1193,7 @@ class _PurchaseScreenExampleState extends State<PurchaseScreenExample> {
                       ? () => showTsaiModalDialog<void>(
                           context: context,
                           title: 'Receipt',
-                          message:
-                              'Your receipt is available in activity history.',
+                          message: 'Coffee House Montevideo · $formatted',
                           icon: const TsaiIcon(LucideIcons.receipt_text),
                           primaryAction: Builder(
                             builder: (dialogContext) => TsaiButton(
@@ -977,7 +1213,7 @@ class _PurchaseScreenExampleState extends State<PurchaseScreenExample> {
                     title: 'Transaction details',
                     icon: const TsaiIcon(LucideIcons.receipt_text),
                     message:
-                        'Merchant: Coffee House Montevideo\nAmount: \$12.40\nStatus: ${_authorized ? 'Authorized' : 'Pending'}',
+                        'Merchant: Coffee House Montevideo\nAmount: $formatted\nStatus: ${_authorized ? 'Sent' : 'Pending'}',
                     primaryAction: Builder(
                       builder: (dialogContext) => TsaiButton(
                         label: 'Close',
@@ -1004,38 +1240,60 @@ class _PurchaseScreenExampleState extends State<PurchaseScreenExample> {
   }
 }
 
-class _OverviewTabContent extends StatelessWidget {
-  const _OverviewTabContent();
+class _PinSheet extends StatefulWidget {
+  const _PinSheet({required this.total, required this.onAuthorized});
+
+  final double total;
+  final VoidCallback onAuthorized;
 
   @override
-  Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.symmetric(vertical: 16),
-    child: Row(
+  State<_PinSheet> createState() => _PinSheetState();
+}
+
+class _PinSheetState extends State<_PinSheet> {
+  var _pin = '';
+
+  @override
+  Widget build(BuildContext context) {
+    final tokens = TsaiThemeTokens.of(context);
+    return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
-        const CircleIcon(
-          icon: TsaiIcon(LucideIcons.coins),
-          semanticLabel: 'Account balance',
+        TsaiAmountDisplay(
+          caption: 'Authorize',
+          value: '\$${widget.total.toStringAsFixed(2)}',
+          subtitle: _pin.isEmpty ? 'Enter your 4-digit PIN' : '•' * _pin.length,
+          alignment: TsaiAmountAlignment.center,
         ),
-        const SizedBox(width: 8),
-        const Avatar(initials: 'IT', semanticLabel: 'Ilona Taylor'),
-        const SizedBox(width: 8),
-        const TsaiCryptoIcon(TsaiCryptoAsset.usdc, size: 24),
-        const SizedBox(width: 12),
-        const Expanded(
-          child: TsaiTextBody(
-            'Multi-currency account',
-            size: TsaiBodySize.medium,
-            weight: TsaiTextWeight.medium,
+        SizedBox(height: tokens.spacing.space24),
+        FittedBox(
+          child: TsaiNumericKeypad(
+            mode: TsaiKeypadMode.pin,
+            onDigit: (digit) {
+              if (_pin.length >= 4) {
+                return;
+              }
+              setState(() => _pin += digit);
+              if (_pin.length == 4) {
+                widget.onAuthorized();
+                Navigator.of(context).pop();
+              }
+            },
+            onBackspace: () {
+              if (_pin.isEmpty) {
+                return;
+              }
+              setState(() => _pin = _pin.substring(0, _pin.length - 1));
+            },
+            onBiometric: () {
+              widget.onAuthorized();
+              Navigator.of(context).pop();
+            },
           ),
         ),
-        TsaiTextMonoBody(
-          'USDC 1,240.00',
-          size: TsaiBodySize.medium,
-          color: TsaiThemeTokens.of(context).colors.contentSecondary,
-        ),
       ],
-    ),
-  );
+    );
+  }
 }
 
 class _InvestmentTabContent extends StatelessWidget {
@@ -1052,178 +1310,96 @@ class _InvestmentTabContent extends StatelessWidget {
   );
 }
 
-class _BalanceSummary extends StatelessWidget {
-  const _BalanceSummary({required this.tokens, super.key});
-
-  final TsaiThemeTokens tokens;
-
-  @override
-  Widget build(BuildContext context) => Container(
-    padding: EdgeInsets.all(tokens.spacing.space20),
-    decoration: BoxDecoration(
-      color: tokens.colors.surfaceRaised,
-      border: Border.all(
-        color: tokens.colors.borderSubtle,
-        width: tokens.borders.hairline,
-      ),
-      borderRadius: BorderRadius.circular(tokens.radii.medium),
-    ),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        TsaiTextCaption(
-          'Available balance',
-          size: TsaiCaptionSize.medium,
-          weight: TsaiTextWeight.medium,
-          color: tokens.colors.contentSecondary,
-        ),
-        SizedBox(height: tokens.spacing.space8),
-        const TsaiTextHeading(r'$24,891.42', size: TsaiHeadingSize.extraLarge),
-        SizedBox(height: tokens.spacing.space4),
-        TsaiTextBody(
-          '+2.4% this month',
-          size: TsaiBodySize.medium,
-          weight: TsaiTextWeight.medium,
-          color: tokens.colors.accentSuccess,
-        ),
-        SizedBox(height: tokens.spacing.space20),
-        Wrap(
-          spacing: tokens.spacing.space8,
-          runSpacing: tokens.spacing.space8,
-          children: [
-            TsaiButton(
-              label: 'Add funds',
-              size: TsaiButtonSize.medium,
-              leadingIcon: const TsaiIcon(LucideIcons.plus, size: 16),
-              onPressed: () => showTsaiBottomSheet<void>(
-                context: context,
-                title: 'Add funds',
-                child: const TsaiTextBody(
-                  'Connect a bank account or card to add funds securely.',
-                  size: TsaiBodySize.medium,
-                  weight: TsaiTextWeight.regular,
-                ),
-                primaryAction: Builder(
-                  builder: (sheetContext) => TsaiButton(
-                    label: 'Start setup',
-                    onPressed: () => Navigator.of(sheetContext).pop(),
-                  ),
-                ),
-              ),
-            ),
-            TsaiButton(
-              label: 'Transfer',
-              size: TsaiButtonSize.medium,
-              variant: TsaiButtonVariant.secondary,
-              leadingIcon: const TsaiIcon(LucideIcons.send, size: 16),
-              onPressed: () => showTsaiModalDialog<void>(
-                context: context,
-                title: 'Transfer money',
-                message: 'Choose a recipient from your saved beneficiaries.',
-                icon: const TsaiIcon(LucideIcons.send),
-                primaryAction: Builder(
-                  builder: (dialogContext) => TsaiButton(
-                    label: 'Close',
-                    onPressed: () => Navigator.of(dialogContext).pop(),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ],
-    ),
-  );
-}
-
 class _ActivityList extends StatelessWidget {
   const _ActivityList();
 
   @override
   Widget build(BuildContext context) {
     final tokens = TsaiThemeTokens.of(context);
-    return TsaiList(
-      title: 'Recent activity',
-      headerTrailingIcon: HitIcon(
-        icon: const TsaiIcon(LucideIcons.search),
-        semanticLabel: 'Search activity',
-        onPressed: () => showTsaiModalDialog<void>(
-          context: context,
-          title: 'Search activity',
-          message: 'Use the activity catalog to find transfers and payments.',
+    return Padding(
+      padding: const EdgeInsets.only(top: 16),
+      child: TsaiList(
+        title: 'Recent activity',
+        headerTrailingIcon: HitIcon(
           icon: const TsaiIcon(LucideIcons.search),
-          primaryAction: Builder(
-            builder: (dialogContext) => TsaiButton(
-              label: 'Close',
-              onPressed: () => Navigator.of(dialogContext).pop(),
+          semanticLabel: 'Search activity',
+          onPressed: () => showTsaiModalDialog<void>(
+            context: context,
+            title: 'Search activity',
+            message: 'Find transfers, card taps, and incoming payments.',
+            icon: const TsaiIcon(LucideIcons.search),
+            primaryAction: Builder(
+              builder: (dialogContext) => TsaiButton(
+                label: 'Close',
+                onPressed: () => Navigator.of(dialogContext).pop(),
+              ),
             ),
           ),
         ),
-      ),
-      items: [
-        for (final activity in _activities)
-          TsaiListItem(
-            icon: TsaiIcon(activity.icon, size: 20),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                TsaiTextBody(
-                  activity.title,
-                  size: TsaiBodySize.medium,
-                  weight: TsaiTextWeight.medium,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                SizedBox(height: tokens.spacing.space2),
-                TsaiTextCaption(
-                  activity.subtitle,
-                  size: TsaiCaptionSize.medium,
-                  weight: TsaiTextWeight.regular,
-                  color: tokens.colors.contentTertiary,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
+        items: [
+          for (final activity in _activities)
+            TsaiListItem(
+              icon: TsaiIcon(activity.icon, size: 20),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TsaiTextBody(
+                    activity.title,
+                    size: TsaiBodySize.medium,
+                    weight: TsaiTextWeight.medium,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  SizedBox(height: tokens.spacing.space2),
+                  TsaiTextCaption(
+                    activity.subtitle,
+                    size: TsaiCaptionSize.medium,
+                    weight: TsaiTextWeight.regular,
+                    color: tokens.colors.contentTertiary,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ),
+              trailing: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  TsaiTextMonoBody(
+                    activity.amount,
+                    size: TsaiBodySize.medium,
+                    color: activity.incoming
+                        ? tokens.colors.accentSuccess
+                        : tokens.colors.contentPrimary,
+                  ),
+                  SizedBox(height: tokens.spacing.space2),
+                  TsaiTextCaption(
+                    activity.time,
+                    size: TsaiCaptionSize.medium,
+                    weight: TsaiTextWeight.regular,
+                    color: tokens.colors.contentTertiary,
+                  ),
+                ],
+              ),
             ),
-            trailing: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                TsaiTextMonoBody(
-                  activity.amount,
-                  size: TsaiBodySize.medium,
-                  color: activity.incoming
-                      ? tokens.colors.accentSuccess
-                      : tokens.colors.contentPrimary,
-                ),
-                SizedBox(height: tokens.spacing.space2),
-                TsaiTextCaption(
-                  activity.time,
-                  size: TsaiCaptionSize.medium,
-                  weight: TsaiTextWeight.regular,
-                  color: tokens.colors.contentTertiary,
-                ),
-              ],
-            ),
-          ),
-      ],
-      button: TsaiButton(
-        label: 'View all activity',
-        size: TsaiButtonSize.medium,
-        variant: TsaiButtonVariant.outline,
-        isExpanded: true,
-        leadingIcon: const TsaiIcon(LucideIcons.receipt_text, size: 16),
-        onPressed: () => showTsaiModalDialog<void>(
-          context: context,
-          title: 'Activity history',
-          message:
-              'All transfers and payments are shown in your full activity history.',
-          icon: const TsaiIcon(LucideIcons.receipt_text),
-          primaryAction: Builder(
-            builder: (dialogContext) => TsaiButton(
-              label: 'Close',
-              onPressed: () => Navigator.of(dialogContext).pop(),
+        ],
+        button: TsaiButton(
+          label: 'View all activity',
+          size: TsaiButtonSize.medium,
+          variant: TsaiButtonVariant.outline,
+          isExpanded: true,
+          leadingIcon: const TsaiIcon(LucideIcons.receipt_text, size: 16),
+          onPressed: () => showTsaiModalDialog<void>(
+            context: context,
+            title: 'Activity history',
+            message: 'The full ledger stays in this account.',
+            icon: const TsaiIcon(LucideIcons.receipt_text),
+            primaryAction: Builder(
+              builder: (dialogContext) => TsaiButton(
+                label: 'Close',
+                onPressed: () => Navigator.of(dialogContext).pop(),
+              ),
             ),
           ),
         ),
@@ -1250,6 +1426,24 @@ class _Activity {
   final String time;
   final bool incoming;
 }
+
+const _currencyOptions = [
+  TsaiSelectOption(
+    value: 'usd',
+    label: 'US Dollar',
+    icon: TsaiIcon.emoji('🇺🇸', size: 20),
+  ),
+  TsaiSelectOption(
+    value: 'uyu',
+    label: 'Uruguayan peso',
+    icon: TsaiIcon.emoji('🇺🇾', size: 20),
+  ),
+  TsaiSelectOption(
+    value: 'eur',
+    label: 'Euro',
+    icon: TsaiIcon.emoji('🇪🇺', size: 20),
+  ),
+];
 
 const _countryOptions = [
   TsaiSelectOption(
