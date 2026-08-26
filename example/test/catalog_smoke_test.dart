@@ -418,6 +418,12 @@ void main() {
     expect(tester.widget<PageView>(pager).clipBehavior, Clip.none);
     expect(tester.getRect(pager).left, scroll.left);
     expect(tester.getRect(pager).right, scroll.right);
+    expect(tester.getSize(pager).height, 214);
+    expect(
+      tester.getRect(find.byType(TsaiPageIndicator)).top -
+          tester.getRect(pager).bottom,
+      TsaiThemeTokens.dark.spacing.space16,
+    );
 
     await tester.tap(find.byKey(const ValueKey<String>('quick-transfer')));
     await pumpUi();

@@ -310,7 +310,7 @@ class _HomeScreenExampleState extends State<HomeScreenExample> {
                 ),
                 SizedBox(height: tokens.spacing.space24),
                 SizedBox(
-                  height: 214 + tokens.spacing.space20 + tokens.spacing.space48,
+                  height: 214,
                   child: PageView(
                     key: const ValueKey<String>('home-card-pager'),
                     controller: _cardController,
@@ -318,14 +318,7 @@ class _HomeScreenExampleState extends State<HomeScreenExample> {
                     onPageChanged: (index) =>
                         setState(() => _cardIndex = index),
                     children: [
-                      for (final card in _cards)
-                        Padding(
-                          padding: EdgeInsets.only(
-                            top: tokens.spacing.space20,
-                            bottom: tokens.spacing.space48,
-                          ),
-                          child: Center(child: card),
-                        ),
+                      for (final card in _cards) Center(child: card),
                     ],
                   ),
                 ),
