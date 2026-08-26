@@ -1,3 +1,10 @@
+## 0.6.7 - 2026-08-26
+
+### Maintenance
+
+- Let bank-card shadows paint under the page indicator. ([114e9e6](https://github.com/tsaitechnology/tsai-ui-flutter/commit/114e9e6c40a379d2823b34125be769223399418f))
+- Format the home card pager children list. ([cfeb99b](https://github.com/tsaitechnology/tsai-ui-flutter/commit/cfeb99ba6e28a9d1ed517fe32ba40989103d2a30))
+
 ## 0.6.6 - 2026-08-25
 
 ### Maintenance
