@@ -317,9 +317,7 @@ class _HomeScreenExampleState extends State<HomeScreenExample> {
                     clipBehavior: Clip.none,
                     onPageChanged: (index) =>
                         setState(() => _cardIndex = index),
-                    children: [
-                      for (final card in _cards) Center(child: card),
-                    ],
+                    children: [for (final card in _cards) Center(child: card)],
                   ),
                 ),
                 SizedBox(height: tokens.spacing.space16),
