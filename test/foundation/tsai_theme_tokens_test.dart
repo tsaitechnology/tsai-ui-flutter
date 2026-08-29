@@ -127,6 +127,48 @@ void main() {
       );
       expect(TsaiThemeTokens.light.colors.iconBright, const Color(0xFF6366F1));
       expect(TsaiThemeTokens.dark.colors.iconBright, const Color(0xFFA5B4FC));
+      expect(TsaiThemeTokens.light.colors.borderGuide, const Color(0xFFB4B5C0));
+      expect(TsaiThemeTokens.dark.colors.borderGuide, const Color(0xFF4A4B52));
+      expect(TsaiThemeTokens.light.colors.accentHalo, const Color(0x336366F1));
+      expect(TsaiThemeTokens.dark.colors.accentHalo, const Color(0x336366F1));
+      expect(
+        TsaiThemeTokens.light.colors.actionPrimaryMuted,
+        const Color(0xFFD8D9FB),
+      );
+      expect(
+        TsaiThemeTokens.dark.colors.actionPrimaryMuted,
+        const Color(0xFF323365),
+      );
+      expect(
+        TsaiThemeTokens.light.colors.surfaceInverted,
+        const Color(0xFF26262B),
+      );
+      expect(
+        TsaiThemeTokens.dark.colors.surfaceInverted,
+        const Color(0xFFECECEC),
+      );
+      expect(
+        TsaiThemeTokens.light.colors.contentInvertedPrimary,
+        const Color(0xFFF4F4F5),
+      );
+      expect(
+        TsaiThemeTokens.dark.colors.contentInvertedPrimary,
+        const Color(0xFF17171A),
+      );
+      expect(
+        TsaiThemeTokens.light.typography.captionExtraSmallRegular.fontSize,
+        10,
+      );
+      expect(
+        TsaiThemeTokens.light.typography.monoCaptionExtraSmall.fontSize,
+        10,
+      );
+      expect(TsaiThemeTokens.light.typography.badgeLabel.fontSize, 12);
+      expect(
+        TsaiThemeTokens.light.typography.badgeLabel.fontWeight,
+        FontWeight.w500,
+      );
+      expect(TsaiThemeTokens.light.radii.extraSmall, 3);
       expect(
         TsaiThemeTokens.light.colors.iconSecondary,
         const Color(0xFF838099),

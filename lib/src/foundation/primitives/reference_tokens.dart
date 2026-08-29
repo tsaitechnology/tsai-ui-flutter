@@ -42,9 +42,15 @@ abstract final class TsaiReferenceTokens {
     textTertiary: Color(0xFF9A9A9A),
     borderHairline: Color(0xFFE1E2EB),
     borderStrong: Color(0xFFD4D4D4),
+    borderGuide: Color(0xFFB4B5C0),
     accentLight: Color(0xFF818CF8),
     accent: Color(0xFF6366F1),
     accentDeep: Color(0xFF4F46E5),
+    accentMuted: Color(0xFFD8D9FB),
+    accentHalo: Color(0x336366F1),
+    surfaceInverted: Color(0xFF26262B),
+    textInvertedPrimary: Color(0xFFF4F4F5),
+    textInvertedSecondary: Color(0xFFA6A6AD),
     semanticAccentInfo: Color(0xFF3B82F6),
     semanticAccentSuccess: Color(0xFF10B981),
     semanticAccentError: Color(0xFFEF4444),
@@ -88,9 +94,15 @@ abstract final class TsaiReferenceTokens {
     textTertiary: Color(0xFF6C6C6D),
     borderHairline: Color(0xFF24252E),
     borderStrong: Color(0xFF3F3F42),
+    borderGuide: Color(0xFF4A4B52),
     accentLight: Color(0xFF818CF8),
     accent: Color(0xFF6366F1),
     accentDeep: Color(0xFF4F46E5),
+    accentMuted: Color(0xFF323365),
+    accentHalo: Color(0x336366F1),
+    surfaceInverted: Color(0xFFECECEC),
+    textInvertedPrimary: Color(0xFF17171A),
+    textInvertedSecondary: Color(0xFF5D5D66),
     semanticAccentInfo: Color(0xFF60A5FA),
     semanticAccentSuccess: Color(0xFF34D399),
     semanticAccentError: Color(0xFFF87171),
@@ -137,9 +149,15 @@ final class TsaiReferenceColors {
     required this.textTertiary,
     required this.borderHairline,
     required this.borderStrong,
+    required this.borderGuide,
     required this.accentLight,
     required this.accent,
     required this.accentDeep,
+    required this.accentMuted,
+    required this.accentHalo,
+    required this.surfaceInverted,
+    required this.textInvertedPrimary,
+    required this.textInvertedSecondary,
     required this.semanticAccentInfo,
     required this.semanticAccentSuccess,
     required this.semanticAccentError,
@@ -182,9 +200,15 @@ final class TsaiReferenceColors {
   final Color textTertiary;
   final Color borderHairline;
   final Color borderStrong;
+  final Color borderGuide;
   final Color accentLight;
   final Color accent;
   final Color accentDeep;
+  final Color accentMuted;
+  final Color accentHalo;
+  final Color surfaceInverted;
+  final Color textInvertedPrimary;
+  final Color textInvertedSecondary;
   final Color semanticAccentInfo;
   final Color semanticAccentSuccess;
   final Color semanticAccentError;

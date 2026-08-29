@@ -97,6 +97,14 @@ void main() {
         type.captionSmallRegular,
       ),
       (
+        const TsaiTextCaption(
+          'Text',
+          size: TsaiCaptionSize.extraSmall,
+          weight: TsaiTextWeight.regular,
+        ),
+        type.captionExtraSmallRegular,
+      ),
+      (
         const TsaiTextMonoHeading('Text', size: TsaiMonoHeadingSize.extraLarge),
         type.monoHeadingExtraLarge,
       ),
@@ -119,6 +127,14 @@ void main() {
       (
         const TsaiTextMonoCaption('Text', weight: TsaiTextWeight.regular),
         type.monoCaptionRegular,
+      ),
+      (
+        const TsaiTextMonoCaption(
+          'Text',
+          weight: TsaiTextWeight.regular,
+          size: TsaiMonoCaptionSize.extraSmall,
+        ),
+        type.monoCaptionExtraSmall,
       ),
     ];
 

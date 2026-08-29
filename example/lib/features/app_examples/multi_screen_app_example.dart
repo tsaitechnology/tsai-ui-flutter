@@ -170,6 +170,7 @@ class _HomeScreenExampleState extends State<HomeScreenExample> {
   String? _currency = 'usd';
   var _cardIndex = 0;
   var _balanceHidden = false;
+  var _trendPeriod = TsaiChartPeriod.oneMonth;
 
   static const _cards = [
     TsaiBankCard(number: '•••• 4821', network: 'VISA'),
@@ -329,6 +330,17 @@ class _HomeScreenExampleState extends State<HomeScreenExample> {
                         child: TsaiPageIndicator(
                           count: _cards.length,
                           index: _cardIndex,
+                        ),
+                      ),
+                      SizedBox(height: tokens.spacing.space24),
+                      Center(
+                        child: TsaiLineChart(
+                          key: const ValueKey<String>('home-balance-chart'),
+                          points: _homeBalancePoints,
+                          period: _trendPeriod,
+                          semanticLabel: 'Balance trend',
+                          onPeriodChanged: (value) =>
+                              setState(() => _trendPeriod = value),
                         ),
                       ),
                       SizedBox(height: tokens.spacing.space24),
@@ -588,6 +600,7 @@ class _FormScreenExampleState extends State<FormScreenExample> {
   var _contactless = true;
   var _spendLimit = 2500.0;
   String? _faq = 'limits';
+  var _spendPeriod = TsaiChartPeriod.oneWeek;
 
   void _saveProfile() => showTsaiModalDialog<void>(
     context: context,
@@ -678,6 +691,19 @@ class _FormScreenExampleState extends State<FormScreenExample> {
                     max: 5000,
                     semanticLabel: 'Daily spend limit',
                     onChanged: (value) => setState(() => _spendLimit = value),
+                  ),
+                  SizedBox(height: tokens.spacing.space24),
+                  TsaiSectionHeader(title: 'Spend this week'),
+                  SizedBox(height: tokens.spacing.space12),
+                  Center(
+                    child: TsaiBarChart(
+                      key: const ValueKey<String>('account-spend-chart'),
+                      points: _accountSpendPoints,
+                      period: _spendPeriod,
+                      semanticLabel: 'Weekly spend',
+                      onPeriodChanged: (value) =>
+                          setState(() => _spendPeriod = value),
+                    ),
                   ),
                   SizedBox(height: tokens.spacing.space20),
                   TsaiSwitch(
@@ -1663,6 +1689,84 @@ const _activities = [
     subtitle: 'Dining · Jul 24',
     amount: r'-$7.80',
     time: '16:15',
+  ),
+];
+
+const _homeBalancePoints = <TsaiChartPoint>[
+  TsaiChartPoint(
+    value: 22140,
+    tooltipValue: r'$22,140.00',
+    tooltipDate: 'Jun 30, 2026',
+  ),
+  TsaiChartPoint(
+    value: 22880,
+    tooltipValue: r'$22,880.00',
+    tooltipDate: 'Jul 7, 2026',
+  ),
+  TsaiChartPoint(
+    value: 22410,
+    tooltipValue: r'$22,410.00',
+    tooltipDate: 'Jul 14, 2026',
+  ),
+  TsaiChartPoint(
+    value: 23620,
+    tooltipValue: r'$23,620.00',
+    tooltipDate: 'Jul 21, 2026',
+  ),
+  TsaiChartPoint(
+    value: 24110,
+    tooltipValue: r'$24,110.00',
+    tooltipDate: 'Jul 28, 2026',
+  ),
+  TsaiChartPoint(
+    value: 24562.8,
+    tooltipValue: r'$24,562.80',
+    tooltipDate: 'Aug 4, 2026',
+  ),
+];
+
+const _accountSpendPoints = <TsaiChartPoint>[
+  TsaiChartPoint(
+    value: 59,
+    tooltipValue: r'$59',
+    tooltipDate: 'Mon',
+    axisLabel: 'M',
+  ),
+  TsaiChartPoint(
+    value: 98,
+    tooltipValue: r'$98',
+    tooltipDate: 'Tue',
+    axisLabel: 'T',
+  ),
+  TsaiChartPoint(
+    value: 42,
+    tooltipValue: r'$42',
+    tooltipDate: 'Wed',
+    axisLabel: 'W',
+  ),
+  TsaiChartPoint(
+    value: 140,
+    tooltipValue: r'$140',
+    tooltipDate: 'Thu',
+    axisLabel: 'T',
+  ),
+  TsaiChartPoint(
+    value: 76,
+    tooltipValue: r'$76',
+    tooltipDate: 'Fri',
+    axisLabel: 'F',
+  ),
+  TsaiChartPoint(
+    value: 28,
+    tooltipValue: r'$28',
+    tooltipDate: 'Sat',
+    axisLabel: 'S',
+  ),
+  TsaiChartPoint(
+    value: 102,
+    tooltipValue: r'$102',
+    tooltipDate: 'Sun',
+    axisLabel: 'S',
   ),
 ];
 

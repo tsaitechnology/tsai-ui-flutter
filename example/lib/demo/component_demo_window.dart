@@ -277,6 +277,21 @@ enum ComponentDemoSection {
     route: '/accordion',
     category: ComponentDemoCategory.layout,
   ),
+  miniTabs(
+    label: 'TsaiMiniTabs',
+    route: '/charts/mini-tabs',
+    category: ComponentDemoCategory.layout,
+  ),
+  lineChart(
+    label: 'TsaiLineChart',
+    route: '/charts/line-chart',
+    category: ComponentDemoCategory.layout,
+  ),
+  barChart(
+    label: 'TsaiBarChart',
+    route: '/charts/bar-chart',
+    category: ComponentDemoCategory.layout,
+  ),
   homeTopBar(
     label: 'Home Top Bar',
     route: '/top-bars/home',

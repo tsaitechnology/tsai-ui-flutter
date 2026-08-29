@@ -10,6 +10,9 @@ import 'features/avatars/avatar_demo_screen.dart';
 import 'features/badges/badge_demo_screen.dart';
 import 'features/bank_card/bank_card_demo_screen.dart';
 import 'features/buttons/button_demo_screen.dart';
+import 'features/charts/bar_chart_demo_screen.dart';
+import 'features/charts/line_chart_demo_screen.dart';
+import 'features/charts/mini_tabs_demo_screen.dart';
 import 'features/effects/glow_demo_screen.dart';
 import 'features/feedback/feedback_demo_screen.dart';
 import 'features/bottom_nav_bar/bottom_nav_bar_demo_screen.dart';
@@ -235,6 +238,18 @@ class _CatalogAppState extends State<CatalogApp> {
         onThemeModeChanged: _setThemeMode,
       ),
       '/accordion': (context) => AccordionDemoScreen(
+        themeMode: _themeMode,
+        onThemeModeChanged: _setThemeMode,
+      ),
+      '/charts/mini-tabs': (context) => MiniTabsDemoScreen(
+        themeMode: _themeMode,
+        onThemeModeChanged: _setThemeMode,
+      ),
+      '/charts/line-chart': (context) => LineChartDemoScreen(
+        themeMode: _themeMode,
+        onThemeModeChanged: _setThemeMode,
+      ),
+      '/charts/bar-chart': (context) => BarChartDemoScreen(
         themeMode: _themeMode,
         onThemeModeChanged: _setThemeMode,
       ),

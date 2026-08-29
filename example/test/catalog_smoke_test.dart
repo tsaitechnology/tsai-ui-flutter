@@ -303,6 +303,9 @@ void main() {
     ComponentDemoSection.amountDisplay,
     ComponentDemoSection.divider,
     ComponentDemoSection.accordion,
+    ComponentDemoSection.miniTabs,
+    ComponentDemoSection.lineChart,
+    ComponentDemoSection.barChart,
   ]) {
     testWidgets('opens ${section.label} in its playground', (tester) async {
       await tester.pumpWidget(CatalogApp(initialRoute: section.route));
@@ -396,6 +399,7 @@ void main() {
     expect(find.byType(TsaiActionTile), findsWidgets);
     expect(find.byType(TsaiBankCard), findsWidgets);
     expect(find.byType(TsaiPageIndicator), findsWidgets);
+    expect(find.byType(TsaiLineChart), findsOneWidget);
 
     final tiles = find.byType(TsaiActionTile);
     expect(tiles, findsNWidgets(4));
@@ -448,6 +452,11 @@ void main() {
     );
     expect(balance.top, lessThan(homeBar.bottom));
     expect(balance.bottom, greaterThan(homeBar.top));
+    await tester.drag(
+      find.byKey(const ValueKey<String>('home-screen-scroll')),
+      const Offset(0, -420),
+    );
+    await tester.pump();
     await tester.tap(find.byKey(const ValueKey<String>('home-country-select')));
     await pumpUi();
     expect(
@@ -464,6 +473,7 @@ void main() {
     expect(find.byType(PageWithTopBar), findsOneWidget);
     expect(find.byType(TsaiAccordion), findsWidgets);
     expect(find.byType(TsaiSlider), findsWidgets);
+    expect(find.byType(TsaiBarChart), findsOneWidget);
     expect(
       find.byKey(const ValueKey<String>('first-name-input')),
       findsOneWidget,

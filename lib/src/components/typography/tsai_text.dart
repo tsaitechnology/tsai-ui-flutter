@@ -51,6 +51,9 @@ enum TsaiCaptionSize {
 
   /// 11-pixel caption.
   small,
+
+  /// 10-pixel caption used by chart axes.
+  extraSmall,
 }
 
 /// Sizes available to [TsaiTextMonoHeading].
@@ -181,6 +184,7 @@ final class TsaiTextCaption extends TsaiText {
         (TsaiCaptionSize.small, TsaiTextWeight.medium) => tokens.captionSmall,
         (TsaiCaptionSize.small, TsaiTextWeight.regular) =>
           tokens.captionSmallRegular,
+        (TsaiCaptionSize.extraSmall, _) => tokens.captionExtraSmallRegular,
       };
 }
 
@@ -236,12 +240,22 @@ final class TsaiTextMonoBody extends TsaiText {
   };
 }
 
+/// Sizes available to [TsaiTextMonoCaption].
+enum TsaiMonoCaptionSize {
+  /// 13-pixel monospaced caption.
+  medium,
+
+  /// 10-pixel monospaced caption used by chart axes.
+  extraSmall,
+}
+
 /// Two-weight JetBrains Mono caption from the Tsai typography system.
 final class TsaiTextMonoCaption extends TsaiText {
   /// Creates a monospaced caption.
   const TsaiTextMonoCaption(
     super.data, {
     required this.weight,
+    this.size = TsaiMonoCaptionSize.medium,
     super.key,
     super.color,
     super.textAlign,
@@ -255,10 +269,18 @@ final class TsaiTextMonoCaption extends TsaiText {
   /// Typography weight.
   final TsaiTextWeight weight;
 
+  /// Typography size.
+  final TsaiMonoCaptionSize size;
+
   @override
-  TextStyle _resolveStyle(TsaiTypographyTokens tokens) => switch (weight) {
-    TsaiTextWeight.medium => tokens.monoCaption,
-    TsaiTextWeight.regular => tokens.monoCaptionRegular,
+  TextStyle _resolveStyle(TsaiTypographyTokens tokens) => switch ((
+    size,
+    weight,
+  )) {
+    (TsaiMonoCaptionSize.extraSmall, _) => tokens.monoCaptionExtraSmall,
+    (TsaiMonoCaptionSize.medium, TsaiTextWeight.medium) => tokens.monoCaption,
+    (TsaiMonoCaptionSize.medium, TsaiTextWeight.regular) =>
+      tokens.monoCaptionRegular,
   };
 }
 

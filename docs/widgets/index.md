@@ -69,3 +69,6 @@ its live Flutter web example.
 - [TsaiPageIndicator](tsai-page-indicator.md)
 - [TsaiDivider](tsai-divider.md)
 - [TsaiAccordion](tsai-accordion.md)
+- [TsaiMiniTabs](tsai-mini-tabs.md)
+- [TsaiLineChart](tsai-line-chart.md)
+- [TsaiBarChart](tsai-bar-chart.md)

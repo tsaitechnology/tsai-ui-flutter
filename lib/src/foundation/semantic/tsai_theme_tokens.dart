@@ -168,9 +168,14 @@ final class TsaiThemeTokens extends ThemeExtension<TsaiThemeTokens> {
       contentTertiary: colors.textTertiary,
       contentOnActionPrimary: colors.textOnAccentPrimary,
       contentOnActionSecondary: colors.textOnAccentSecondary,
+      surfaceInverted: colors.surfaceInverted,
+      contentInvertedPrimary: colors.textInvertedPrimary,
+      contentInvertedSecondary: colors.textInvertedSecondary,
       actionPrimary: colors.accent,
       actionPrimaryPressed: colors.accentDeep,
       actionPrimarySoft: colors.accentLight,
+      actionPrimaryMuted: colors.accentMuted,
+      accentHalo: colors.accentHalo,
       actionDanger: colors.semanticSolidError,
       actionDangerPressed: colors.semanticSolidErrorDeep,
       contentDanger: colors.semanticTextError,
@@ -188,6 +193,7 @@ final class TsaiThemeTokens extends ThemeExtension<TsaiThemeTokens> {
       statusBorderWarning: colors.semanticBorderWarning,
       borderSubtle: colors.borderHairline,
       borderStrong: colors.borderStrong,
+      borderGuide: colors.borderGuide,
       iconPrimary: colors.iconPrimary,
       iconSecondary: colors.iconSecondary,
       iconTertiary: colors.iconTertiary,
@@ -227,13 +233,19 @@ final class TsaiColorTokens {
     required this.contentTertiary,
     required this.contentOnActionPrimary,
     required this.contentOnActionSecondary,
+    this.surfaceInverted = const Color(0xFFECECEC),
+    this.contentInvertedPrimary = const Color(0xFF17171A),
+    this.contentInvertedSecondary = const Color(0xFF5D5D66),
     required this.actionPrimary,
     required this.actionPrimaryPressed,
     required this.actionPrimarySoft,
+    this.actionPrimaryMuted = const Color(0xFF323365),
+    this.accentHalo = const Color(0x336366F1),
     required this.accentSuccess,
     required this.accentError,
     required this.borderSubtle,
     required this.borderStrong,
+    this.borderGuide = const Color(0xFF4A4B52),
     required this.iconPrimary,
     required this.iconSecondary,
     required this.iconTertiary,
@@ -306,6 +318,15 @@ final class TsaiColorTokens {
   /// Secondary content placed over a primary action.
   final Color contentOnActionSecondary;
 
+  /// Inverted surface used by chart tooltips.
+  final Color surfaceInverted;
+
+  /// Primary content placed on an inverted surface.
+  final Color contentInvertedPrimary;
+
+  /// Secondary content placed on an inverted surface.
+  final Color contentInvertedSecondary;
+
   /// Primary interactive action.
   final Color actionPrimary;
 
@@ -314,6 +335,12 @@ final class TsaiColorTokens {
 
   /// Lighter accent used for focus and emphasis.
   final Color actionPrimarySoft;
+
+  /// Muted accent used for dimmed chart bars.
+  final Color actionPrimaryMuted;
+
+  /// Translucent accent halo used by chart endpoint dots.
+  final Color accentHalo;
 
   /// Destructive primary action.
   final Color actionDanger;
@@ -365,6 +392,9 @@ final class TsaiColorTokens {
 
   /// Strong border.
   final Color borderStrong;
+
+  /// Guide lines used by chart crosshairs.
+  final Color borderGuide;
 
   /// Primary icon.
   final Color iconPrimary;
@@ -425,6 +455,17 @@ final class TsaiColorTokens {
       other.contentOnActionSecondary,
       t,
     )!,
+    surfaceInverted: Color.lerp(surfaceInverted, other.surfaceInverted, t)!,
+    contentInvertedPrimary: Color.lerp(
+      contentInvertedPrimary,
+      other.contentInvertedPrimary,
+      t,
+    )!,
+    contentInvertedSecondary: Color.lerp(
+      contentInvertedSecondary,
+      other.contentInvertedSecondary,
+      t,
+    )!,
     actionPrimary: Color.lerp(actionPrimary, other.actionPrimary, t)!,
     actionPrimaryPressed: Color.lerp(
       actionPrimaryPressed,
@@ -436,6 +477,12 @@ final class TsaiColorTokens {
       other.actionPrimarySoft,
       t,
     )!,
+    actionPrimaryMuted: Color.lerp(
+      actionPrimaryMuted,
+      other.actionPrimaryMuted,
+      t,
+    )!,
+    accentHalo: Color.lerp(accentHalo, other.accentHalo, t)!,
     actionDanger: Color.lerp(actionDanger, other.actionDanger, t)!,
     actionDangerPressed: Color.lerp(
       actionDangerPressed,
@@ -485,6 +532,7 @@ final class TsaiColorTokens {
     )!,
     borderSubtle: Color.lerp(borderSubtle, other.borderSubtle, t)!,
     borderStrong: Color.lerp(borderStrong, other.borderStrong, t)!,
+    borderGuide: Color.lerp(borderGuide, other.borderGuide, t)!,
     iconPrimary: Color.lerp(iconPrimary, other.iconPrimary, t)!,
     iconSecondary: Color.lerp(iconSecondary, other.iconSecondary, t)!,
     iconTertiary: Color.lerp(iconTertiary, other.iconTertiary, t)!,
@@ -534,12 +582,15 @@ final class TsaiTypographyTokens {
     required this.captionMediumRegular,
     required this.captionSmall,
     required this.captionSmallRegular,
+    required this.captionExtraSmallRegular,
+    required this.badgeLabel,
     required this.monoHeadingExtraLarge,
     required this.monoHeadingLarge,
     required this.monoBodyLarge,
     required this.monoBodyMedium,
     required this.monoCaption,
     required this.monoCaptionRegular,
+    required this.monoCaptionExtraSmall,
   });
 
   /// Canonical typography values sourced from Penpot.
@@ -656,6 +707,22 @@ final class TsaiTypographyTokens {
       letterSpacing: 0,
       height: 1.2727,
     ),
+    captionExtraSmallRegular: TextStyle(
+      fontFamily: 'Inter',
+      package: 'tsai_ui',
+      fontSize: 10,
+      fontWeight: FontWeight.w400,
+      letterSpacing: 0,
+      height: 1.2,
+    ),
+    badgeLabel: TextStyle(
+      fontFamily: 'Inter',
+      package: 'tsai_ui',
+      fontSize: 12,
+      fontWeight: FontWeight.w500,
+      letterSpacing: 0,
+      height: 1.3333,
+    ),
     monoHeadingExtraLarge: TextStyle(
       fontFamily: 'JetBrains Mono',
       package: 'tsai_ui',
@@ -704,6 +771,14 @@ final class TsaiTypographyTokens {
       letterSpacing: 0,
       height: 1.2308,
     ),
+    monoCaptionExtraSmall: TextStyle(
+      fontFamily: 'JetBrains Mono',
+      package: 'tsai_ui',
+      fontSize: 10,
+      fontWeight: FontWeight.w400,
+      letterSpacing: 0,
+      height: 1.2,
+    ),
   );
 
   /// Extra-large UI heading.
@@ -748,6 +823,12 @@ final class TsaiTypographyTokens {
   /// Regular small caption.
   final TextStyle captionSmallRegular;
 
+  /// Extra-small caption used by chart axis labels and tooltip dates.
+  final TextStyle captionExtraSmallRegular;
+
+  /// Compact label used by Mini Tabs and badges.
+  final TextStyle badgeLabel;
+
   /// Extra-large monospaced heading.
   final TextStyle monoHeadingExtraLarge;
 
@@ -765,6 +846,9 @@ final class TsaiTypographyTokens {
 
   /// Regular monospaced caption.
   final TextStyle monoCaptionRegular;
+
+  /// Extra-small monospaced caption used by chart y-axis values.
+  final TextStyle monoCaptionExtraSmall;
 
   /// Interpolates every typography role.
   TsaiTypographyTokens lerp(TsaiTypographyTokens other, double t) {
@@ -790,6 +874,11 @@ final class TsaiTypographyTokens {
         captionSmallRegular,
         other.captionSmallRegular,
       ),
+      captionExtraSmallRegular: style(
+        captionExtraSmallRegular,
+        other.captionExtraSmallRegular,
+      ),
+      badgeLabel: style(badgeLabel, other.badgeLabel),
       monoHeadingExtraLarge: style(
         monoHeadingExtraLarge,
         other.monoHeadingExtraLarge,
@@ -799,6 +888,10 @@ final class TsaiTypographyTokens {
       monoBodyMedium: style(monoBodyMedium, other.monoBodyMedium),
       monoCaption: style(monoCaption, other.monoCaption),
       monoCaptionRegular: style(monoCaptionRegular, other.monoCaptionRegular),
+      monoCaptionExtraSmall: style(
+        monoCaptionExtraSmall,
+        other.monoCaptionExtraSmall,
+      ),
     );
   }
 }
@@ -897,6 +990,7 @@ final class TsaiSpacingTokens {
 final class TsaiRadiusTokens {
   /// Creates a complete corner-radius scale.
   const TsaiRadiusTokens({
+    this.extraSmall = 3,
     required this.small,
     required this.innerMedium,
     required this.medium,
@@ -909,6 +1003,7 @@ final class TsaiRadiusTokens {
 
   /// Canonical radius values sourced from Penpot.
   static const standard = TsaiRadiusTokens(
+    extraSmall: 3,
     small: 6,
     innerMedium: 10,
     medium: 12,
@@ -918,6 +1013,9 @@ final class TsaiRadiusTokens {
     extraExtraLarge: 32,
     pill: 999,
   );
+
+  /// Three-pixel radius used by dense chart bars.
+  final double extraSmall;
 
   /// Six-pixel radius.
   final double small;
@@ -945,6 +1043,7 @@ final class TsaiRadiusTokens {
 
   /// Interpolates every radius value.
   TsaiRadiusTokens lerp(TsaiRadiusTokens other, double t) => TsaiRadiusTokens(
+    extraSmall: lerpDouble(extraSmall, other.extraSmall, t)!,
     small: lerpDouble(small, other.small, t)!,
     innerMedium: lerpDouble(innerMedium, other.innerMedium, t)!,
     medium: lerpDouble(medium, other.medium, t)!,

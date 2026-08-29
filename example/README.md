@@ -114,6 +114,9 @@ Render one full entity page by opening its route:
 /#/typography/mono-heading TsaiTextMonoHeading
 /#/typography/mono-body TsaiTextMonoBody
 /#/typography/mono-caption TsaiTextMonoCaption
+/#/charts/mini-tabs TsaiMiniTabs
+/#/charts/line-chart TsaiLineChart
+/#/charts/bar-chart TsaiBarChart
 ```
 
 The widget-specific routes are stable deep links used by the public
