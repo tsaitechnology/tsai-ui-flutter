@@ -457,6 +457,25 @@ void main() {
       const Offset(0, -420),
     );
     await tester.pump();
+    expect(
+      tester.widget<TsaiLineChart>(find.byType(TsaiLineChart)).points.length,
+      24,
+    );
+    await tester.tap(
+      find.descendant(
+        of: find.byKey(const ValueKey<String>('home-balance-chart')),
+        matching: find.text('1Y'),
+      ),
+    );
+    await tester.pump();
+    expect(
+      tester.widget<TsaiLineChart>(find.byType(TsaiLineChart)).period,
+      TsaiChartPeriod.oneYear,
+    );
+    expect(
+      tester.widget<TsaiLineChart>(find.byType(TsaiLineChart)).points.length,
+      12,
+    );
     await tester.tap(find.byKey(const ValueKey<String>('home-country-select')));
     await pumpUi();
     expect(
