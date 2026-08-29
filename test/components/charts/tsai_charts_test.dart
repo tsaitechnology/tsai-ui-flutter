@@ -81,15 +81,21 @@ void main() {
     expect(selected, 1);
   });
 
-  testWidgets('Line Chart is 318 by 280 including overflow and shows empty copy', (tester) async {
-    await pumpChart(
-      tester,
-      child: const TsaiLineChart(points: points, status: TsaiChartStatus.empty),
-    );
+  testWidgets(
+    'Line Chart is 318 by 280 including overflow and shows empty copy',
+    (tester) async {
+      await pumpChart(
+        tester,
+        child: const TsaiLineChart(
+          points: points,
+          status: TsaiChartStatus.empty,
+        ),
+      );
 
-    expect(tester.getSize(find.byType(TsaiLineChart)), const Size(318, 280));
-    expect(find.text('No data for this period'), findsOneWidget);
-  });
+      expect(tester.getSize(find.byType(TsaiLineChart)), const Size(318, 280));
+      expect(find.text('No data for this period'), findsOneWidget);
+    },
+  );
 
   testWidgets('Line Chart error retry fires', (tester) async {
     var retried = false;
