@@ -33,7 +33,11 @@ class _BarChartDemo extends StatefulWidget {
 
 class _BarChartDemoState extends State<_BarChartDemo> {
   var _period = TsaiChartPeriod.oneWeek;
-  var _status = TsaiChartStatus.data;
+  var _source = TsaiChartStatus.data;
+  var _showTabs = true;
+
+  List<TsaiChartPoint> get _points =>
+      _source == TsaiChartStatus.data ? barChartPointsFor(_period) : const [];
 
   @override
   Widget build(BuildContext context) => ListView(
@@ -42,18 +46,37 @@ class _BarChartDemoState extends State<_BarChartDemo> {
     children: [
       ComponentPlayground(
         preview: TsaiBarChart(
-          points: barChartPointsFor(_period),
+          points: _points,
           period: _period,
-          status: _status,
+          status: _source,
+          showTabs: _showTabs,
           onPeriodChanged: (value) => setState(() => _period = value),
-          onRetry: () => setState(() => _status = TsaiChartStatus.data),
+          onRetry: () => setState(() => _source = TsaiChartStatus.data),
         ),
         controls: [
           PlaygroundSelectControl<TsaiChartStatus>(
-            label: 'status',
-            value: _status,
-            values: TsaiChartStatus.values,
-            onChanged: (value) => setState(() => _status = value),
+            label: 'source',
+            value: _source,
+            values: const [
+              TsaiChartStatus.loading,
+              TsaiChartStatus.empty,
+              TsaiChartStatus.data,
+              TsaiChartStatus.error,
+            ],
+            labels: const ['Not loaded', 'Loaded empty', 'Loaded', 'Error'],
+            onChanged: (value) => setState(() => _source = value),
+          ),
+          PlaygroundSelectControl<TsaiChartPeriod>(
+            label: 'period',
+            value: _period,
+            values: TsaiChartPeriod.values,
+            labels: [for (final period in TsaiChartPeriod.values) period.label],
+            onChanged: (value) => setState(() => _period = value),
+          ),
+          PlaygroundToggleControl(
+            label: 'tabs',
+            value: _showTabs,
+            onChanged: (value) => setState(() => _showTabs = value),
           ),
         ],
       ),

@@ -7,6 +7,18 @@ import '../../link/tsai_link.dart';
 import '../../typography/tsai_text.dart';
 import '../tsai_chart_types.dart';
 
+/// Silhouette series used when a loading chart has no values yet.
+const tsaiChartLoadingSilhouette = [
+  12.4,
+  13.1,
+  12.6,
+  14.2,
+  15.8,
+  15.1,
+  16.4,
+  17.2,
+];
+
 /// Empty, error, tooltip, and shimmer pieces shared by Tsai charts.
 abstract final class TsaiChartChrome {
   /// Area fill under a default trend line.
@@ -93,6 +105,7 @@ abstract final class TsaiChartChrome {
     required double maxWidth,
   }) {
     const tooltipWidth = 96.0;
+    // Penpot: centered on the point/bar; flush to a side when that would overflow.
     final left = (anchorX - tooltipWidth / 2).clamp(
       0.0,
       maxWidth - tooltipWidth,

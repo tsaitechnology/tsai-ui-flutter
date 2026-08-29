@@ -106,6 +106,7 @@ nav:
           - TsaiPageIndicator: widgets/tsai-page-indicator.md
           - TsaiDivider: widgets/tsai-divider.md
           - TsaiAccordion: widgets/tsai-accordion.md
+      - Data visualization:
           - TsaiMiniTabs: widgets/tsai-mini-tabs.md
           - TsaiLineChart: widgets/tsai-line-chart.md
           - TsaiBarChart: widgets/tsai-bar-chart.md

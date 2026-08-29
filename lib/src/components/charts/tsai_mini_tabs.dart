@@ -92,40 +92,48 @@ class TsaiMiniTabs extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tokens = TsaiThemeTokens.of(context);
-    return SizedBox(
-      key: const ValueKey<String>('tsai-mini-tabs'),
-      width: width,
-      height: TsaiChartMetrics.tabsHeight,
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          color: tokens.colors.surface,
-          borderRadius: BorderRadius.circular(tokens.radii.innerMedium),
-          border: Border.all(
-            color: tokens.colors.borderSubtle,
-            width: tokens.borders.hairline,
-          ),
-        ),
-        child: Padding(
-          padding: EdgeInsets.all(tokens.spacing.space2),
-          child: Row(
-            children: [
-              for (var index = 0; index < labels.length; index++)
-                Expanded(
-                  child: SizedBox(
-                    height: 24,
-                    child: TsaiMiniTab(
-                      label: labels[index],
-                      selected: index == selectedIndex,
-                      onPressed: onChanged == null
-                          ? null
-                          : () => onChanged!(index),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final resolvedWidth =
+            !constraints.maxWidth.isFinite || constraints.maxWidth >= width
+            ? width
+            : constraints.maxWidth;
+        return SizedBox(
+          key: const ValueKey<String>('tsai-mini-tabs'),
+          width: resolvedWidth,
+          height: TsaiChartMetrics.tabsHeight,
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              color: tokens.colors.surface,
+              borderRadius: BorderRadius.circular(tokens.radii.innerMedium),
+              border: Border.all(
+                color: tokens.colors.borderSubtle,
+                width: tokens.borders.hairline,
+              ),
+            ),
+            child: Padding(
+              padding: EdgeInsets.all(tokens.spacing.space2),
+              child: Row(
+                children: [
+                  for (var index = 0; index < labels.length; index++)
+                    Expanded(
+                      child: SizedBox(
+                        height: 24,
+                        child: TsaiMiniTab(
+                          label: labels[index],
+                          selected: index == selectedIndex,
+                          onPressed: onChanged == null
+                              ? null
+                              : () => onChanged!(index),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-            ],
+                ],
+              ),
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

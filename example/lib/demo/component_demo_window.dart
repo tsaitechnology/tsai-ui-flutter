@@ -12,6 +12,7 @@ enum ComponentDemoCategory {
   forms('Forms'),
   uiBlocks('UI Blocks'),
   layout('Layout'),
+  dataVisualization('Data visualization'),
   appExamples('App examples');
 
   const ComponentDemoCategory(this.label);
@@ -277,21 +278,6 @@ enum ComponentDemoSection {
     route: '/accordion',
     category: ComponentDemoCategory.layout,
   ),
-  miniTabs(
-    label: 'TsaiMiniTabs',
-    route: '/charts/mini-tabs',
-    category: ComponentDemoCategory.layout,
-  ),
-  lineChart(
-    label: 'TsaiLineChart',
-    route: '/charts/line-chart',
-    category: ComponentDemoCategory.layout,
-  ),
-  barChart(
-    label: 'TsaiBarChart',
-    route: '/charts/bar-chart',
-    category: ComponentDemoCategory.layout,
-  ),
   homeTopBar(
     label: 'Home Top Bar',
     route: '/top-bars/home',
@@ -311,6 +297,21 @@ enum ComponentDemoSection {
     label: 'Page With Search Top Bar',
     route: '/top-bars/page-search-layout',
     category: ComponentDemoCategory.layout,
+  ),
+  miniTabs(
+    label: 'TsaiMiniTabs',
+    route: '/charts/mini-tabs',
+    category: ComponentDemoCategory.dataVisualization,
+  ),
+  lineChart(
+    label: 'TsaiLineChart',
+    route: '/charts/line-chart',
+    category: ComponentDemoCategory.dataVisualization,
+  ),
+  barChart(
+    label: 'TsaiBarChart',
+    route: '/charts/bar-chart',
+    category: ComponentDemoCategory.dataVisualization,
   ),
   multiScreenApp(
     label: 'Multi-screen app example',

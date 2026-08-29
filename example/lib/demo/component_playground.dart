@@ -277,6 +277,7 @@ class _ComponentPlaygroundState extends State<ComponentPlayground> {
       borderRadius: BorderRadius.circular(tokens.radii.medium),
     ),
     child: ClipRRect(
+      clipBehavior: Clip.none,
       borderRadius: BorderRadius.circular(tokens.radii.medium),
       child: CustomPaint(
         key: const ValueKey<String>('component-playground-checkerboard'),

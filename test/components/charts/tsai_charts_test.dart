@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tsai_ui/tsai_ui.dart';
@@ -80,13 +81,13 @@ void main() {
     expect(selected, 1);
   });
 
-  testWidgets('Line Chart is 294 by 256 and shows empty copy', (tester) async {
+  testWidgets('Line Chart is 318 by 280 including overflow and shows empty copy', (tester) async {
     await pumpChart(
       tester,
       child: const TsaiLineChart(points: points, status: TsaiChartStatus.empty),
     );
 
-    expect(tester.getSize(find.byType(TsaiLineChart)), const Size(294, 256));
+    expect(tester.getSize(find.byType(TsaiLineChart)), const Size(318, 280));
     expect(find.text('No data for this period'), findsOneWidget);
   });
 
@@ -107,7 +108,7 @@ void main() {
     expect(retried, isTrue);
   });
 
-  testWidgets('Bar Chart is 294 by 256 and keeps tabs while loading', (
+  testWidgets('Bar Chart is 318 by 280 and keeps tabs while loading', (
     tester,
   ) async {
     TsaiChartPeriod? period;
@@ -121,20 +122,83 @@ void main() {
       ),
     );
 
-    expect(tester.getSize(find.byType(TsaiBarChart)), const Size(294, 256));
+    expect(tester.getSize(find.byType(TsaiBarChart)), const Size(318, 280));
     await tester.tap(find.text('1Y'));
     await tester.pump();
     expect(period, TsaiChartPeriod.oneYear);
   });
 
-  testWidgets('Line Chart scrub shows the tooltip value', (tester) async {
-    await pumpChart(tester, child: const TsaiLineChart(points: points));
+  testWidgets('Line Chart hold scrubs and keeps the tooltip after release', (
+    tester,
+  ) async {
+    int? committed;
+    await pumpChart(
+      tester,
+      child: TsaiLineChart(
+        points: points,
+        onScrubIndexChanged: (index) => committed = index,
+      ),
+    );
     final chart = tester.getRect(find.byType(TsaiLineChart));
     final gesture = await tester.startGesture(
-      Offset(chart.left + 8, chart.top + 120),
+      Offset(chart.left + 20, chart.top + 120),
     );
     await tester.pump(const Duration(milliseconds: 600));
     expect(find.text(r'$10'), findsOneWidget);
     await gesture.up();
+    await tester.pump();
+    expect(find.text(r'$10'), findsOneWidget);
+    expect(committed, 0);
+  });
+
+  testWidgets('Line Chart mouse hover scrubs and pins the tooltip', (
+    tester,
+  ) async {
+    await pumpChart(tester, child: const TsaiLineChart(points: points));
+    final chart = tester.getRect(find.byType(TsaiLineChart));
+    final mouse = await tester.createGesture(kind: PointerDeviceKind.mouse);
+    await mouse.addPointer();
+    addTearDown(mouse.removePointer);
+    await mouse.moveTo(chart.center);
+    await tester.pump();
+    expect(find.text(r'$28'), findsOneWidget);
+    await mouse.moveTo(Offset(chart.right - 16, chart.center.dy));
+    await tester.pump();
+    expect(find.text(r'$22'), findsOneWidget);
+  });
+
+  testWidgets('Bar Chart hold highlights a bar and stays after release', (
+    tester,
+  ) async {
+    await pumpChart(
+      tester,
+      child: const TsaiBarChart(
+        points: points,
+        period: TsaiChartPeriod.oneWeek,
+      ),
+    );
+    final chart = tester.getRect(find.byType(TsaiBarChart));
+    final gesture = await tester.startGesture(
+      Offset(chart.left + 28, chart.top + 120),
+    );
+    await tester.pump(const Duration(milliseconds: 600));
+    expect(find.text(r'$10'), findsOneWidget);
+    await gesture.up();
+    await tester.pump();
+    expect(find.text(r'$10'), findsOneWidget);
+  });
+
+  testWidgets('Line Chart shrinks to a narrow parent instead of clipping', (
+    tester,
+  ) async {
+    await pumpChart(
+      tester,
+      child: const SizedBox(width: 200, child: TsaiLineChart(points: points)),
+    );
+    expect(tester.getSize(find.byType(TsaiLineChart)).width, 200);
+    expect(
+      tester.getSize(find.byType(TsaiLineChart)).height,
+      closeTo(175.94, 0.2),
+    );
   });
 }

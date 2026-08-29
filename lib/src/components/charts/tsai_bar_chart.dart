@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 
 import '../../foundation/semantic/tsai_theme_tokens.dart';
 import 'src/tsai_chart_chrome.dart';
+import 'src/tsai_chart_frame.dart';
+import 'src/tsai_chart_scrub.dart';
 import 'tsai_chart_types.dart';
 import 'tsai_mini_tabs.dart';
 
@@ -80,6 +82,8 @@ class TsaiBarChart extends StatefulWidget {
     this.period = TsaiChartPeriod.oneWeek,
     this.onPeriodChanged,
     this.onRetry,
+    this.onScrubIndexChanged,
+    this.showTabs = true,
     this.semanticLabel,
   });
 
@@ -98,6 +102,12 @@ class TsaiBarChart extends StatefulWidget {
   /// Called from the error-state retry link.
   final VoidCallback? onRetry;
 
+  /// Called when a hold-to-scrub index is committed or cleared.
+  final ValueChanged<int?>? onScrubIndexChanged;
+
+  /// Whether to show Mini Tabs.
+  final bool showTabs;
+
   /// Optional accessibility name for the chart.
   final String? semanticLabel;
 
@@ -107,11 +117,17 @@ class TsaiBarChart extends StatefulWidget {
 
 class _TsaiBarChartState extends State<TsaiBarChart>
     with SingleTickerProviderStateMixin {
-  int? _scrubIndex;
+  int? _hoverIndex;
+  int? _holdIndex;
+  int? _stickyIndex;
   late final AnimationController _shimmer = AnimationController(
     vsync: this,
     duration: const Duration(milliseconds: 1400),
   );
+
+  int? get _scrubIndex => _holdIndex ?? _hoverIndex ?? _stickyIndex;
+
+  void _notifyScrub() => widget.onScrubIndexChanged?.call(_stickyIndex);
 
   @override
   void didChangeDependencies() {
@@ -122,6 +138,13 @@ class _TsaiBarChartState extends State<TsaiBarChart>
   @override
   void didUpdateWidget(covariant TsaiBarChart oldWidget) {
     super.didUpdateWidget(oldWidget);
+    if (widget.status != oldWidget.status ||
+        widget.period != oldWidget.period) {
+      _hoverIndex = null;
+      _holdIndex = null;
+      _stickyIndex = null;
+      widget.onScrubIndexChanged?.call(null);
+    }
     _syncShimmer();
   }
 
@@ -161,81 +184,84 @@ class _TsaiBarChartState extends State<TsaiBarChart>
     final periods = TsaiChartPeriod.values;
     return Semantics(
       label: widget.semanticLabel ?? 'Bar chart',
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(tokens.radii.card),
-        child: SizedBox(
-          key: const ValueKey<String>('tsai-bar-chart'),
-          width: TsaiChartMetrics.width,
-          height: TsaiChartMetrics.height,
-          child: Stack(
-            children: [
-              Positioned.fill(
-                child: GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  onLongPressStart: widget.status == TsaiChartStatus.data
-                      ? (details) => setState(
-                          () => _scrubIndex = _indexForDx(
-                            details.localPosition.dx,
-                            layout,
-                          ),
-                        )
-                      : null,
-                  onLongPressMoveUpdate: widget.status == TsaiChartStatus.data
-                      ? (details) => setState(
-                          () => _scrubIndex = _indexForDx(
-                            details.localPosition.dx,
-                            layout,
-                          ),
-                        )
-                      : null,
-                  onLongPressEnd: (_) => setState(() => _scrubIndex = null),
-                  child: AnimatedBuilder(
-                    animation: _shimmer,
-                    builder: (context, child) => CustomPaint(
-                      painter: _BarChartPainter(
-                        tokens: tokens,
-                        points: widget.points,
-                        layout: layout,
-                        status: widget.status,
-                        scrubIndex: _scrubIndex,
-                        shimmer: _shimmer.value,
+      child: TsaiChartFrame(
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(tokens.radii.card),
+          child: SizedBox(
+            key: const ValueKey<String>('tsai-bar-chart'),
+            width: TsaiChartMetrics.width,
+            height: TsaiChartMetrics.height,
+            child: Stack(
+              clipBehavior: Clip.none,
+              children: [
+                Positioned.fill(
+                  child: TsaiChartScrubListener(
+                    enabled:
+                        widget.status == TsaiChartStatus.data &&
+                        widget.points.isNotEmpty,
+                    onHoverDx: (dx) => setState(() {
+                      _hoverIndex = _indexForDx(dx, layout);
+                    }),
+                    onHoverEnd: () => setState(() => _hoverIndex = null),
+                    onHoldDx: (dx) => setState(() {
+                      _holdIndex = _indexForDx(dx, layout);
+                    }),
+                    onHoldEnd: () {
+                      setState(() {
+                        _stickyIndex = _holdIndex ?? _stickyIndex;
+                        _holdIndex = null;
+                      });
+                      _notifyScrub();
+                    },
+                    child: AnimatedBuilder(
+                      animation: _shimmer,
+                      builder: (context, child) => CustomPaint(
+                        painter: _BarChartPainter(
+                          tokens: tokens,
+                          points: widget.points,
+                          layout: layout,
+                          status: widget.status,
+                          scrubIndex: _scrubIndex,
+                          shimmer: _shimmer.value,
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-              if (widget.status == TsaiChartStatus.empty)
-                Positioned(
-                  top: TsaiChartMetrics.plotTop,
-                  child: TsaiChartChrome.empty(tokens: tokens),
-                ),
-              if (widget.status == TsaiChartStatus.error)
-                Positioned(
-                  top: TsaiChartMetrics.plotTop,
-                  child: TsaiChartChrome.error(
-                    tokens: tokens,
-                    onRetry: widget.onRetry,
+                if (widget.status == TsaiChartStatus.empty)
+                  Positioned(
+                    top: TsaiChartMetrics.plotTop,
+                    child: TsaiChartChrome.empty(tokens: tokens),
                   ),
-                ),
-              if (_scrubIndex != null && widget.points.isNotEmpty)
-                TsaiChartChrome.tooltip(
-                  tokens: tokens,
-                  value: widget.points[_scrubIndex!].tooltipValue,
-                  date: widget.points[_scrubIndex!].tooltipDate,
-                  anchorX: layout.xFor(_scrubIndex!) + layout.barWidth / 2,
-                  maxWidth: TsaiChartMetrics.width,
-                ),
-              Positioned(
-                top: TsaiChartMetrics.tabsTop,
-                child: TsaiMiniTabs(
-                  labels: [for (final period in periods) period.label],
-                  selectedIndex: periods.indexOf(widget.period),
-                  onChanged: widget.onPeriodChanged == null
-                      ? null
-                      : (index) => widget.onPeriodChanged!(periods[index]),
-                ),
-              ),
-            ],
+                if (widget.status == TsaiChartStatus.error)
+                  Positioned(
+                    top: TsaiChartMetrics.plotTop,
+                    child: TsaiChartChrome.error(
+                      tokens: tokens,
+                      onRetry: widget.onRetry,
+                    ),
+                  ),
+                if (_scrubIndex != null && widget.points.isNotEmpty)
+                  TsaiChartChrome.tooltip(
+                    tokens: tokens,
+                    value: widget.points[_scrubIndex!].tooltipValue,
+                    date: widget.points[_scrubIndex!].tooltipDate,
+                    anchorX: layout.xFor(_scrubIndex!) + layout.barWidth / 2,
+                    maxWidth: TsaiChartMetrics.width,
+                  ),
+                if (widget.showTabs)
+                  Positioned(
+                    top: TsaiChartMetrics.tabsTop,
+                    child: TsaiMiniTabs(
+                      labels: [for (final period in periods) period.label],
+                      selectedIndex: periods.indexOf(widget.period),
+                      onChanged: widget.onPeriodChanged == null
+                          ? null
+                          : (index) => widget.onPeriodChanged!(periods[index]),
+                    ),
+                  ),
+              ],
+            ),
           ),
         ),
       ),
@@ -276,7 +302,7 @@ class _BarChartPainter extends CustomPainter {
     if (values.isEmpty && status != TsaiChartStatus.loading) {
       return;
     }
-    final fallback = const [59.0, 98.0, 42.0, 140.0, 76.0, 28.0, 102.0];
+    final fallback = tsaiChartLoadingSilhouette;
     final series = values.isEmpty ? fallback : values;
     final maxValue = series.reduce((a, b) => a > b ? a : b);
     final barCount = status == TsaiChartStatus.loading

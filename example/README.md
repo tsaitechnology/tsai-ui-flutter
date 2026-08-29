@@ -46,6 +46,10 @@ lib/
     typography/
       typography_demo.dart               # Embeddable typography demo
       typography_demo_screen.dart        # Full-page composition
+    charts/
+      mini_tabs_demo_screen.dart          # Data-visualization playgrounds
+      line_chart_demo_screen.dart
+      bar_chart_demo_screen.dart
 ```
 
 The dependency direction is:

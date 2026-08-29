@@ -12,9 +12,12 @@ TsaiBarChart(
   period: TsaiChartPeriod.oneWeek,
   status: TsaiChartStatus.data,
   onPeriodChanged: (period) => setPeriod(period),
+  onScrubIndexChanged: (index) => setScrub(index),
   onRetry: reload,
 )
 ```
 
-Press and hold a bar to scrub. Other bars dim to `accent.muted`. Loading, empty,
-and error states match Line Chart. Mini Tabs stay interactive while loading.
+`status` is the same data-source contract as [TsaiLineChart](tsai-line-chart.md).
+Hold a bar to scrub; other bars dim to `accent.muted`. After release the
+selection stays. The 96×44 tooltip pins flush on the first or last bar.
+`showTabs` hides Mini Tabs when the host supplies another period control.

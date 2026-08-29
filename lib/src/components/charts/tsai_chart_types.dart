@@ -23,18 +23,18 @@ enum TsaiChartPeriod {
   final String label;
 }
 
-/// Visual status of a Tsai chart besides the press-and-hold scrub overlay.
+/// Visual status of a Tsai chart besides the scrub overlay.
 enum TsaiChartStatus {
-  /// Renders the series.
+  /// Loaded series. Scrub and Mini Tabs are interactive.
   data,
 
-  /// Renders the skeleton silhouette. Mini Tabs stay interactive.
+  /// Not loaded yet. Skeleton silhouette; Mini Tabs stay interactive.
   loading,
 
-  /// Renders the empty caption and baseline.
+  /// Loaded, but this period has no samples.
   empty,
 
-  /// Renders the retry block.
+  /// Load failed. Retry stays on the plot; Mini Tabs stay interactive.
   error,
 }
 
@@ -93,4 +93,8 @@ abstract final class TsaiChartMetrics {
 
   /// Mini Tabs height.
   static const double tabsHeight = 28;
+
+  /// Extra space around the 294×256 surface so endpoint halos and tab
+  /// corners are not clipped by a parent [ClipRect].
+  static const double overflow = 12;
 }

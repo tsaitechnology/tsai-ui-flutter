@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../foundation/semantic/tsai_theme_tokens.dart';
 import 'src/tsai_chart_chrome.dart';
+import 'src/tsai_chart_frame.dart';
+import 'src/tsai_chart_scrub.dart';
 import 'tsai_chart_types.dart';
 import 'tsai_mini_tabs.dart';
 
@@ -15,6 +17,7 @@ class TsaiLineChart extends StatefulWidget {
     this.period = TsaiChartPeriod.oneMonth,
     this.onPeriodChanged,
     this.onRetry,
+    this.onScrubIndexChanged,
     this.showGrid = false,
     this.showBaseline = false,
     this.showAxisY = false,
@@ -39,6 +42,12 @@ class TsaiLineChart extends StatefulWidget {
 
   /// Called from the error-state retry link.
   final VoidCallback? onRetry;
+
+  /// Called when a hold-to-scrub index is committed or cleared.
+  ///
+  /// Hover does not invoke this. After the pointer is released the last
+  /// index stays selected until [status] or [period] changes.
+  final ValueChanged<int?>? onScrubIndexChanged;
 
   /// Whether to paint the optional grid.
   final bool showGrid;
@@ -70,11 +79,17 @@ class TsaiLineChart extends StatefulWidget {
 
 class _TsaiLineChartState extends State<TsaiLineChart>
     with SingleTickerProviderStateMixin {
-  int? _scrubIndex;
+  int? _hoverIndex;
+  int? _holdIndex;
+  int? _stickyIndex;
   late final AnimationController _shimmer = AnimationController(
     vsync: this,
     duration: const Duration(milliseconds: 1400),
   );
+
+  int? get _scrubIndex => _holdIndex ?? _hoverIndex ?? _stickyIndex;
+
+  void _notifyScrub() => widget.onScrubIndexChanged?.call(_stickyIndex);
 
   @override
   void didChangeDependencies() {
@@ -85,6 +100,13 @@ class _TsaiLineChartState extends State<TsaiLineChart>
   @override
   void didUpdateWidget(covariant TsaiLineChart oldWidget) {
     super.didUpdateWidget(oldWidget);
+    if (widget.status != oldWidget.status ||
+        widget.period != oldWidget.period) {
+      _hoverIndex = null;
+      _holdIndex = null;
+      _stickyIndex = null;
+      widget.onScrubIndexChanged?.call(null);
+    }
     _syncShimmer();
   }
 
@@ -122,85 +144,90 @@ class _TsaiLineChartState extends State<TsaiLineChart>
     final periods = TsaiChartPeriod.values;
     return Semantics(
       label: widget.semanticLabel ?? 'Line chart',
-      child: SizedBox(
-        key: const ValueKey<String>('tsai-line-chart'),
-        width: TsaiChartMetrics.width,
-        height: TsaiChartMetrics.height,
-        child: Stack(
-          clipBehavior: Clip.none,
-          children: [
-            Positioned.fill(
-              child: GestureDetector(
-                behavior: HitTestBehavior.opaque,
-                onLongPressStart: widget.status == TsaiChartStatus.data
-                    ? (details) => setState(
-                        () =>
-                            _scrubIndex = _indexForDx(details.localPosition.dx),
-                      )
-                    : null,
-                onLongPressMoveUpdate: widget.status == TsaiChartStatus.data
-                    ? (details) => setState(
-                        () =>
-                            _scrubIndex = _indexForDx(details.localPosition.dx),
-                      )
-                    : null,
-                onLongPressEnd: (_) => setState(() => _scrubIndex = null),
-                child: AnimatedBuilder(
-                  animation: _shimmer,
-                  builder: (context, child) => CustomPaint(
-                    painter: _LineChartPainter(
-                      tokens: tokens,
-                      points: widget.points,
-                      status: widget.status,
-                      scrubIndex: _scrubIndex,
-                      showGrid: widget.showGrid,
-                      showBaseline: widget.showBaseline,
-                      showAxisY: widget.showAxisY,
-                      showAxisX: widget.showAxisX,
-                      showArea: widget.showArea,
-                      showDot: widget.showDot && _scrubIndex == null,
-                      shimmer: _shimmer.value,
+      child: TsaiChartFrame(
+        child: SizedBox(
+          key: const ValueKey<String>('tsai-line-chart'),
+          width: TsaiChartMetrics.width,
+          height: TsaiChartMetrics.height,
+          child: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              Positioned.fill(
+                child: TsaiChartScrubListener(
+                  enabled:
+                      widget.status == TsaiChartStatus.data &&
+                      widget.points.isNotEmpty,
+                  onHoverDx: (dx) => setState(() {
+                    _hoverIndex = _indexForDx(dx);
+                  }),
+                  onHoverEnd: () => setState(() => _hoverIndex = null),
+                  onHoldDx: (dx) => setState(() {
+                    _holdIndex = _indexForDx(dx);
+                  }),
+                  onHoldEnd: () {
+                    setState(() {
+                      _stickyIndex = _holdIndex ?? _stickyIndex;
+                      _holdIndex = null;
+                    });
+                    _notifyScrub();
+                  },
+                  child: AnimatedBuilder(
+                    animation: _shimmer,
+                    builder: (context, child) => CustomPaint(
+                      painter: _LineChartPainter(
+                        tokens: tokens,
+                        points: widget.points,
+                        status: widget.status,
+                        scrubIndex: _scrubIndex,
+                        showGrid: widget.showGrid,
+                        showBaseline: widget.showBaseline,
+                        showAxisY: widget.showAxisY,
+                        showAxisX: widget.showAxisX,
+                        showArea: widget.showArea,
+                        showDot: widget.showDot && _scrubIndex == null,
+                        shimmer: _shimmer.value,
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-            if (widget.status == TsaiChartStatus.empty)
-              Positioned(
-                top: TsaiChartMetrics.plotTop,
-                child: TsaiChartChrome.empty(tokens: tokens),
-              ),
-            if (widget.status == TsaiChartStatus.error)
-              Positioned(
-                top: TsaiChartMetrics.plotTop,
-                child: TsaiChartChrome.error(
+              if (widget.status == TsaiChartStatus.empty)
+                Positioned(
+                  top: TsaiChartMetrics.plotTop,
+                  child: TsaiChartChrome.empty(tokens: tokens),
+                ),
+              if (widget.status == TsaiChartStatus.error)
+                Positioned(
+                  top: TsaiChartMetrics.plotTop,
+                  child: TsaiChartChrome.error(
+                    tokens: tokens,
+                    onRetry: widget.onRetry,
+                  ),
+                ),
+              if (_scrubIndex != null && widget.points.isNotEmpty)
+                TsaiChartChrome.tooltip(
                   tokens: tokens,
-                  onRetry: widget.onRetry,
+                  value: widget.points[_scrubIndex!].tooltipValue,
+                  date: widget.points[_scrubIndex!].tooltipDate,
+                  anchorX: tsaiLinePlotOffsets(
+                    widget.points.map((point) => point.value).toList(),
+                    const Size(TsaiChartMetrics.width, TsaiChartMetrics.height),
+                  )[_scrubIndex!].dx,
+                  maxWidth: TsaiChartMetrics.width,
                 ),
-              ),
-            if (_scrubIndex != null && widget.points.isNotEmpty)
-              TsaiChartChrome.tooltip(
-                tokens: tokens,
-                value: widget.points[_scrubIndex!].tooltipValue,
-                date: widget.points[_scrubIndex!].tooltipDate,
-                anchorX: tsaiLinePlotOffsets(
-                  widget.points.map((point) => point.value).toList(),
-                  const Size(TsaiChartMetrics.width, TsaiChartMetrics.height),
-                )[_scrubIndex!].dx,
-                maxWidth: TsaiChartMetrics.width,
-              ),
-            if (widget.showTabs)
-              Positioned(
-                top: TsaiChartMetrics.tabsTop,
-                child: TsaiMiniTabs(
-                  labels: [for (final period in periods) period.label],
-                  selectedIndex: periods.indexOf(widget.period),
-                  onChanged: widget.onPeriodChanged == null
-                      ? null
-                      : (index) => widget.onPeriodChanged!(periods[index]),
+              if (widget.showTabs)
+                Positioned(
+                  top: TsaiChartMetrics.tabsTop,
+                  child: TsaiMiniTabs(
+                    labels: [for (final period in periods) period.label],
+                    selectedIndex: periods.indexOf(widget.period),
+                    onChanged: widget.onPeriodChanged == null
+                        ? null
+                        : (index) => widget.onPeriodChanged!(periods[index]),
+                  ),
                 ),
-              ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -259,10 +286,12 @@ class _LineChartPainter extends CustomPainter {
       return;
     }
 
-    final values = [for (final point in points) point.value];
-    if (values.isEmpty) {
-      return;
-    }
+    final values = [
+      if (points.isEmpty)
+        ...tsaiChartLoadingSilhouette
+      else
+        for (final point in points) point.value,
+    ];
     final offsets = tsaiLinePlotOffsets(values, size);
     final linePath = tsaiSmoothLinePath(offsets);
     final areaPath = Path.from(linePath)
