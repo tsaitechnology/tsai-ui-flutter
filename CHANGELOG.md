@@ -1,3 +1,11 @@
+## 0.6.9 - 2026-08-29
+
+### Maintenance
+
+- Make Line and Bar charts production-ready with a data-source playground. ([30e830a](https://github.com/tsaitechnology/tsai-ui-flutter/commit/30e830aa979f7e02a05cf270db2b1c3c74b02010))
+- Merge branch 'main' of github.com:tsaitechnology/tsai-ui-flutter ([14f883a](https://github.com/tsaitechnology/tsai-ui-flutter/commit/14f883a6ccd4813b635b9d18dad8fb230f3b60e2))
+- Format the Line Chart empty-state widget test. ([20f3484](https://github.com/tsaitechnology/tsai-ui-flutter/commit/20f348421a23a5920d3753e75a9eb170b94b0ef6))
+
 ## 0.6.8 - 2026-08-29
 
 ### Maintenance
