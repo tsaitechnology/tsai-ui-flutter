@@ -1,3 +1,10 @@
+## 0.6.8 - 2026-08-29
+
+### Maintenance
+
+- Add Line Chart, Mini Tabs, and Bar Chart from the Penpot Charts page. ([1675e05](https://github.com/tsaitechnology/tsai-ui-flutter/commit/1675e0513a86607ba1b8325a65a5759514424bd1))
+- Merge branch 'main' of github.com:tsaitechnology/tsai-ui-flutter ([01aef3c](https://github.com/tsaitechnology/tsai-ui-flutter/commit/01aef3cdcc9a1fd272af8d79adf22f722101fee9))
+
 ## 0.6.7 - 2026-08-26
 
 ### Maintenance
