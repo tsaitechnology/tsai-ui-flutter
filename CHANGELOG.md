@@ -1,3 +1,10 @@
+## 0.6.10 - 2026-08-29
+
+### Maintenance
+
+- Wire multi-screen chart examples to period-specific demo series. ([a091ae0](https://github.com/tsaitechnology/tsai-ui-flutter/commit/a091ae0654b1c2e56cf159004aa5c898c398bf66))
+- Merge branch 'main' of github.com:tsaitechnology/tsai-ui-flutter ([eccc706](https://github.com/tsaitechnology/tsai-ui-flutter/commit/eccc7062ed3e2d237207db4d6c83f7a606b3ba06))
+
 ## 0.6.9 - 2026-08-29
 
 ### Maintenance
