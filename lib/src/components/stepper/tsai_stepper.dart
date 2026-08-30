@@ -35,6 +35,7 @@ class TsaiStepper extends StatelessWidget {
     final canDecrement = onChanged != null && value > min;
     final canIncrement = onChanged != null && value < max;
     return Semantics(
+      container: true,
       label: 'Quantity $value',
       child: DecoratedBox(
         key: const ValueKey<String>('tsai-stepper'),

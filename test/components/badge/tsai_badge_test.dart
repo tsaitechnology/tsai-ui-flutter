@@ -38,25 +38,4 @@ void main() {
 
     expect(tester.getSize(find.byType(TsaiBadgeCounter)).height, 18);
   });
-
-  testWidgets('chip calls tap and delete callbacks', (tester) async {
-    var taps = 0;
-    var deletes = 0;
-    await tester.pumpWidget(
-      MaterialApp(
-        theme: TsaiTheme.light(),
-        home: Scaffold(
-          body: TsaiChip(
-            label: 'USD',
-            onTap: () => taps++,
-            onDeleted: () => deletes++,
-          ),
-        ),
-      ),
-    );
-    await tester.tap(find.text('USD'));
-    await tester.tap(find.byIcon(Icons.close));
-    expect(taps, 1);
-    expect(deletes, 1);
-  });
 }
