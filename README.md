@@ -14,7 +14,7 @@ Add the package from pub.dev:
 
 ```yaml
 dependencies:
-  tsai_ui: ^0.6.11
+  tsai_ui: ^0.6.12
 ```
 
 Or run:

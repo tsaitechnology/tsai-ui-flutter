@@ -1,3 +1,18 @@
+## 0.6.12 - 2026-08-30
+
+### Maintenance
+
+- Fix TsaiBarChart tooltip period copy and extend the scrub guide to the bar. ([17a0add](https://github.com/tsaitechnology/tsai-ui-flutter/commit/17a0addfb24de246590567f090f2466ca13691c2))
+- Merge branch 'main' of github.com:tsaitechnology/tsai-ui-flutter ([04e82a5](https://github.com/tsaitechnology/tsai-ui-flutter/commit/04e82a5ace0570d54eb04408d6b426ab9b4e2544))
+- Keep the last series as the loading skeleton and freeze period tabs until data returns. ([6a24a81](https://github.com/tsaitechnology/tsai-ui-flutter/commit/6a24a810b517e3e3f4cef8a30a9b69085dd1136f))
+- Run format, analyze, tests, coverage, and web build on every pull request. ([9bacd66](https://github.com/tsaitechnology/tsai-ui-flutter/commit/9bacd661680913b34479e61a334c2303056e107c))
+- Add widget tests for shipped components that had no dedicated suite. ([6578252](https://github.com/tsaitechnology/tsai-ui-flutter/commit/6578252ed9d2db6c1a205ccc333cfe83d558f7bc))
+- Replace the one-sheet Penpot golden with per-component light and dark snapshots. ([82107eb](https://github.com/tsaitechnology/tsai-ui-flutter/commit/82107ebd7113b770ea0824ceb5337a44cc90da0c))
+- Expand accessibility coverage for remaining interactive chrome. ([52429e2](https://github.com/tsaitechnology/tsai-ui-flutter/commit/52429e2aba38a4c4ff6d914dd8a0256ee0d1c037))
+- Document flutter_svg, public composition, and token contrast policy. ([a9883ab](https://github.com/tsaitechnology/tsai-ui-flutter/commit/a9883abade39e284acbb4a771cd9a0a94991258d))
+- Stop using the deprecated SemanticsNode.hasFlag API in chip tests. ([07cfaec](https://github.com/tsaitechnology/tsai-ui-flutter/commit/07cfaec27b07e37cc07a5454f07d1ae9f04ab4d7))
+- Add Penpot-faithful textarea and date/time pickers. ([96585d6](https://github.com/tsaitechnology/tsai-ui-flutter/commit/96585d64aeb5c088e43e3b9700883bb27e03abcb))
+
 ## 0.6.11 - 2026-08-30
 
 ### Maintenance
