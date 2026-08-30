@@ -1,5 +1,6 @@
+import 'dart:ui' show Tristate;
+
 import 'package:flutter/material.dart';
-import 'package:flutter/semantics.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tsai_ui/tsai_ui.dart';
 
@@ -40,7 +41,7 @@ void main() {
     expect(find.byIcon(Icons.check), findsOneWidget);
     final chipSemantics = tester.getSemantics(find.byType(TsaiChip));
     expect(chipSemantics.label, contains('EUR'));
-    expect(chipSemantics.hasFlag(SemanticsFlag.isSelected), isTrue);
+    expect(chipSemantics.flagsCollection.isSelected, Tristate.isTrue);
     semantics.dispose();
   });
 }
