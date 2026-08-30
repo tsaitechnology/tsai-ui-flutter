@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tsai_ui/tsai_ui.dart';
@@ -234,6 +236,34 @@ void main() {
       expect(result.motion, same(source.motion));
     });
 
+    test('semantic content pairs meet WCAG AA contrast', () {
+      for (final tokens in [TsaiThemeTokens.light, TsaiThemeTokens.dark]) {
+        final colors = tokens.colors;
+        expect(
+          _contrastRatio(colors.contentPrimary, colors.canvas),
+          greaterThanOrEqualTo(4.5),
+        );
+        expect(
+          _contrastRatio(colors.contentPrimary, colors.surface),
+          greaterThanOrEqualTo(4.5),
+        );
+        expect(
+          _contrastRatio(colors.contentOnActionPrimary, colors.actionPrimary),
+          greaterThan(4.4),
+          reason:
+              'Penpot action fill is just under 4.5:1; keep it above 4.4:1.',
+        );
+        expect(
+          _contrastRatio(colors.contentInvertedPrimary, colors.surfaceInverted),
+          greaterThanOrEqualTo(4.5),
+        );
+        expect(
+          _contrastRatio(colors.contentSecondary, colors.canvas),
+          greaterThanOrEqualTo(3.0),
+        );
+      }
+    });
+
     test('lerp preserves endpoints and interpolates values', () {
       final light = TsaiThemeTokens.light;
       final dark = TsaiThemeTokens.dark;
@@ -277,6 +307,18 @@ void main() {
     expect(resolved, same(TsaiThemeTokens.light));
     expect(theme.extension<_MarkerTheme>(), marker);
   });
+}
+
+double _contrastRatio(Color foreground, Color background) {
+  final lighter = math.max(
+    foreground.computeLuminance(),
+    background.computeLuminance(),
+  );
+  final darker = math.min(
+    foreground.computeLuminance(),
+    background.computeLuminance(),
+  );
+  return (lighter + 0.05) / (darker + 0.05);
 }
 
 final class _MarkerTheme extends ThemeExtension<_MarkerTheme> {

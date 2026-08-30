@@ -92,13 +92,40 @@ values outside the private reference-token layer.
 ## Dependencies
 
 - Flutter SDK provides rendering, interaction, semantics, and theming.
-- `flutter_lucide` is the only non-SDK runtime dependency. Components use it
-  internally for canonical glyphs, while the complete catalog is re-exported
-  only through the opt-in `tsai_icons.dart` entrypoint. Third-party types do
-  not appear in component signatures.
+- `flutter_lucide` supplies canonical glyphs. The complete catalog is re-exported
+  only through the opt-in `tsai_icons.dart` entrypoint.
+- `flutter_svg` renders bundled cryptocurrency artwork inside `TsaiCryptoIcon`.
+  `SvgPicture` and other `flutter_svg` types must stay out of public component
+  signatures.
+
+Third-party types do not appear in component APIs. Consumers depend on Tsai
+widgets, semantic tokens, and Flutter types only.
 
 Inter and JetBrains Mono are bundled as package fonts with their OFL license
 files, keeping mobile and web rendering independent from network font loading.
+
+## Component composition
+
+Components may compose other **public** Tsai widgets. That is intentional
+product composition, not a reverse-dependency:
+
+- `TsaiSelect` opens options in `TsaiBottomSheet` and reuses list rows.
+- `TsaiAccordion` may paint a `TsaiDivider`.
+- `TsaiIconButton` may overlay a `TsaiBadge`.
+- Chart empty/error chrome may reuse `TsaiLink` and typography widgets.
+
+Forbidden: importing another component's `src/` helpers or private part
+files. Shared behavior stays inside the owning family (`part` files) or is
+promoted to a public widget.
+
+## Contrast policy
+
+Semantic foreground/background pairs used for body copy must meet WCAG 2.1
+AA contrast (4.5:1 for normal text). Token tests enforce that for primary
+content on canvas and surface, inverted tooltip pairs, and a 4.4:1 floor for
+on-action text (Penpot's indigo fill is ~4.47:1). Accent-colored labels on
+tinted navigation chrome are decorative treatments, not the body-copy
+contract.
 
 ## Compatibility
 
