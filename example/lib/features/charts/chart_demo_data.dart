@@ -82,17 +82,45 @@ List<TsaiChartPoint> lineChartPointsFor(TsaiChartPeriod period) {
 }
 
 List<TsaiChartPoint> barChartPointsFor(TsaiChartPeriod period) {
-  final (values, labels) = switch (period) {
+  const weekdays = [
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+    'Sunday',
+  ];
+  const months = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
+  final (values, axisLabels, tooltipDates) = switch (period) {
     TsaiChartPeriod.oneDay => (
       List<double>.generate(24, (index) => 20 + ((index * 17) % 90).toDouble()),
       List<String>.generate(
         24,
         (index) => index % 6 == 0 ? index.toString().padLeft(2, '0') : '',
       ),
+      List<String>.generate(
+        24,
+        (index) => '${index.toString().padLeft(2, '0')}:00',
+      ),
     ),
     TsaiChartPeriod.oneWeek => (
       const [59.0, 98.0, 42.0, 140.0, 76.0, 28.0, 102.0],
       const ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
+      weekdays,
     ),
     TsaiChartPeriod.oneMonth => (
       List<double>.generate(
@@ -103,6 +131,7 @@ List<TsaiChartPoint> barChartPointsFor(TsaiChartPeriod period) {
         30,
         (index) => (index % 7 == 0) ? '${index + 1}' : '',
       ),
+      List<String>.generate(30, (index) => 'Jul ${index + 1}, 2026'),
     ),
     TsaiChartPeriod.oneYear => (
       const [
@@ -120,9 +149,11 @@ List<TsaiChartPoint> barChartPointsFor(TsaiChartPeriod period) {
         120.0,
       ],
       const ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'],
+      months,
     ),
     TsaiChartPeriod.all => (
       const [36.0, 58.0, 72.0, 96.0, 112.0, 140.0],
+      const ['2021', '2022', '2023', '2024', '2025', '2026'],
       const ['2021', '2022', '2023', '2024', '2025', '2026'],
     ),
   };
@@ -131,8 +162,8 @@ List<TsaiChartPoint> barChartPointsFor(TsaiChartPeriod period) {
       TsaiChartPoint(
         value: values[index],
         tooltipValue: '\$${values[index].toStringAsFixed(0)}',
-        tooltipDate: labels[index].isEmpty ? 'Day ${index + 1}' : labels[index],
-        axisLabel: labels[index],
+        tooltipDate: tooltipDates[index],
+        axisLabel: axisLabels[index],
       ),
   ];
 }

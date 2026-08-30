@@ -189,9 +189,27 @@ void main() {
     );
     await tester.pump(const Duration(milliseconds: 600));
     expect(find.text(r'$10'), findsOneWidget);
+    expect(find.text('Mon'), findsOneWidget);
     await gesture.up();
     await tester.pump();
     expect(find.text(r'$10'), findsOneWidget);
+  });
+
+  testWidgets('Bar Chart hover shows the point tooltip date', (tester) async {
+    await pumpChart(
+      tester,
+      child: const TsaiBarChart(
+        points: points,
+        period: TsaiChartPeriod.oneWeek,
+      ),
+    );
+    final chart = tester.getRect(find.byType(TsaiBarChart));
+    final mouse = await tester.createGesture(kind: PointerDeviceKind.mouse);
+    await mouse.addPointer();
+    addTearDown(mouse.removePointer);
+    await mouse.moveTo(Offset(chart.left + 28, chart.top + 120));
+    await tester.pump();
+    expect(find.text('Mon'), findsOneWidget);
   });
 
   testWidgets('Line Chart shrinks to a narrow parent instead of clipping', (

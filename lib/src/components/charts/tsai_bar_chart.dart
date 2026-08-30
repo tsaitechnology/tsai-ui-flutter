@@ -310,10 +310,7 @@ class _BarChartPainter extends CustomPainter {
       final value = index < series.length
           ? series[index]
           : fallback[index % fallback.length];
-      final height = maxValue == 0
-          ? 0.0
-          : TsaiChartMetrics.barPlotHeight *
-                (value / (maxValue == 0 ? 1 : maxValue));
+      final height = _barHeight(value, maxValue);
       final x = layout.xFor(index);
       final rect = RRect.fromLTRBAndCorners(
         x,
@@ -379,12 +376,22 @@ class _BarChartPainter extends CustomPainter {
 
     if (scrubIndex != null && status == TsaiChartStatus.data) {
       final x = layout.xFor(scrubIndex!) + layout.barWidth / 2;
+      final barTop =
+          TsaiChartMetrics.barPlotBottom -
+          _barHeight(series[scrubIndex!], maxValue);
       final paint = Paint()
         ..color = tokens.colors.borderGuide
         ..strokeWidth = 1;
-      canvas.drawLine(Offset(x, 44), Offset(x, 53), paint);
+      canvas.drawLine(
+        Offset(x, TsaiChartMetrics.tooltipZoneHeight),
+        Offset(x, barTop),
+        paint,
+      );
     }
   }
+
+  static double _barHeight(double value, double maxValue) =>
+      maxValue == 0 ? 0.0 : TsaiChartMetrics.barPlotHeight * (value / maxValue);
 
   @override
   bool shouldRepaint(covariant _BarChartPainter oldDelegate) =>
