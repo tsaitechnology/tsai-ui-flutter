@@ -8,7 +8,7 @@ Add Tsai UI to your application:
 dependencies:
   flutter:
     sdk: flutter
-  tsai_ui: ^0.6.9
+  tsai_ui: ^0.6.10
 ```
 
 Then resolve dependencies:
