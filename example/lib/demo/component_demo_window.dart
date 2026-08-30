@@ -147,6 +147,21 @@ enum ComponentDemoSection {
     route: '/input-pin',
     category: ComponentDemoCategory.forms,
   ),
+  textarea(
+    label: 'Textarea',
+    route: '/input-textarea',
+    category: ComponentDemoCategory.forms,
+  ),
+  datePicker(
+    label: 'Date / Period Picker',
+    route: '/date-picker',
+    category: ComponentDemoCategory.forms,
+  ),
+  timePicker(
+    label: 'Time Picker',
+    route: '/time-picker',
+    category: ComponentDemoCategory.forms,
+  ),
   numericKeypad(
     label: 'TsaiNumericKeypad',
     route: '/keypad',

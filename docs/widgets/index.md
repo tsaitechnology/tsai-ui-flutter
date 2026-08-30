@@ -34,6 +34,7 @@ its live Flutter web example.
 ## Forms
 
 - [TsaiInput](tsai-input.md)
+- [TsaiTextarea](tsai-textarea.md)
 - [TsaiSearchInput](tsai-search-input.md)
 - [TsaiPhoneInput](tsai-phone-input.md)
 - [TsaiOtpInput](tsai-otp-input.md)
@@ -42,6 +43,8 @@ its live Flutter web example.
 - [TsaiNumericKeypad](tsai-numeric-keypad.md)
 - [TsaiSlider](tsai-slider.md)
 - [TsaiStepper](tsai-stepper.md)
+- [TsaiDatePeriodPicker](tsai-date-period-picker.md)
+- [TsaiTimePicker](tsai-time-picker.md)
 - [TsaiCheckbox](tsai-checkbox.md)
 - [TsaiRadio](tsai-radio.md)
 - [TsaiSwitch](tsai-switch.md)

@@ -122,6 +122,15 @@ TsaiInput(
   ),
 );
 
+TsaiTextarea(
+  placeholder: 'Note for the bank',
+  description: 'Optional',
+  maxLength: 500,
+);
+
+final period = await showTsaiDatePeriodPicker(context: context);
+final time = await showTsaiTimePicker(context: context, minuteStep: 5);
+
 TsaiSearchInput(
   hintText: 'Search assets',
   onChanged: (value) {},

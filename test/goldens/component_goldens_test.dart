@@ -290,10 +290,39 @@ List<_Spec> _specs() {
             TsaiPhoneInput(),
             SizedBox(height: 12),
             TsaiOtpInput(length: 4),
+            SizedBox(height: 12),
+            TsaiTextarea(
+              placeholder: 'Label',
+              description: 'Description',
+              initialValue: 'A short note.',
+            ),
           ],
         ),
       ),
-      size: const Size(390, 360),
+      size: const Size(390, 520),
+    ),
+    _Spec(
+      'date_picker',
+      Padding(
+        padding: const EdgeInsets.all(16),
+        child: TsaiDatePeriodPicker(
+          now: DateTime(2026, 8, 30),
+          initialPeriod: TsaiDatePeriod(
+            start: DateTime(2026, 8, 5),
+            end: DateTime(2026, 8, 13),
+            granularity: TsaiDateGranularity.weekly,
+          ),
+        ),
+      ),
+      size: const Size(390, 640),
+    ),
+    _Spec(
+      'time_picker',
+      Padding(
+        padding: const EdgeInsets.all(16),
+        child: TsaiTimePicker(initialTime: TimeOfDay(hour: 15, minute: 30)),
+      ),
+      size: const Size(390, 280),
     ),
     _Spec(
       'keypad',

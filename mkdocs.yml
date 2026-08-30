@@ -75,6 +75,7 @@ nav:
           - TsaiTextMonoCaption: widgets/tsai-text-mono-caption.md
       - Forms:
           - TsaiInput: widgets/tsai-input.md
+          - TsaiTextarea: widgets/tsai-textarea.md
           - TsaiSearchInput: widgets/tsai-search-input.md
           - TsaiPhoneInput: widgets/tsai-phone-input.md
           - TsaiOtpInput: widgets/tsai-otp-input.md
@@ -83,6 +84,8 @@ nav:
           - TsaiNumericKeypad: widgets/tsai-numeric-keypad.md
           - TsaiSlider: widgets/tsai-slider.md
           - TsaiStepper: widgets/tsai-stepper.md
+          - TsaiDatePeriodPicker: widgets/tsai-date-period-picker.md
+          - TsaiTimePicker: widgets/tsai-time-picker.md
           - TsaiCheckbox: widgets/tsai-checkbox.md
           - TsaiRadio: widgets/tsai-radio.md
           - TsaiSwitch: widgets/tsai-switch.md

@@ -58,6 +58,8 @@ import 'package:tsai_ui/tsai_icons.dart';
 | `TsaiSelectOption<T>` | Immutable select option with an optional composed `TsaiIcon` | Public |
 | `TsaiSelectPresentation` | Compatibility presentation flag; options always open in a bottom sheet | Public |
 | `TsaiInput` | Text and opt-in password/visibility input | Public |
+| `TsaiTextarea` | Multiline text field with optional character counter | Public |
+| `TsaiTextareaMetaRow` | Helper copy and optional counter under a textarea | Public |
 | `TsaiSearchInput` | Compact search field with native editing, submission, focus, and clear behavior | Public |
 | `TsaiPhoneInput` | Country-code and masked national-number input | Public |
 | `TsaiPhoneInputFormatter` | Cursor-aware phone mask formatter | Public |
@@ -113,6 +115,23 @@ import 'package:tsai_ui/tsai_icons.dart';
 | `TsaiActionTileVariant` | Circle, card, and ghost plates | Public |
 | `TsaiSlider` | Single-thumb continuous slider | Public |
 | `TsaiStepper` | Pill quantity control | Public |
+| `TsaiDateGranularity` | Weekly, monthly, and yearly period units | Public |
+| `TsaiDatePeriod` | Single value or inclusive range | Public |
+| `TsaiCalendarDayCell` | 44-pixel calendar day with range-band states | Public |
+| `TsaiCalendarDayCellState` | Empty, standard, today, selected, range, disabled | Public |
+| `TsaiCalendarHeader` | Period title with previous and next chevrons | Public |
+| `TsaiCalendarWeekdays` | Monday-first weekday labels | Public |
+| `TsaiCalendarMonth` | Header, weekdays, and 6-week grid | Public |
+| `TsaiPickerTile` | 108×44 month or year tile | Public |
+| `TsaiPickerTileState` | Standard, current, selected, range, disabled | Public |
+| `TsaiPeriodGrid` | 3×4 month or year grid | Public |
+| `TsaiDatePeriodPicker` | Weekly / Monthly / Yearly sheet body | Public |
+| `showTsaiDatePeriodPicker` | Bottom sheet with deferred Cancel / Apply | Public |
+| `TsaiTimeColon` | 12-pixel colon with 12-pixel gaps | Public |
+| `TsaiTimeWheelColumn` | Single hour or minute wheel | Public |
+| `TsaiTimeWheel` | 342×220 hour and minute wheels | Public |
+| `TsaiTimePicker` | Wheel time-of-day picker | Public |
+| `showTsaiTimePicker` | Bottom sheet with deferred Cancel / Apply | Public |
 | `TsaiBankCard` | Dark payment-card face with optional overlays | Public |
 | `TsaiAmountDisplay` | Caption, amount, and subtitle stack | Public |
 | `TsaiAmountAlignment` | Start and center amount stacks | Public |

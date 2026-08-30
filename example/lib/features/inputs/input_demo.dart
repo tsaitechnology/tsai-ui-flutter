@@ -185,6 +185,121 @@ class _InputDemoState extends State<InputDemo> {
   );
 }
 
+class TextareaDemo extends StatefulWidget {
+  const TextareaDemo({super.key});
+
+  @override
+  State<TextareaDemo> createState() => _TextareaDemoState();
+}
+
+class _TextareaDemoState extends State<TextareaDemo> {
+  final _controller = TextEditingController(
+    text: 'Value text that is long enough to wrap onto the second line.',
+  );
+  String _placeholder = 'Label';
+  String _description = 'Description';
+  String _errorText = '';
+  bool _enabled = true;
+  bool _readOnly = false;
+  bool _showCounter = false;
+  bool _labeledPlaceholder = true;
+  int _maxLength = 500;
+  double _fieldHeight = 120;
+  String _event = 'No events';
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => _DemoPage(
+    pageKey: 'textarea-demo',
+    playground: ComponentPlayground(
+      controls: [
+        _TextProperty(
+          label: 'value',
+          controller: _controller,
+          onChanged: (_) => setState(() {}),
+        ),
+        _TextProperty(
+          label: 'placeholder',
+          value: _placeholder,
+          onChanged: (value) => setState(() => _placeholder = value),
+        ),
+        _TextProperty(
+          label: 'description',
+          value: _description,
+          onChanged: (value) => setState(() => _description = value),
+        ),
+        _TextProperty(
+          label: 'errorText',
+          value: _errorText,
+          onChanged: (value) => setState(() => _errorText = value),
+        ),
+        PlaygroundField(
+          label: 'maxLength: $_maxLength',
+          child: Slider(
+            value: _maxLength.toDouble(),
+            min: 20,
+            max: 500,
+            divisions: 48,
+            onChanged: (value) => setState(() => _maxLength = value.round()),
+          ),
+        ),
+        PlaygroundField(
+          label: 'fieldHeight: ${_fieldHeight.round()}',
+          child: Slider(
+            value: _fieldHeight,
+            min: 120,
+            max: 220,
+            divisions: 10,
+            onChanged: (value) => setState(() => _fieldHeight = value),
+          ),
+        ),
+        _Toggle(
+          label: 'labeledPlaceholder',
+          value: _labeledPlaceholder,
+          onChanged: (value) => setState(() => _labeledPlaceholder = value),
+        ),
+        _Toggle(
+          label: 'showCharacterCounter',
+          value: _showCounter,
+          onChanged: (value) => setState(() => _showCounter = value),
+        ),
+        _Toggle(
+          label: 'enabled',
+          value: _enabled,
+          onChanged: (value) => setState(() => _enabled = value),
+        ),
+        _Toggle(
+          label: 'readOnly',
+          value: _readOnly,
+          onChanged: (value) => setState(() => _readOnly = value),
+        ),
+        _EventProperty(_event),
+      ],
+      preview: TsaiTextarea(
+        controller: _controller,
+        placeholder: _emptyToNull(_placeholder),
+        labeledPlaceholder: _labeledPlaceholder,
+        description: _emptyToNull(_description),
+        errorText: _emptyToNull(_errorText),
+        enabled: _enabled,
+        readOnly: _readOnly,
+        showCharacterCounter: _showCounter,
+        maxLength: _maxLength,
+        fieldHeight: _fieldHeight,
+        onChanged: (value) => setState(() => _event = 'onChanged($value)'),
+        onSubmitted: (value) => setState(() => _event = 'onSubmitted($value)'),
+        onFocusChange: (value) =>
+            setState(() => _event = 'onFocusChange($value)'),
+      ),
+    ),
+  );
+}
+
 class SearchInputDemo extends StatefulWidget {
   const SearchInputDemo({super.key});
 

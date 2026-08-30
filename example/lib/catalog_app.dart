@@ -17,6 +17,7 @@ import 'features/effects/glow_demo_screen.dart';
 import 'features/feedback/feedback_demo_screen.dart';
 import 'features/bottom_nav_bar/bottom_nav_bar_demo_screen.dart';
 import 'features/bottom_sheet/bottom_sheet_demo_screen.dart';
+import 'features/date_picker/date_picker_demo_screen.dart';
 import 'features/divider/divider_demo_screen.dart';
 import 'features/icons/icon_demo_screen.dart';
 import 'features/inputs/input_demo_screen.dart';
@@ -202,6 +203,18 @@ class _CatalogAppState extends State<CatalogApp> {
         onThemeModeChanged: _setThemeMode,
       ),
       '/input-pin': (context) => PinInputDemoScreen(
+        themeMode: _themeMode,
+        onThemeModeChanged: _setThemeMode,
+      ),
+      '/input-textarea': (context) => TextareaDemoScreen(
+        themeMode: _themeMode,
+        onThemeModeChanged: _setThemeMode,
+      ),
+      '/date-picker': (context) => DatePickerDemoScreen(
+        themeMode: _themeMode,
+        onThemeModeChanged: _setThemeMode,
+      ),
+      '/time-picker': (context) => TimePickerDemoScreen(
         themeMode: _themeMode,
         onThemeModeChanged: _setThemeMode,
       ),

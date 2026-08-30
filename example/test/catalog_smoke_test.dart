@@ -786,6 +786,9 @@ void main() {
 
   for (final demo in <(String, String)>[
     ('/input-search', 'input-search-demo'),
+    ('/input-textarea', 'textarea-demo'),
+    ('/date-picker', 'date-picker-demo'),
+    ('/time-picker', 'time-picker-demo'),
     ('/effects/glow', 'glow-demo'),
     ('/bottom-sheet', 'bottom-sheet-demo'),
     ('/modal-dialog', 'modal-dialog-demo'),

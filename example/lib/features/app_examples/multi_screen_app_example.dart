@@ -513,6 +513,7 @@ class _TransferComposer extends StatefulWidget {
 
 class _TransferComposerState extends State<_TransferComposer> {
   var _amount = '120.00';
+  TimeOfDay? _scheduledTime;
 
   void _append(String digit) {
     setState(() {
@@ -556,6 +557,25 @@ class _TransferComposerState extends State<_TransferComposer> {
               });
             },
           ),
+        ),
+        SizedBox(height: tokens.spacing.space16),
+        TsaiButton(
+          key: const ValueKey<String>('schedule-transfer-time'),
+          label: _scheduledTime == null
+              ? 'Schedule time'
+              : 'Scheduled ${_scheduledTime!.hour}:${_scheduledTime!.minute.toString().padLeft(2, '0')}',
+          variant: TsaiButtonVariant.outline,
+          isExpanded: true,
+          onPressed: () async {
+            final result = await showTsaiTimePicker(
+              context: context,
+              initialTime: _scheduledTime,
+              minuteStep: 5,
+            );
+            if (result != null) {
+              setState(() => _scheduledTime = result);
+            }
+          },
         ),
         SizedBox(height: tokens.spacing.space16),
         TsaiButton(
@@ -771,6 +791,14 @@ class _FormScreenExampleState extends State<FormScreenExample> {
                     placeholder: 'Email address',
                     keyboardType: TextInputType.emailAddress,
                     description: 'Statements and security alerts go here.',
+                  ),
+                  SizedBox(height: tokens.spacing.space16),
+                  const TsaiTextarea(
+                    key: ValueKey<String>('profile-note-textarea'),
+                    placeholder: 'Note for the bank',
+                    description: 'Shown to support when you write in.',
+                    initialValue:
+                        'Please call before posting a replacement card.',
                   ),
                   SizedBox(height: tokens.spacing.space24),
                   const TsaiTextHeading(
@@ -1481,99 +1509,156 @@ class _InvestmentTabContent extends StatelessWidget {
   );
 }
 
-class _ActivityList extends StatelessWidget {
+class _ActivityList extends StatefulWidget {
   const _ActivityList();
+
+  @override
+  State<_ActivityList> createState() => _ActivityListState();
+}
+
+class _ActivityListState extends State<_ActivityList> {
+  TsaiDatePeriod? _period;
+
+  String get _periodLabel {
+    final period = _period;
+    if (period == null) {
+      return 'All activity';
+    }
+    if (!period.isRange) {
+      return '${period.start.day} ${_monthShort(period.start)}';
+    }
+    return '${period.start.day}–${period.resolvedEnd.day} ${_monthShort(period.start)}';
+  }
+
+  String _monthShort(DateTime value) {
+    const names = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
+    return names[value.month - 1];
+  }
 
   @override
   Widget build(BuildContext context) {
     final tokens = TsaiThemeTokens.of(context);
     return Padding(
       padding: const EdgeInsets.only(top: 16),
-      child: TsaiList(
-        title: 'Recent activity',
-        headerTrailingIcon: HitIcon(
-          icon: const TsaiIcon(LucideIcons.search),
-          semanticLabel: 'Search activity',
-          onPressed: () => showTsaiModalDialog<void>(
-            context: context,
-            title: 'Search activity',
-            message: 'Find transfers, card taps, and incoming payments.',
-            icon: const TsaiIcon(LucideIcons.search),
-            primaryAction: Builder(
-              builder: (dialogContext) => TsaiButton(
-                label: 'Close',
-                onPressed: () => Navigator.of(dialogContext).pop(),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          TsaiChip(
+            key: const ValueKey<String>('activity-period-chip'),
+            label: _periodLabel,
+            selected: _period != null,
+            onTap: () async {
+              final result = await showTsaiDatePeriodPicker(
+                context: context,
+                now: DateTime(2026, 8, 30),
+                initialPeriod: _period,
+              );
+              if (result != null) {
+                setState(() => _period = result);
+              }
+            },
+          ),
+          SizedBox(height: tokens.spacing.space12),
+          TsaiList(
+            title: 'Recent activity',
+            headerTrailingIcon: HitIcon(
+              icon: const TsaiIcon(LucideIcons.search),
+              semanticLabel: 'Search activity',
+              onPressed: () => showTsaiModalDialog<void>(
+                context: context,
+                title: 'Search activity',
+                message: 'Find transfers, card taps, and incoming payments.',
+                icon: const TsaiIcon(LucideIcons.search),
+                primaryAction: Builder(
+                  builder: (dialogContext) => TsaiButton(
+                    label: 'Close',
+                    onPressed: () => Navigator.of(dialogContext).pop(),
+                  ),
+                ),
+              ),
+            ),
+            items: [
+              for (final activity in _activities)
+                TsaiListItem(
+                  icon: TsaiIcon(activity.icon, size: 20),
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      TsaiTextBody(
+                        activity.title,
+                        size: TsaiBodySize.medium,
+                        weight: TsaiTextWeight.medium,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      SizedBox(height: tokens.spacing.space2),
+                      TsaiTextCaption(
+                        activity.subtitle,
+                        size: TsaiCaptionSize.medium,
+                        weight: TsaiTextWeight.regular,
+                        color: tokens.colors.contentTertiary,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
+                  trailing: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      TsaiTextMonoBody(
+                        activity.amount,
+                        size: TsaiBodySize.medium,
+                        color: activity.incoming
+                            ? tokens.colors.accentSuccess
+                            : tokens.colors.contentPrimary,
+                      ),
+                      SizedBox(height: tokens.spacing.space2),
+                      TsaiTextCaption(
+                        activity.time,
+                        size: TsaiCaptionSize.medium,
+                        weight: TsaiTextWeight.regular,
+                        color: tokens.colors.contentTertiary,
+                      ),
+                    ],
+                  ),
+                ),
+            ],
+            button: TsaiButton(
+              label: 'View all activity',
+              size: TsaiButtonSize.medium,
+              variant: TsaiButtonVariant.outline,
+              isExpanded: true,
+              leadingIcon: const TsaiIcon(LucideIcons.receipt_text, size: 16),
+              onPressed: () => showTsaiModalDialog<void>(
+                context: context,
+                title: 'Activity history',
+                message: 'The full ledger stays in this account.',
+                icon: const TsaiIcon(LucideIcons.receipt_text),
+                primaryAction: Builder(
+                  builder: (dialogContext) => TsaiButton(
+                    label: 'Close',
+                    onPressed: () => Navigator.of(dialogContext).pop(),
+                  ),
+                ),
               ),
             ),
           ),
-        ),
-        items: [
-          for (final activity in _activities)
-            TsaiListItem(
-              icon: TsaiIcon(activity.icon, size: 20),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  TsaiTextBody(
-                    activity.title,
-                    size: TsaiBodySize.medium,
-                    weight: TsaiTextWeight.medium,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  SizedBox(height: tokens.spacing.space2),
-                  TsaiTextCaption(
-                    activity.subtitle,
-                    size: TsaiCaptionSize.medium,
-                    weight: TsaiTextWeight.regular,
-                    color: tokens.colors.contentTertiary,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
-              ),
-              trailing: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  TsaiTextMonoBody(
-                    activity.amount,
-                    size: TsaiBodySize.medium,
-                    color: activity.incoming
-                        ? tokens.colors.accentSuccess
-                        : tokens.colors.contentPrimary,
-                  ),
-                  SizedBox(height: tokens.spacing.space2),
-                  TsaiTextCaption(
-                    activity.time,
-                    size: TsaiCaptionSize.medium,
-                    weight: TsaiTextWeight.regular,
-                    color: tokens.colors.contentTertiary,
-                  ),
-                ],
-              ),
-            ),
         ],
-        button: TsaiButton(
-          label: 'View all activity',
-          size: TsaiButtonSize.medium,
-          variant: TsaiButtonVariant.outline,
-          isExpanded: true,
-          leadingIcon: const TsaiIcon(LucideIcons.receipt_text, size: 16),
-          onPressed: () => showTsaiModalDialog<void>(
-            context: context,
-            title: 'Activity history',
-            message: 'The full ledger stays in this account.',
-            icon: const TsaiIcon(LucideIcons.receipt_text),
-            primaryAction: Builder(
-              builder: (dialogContext) => TsaiButton(
-                label: 'Close',
-                onPressed: () => Navigator.of(dialogContext).pop(),
-              ),
-            ),
-          ),
-        ),
       ),
     );
   }

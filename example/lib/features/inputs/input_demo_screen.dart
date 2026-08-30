@@ -92,3 +92,21 @@ class PinInputDemoScreen extends StatelessWidget {
     child: const PinInputDemo(),
   );
 }
+
+class TextareaDemoScreen extends StatelessWidget {
+  const TextareaDemoScreen({
+    required this.themeMode,
+    required this.onThemeModeChanged,
+    super.key,
+  });
+  final ThemeMode themeMode;
+  final ValueChanged<ThemeMode> onThemeModeChanged;
+
+  @override
+  Widget build(BuildContext context) => ComponentDemoWindow(
+    section: ComponentDemoSection.textarea,
+    themeMode: themeMode,
+    onThemeModeChanged: onThemeModeChanged,
+    child: const TextareaDemo(),
+  );
+}
