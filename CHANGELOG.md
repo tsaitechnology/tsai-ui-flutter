@@ -1,3 +1,12 @@
+## 0.6.11 - 2026-08-30
+
+### Maintenance
+
+- Stop clipping Bar Chart corners with a card-radius mask. ([490618e](https://github.com/tsaitechnology/tsai-ui-flutter/commit/490618e8abb97dc25861051d45e81c4bf6e9c434))
+- Merge branch 'main' of github.com:tsaitechnology/tsai-ui-flutter ([203bc04](https://github.com/tsaitechnology/tsai-ui-flutter/commit/203bc04bc12b8b57bbae378ddb6cf647adfdc561))
+- Align the example lockfile with Flutter 3.47 SDK transitives. ([304ff13](https://github.com/tsaitechnology/tsai-ui-flutter/commit/304ff1369af509f556b43186a17da1236099f2f8))
+- Refresh Penpot goldens for Flutter 3.47 rasterization. ([42817ae](https://github.com/tsaitechnology/tsai-ui-flutter/commit/42817ae9be8e187b5a1bb3ed956f25603024eada))
+
 ## 0.6.10 - 2026-08-29
 
 ### Maintenance
