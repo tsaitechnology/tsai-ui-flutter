@@ -17,7 +17,10 @@ TsaiBarChart(
 )
 ```
 
-`status` is the same data-source contract as [TsaiLineChart](tsai-line-chart.md).
+`status` is the same data-source contract as [TsaiLineChart](tsai-line-chart.md):
+Mini Tabs are inert while `loading`. A previous bar series is grayed in place;
+the Penpot Loading bars (seven 1W-shaped columns) are used only when there is
+no last series.
 Hold a bar to scrub; other bars dim to `accent.muted`. After release the
 selection stays. The 96×44 tooltip pins flush on the first or last bar.
 `showTabs` hides Mini Tabs when the host supplies another period control.

@@ -77,24 +77,20 @@ class TsaiLineChart extends StatefulWidget {
   State<TsaiLineChart> createState() => _TsaiLineChartState();
 }
 
-class _TsaiLineChartState extends State<TsaiLineChart>
-    with SingleTickerProviderStateMixin {
+class _TsaiLineChartState extends State<TsaiLineChart> {
   int? _hoverIndex;
   int? _holdIndex;
   int? _stickyIndex;
-  late final AnimationController _shimmer = AnimationController(
-    vsync: this,
-    duration: const Duration(milliseconds: 1400),
-  );
+  final _memory = TsaiChartSeriesMemory();
 
   int? get _scrubIndex => _holdIndex ?? _hoverIndex ?? _stickyIndex;
 
   void _notifyScrub() => widget.onScrubIndexChanged?.call(_stickyIndex);
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _syncShimmer();
+  void initState() {
+    super.initState();
+    _syncMemory();
   }
 
   @override
@@ -107,26 +103,15 @@ class _TsaiLineChartState extends State<TsaiLineChart>
       _stickyIndex = null;
       widget.onScrubIndexChanged?.call(null);
     }
-    _syncShimmer();
+    _syncMemory();
   }
 
-  void _syncShimmer() {
-    final reduce = MediaQuery.disableAnimationsOf(context);
-    if (widget.status == TsaiChartStatus.loading && !reduce) {
-      if (!_shimmer.isAnimating) {
-        _shimmer.repeat();
-      }
-    } else {
-      _shimmer
-        ..stop()
-        ..value = 0;
-    }
-  }
-
-  @override
-  void dispose() {
-    _shimmer.dispose();
-    super.dispose();
+  void _syncMemory() {
+    _memory.sync(
+      status: widget.status,
+      incoming: widget.points,
+      incomingPeriod: widget.period,
+    );
   }
 
   int _indexForDx(double dx) {
@@ -171,22 +156,23 @@ class _TsaiLineChartState extends State<TsaiLineChart>
                     });
                     _notifyScrub();
                   },
-                  child: AnimatedBuilder(
-                    animation: _shimmer,
-                    builder: (context, child) => CustomPaint(
-                      painter: _LineChartPainter(
-                        tokens: tokens,
-                        points: widget.points,
-                        status: widget.status,
-                        scrubIndex: _scrubIndex,
-                        showGrid: widget.showGrid,
-                        showBaseline: widget.showBaseline,
-                        showAxisY: widget.showAxisY,
-                        showAxisX: widget.showAxisX,
-                        showArea: widget.showArea,
-                        showDot: widget.showDot && _scrubIndex == null,
-                        shimmer: _shimmer.value,
-                      ),
+                  child: CustomPaint(
+                    painter: _LineChartPainter(
+                      tokens: tokens,
+                      points: widget.status == TsaiChartStatus.loading
+                          ? (_memory.points ?? const [])
+                          : widget.points,
+                      status: widget.status,
+                      canonicalLoading:
+                          widget.status == TsaiChartStatus.loading &&
+                          !_memory.hasPoints,
+                      scrubIndex: _scrubIndex,
+                      showGrid: widget.showGrid,
+                      showBaseline: widget.showBaseline,
+                      showAxisY: widget.showAxisY,
+                      showAxisX: widget.showAxisX,
+                      showArea: widget.showArea,
+                      showDot: widget.showDot && _scrubIndex == null,
                     ),
                   ),
                 ),
@@ -221,7 +207,9 @@ class _TsaiLineChartState extends State<TsaiLineChart>
                   child: TsaiMiniTabs(
                     labels: [for (final period in periods) period.label],
                     selectedIndex: periods.indexOf(widget.period),
-                    onChanged: widget.onPeriodChanged == null
+                    onChanged:
+                        widget.status == TsaiChartStatus.loading ||
+                            widget.onPeriodChanged == null
                         ? null
                         : (index) => widget.onPeriodChanged!(periods[index]),
                   ),
@@ -239,6 +227,7 @@ class _LineChartPainter extends CustomPainter {
     required this.tokens,
     required this.points,
     required this.status,
+    required this.canonicalLoading,
     required this.scrubIndex,
     required this.showGrid,
     required this.showBaseline,
@@ -246,12 +235,12 @@ class _LineChartPainter extends CustomPainter {
     required this.showAxisX,
     required this.showArea,
     required this.showDot,
-    required this.shimmer,
   });
 
   final TsaiThemeTokens tokens;
   final List<TsaiChartPoint> points;
   final TsaiChartStatus status;
+  final bool canonicalLoading;
   final int? scrubIndex;
   final bool showGrid;
   final bool showBaseline;
@@ -259,7 +248,6 @@ class _LineChartPainter extends CustomPainter {
   final bool showAxisX;
   final bool showArea;
   final bool showDot;
-  final double shimmer;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -286,12 +274,20 @@ class _LineChartPainter extends CustomPainter {
       return;
     }
 
-    final values = [
-      if (points.isEmpty)
-        ...tsaiChartLoadingSilhouette
-      else
-        for (final point in points) point.value,
-    ];
+    if (status == TsaiChartStatus.loading && canonicalLoading) {
+      tsaiPaintLoadingLine(
+        canvas,
+        size,
+        tsaiChartLoadingLinePath(),
+        tokens.colors.surfaceSkeleton,
+      );
+      return;
+    }
+
+    final values = [for (final point in points) point.value];
+    if (values.isEmpty) {
+      return;
+    }
     final offsets = tsaiLinePlotOffsets(values, size);
     final linePath = tsaiSmoothLinePath(offsets);
     final areaPath = Path.from(linePath)
@@ -300,52 +296,12 @@ class _LineChartPainter extends CustomPainter {
       ..close();
 
     if (status == TsaiChartStatus.loading) {
-      canvas.drawPath(
-        areaPath,
-        Paint()
-          ..shader = TsaiChartChrome.loadingAreaGradient.createShader(
-            Rect.fromLTWH(
-              0,
-              TsaiChartMetrics.plotTop,
-              size.width,
-              TsaiChartMetrics.linePlotBottom - TsaiChartMetrics.plotTop,
-            ),
-          ),
-      );
-      canvas.drawPath(
+      tsaiPaintLoadingLine(
+        canvas,
+        size,
         linePath,
-        Paint()
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = 3
-          ..strokeJoin = StrokeJoin.round
-          ..strokeCap = StrokeCap.round
-          ..color = tokens.colors.surfaceSkeleton,
+        tokens.colors.surfaceSkeleton,
       );
-      final offset = -3 + shimmer * 6;
-      canvas.saveLayer(Offset.zero & size, Paint());
-      canvas.drawPath(areaPath, Paint()..color = const Color(0x338C8FA6));
-      canvas.drawPath(
-        linePath,
-        Paint()
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = 3
-          ..color = const Color(0x338C8FA6),
-      );
-      canvas.drawRect(
-        Offset.zero & size,
-        Paint()
-          ..blendMode = BlendMode.srcATop
-          ..shader = LinearGradient(
-            begin: Alignment(offset - 1, -0.2),
-            end: Alignment(offset + 1, 0.2),
-            colors: const [
-              Color(0x008C8FA6),
-              Color(0x338C8FA6),
-              Color(0x008C8FA6),
-            ],
-          ).createShader(Offset.zero & size),
-      );
-      canvas.restore();
       return;
     }
 
@@ -430,6 +386,7 @@ class _LineChartPainter extends CustomPainter {
   bool shouldRepaint(covariant _LineChartPainter oldDelegate) =>
       oldDelegate.points != points ||
       oldDelegate.status != status ||
+      oldDelegate.canonicalLoading != canonicalLoading ||
       oldDelegate.scrubIndex != scrubIndex ||
       oldDelegate.showGrid != showGrid ||
       oldDelegate.showBaseline != showBaseline ||
@@ -437,6 +394,5 @@ class _LineChartPainter extends CustomPainter {
       oldDelegate.showAxisX != showAxisX ||
       oldDelegate.showArea != showArea ||
       oldDelegate.showDot != showDot ||
-      oldDelegate.shimmer != shimmer ||
       oldDelegate.tokens != tokens;
 }

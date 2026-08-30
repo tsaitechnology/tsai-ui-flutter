@@ -1,5 +1,10 @@
+import 'dart:math' as math;
+import 'dart:typed_data';
+import 'dart:ui' as ui;
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tsai_ui/tsai_ui.dart';
 
@@ -62,6 +67,32 @@ void main() {
     await tester.pump();
   }
 
+  Future<Uint8List> capturePlot(
+    WidgetTester tester, {
+    required Widget child,
+  }) async {
+    await pumpChart(
+      tester,
+      child: ColoredBox(
+        color: const Color(0xFF15161F),
+        child: RepaintBoundary(
+          key: const ValueKey<String>('plot-capture'),
+          child: child,
+        ),
+      ),
+    );
+    final boundary = tester.renderObject<RenderRepaintBoundary>(
+      find.byKey(const ValueKey<String>('plot-capture')),
+    );
+    late Uint8List out;
+    await tester.runAsync(() async {
+      final image = await boundary.toImage(pixelRatio: 1);
+      final bytes = await image.toByteData(format: ui.ImageByteFormat.rawRgba);
+      out = bytes!.buffer.asUint8List();
+    });
+    return out;
+  }
+
   testWidgets('Mini Tabs is 294 by 28 and reports the tapped index', (
     tester,
   ) async {
@@ -114,7 +145,7 @@ void main() {
     expect(retried, isTrue);
   });
 
-  testWidgets('Bar Chart is 318 by 280 and keeps tabs while loading', (
+  testWidgets('Bar Chart is 318 by 280 and ignores tabs while loading', (
     tester,
   ) async {
     TsaiChartPeriod? period;
@@ -131,7 +162,7 @@ void main() {
     expect(tester.getSize(find.byType(TsaiBarChart)), const Size(318, 280));
     await tester.tap(find.text('1Y'));
     await tester.pump();
-    expect(period, TsaiChartPeriod.oneYear);
+    expect(period, isNull);
   });
 
   testWidgets('Line Chart hold scrubs and keeps the tooltip after release', (
@@ -212,6 +243,70 @@ void main() {
     expect(find.text('Mon'), findsOneWidget);
   });
 
+  testWidgets(
+    'Line Chart loading stroke is skeleton and area is 20% slate fade',
+    (tester) async {
+      const canvas = Color(0xFF15161F);
+      const skeleton = Color(0xFF1C1C20);
+      // `#8C8FA6` at 20% over Penpot card `#15161F` at the top of the area.
+      const areaTop = Color(0xFF2D2E3A);
+      await pumpChart(
+        tester,
+        child: const RepaintBoundary(
+          key: ValueKey<String>('loading-line-capture'),
+          child: ColoredBox(
+            color: canvas,
+            child: TsaiLineChart(points: [], status: TsaiChartStatus.loading),
+          ),
+        ),
+      );
+
+      final boundary = tester.renderObject<RenderRepaintBoundary>(
+        find.byKey(const ValueKey<String>('loading-line-capture')),
+      );
+      ui.Image? image;
+      ByteData? bytes;
+      await tester.runAsync(() async {
+        image = await boundary.toImage(pixelRatio: 1);
+        bytes = await image!.toByteData(format: ui.ImageByteFormat.rawRgba);
+      });
+      expect(bytes, isNotNull);
+      expect(image, isNotNull);
+      final data = bytes!.buffer.asUint8List();
+      final width = image!.width;
+
+      int dist(int index, Color color) {
+        final red = (color.r * 255).round();
+        final green = (color.g * 255).round();
+        final blue = (color.b * 255).round();
+        return (data[index] - red).abs() +
+            (data[index + 1] - green).abs() +
+            (data[index + 2] - blue).abs();
+      }
+
+      var closestSkeleton = 999;
+      var closestAreaTop = 999;
+      for (var y = 50; y < 190; y++) {
+        for (var x = 16; x < width - 16; x++) {
+          final index = (y * width + x) * 4;
+          closestSkeleton = math.min(closestSkeleton, dist(index, skeleton));
+          closestAreaTop = math.min(closestAreaTop, dist(index, areaTop));
+        }
+      }
+      expect(closestSkeleton, lessThan(16));
+      expect(closestAreaTop, lessThan(16));
+
+      var maxFloor = 0;
+      for (var y = 204; y < 222; y++) {
+        for (var x = 24; x < width - 24; x++) {
+          final index = (y * width + x) * 4;
+          maxFloor = math.max(maxFloor, dist(index, canvas));
+        }
+      }
+      expect(maxFloor, lessThan(36));
+    },
+  );
+
   testWidgets('Line Chart shrinks to a narrow parent instead of clipping', (
     tester,
   ) async {
@@ -224,5 +319,166 @@ void main() {
       tester.getSize(find.byType(TsaiLineChart)).height,
       closeTo(175.94, 0.2),
     );
+  });
+
+  testWidgets('Line Chart ignores Mini Tabs while loading', (tester) async {
+    TsaiChartPeriod? period;
+    await pumpChart(
+      tester,
+      child: TsaiLineChart(
+        points: const [],
+        status: TsaiChartStatus.loading,
+        onPeriodChanged: (value) => period = value,
+      ),
+    );
+    await tester.tap(find.text('1Y'));
+    await tester.pump();
+    expect(period, isNull);
+  });
+
+  testWidgets(
+    'Bar Chart first-load skeleton does not follow the selected period',
+    (tester) async {
+      final day = await capturePlot(
+        tester,
+        child: const TsaiBarChart(
+          points: [],
+          status: TsaiChartStatus.loading,
+          period: TsaiChartPeriod.oneDay,
+          showTabs: false,
+        ),
+      );
+      final year = await capturePlot(
+        tester,
+        child: const TsaiBarChart(
+          points: [],
+          status: TsaiChartStatus.loading,
+          period: TsaiChartPeriod.oneYear,
+          showTabs: false,
+        ),
+      );
+      expect(day, year);
+    },
+  );
+
+  testWidgets('Bar Chart loading after data keeps the previous bars', (
+    tester,
+  ) async {
+    var status = TsaiChartStatus.data;
+    late StateSetter setHost;
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: TsaiTheme.dark(),
+        home: MediaQuery(
+          data: const MediaQueryData(disableAnimations: true),
+          child: Scaffold(
+            body: Center(
+              child: StatefulBuilder(
+                builder: (context, setState) {
+                  setHost = setState;
+                  return ColoredBox(
+                    color: const Color(0xFF15161F),
+                    child: RepaintBoundary(
+                      key: const ValueKey<String>('retain-capture'),
+                      child: TsaiBarChart(
+                        points: status == TsaiChartStatus.data
+                            ? points
+                            : const [],
+                        status: status,
+                        period: TsaiChartPeriod.oneWeek,
+                        showTabs: false,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+    setHost(() => status = TsaiChartStatus.loading);
+    await tester.pump();
+
+    final boundary = tester.renderObject<RenderRepaintBoundary>(
+      find.byKey(const ValueKey<String>('retain-capture')),
+    );
+    late Uint8List retained;
+    await tester.runAsync(() async {
+      final image = await boundary.toImage(pixelRatio: 1);
+      retained = (await image.toByteData(
+        format: ui.ImageByteFormat.rawRgba,
+      ))!.buffer.asUint8List();
+    });
+    final canonical = await capturePlot(
+      tester,
+      child: const TsaiBarChart(
+        points: [],
+        status: TsaiChartStatus.loading,
+        period: TsaiChartPeriod.oneWeek,
+        showTabs: false,
+      ),
+    );
+    expect(retained, isNot(canonical));
+  });
+
+  testWidgets('Bar Chart loading after error uses the canonical skeleton', (
+    tester,
+  ) async {
+    var status = TsaiChartStatus.error;
+    late StateSetter setHost;
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: TsaiTheme.dark(),
+        home: MediaQuery(
+          data: const MediaQueryData(disableAnimations: true),
+          child: Scaffold(
+            body: Center(
+              child: StatefulBuilder(
+                builder: (context, setState) {
+                  setHost = setState;
+                  return ColoredBox(
+                    color: const Color(0xFF15161F),
+                    child: RepaintBoundary(
+                      key: const ValueKey<String>('error-loading-capture'),
+                      child: TsaiBarChart(
+                        points: const [],
+                        status: status,
+                        period: TsaiChartPeriod.oneWeek,
+                        showTabs: false,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+    setHost(() => status = TsaiChartStatus.loading);
+    await tester.pump();
+    final boundary = tester.renderObject<RenderRepaintBoundary>(
+      find.byKey(const ValueKey<String>('error-loading-capture')),
+    );
+    late Uint8List afterError;
+    await tester.runAsync(() async {
+      final image = await boundary.toImage(pixelRatio: 1);
+      afterError = (await image.toByteData(
+        format: ui.ImageByteFormat.rawRgba,
+      ))!.buffer.asUint8List();
+    });
+    final canonical = await capturePlot(
+      tester,
+      child: const TsaiBarChart(
+        points: [],
+        status: TsaiChartStatus.loading,
+        period: TsaiChartPeriod.oneWeek,
+        showTabs: false,
+      ),
+    );
+    expect(afterError, canonical);
   });
 }

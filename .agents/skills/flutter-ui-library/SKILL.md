@@ -11,19 +11,22 @@ evolution across hundreds of consuming applications.
 
 ## Core workflow
 
-1. Inspect the package, its consumers, supported Flutter/Dart constraints, and
+1. For visual or token work, connect Penpot MCP to the Design System file and
+   dump the target variant before changing pixels. If the plugin is not
+   connected, stop. Do not guess from tickets or screenshot captions.
+2. Inspect the package, its consumers, supported Flutter/Dart constraints, and
    existing public exports. Do not assume an application architecture applies
    to a component package.
-2. Write or update an API inventory before implementation:
+3. Write or update an API inventory before implementation:
    - intended public libraries, types, constructors, callbacks, and themes;
    - internal implementation types;
    - compatibility impact of each change.
-3. Define the dependency graph and token contract before adding components.
-4. Implement the smallest coherent public surface. Keep implementation under
+4. Define the dependency graph and token contract before adding components.
+5. Implement the smallest coherent public surface. Keep implementation under
    `lib/src/` and expose it through deliberate top-level libraries.
-5. Test tokens, behavior, semantics, visuals, mobile constraints, and web.
-6. Run all quality and publication gates before declaring the package ready.
-7. Classify every public API change with semantic versioning and document the
+6. Test tokens, behavior, semantics, visuals, mobile constraints, and web.
+7. Run all quality and publication gates before declaring the package ready.
+8. Classify every public API change with semantic versioning and document the
    migration path.
 
 ## Required architectural decisions

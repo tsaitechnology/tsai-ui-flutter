@@ -78,6 +78,15 @@ Latest snapshot read on 2026-08-13:
 - Card: 342 × 148 reference composition, 16-pixel radius and padding,
   20-pixel header, 16-pixel content gap, and arbitrary body content.
 
+## Source of truth
+
+Penpot is the only authority for visual UI and tokens. Ticket prose, raw hex
+in Vikunja, screenshot captions, and Skeleton shimmer recipes are not.
+
+Do not implement or change appearance unless Penpot MCP is connected to the
+Design System file and the target variant has been dumped (`fills`, `strokes`,
+layout, tokens). If the plugin is not connected, stop and wait for a reconnect.
+
 ## Sync workflow
 
 1. Read `tokenOverview()`, every raw token value, and reusable color/gradient

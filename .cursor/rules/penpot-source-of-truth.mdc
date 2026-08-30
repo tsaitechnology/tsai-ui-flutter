@@ -1,0 +1,27 @@
+---
+description: Penpot is the only visual source of truth; stop if Penpot MCP is not connected.
+alwaysApply: true
+---
+
+# Penpot is the only visual source of truth
+
+When the work changes UI appearance, layout, motion, or design tokens:
+
+1. **Trust Penpot only.** Measured fills, strokes, radii, type, spacing, and
+   variant layers from the Design System file beat Vikunja text, ticket hex,
+   screenshot captions, Skeleton shimmer recipes, and prior chat guesses.
+2. **Penpot MCP is required.** Before painting or changing visuals, call the
+   connected Penpot plugin (`execute_code` / `export_shape`) and read the
+   target component variant (page, name, state).
+3. **No plugin instance → stop immediately.** If MCP auth works but the plugin
+   is not connected to the file, or shape dumps fail, do not implement, do not
+   invent `#RRGGBB`, and do not "approximate" from copy. Tell the user to open
+   the Design System in Penpot and connect the MCP plugin, then wait.
+4. **Tokens over raw hex.** Record `token + opacity + role` (fill, stroke,
+   overlay, canvas behind the shot). Copy hex from a shape dump only, with
+   light and dark. Shimmer (`#8C8FA6`) is an overlay, not the silhouette fill.
+5. **Screenshots are not a substitute for MCP.** Use them only after RGB
+   sampling, and only to confirm a dump. Image descriptions are not evidence.
+
+This rule does not apply to non-visual work (git, changelog policy, tests that
+do not assert appearance).

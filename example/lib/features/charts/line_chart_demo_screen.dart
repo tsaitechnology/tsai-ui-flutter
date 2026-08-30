@@ -75,7 +75,7 @@ class _LineChartDemoState extends State<_LineChartDemo> {
               TsaiChartStatus.data,
               TsaiChartStatus.error,
             ],
-            labels: const ['Not loaded', 'Loaded empty', 'Loaded', 'Error'],
+            labels: const ['Loading', 'Loaded empty', 'Loaded', 'Error'],
             onChanged: (value) => setState(() => _source = value),
           ),
           PlaygroundSelectControl<TsaiChartPeriod>(

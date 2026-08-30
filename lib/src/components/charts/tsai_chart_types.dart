@@ -28,7 +28,9 @@ enum TsaiChartStatus {
   /// Loaded series. Scrub and Mini Tabs are interactive.
   data,
 
-  /// Not loaded yet. Skeleton silhouette; Mini Tabs stay interactive.
+  /// Request in flight. Mini Tabs are inert. The plot is the last loaded
+  /// series in skeleton paint, or the Penpot Loading silhouette when there
+  /// is no last series (first load, retry after error, or after empty).
   loading,
 
   /// Loaded, but this period has no samples.

@@ -115,24 +115,20 @@ class TsaiBarChart extends StatefulWidget {
   State<TsaiBarChart> createState() => _TsaiBarChartState();
 }
 
-class _TsaiBarChartState extends State<TsaiBarChart>
-    with SingleTickerProviderStateMixin {
+class _TsaiBarChartState extends State<TsaiBarChart> {
   int? _hoverIndex;
   int? _holdIndex;
   int? _stickyIndex;
-  late final AnimationController _shimmer = AnimationController(
-    vsync: this,
-    duration: const Duration(milliseconds: 1400),
-  );
+  final _memory = TsaiChartSeriesMemory();
 
   int? get _scrubIndex => _holdIndex ?? _hoverIndex ?? _stickyIndex;
 
   void _notifyScrub() => widget.onScrubIndexChanged?.call(_stickyIndex);
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _syncShimmer();
+  void initState() {
+    super.initState();
+    _syncMemory();
   }
 
   @override
@@ -145,26 +141,15 @@ class _TsaiBarChartState extends State<TsaiBarChart>
       _stickyIndex = null;
       widget.onScrubIndexChanged?.call(null);
     }
-    _syncShimmer();
+    _syncMemory();
   }
 
-  void _syncShimmer() {
-    final reduce = MediaQuery.disableAnimationsOf(context);
-    if (widget.status == TsaiChartStatus.loading && !reduce) {
-      if (!_shimmer.isAnimating) {
-        _shimmer.repeat();
-      }
-    } else {
-      _shimmer
-        ..stop()
-        ..value = 0;
-    }
-  }
-
-  @override
-  void dispose() {
-    _shimmer.dispose();
-    super.dispose();
+  void _syncMemory() {
+    _memory.sync(
+      status: widget.status,
+      incoming: widget.points,
+      incomingPeriod: widget.period,
+    );
   }
 
   int _indexForDx(double dx, _TsaiBarChartLayout layout) {
@@ -180,7 +165,13 @@ class _TsaiBarChartState extends State<TsaiBarChart>
   @override
   Widget build(BuildContext context) {
     final tokens = TsaiThemeTokens.of(context);
-    final layout = _TsaiBarChartLayout.forPeriod(widget.period, tokens);
+    final layoutPeriod =
+        widget.status == TsaiChartStatus.loading && !_memory.hasPoints
+        ? TsaiChartPeriod.oneWeek
+        : widget.status == TsaiChartStatus.loading && _memory.period != null
+        ? _memory.period!
+        : widget.period;
+    final layout = _TsaiBarChartLayout.forPeriod(layoutPeriod, tokens);
     final periods = TsaiChartPeriod.values;
     return Semantics(
       label: widget.semanticLabel ?? 'Bar chart',
@@ -211,17 +202,18 @@ class _TsaiBarChartState extends State<TsaiBarChart>
                     });
                     _notifyScrub();
                   },
-                  child: AnimatedBuilder(
-                    animation: _shimmer,
-                    builder: (context, child) => CustomPaint(
-                      painter: _BarChartPainter(
-                        tokens: tokens,
-                        points: widget.points,
-                        layout: layout,
-                        status: widget.status,
-                        scrubIndex: _scrubIndex,
-                        shimmer: _shimmer.value,
-                      ),
+                  child: CustomPaint(
+                    painter: _BarChartPainter(
+                      tokens: tokens,
+                      points: widget.status == TsaiChartStatus.loading
+                          ? (_memory.points ?? const [])
+                          : widget.points,
+                      layout: layout,
+                      status: widget.status,
+                      canonicalLoading:
+                          widget.status == TsaiChartStatus.loading &&
+                          !_memory.hasPoints,
+                      scrubIndex: _scrubIndex,
                     ),
                   ),
                 ),
@@ -253,7 +245,9 @@ class _TsaiBarChartState extends State<TsaiBarChart>
                   child: TsaiMiniTabs(
                     labels: [for (final period in periods) period.label],
                     selectedIndex: periods.indexOf(widget.period),
-                    onChanged: widget.onPeriodChanged == null
+                    onChanged:
+                        widget.status == TsaiChartStatus.loading ||
+                            widget.onPeriodChanged == null
                         ? null
                         : (index) => widget.onPeriodChanged!(periods[index]),
                   ),
@@ -272,16 +266,16 @@ class _BarChartPainter extends CustomPainter {
     required this.points,
     required this.layout,
     required this.status,
+    required this.canonicalLoading,
     required this.scrubIndex,
-    required this.shimmer,
   });
 
   final TsaiThemeTokens tokens;
   final List<TsaiChartPoint> points;
   final _TsaiBarChartLayout layout;
   final TsaiChartStatus status;
+  final bool canonicalLoading;
   final int? scrubIndex;
-  final double shimmer;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -289,61 +283,46 @@ class _BarChartPainter extends CustomPainter {
       return;
     }
     final values = [
-      for (
-        var index = 0;
-        index < math.min(layout.count, points.length);
-        index++
-      )
-        points[index].value,
+      if (status == TsaiChartStatus.loading && canonicalLoading)
+        ...tsaiChartLoadingBarHeights
+      else
+        for (
+          var index = 0;
+          index < math.min(layout.count, points.length);
+          index++
+        )
+          points[index].value,
     ];
-    if (values.isEmpty && status != TsaiChartStatus.loading) {
+    if (values.isEmpty) {
       return;
     }
-    final fallback = tsaiChartLoadingSilhouette;
-    final series = values.isEmpty ? fallback : values;
-    final maxValue = series.reduce((a, b) => a > b ? a : b);
-    final barCount = status == TsaiChartStatus.loading
-        ? layout.count
-        : math.min(layout.count, points.length);
+    final series = values;
+    final maxValue = status == TsaiChartStatus.loading && canonicalLoading
+        ? TsaiChartMetrics.barPlotHeight
+        : series.reduce((a, b) => a > b ? a : b);
+    final barCount = series.length;
+    final bars = <RRect>[
+      for (var index = 0; index < barCount; index++)
+        RRect.fromLTRBAndCorners(
+          layout.xFor(index),
+          TsaiChartMetrics.barPlotBottom - _barHeight(series[index], maxValue),
+          layout.xFor(index) + layout.barWidth,
+          TsaiChartMetrics.barPlotBottom,
+          topLeft: Radius.circular(layout.topRadius),
+          topRight: Radius.circular(layout.topRadius),
+        ),
+    ];
 
-    for (var index = 0; index < barCount; index++) {
-      final value = index < series.length
-          ? series[index]
-          : fallback[index % fallback.length];
-      final height = _barHeight(value, maxValue);
-      final x = layout.xFor(index);
-      final rect = RRect.fromLTRBAndCorners(
-        x,
-        TsaiChartMetrics.barPlotBottom - height,
-        x + layout.barWidth,
-        TsaiChartMetrics.barPlotBottom,
-        topLeft: Radius.circular(layout.topRadius),
-        topRight: Radius.circular(layout.topRadius),
-      );
-      if (status == TsaiChartStatus.loading) {
-        canvas.drawRRect(rect, Paint()..color = tokens.colors.surfaceSkeleton);
-        final offset = -3 + shimmer * 6;
-        canvas.saveLayer(rect.outerRect, Paint());
-        canvas.drawRRect(rect, Paint()..color = const Color(0x338C8FA6));
-        canvas.drawRect(
-          rect.outerRect,
-          Paint()
-            ..blendMode = BlendMode.srcATop
-            ..shader = LinearGradient(
-              begin: Alignment(0, offset - 1),
-              end: Alignment(0, offset + 1),
-              colors: const [
-                Color(0x008C8FA6),
-                Color(0x338C8FA6),
-                Color(0x008C8FA6),
-              ],
-            ).createShader(rect.outerRect),
-        );
-        canvas.restore();
-      } else {
+    if (status == TsaiChartStatus.loading) {
+      final skeleton = Paint()..color = tokens.colors.surfaceSkeleton;
+      for (final rect in bars) {
+        canvas.drawRRect(rect, skeleton);
+      }
+    } else {
+      for (var index = 0; index < barCount; index++) {
         final muted = scrubIndex != null && scrubIndex != index;
         canvas.drawRRect(
-          rect,
+          bars[index],
           Paint()
             ..color = muted
                 ? tokens.colors.actionPrimaryMuted
@@ -379,13 +358,13 @@ class _BarChartPainter extends CustomPainter {
       final barTop =
           TsaiChartMetrics.barPlotBottom -
           _barHeight(series[scrubIndex!], maxValue);
-      final paint = Paint()
-        ..color = tokens.colors.borderGuide
-        ..strokeWidth = 1;
-      canvas.drawLine(
+      tsaiDrawDashedLine(
+        canvas,
         Offset(x, TsaiChartMetrics.tooltipZoneHeight),
         Offset(x, barTop),
-        paint,
+        Paint()
+          ..color = tokens.colors.borderGuide
+          ..strokeWidth = 1,
       );
     }
   }
@@ -398,7 +377,7 @@ class _BarChartPainter extends CustomPainter {
       oldDelegate.points != points ||
       oldDelegate.layout != layout ||
       oldDelegate.status != status ||
+      oldDelegate.canonicalLoading != canonicalLoading ||
       oldDelegate.scrubIndex != scrubIndex ||
-      oldDelegate.shimmer != shimmer ||
       oldDelegate.tokens != tokens;
 }
