@@ -36,11 +36,15 @@ class TsaiIconButton extends StatelessWidget {
     required this.icon,
     required this.onPressed,
     this.badge = const TsaiIconButtonBadgeNone(),
+    this.semanticLabel,
     super.key,
   });
   final Widget icon;
   final VoidCallback? onPressed;
   final TsaiIconButtonBadge badge;
+
+  /// Accessibility label for the control.
+  final String? semanticLabel;
   @override
   Widget build(BuildContext context) {
     final t = TsaiThemeTokens.of(context);
@@ -53,6 +57,7 @@ class TsaiIconButton extends StatelessWidget {
           IconButton(
             onPressed: onPressed,
             padding: EdgeInsets.zero,
+            tooltip: semanticLabel,
             icon: IconTheme.merge(
               data: IconThemeData(color: t.colors.iconPrimary, size: 20),
               child: icon,
