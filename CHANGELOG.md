@@ -1,3 +1,9 @@
+## 0.6.14 - 2026-08-31
+
+### Maintenance
+
+- Make the whole input plate the field hit target. ([c85e9bd](https://github.com/tsaitechnology/tsai-ui-flutter/commit/c85e9bdc0b74b5e9dba25c33a712184d4ae8798b))
+
 ## 0.6.13 - 2026-08-31
 
 ### Maintenance
