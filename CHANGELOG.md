@@ -1,3 +1,9 @@
+## 0.6.13 - 2026-08-31
+
+### Maintenance
+
+- Size date sheets to content and split day, range, month, year, and time fields. ([8e65acf](https://github.com/tsaitechnology/tsai-ui-flutter/commit/8e65acfd726926110e5996bd22a6a35de2940381))
+
 ## 0.6.12 - 2026-08-30
 
 ### Maintenance
