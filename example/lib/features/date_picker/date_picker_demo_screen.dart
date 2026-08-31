@@ -51,73 +51,92 @@ class DatePickerDemo extends StatefulWidget {
 
 class _DatePickerDemoState extends State<DatePickerDemo> {
   static final _now = DateTime(2026, 8, 30);
-  var _granularity = TsaiDateGranularity.weekly;
-  TsaiDatePeriod? _period = TsaiDatePeriod(
+  var _locale = const Locale('en');
+  DateTime? _date = DateTime(2026, 8, 12);
+  DateTimeRange? _range = DateTimeRange(
     start: DateTime(2026, 8, 5),
     end: DateTime(2026, 8, 13),
-    granularity: TsaiDateGranularity.weekly,
   );
+  DateTime? _month = DateTime(2026, 8);
+  int? _year = 2026;
+  var _blockFuture = true;
+  var _blockPast = false;
+
+  DateTime? get _firstDate => _blockPast ? _now : DateTime(2018, 1, 1);
+  DateTime? get _lastDate => _blockFuture ? _now : DateTime(2032, 12, 31);
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      key: const ValueKey<String>('date-picker-demo'),
-      padding: const EdgeInsets.all(24),
-      children: [
-        ComponentPlayground(
-          controls: [
-            PlaygroundSelectControl<TsaiDateGranularity>(
-              label: 'granularity',
-              value: _granularity,
-              values: TsaiDateGranularity.values,
-              labels: const ['Weekly', 'Monthly', 'Yearly'],
-              onChanged: (value) => setState(() => _granularity = value),
+    return Localizations.override(
+      context: context,
+      locale: _locale,
+      child: ListView(
+        key: const ValueKey<String>('date-picker-demo'),
+        padding: const EdgeInsets.all(24),
+        children: [
+          ComponentPlayground(
+            controls: [
+              PlaygroundSelectControl<Locale>(
+                label: 'locale',
+                value: _locale,
+                values: const [Locale('en'), Locale('ru'), Locale('de')],
+                labels: const ['en', 'ru', 'de'],
+                onChanged: (value) => setState(() => _locale = value),
+              ),
+              PlaygroundToggleControl(
+                label: 'blockFuture (lastDate = today)',
+                value: _blockFuture,
+                onChanged: (value) => setState(() => _blockFuture = value),
+              ),
+              PlaygroundToggleControl(
+                label: 'blockPast (firstDate = today)',
+                value: _blockPast,
+                onChanged: (value) => setState(() => _blockPast = value),
+              ),
+            ],
+            preview: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                TsaiDateField(
+                  placeholder: 'Date',
+                  value: _date,
+                  now: _now,
+                  firstDate: _firstDate,
+                  lastDate: _lastDate,
+                  onChanged: (value) => setState(() => _date = value),
+                ),
+                const SizedBox(height: 16),
+                TsaiDateRangeField(
+                  placeholder: 'Period',
+                  value: _range,
+                  now: _now,
+                  firstDate: _firstDate,
+                  lastDate: _lastDate,
+                  onChanged: (value) => setState(() => _range = value),
+                ),
+                const SizedBox(height: 16),
+                TsaiMonthField(
+                  placeholder: 'Month',
+                  value: _month,
+                  now: _now,
+                  firstDate: _firstDate,
+                  lastDate: _lastDate,
+                  onChanged: (value) => setState(() => _month = value),
+                ),
+                const SizedBox(height: 16),
+                TsaiYearField(
+                  placeholder: 'Year',
+                  value: _year,
+                  now: _now,
+                  firstDate: _firstDate,
+                  lastDate: _lastDate,
+                  onChanged: (value) => setState(() => _year = value),
+                ),
+              ],
             ),
-            PlaygroundOutput(
-              label: 'Selection',
-              value: _period == null
-                  ? 'None'
-                  : '${_period!.start} → ${_period!.resolvedEnd}',
-            ),
-          ],
-          preview: LayoutBuilder(
-            builder: (context, constraints) {
-              final picker = Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  TsaiDatePeriodPicker(
-                    key: ValueKey<TsaiDateGranularity>(_granularity),
-                    now: _now,
-                    granularity: _granularity,
-                    initialPeriod: _period,
-                    onChanged: (value) => setState(() => _period = value),
-                  ),
-                  const SizedBox(height: 16),
-                  TsaiButton(
-                    label: 'Open sheet',
-                    isExpanded: true,
-                    onPressed: () async {
-                      final result = await showTsaiDatePeriodPicker(
-                        context: context,
-                        now: _now,
-                        granularity: _granularity,
-                        initialPeriod: _period,
-                      );
-                      if (result != null) {
-                        setState(() => _period = result);
-                      }
-                    },
-                  ),
-                ],
-              );
-              if (!constraints.hasBoundedHeight) {
-                return picker;
-              }
-              return SingleChildScrollView(child: picker);
-            },
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
@@ -131,7 +150,7 @@ class TimePickerDemo extends StatefulWidget {
 
 class _TimePickerDemoState extends State<TimePickerDemo> {
   var _step = 1;
-  var _time = const TimeOfDay(hour: 15, minute: 30);
+  TimeOfDay? _time = const TimeOfDay(hour: 15, minute: 30);
 
   @override
   Widget build(BuildContext context) {
@@ -148,36 +167,12 @@ class _TimePickerDemoState extends State<TimePickerDemo> {
               labels: const ['1', '5', '15'],
               onChanged: (value) => setState(() => _step = value),
             ),
-            PlaygroundOutput(
-              label: 'Time',
-              value: '${_time.hour}:${_time.minute.toString().padLeft(2, '0')}',
-            ),
           ],
-          preview: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TsaiTimePicker(
-                key: ValueKey<int>(_step),
-                initialTime: _time,
-                minuteStep: _step,
-                onChanged: (value) => setState(() => _time = value),
-              ),
-              const SizedBox(height: 16),
-              TsaiButton(
-                label: 'Open sheet',
-                isExpanded: true,
-                onPressed: () async {
-                  final result = await showTsaiTimePicker(
-                    context: context,
-                    initialTime: _time,
-                    minuteStep: _step,
-                  );
-                  if (result != null) {
-                    setState(() => _time = result);
-                  }
-                },
-              ),
-            ],
+          preview: TsaiTimeField(
+            placeholder: 'Time',
+            minuteStep: _step,
+            value: _time,
+            onChanged: (value) => setState(() => _time = value),
           ),
         ),
       ],

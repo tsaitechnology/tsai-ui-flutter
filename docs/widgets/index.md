@@ -43,7 +43,7 @@ its live Flutter web example.
 - [TsaiNumericKeypad](tsai-numeric-keypad.md)
 - [TsaiSlider](tsai-slider.md)
 - [TsaiStepper](tsai-stepper.md)
-- [TsaiDatePeriodPicker](tsai-date-period-picker.md)
+- [TsaiDateField](tsai-date-picker.md)
 - [TsaiTimePicker](tsai-time-picker.md)
 - [TsaiCheckbox](tsai-checkbox.md)
 - [TsaiRadio](tsai-radio.md)

@@ -1,24 +1,40 @@
 part of '../tsai_date_picker.dart';
 
-/// Month or year title with previous and next chevrons.
+/// Navigation row: chevrons plus optional month and year actions.
 class TsaiCalendarHeader extends StatelessWidget {
   /// Creates a 342×44 calendar header.
   const TsaiCalendarHeader({
-    required this.title,
     super.key,
+    this.title,
+    this.monthLabel,
+    this.yearLabel,
+    this.onMonthPressed,
+    this.onYearPressed,
     this.onPrevious,
     this.onNext,
     this.previousEnabled = true,
     this.nextEnabled = true,
   });
 
-  /// Centered period title, for example `August 2026`.
-  final String title;
+  /// Non-interactive title, used on the year grid.
+  final String? title;
 
-  /// Called by the previous chevron.
+  /// Tappable month name on the day grid.
+  final String? monthLabel;
+
+  /// Tappable year on the day or month grid.
+  final String? yearLabel;
+
+  /// Opens the month grid.
+  final VoidCallback? onMonthPressed;
+
+  /// Opens the year grid.
+  final VoidCallback? onYearPressed;
+
+  /// Previous chevron.
   final VoidCallback? onPrevious;
 
-  /// Called by the next chevron.
+  /// Next chevron.
   final VoidCallback? onNext;
 
   /// Whether the previous chevron is interactive.
@@ -40,26 +56,73 @@ class TsaiCalendarHeader extends StatelessWidget {
             key: const ValueKey<String>('tsai-calendar-prev'),
             icon: LucideIcons.chevron_left,
             semanticLabel: 'Previous period',
-            enabled: previousEnabled,
+            enabled: previousEnabled && onPrevious != null,
             onPressed: onPrevious,
           ),
-          Expanded(
-            child: Text(
-              title,
-              textAlign: TextAlign.center,
-              style: tokens.typography.bodyMediumMedium.copyWith(
-                color: tokens.colors.contentPrimary,
-              ),
-            ),
-          ),
+          Expanded(child: _titleRow(tokens)),
           _HeaderChevron(
             key: const ValueKey<String>('tsai-calendar-next'),
             icon: LucideIcons.chevron_right,
             semanticLabel: 'Next period',
-            enabled: nextEnabled,
+            enabled: nextEnabled && onNext != null,
             onPressed: onNext,
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _titleRow(TsaiThemeTokens tokens) {
+    final style = tokens.typography.bodyMediumMedium.copyWith(
+      color: tokens.colors.contentPrimary,
+    );
+    if (title != null) {
+      return Text(title!, textAlign: TextAlign.center, style: style);
+    }
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        if (monthLabel != null) ...[
+          _HeaderTextButton(
+            key: const ValueKey<String>('tsai-calendar-month-button'),
+            label: monthLabel!,
+            onPressed: onMonthPressed,
+            style: style,
+          ),
+          if (yearLabel != null) SizedBox(width: tokens.spacing.space8),
+        ],
+        if (yearLabel != null)
+          _HeaderTextButton(
+            key: const ValueKey<String>('tsai-calendar-year-button'),
+            label: yearLabel!,
+            onPressed: onYearPressed,
+            style: style,
+          ),
+      ],
+    );
+  }
+}
+
+class _HeaderTextButton extends StatelessWidget {
+  const _HeaderTextButton({
+    required this.label,
+    required this.style,
+    super.key,
+    this.onPressed,
+  });
+
+  final String label;
+  final TextStyle style;
+  final VoidCallback? onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onPressed,
+      behavior: HitTestBehavior.opaque,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+        child: Text(label, style: style),
       ),
     );
   }

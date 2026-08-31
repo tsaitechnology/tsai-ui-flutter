@@ -559,23 +559,12 @@ class _TransferComposerState extends State<_TransferComposer> {
           ),
         ),
         SizedBox(height: tokens.spacing.space16),
-        TsaiButton(
+        TsaiTimeField(
           key: const ValueKey<String>('schedule-transfer-time'),
-          label: _scheduledTime == null
-              ? 'Schedule time'
-              : 'Scheduled ${_scheduledTime!.hour}:${_scheduledTime!.minute.toString().padLeft(2, '0')}',
-          variant: TsaiButtonVariant.outline,
-          isExpanded: true,
-          onPressed: () async {
-            final result = await showTsaiTimePicker(
-              context: context,
-              initialTime: _scheduledTime,
-              minuteStep: 5,
-            );
-            if (result != null) {
-              setState(() => _scheduledTime = result);
-            }
-          },
+          placeholder: 'Schedule time',
+          minuteStep: 5,
+          value: _scheduledTime,
+          onChanged: (value) => setState(() => _scheduledTime = value),
         ),
         SizedBox(height: tokens.spacing.space16),
         TsaiButton(
@@ -1517,36 +1506,7 @@ class _ActivityList extends StatefulWidget {
 }
 
 class _ActivityListState extends State<_ActivityList> {
-  TsaiDatePeriod? _period;
-
-  String get _periodLabel {
-    final period = _period;
-    if (period == null) {
-      return 'All activity';
-    }
-    if (!period.isRange) {
-      return '${period.start.day} ${_monthShort(period.start)}';
-    }
-    return '${period.start.day}–${period.resolvedEnd.day} ${_monthShort(period.start)}';
-  }
-
-  String _monthShort(DateTime value) {
-    const names = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec',
-    ];
-    return names[value.month - 1];
-  }
+  DateTimeRange? _period;
 
   @override
   Widget build(BuildContext context) {
@@ -1556,20 +1516,13 @@ class _ActivityListState extends State<_ActivityList> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          TsaiChip(
-            key: const ValueKey<String>('activity-period-chip'),
-            label: _periodLabel,
-            selected: _period != null,
-            onTap: () async {
-              final result = await showTsaiDatePeriodPicker(
-                context: context,
-                now: DateTime(2026, 8, 30),
-                initialPeriod: _period,
-              );
-              if (result != null) {
-                setState(() => _period = result);
-              }
-            },
+          TsaiDateRangeField(
+            key: const ValueKey<String>('activity-period-field'),
+            placeholder: 'Period',
+            now: DateTime(2026, 8, 30),
+            lastDate: DateTime(2026, 8, 30),
+            value: _period,
+            onChanged: (value) => setState(() => _period = value),
           ),
           SizedBox(height: tokens.spacing.space12),
           TsaiList(

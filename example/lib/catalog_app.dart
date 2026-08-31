@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:tsai_ui/tsai_ui.dart';
 
 import 'demo/component_demo_window.dart';
@@ -54,6 +55,13 @@ class _CatalogAppState extends State<CatalogApp> {
     theme: TsaiTheme.light(),
     darkTheme: TsaiTheme.dark(),
     themeMode: _themeMode,
+    locale: const Locale('en'),
+    supportedLocales: const [Locale('en'), Locale('ru'), Locale('de')],
+    localizationsDelegates: const [
+      GlobalMaterialLocalizations.delegate,
+      GlobalWidgetsLocalizations.delegate,
+      GlobalCupertinoLocalizations.delegate,
+    ],
     initialRoute: widget.initialRoute,
     routes: {
       for (final section in [

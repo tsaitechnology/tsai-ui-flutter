@@ -76,6 +76,10 @@ class TsaiBottomSheet extends StatelessWidget {
     final tokens = TsaiThemeTokens.of(context);
     final sheetHeight = height ?? size.designHeight;
     final hasFixedHeight = sheetHeight != null;
+    final paddedChild = Padding(
+      padding: EdgeInsets.symmetric(horizontal: tokens.spacing.space24),
+      child: child,
+    );
     return SizedBox(
       height: sheetHeight,
       width: double.infinity,
@@ -118,15 +122,13 @@ class TsaiBottomSheet extends StatelessWidget {
                     leading: leading,
                     trailing: trailing,
                   ),
-                  Flexible(
-                    fit: hasFixedHeight ? FlexFit.tight : FlexFit.loose,
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: tokens.spacing.space24,
-                      ),
-                      child: child,
+                  if (hasFixedHeight)
+                    Flexible(fit: FlexFit.tight, child: paddedChild)
+                  else
+                    Flexible(
+                      fit: FlexFit.loose,
+                      child: SingleChildScrollView(child: paddedChild),
                     ),
-                  ),
                   if (secondaryAction != null || primaryAction != null)
                     Padding(
                       padding: EdgeInsets.only(
@@ -206,18 +208,30 @@ Future<T?> showTsaiBottomSheet<T>({
     barrierLabel: barrierLabel,
     backgroundColor: Colors.transparent,
     constraints: BoxConstraints(maxHeight: availableHeight),
-    builder: (sheetContext) => TsaiBottomSheet(
-      title: title,
-      size: size,
-      height: resolvedHeight,
-      leading: leading,
-      trailing: trailing,
-      secondaryAction: secondaryAction,
-      primaryAction: primaryAction,
-      showCloseButton: showCloseButton ?? size == TsaiBottomSheetSize.full,
-      onClose: () => Navigator.of(sheetContext).pop(),
-      child: child,
-    ),
+    builder: (sheetContext) {
+      final sheet = TsaiBottomSheet(
+        title: title,
+        size: size,
+        height: resolvedHeight,
+        leading: leading,
+        trailing: trailing,
+        secondaryAction: secondaryAction,
+        primaryAction: primaryAction,
+        showCloseButton: showCloseButton ?? size == TsaiBottomSheetSize.full,
+        onClose: () => Navigator.of(sheetContext).pop(),
+        child: child,
+      );
+      if (resolvedHeight != null) {
+        return sheet;
+      }
+      return Align(
+        alignment: Alignment.bottomCenter,
+        child: ConstrainedBox(
+          constraints: BoxConstraints(maxHeight: availableHeight),
+          child: sheet,
+        ),
+      );
+    },
   );
 }
 

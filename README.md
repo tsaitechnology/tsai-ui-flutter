@@ -128,7 +128,8 @@ TsaiTextarea(
   maxLength: 500,
 );
 
-final period = await showTsaiDatePeriodPicker(context: context);
+final date = await showTsaiDatePicker(context: context);
+final range = await showTsaiDateRangePicker(context: context);
 final time = await showTsaiTimePicker(context: context, minuteStep: 5);
 
 TsaiSearchInput(

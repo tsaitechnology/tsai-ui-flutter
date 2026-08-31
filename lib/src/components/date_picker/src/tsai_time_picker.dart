@@ -89,6 +89,7 @@ Future<TimeOfDay?> showTsaiTimePicker({
     ),
     primaryAction: Builder(
       builder: (sheetContext) => TsaiButton(
+        key: const ValueKey<String>('tsai-picker-apply'),
         label: 'Apply',
         isExpanded: true,
         onPressed: () => Navigator.of(sheetContext).pop(draft),
@@ -96,12 +97,10 @@ Future<TimeOfDay?> showTsaiTimePicker({
     ),
     child: Align(
       alignment: Alignment.topCenter,
-      child: SingleChildScrollView(
-        child: TsaiTimePicker(
-          initialTime: initialTime,
-          minuteStep: minuteStep,
-          onChanged: (value) => draft = value,
-        ),
+      child: TsaiTimePicker(
+        initialTime: initialTime,
+        minuteStep: minuteStep,
+        onChanged: (value) => draft = value,
       ),
     ),
   );

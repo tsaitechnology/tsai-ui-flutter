@@ -1,16 +1,20 @@
 part of '../tsai_date_picker.dart';
 
-/// Assembled weekly calendar: header, weekdays, and a 6-week grid.
+/// Assembled day calendar: header, weekdays, and a 6-week grid.
 class TsaiCalendarMonth extends StatelessWidget {
   /// Creates a 342-wide calendar for [visibleMonth].
   const TsaiCalendarMonth({
     required this.visibleMonth,
     required this.today,
     super.key,
-    this.selection,
+    this.selectedDates = const [],
+    this.firstDate,
+    this.lastDate,
     this.onDayPressed,
     this.onPrevious,
     this.onNext,
+    this.onMonthPressed,
+    this.onYearPressed,
     this.nextEnabled = true,
     this.previousEnabled = true,
   });
@@ -18,11 +22,17 @@ class TsaiCalendarMonth extends StatelessWidget {
   /// First day of the displayed month.
   final DateTime visibleMonth;
 
-  /// Clock used to mark today and disable the future.
+  /// Clock used to mark today.
   final DateTime today;
 
-  /// Current day selection, if any.
-  final TsaiDatePeriod? selection;
+  /// Zero, one, or two selected days.
+  final List<DateTime> selectedDates;
+
+  /// Inclusive lower bound. Null means open.
+  final DateTime? firstDate;
+
+  /// Inclusive upper bound. Null means open.
+  final DateTime? lastDate;
 
   /// Called with a date-only value when an enabled day is pressed.
   final ValueChanged<DateTime>? onDayPressed;
@@ -32,6 +42,12 @@ class TsaiCalendarMonth extends StatelessWidget {
 
   /// Next-month chevron.
   final VoidCallback? onNext;
+
+  /// Opens the month grid.
+  final VoidCallback? onMonthPressed;
+
+  /// Opens the year grid.
+  final VoidCallback? onYearPressed;
 
   /// Whether the next chevron is enabled.
   final bool nextEnabled;
@@ -51,7 +67,10 @@ class TsaiCalendarMonth extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           TsaiCalendarHeader(
-            title: _monthTitle(month),
+            monthLabel: _monthNameFormat(context).format(month),
+            yearLabel: _yearFormat(context, null).format(month),
+            onMonthPressed: onMonthPressed,
+            onYearPressed: onYearPressed,
             onPrevious: onPrevious,
             onNext: onNext,
             previousEnabled: previousEnabled,
@@ -91,8 +110,7 @@ class TsaiCalendarMonth extends StatelessWidget {
     final daysInMonth = DateTime(month.year, month.month + 1, 0).day;
     final leading = (first.weekday + 6) % 7;
     final todayDate = _dateOnly(today);
-    final start = selection == null ? null : _dateOnly(selection!.start);
-    final end = selection == null ? null : _dateOnly(selection!.resolvedEnd);
+    final selected = selectedDates.map(_dateOnly).toList();
     final models = <_DayModel>[];
     for (var index = 0; index < 42; index++) {
       final dayNumber = index - leading + 1;
@@ -105,7 +123,7 @@ class TsaiCalendarMonth extends StatelessWidget {
         _DayModel(
           date: date,
           label: '$dayNumber',
-          state: _dayState(date, todayDate, start, end),
+          state: _dayState(date, todayDate, selected),
         ),
       );
     }
@@ -115,15 +133,16 @@ class TsaiCalendarMonth extends StatelessWidget {
   TsaiCalendarDayCellState _dayState(
     DateTime date,
     DateTime todayDate,
-    DateTime? start,
-    DateTime? end,
+    List<DateTime> selected,
   ) {
-    if (_isAfterToday(date, todayDate, TsaiDateGranularity.weekly)) {
+    if (!_daySelectable(date, firstDate, lastDate)) {
       return TsaiCalendarDayCellState.disabled;
     }
-    if (start != null && end != null) {
-      final isStart = _sameUnit(date, start, TsaiDateGranularity.weekly);
-      final isEnd = _sameUnit(date, end, TsaiDateGranularity.weekly);
+    if (selected.length >= 2) {
+      final start = _minDay(selected[0], selected[1]);
+      final end = _maxDay(selected[0], selected[1]);
+      final isStart = _sameDay(date, start);
+      final isEnd = _sameDay(date, end);
       if (isStart && isEnd) {
         return TsaiCalendarDayCellState.selected;
       }
@@ -133,11 +152,13 @@ class TsaiCalendarMonth extends StatelessWidget {
       if (isEnd) {
         return TsaiCalendarDayCellState.rangeEnd;
       }
-      if (_inRange(date, start, end, TsaiDateGranularity.weekly)) {
+      if (_inDayRange(date, start, end)) {
         return TsaiCalendarDayCellState.inRange;
       }
+    } else if (selected.length == 1 && _sameDay(date, selected.first)) {
+      return TsaiCalendarDayCellState.selected;
     }
-    if (_sameUnit(date, todayDate, TsaiDateGranularity.weekly)) {
+    if (_sameDay(date, todayDate)) {
       return TsaiCalendarDayCellState.today;
     }
     return TsaiCalendarDayCellState.standard;

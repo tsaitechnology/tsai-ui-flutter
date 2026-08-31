@@ -305,12 +305,12 @@ List<_Spec> _specs() {
       'date_picker',
       Padding(
         padding: const EdgeInsets.all(16),
-        child: TsaiDatePeriodPicker(
+        child: TsaiCalendarPicker(
           now: DateTime(2026, 8, 30),
-          initialPeriod: TsaiDatePeriod(
+          kind: TsaiCalendarKind.dateRange,
+          initialRange: DateTimeRange(
             start: DateTime(2026, 8, 5),
             end: DateTime(2026, 8, 13),
-            granularity: TsaiDateGranularity.weekly,
           ),
         ),
       ),
