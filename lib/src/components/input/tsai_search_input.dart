@@ -127,71 +127,79 @@ class _TsaiSearchInputState extends State<TsaiSearchInput> {
       textField: true,
       label: widget.semanticLabel ?? widget.placeholder,
       enabled: widget.enabled,
-      child: AnimatedContainer(
-        key: const ValueKey<String>('tsai-search-input-frame'),
-        height: 40,
-        duration: MediaQuery.disableAnimationsOf(context)
-            ? Duration.zero
-            : tokens.motion.interaction,
-        curve: tokens.motion.interactionCurve,
-        padding: EdgeInsetsDirectional.only(
-          start: tokens.spacing.space12,
-          end: tokens.spacing.space8,
-        ),
-        decoration: BoxDecoration(
-          color: widget.enabled ? colors.surface : colors.surfaceRaised,
-          border: Border.all(
-            color: _focused ? colors.actionPrimarySoft : colors.borderSubtle,
-            width: tokens.borders.hairline,
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: widget.enabled ? _focusNode.requestFocus : null,
+        child: AnimatedContainer(
+          key: const ValueKey<String>('tsai-search-input-frame'),
+          height: 40,
+          duration: MediaQuery.disableAnimationsOf(context)
+              ? Duration.zero
+              : tokens.motion.interaction,
+          curve: tokens.motion.interactionCurve,
+          padding: EdgeInsetsDirectional.only(
+            start: tokens.spacing.space12,
+            end: tokens.spacing.space8,
           ),
-          borderRadius: BorderRadius.circular(tokens.radii.medium),
-        ),
-        child: Row(
-          children: [
-            TsaiIcon(LucideIcons.search, size: 20, color: colors.iconSecondary),
-            SizedBox(width: tokens.spacing.space8),
-            Expanded(
-              child: TextField(
-                key: const ValueKey<String>('tsai-search-input-editable'),
-                controller: _controller,
-                focusNode: _focusNode,
-                enabled: widget.enabled,
-                autofocus: widget.autofocus,
-                keyboardType: TextInputType.text,
-                textInputAction: TextInputAction.search,
-                maxLines: 1,
-                cursorHeight: 20,
-                cursorWidth: 2,
-                cursorColor: colors.actionPrimarySoft,
-                style: tokens.typography.bodyLarge.copyWith(
-                  color: colors.contentPrimary,
-                ),
-                decoration: InputDecoration.collapsed(
-                  hintText: widget.placeholder,
-                  hintStyle: tokens.typography.bodyLarge.copyWith(
-                    color: colors.contentTertiary,
-                  ),
-                ),
-                onChanged: widget.onChanged,
-                onSubmitted: widget.onSubmitted,
-              ),
+          decoration: BoxDecoration(
+            color: widget.enabled ? colors.surface : colors.surfaceRaised,
+            border: Border.all(
+              color: _focused ? colors.actionPrimarySoft : colors.borderSubtle,
+              width: tokens.borders.hairline,
             ),
-            if (showClear)
-              Tooltip(
-                message: 'Clear search',
-                child: IconButton(
-                  key: const ValueKey<String>('tsai-search-input-clear'),
-                  onPressed: _clear,
-                  icon: const TsaiIcon(LucideIcons.x, size: 16),
-                  color: colors.iconSecondary,
-                  padding: EdgeInsets.zero,
-                  constraints: const BoxConstraints.tightFor(
-                    width: 32,
-                    height: 32,
+            borderRadius: BorderRadius.circular(tokens.radii.medium),
+          ),
+          child: Row(
+            children: [
+              TsaiIcon(
+                LucideIcons.search,
+                size: 20,
+                color: colors.iconSecondary,
+              ),
+              SizedBox(width: tokens.spacing.space8),
+              Expanded(
+                child: TextField(
+                  key: const ValueKey<String>('tsai-search-input-editable'),
+                  controller: _controller,
+                  focusNode: _focusNode,
+                  enabled: widget.enabled,
+                  autofocus: widget.autofocus,
+                  keyboardType: TextInputType.text,
+                  textInputAction: TextInputAction.search,
+                  maxLines: 1,
+                  cursorHeight: 20,
+                  cursorWidth: 2,
+                  cursorColor: colors.actionPrimarySoft,
+                  style: tokens.typography.bodyLarge.copyWith(
+                    color: colors.contentPrimary,
                   ),
+                  decoration: InputDecoration.collapsed(
+                    hintText: widget.placeholder,
+                    hintStyle: tokens.typography.bodyLarge.copyWith(
+                      color: colors.contentTertiary,
+                    ),
+                  ),
+                  onChanged: widget.onChanged,
+                  onSubmitted: widget.onSubmitted,
                 ),
               ),
-          ],
+              if (showClear)
+                Tooltip(
+                  message: 'Clear search',
+                  child: IconButton(
+                    key: const ValueKey<String>('tsai-search-input-clear'),
+                    onPressed: _clear,
+                    icon: const TsaiIcon(LucideIcons.x, size: 16),
+                    color: colors.iconSecondary,
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints.tightFor(
+                      width: 32,
+                      height: 32,
+                    ),
+                  ),
+                ),
+            ],
+          ),
         ),
       ),
     );

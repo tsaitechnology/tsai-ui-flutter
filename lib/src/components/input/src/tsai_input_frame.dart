@@ -22,6 +22,9 @@ class _TsaiInputFrame extends StatelessWidget {
   final bool hasError;
   final String? description;
   final String? errorText;
+
+  /// Plate-wide tap. Covers the 56-pixel field, not only the inner text line.
+  /// Trailing actions still win hit-testing so clear/visibility keep working.
   final VoidCallback? onFieldTap;
   final PointerDownEventListener? onFieldPointerDown;
 

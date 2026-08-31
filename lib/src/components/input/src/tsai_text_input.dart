@@ -114,6 +114,11 @@ class TsaiInput extends StatefulWidget {
   final VoidCallback? onEditingComplete;
 
   /// Called when the editable value is tapped.
+  ///
+  /// When [readOnly] is true, this is the plate-wide field action (the whole
+  /// 56-pixel control, including trailing chrome). Editable fields still use
+  /// the inner text control for caret placement; empty padding focuses the
+  /// field through the shared plate hit target.
   final GestureTapCallback? onTap;
 
   /// Called for a pointer down outside the field's tap region.
@@ -215,7 +220,7 @@ class _TsaiInputState extends State<TsaiInput> {
             hasError: widget.errorText != null,
             description: widget.description,
             errorText: widget.errorText,
-            onFieldTap: widget.enabled ? _focusNode.requestFocus : null,
+            onFieldTap: widget.enabled ? _handlePlateTap : null,
             actions: [
               if (_controller.text.isNotEmpty &&
                   widget.showClearButton &&
@@ -260,40 +265,46 @@ class _TsaiInputState extends State<TsaiInput> {
                         : AlignmentDirectional.centerStart,
                     child: SizedBox(
                       height: 20,
-                      child: TextField(
-                        key: const ValueKey<String>('tsai-input-editable'),
-                        controller: _controller,
-                        focusNode: _focusNode,
-                        enabled: widget.enabled,
-                        readOnly: widget.readOnly,
-                        obscureText: _obscured,
-                        obscuringCharacter: '•',
-                        autofocus: widget.autofocus,
-                        keyboardType: widget.keyboardType,
-                        textInputAction: widget.textInputAction,
-                        textCapitalization: widget.textCapitalization,
-                        inputFormatters: [
-                          ...?widget.inputFormatters,
-                          if (widget.maxLength != null)
-                            LengthLimitingTextInputFormatter(widget.maxLength),
-                        ],
-                        autofillHints: widget.autofillHints,
-                        maxLines: 1,
-                        cursorHeight: 20,
-                        cursorColor: colors.actionPrimarySoft,
-                        style: tokens.typography.bodyLarge.copyWith(
-                          color: widget.enabled
-                              ? colors.contentPrimary
-                              : colors.contentTertiary,
+                      child: IgnorePointer(
+                        ignoring: _opensOverlay,
+                        child: TextField(
+                          key: const ValueKey<String>('tsai-input-editable'),
+                          controller: _controller,
+                          focusNode: _focusNode,
+                          enabled: widget.enabled,
+                          readOnly: widget.readOnly,
+                          enableInteractiveSelection: !widget.readOnly,
+                          obscureText: _obscured,
+                          obscuringCharacter: '•',
+                          autofocus: widget.autofocus,
+                          keyboardType: widget.keyboardType,
+                          textInputAction: widget.textInputAction,
+                          textCapitalization: widget.textCapitalization,
+                          inputFormatters: [
+                            ...?widget.inputFormatters,
+                            if (widget.maxLength != null)
+                              LengthLimitingTextInputFormatter(
+                                widget.maxLength,
+                              ),
+                          ],
+                          autofillHints: widget.autofillHints,
+                          maxLines: 1,
+                          cursorHeight: 20,
+                          cursorColor: colors.actionPrimarySoft,
+                          style: tokens.typography.bodyLarge.copyWith(
+                            color: widget.enabled
+                                ? colors.contentPrimary
+                                : colors.contentTertiary,
+                          ),
+                          decoration: const InputDecoration.collapsed(
+                            hintText: '',
+                          ),
+                          onChanged: widget.onChanged,
+                          onSubmitted: widget.onSubmitted,
+                          onEditingComplete: widget.onEditingComplete,
+                          onTap: _opensOverlay ? null : widget.onTap,
+                          onTapOutside: widget.onTapOutside,
                         ),
-                        decoration: const InputDecoration.collapsed(
-                          hintText: '',
-                        ),
-                        onChanged: widget.onChanged,
-                        onSubmitted: widget.onSubmitted,
-                        onEditingComplete: widget.onEditingComplete,
-                        onTap: widget.onTap,
-                        onTapOutside: widget.onTapOutside,
                       ),
                     ),
                   ),
@@ -314,6 +325,16 @@ class _TsaiInputState extends State<TsaiInput> {
       return tokens.colors.accentError;
     }
     return tokens.colors.contentSecondary;
+  }
+
+  bool get _opensOverlay => widget.readOnly && widget.onTap != null;
+
+  void _handlePlateTap() {
+    if (_opensOverlay) {
+      widget.onTap!.call();
+      return;
+    }
+    _focusNode.requestFocus();
   }
 
   void _handleControllerChanged() {
