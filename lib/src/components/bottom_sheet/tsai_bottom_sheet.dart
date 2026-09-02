@@ -226,6 +226,7 @@ Future<T?> showTsaiBottomSheet<T>({
       }
       return Align(
         alignment: Alignment.bottomCenter,
+        heightFactor: 1,
         child: ConstrainedBox(
           constraints: BoxConstraints(maxHeight: availableHeight),
           child: sheet,

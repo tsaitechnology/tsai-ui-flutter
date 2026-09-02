@@ -103,6 +103,61 @@ void main() {
     expect(find.byType(TsaiBottomSheet), findsNothing);
   });
 
+  testWidgets('dismisses when tapping the scrim above the sheet', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(390, 844);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await tester.pumpWidget(const _ContentLauncher());
+    await tester.tap(find.text('Open content sheet'));
+    await tester.pumpAndSettle();
+
+    final sheetTop = tester.getTopLeft(find.byType(TsaiBottomSheet)).dy;
+    expect(sheetTop, greaterThan(80));
+
+    await tester.tapAt(Offset(195, sheetTop / 2));
+    await tester.pumpAndSettle();
+    expect(find.byType(TsaiBottomSheet), findsNothing);
+  });
+
+  testWidgets('does not dismiss when tapping the sheet itself', (tester) async {
+    tester.view.physicalSize = const Size(390, 844);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await tester.pumpWidget(const _ContentLauncher());
+    await tester.tap(find.text('Open content sheet'));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byType(TsaiBottomSheet));
+    await tester.pumpAndSettle();
+    expect(find.byType(TsaiBottomSheet), findsOneWidget);
+  });
+
+  testWidgets('dismisses a half sheet when tapping the scrim above it', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(390, 844);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await tester.pumpWidget(const _HalfLauncher());
+    await tester.tap(find.text('Open half sheet'));
+    await tester.pumpAndSettle();
+
+    final sheetTop = tester.getTopLeft(find.byType(TsaiBottomSheet)).dy;
+    expect(sheetTop, greaterThan(80));
+
+    await tester.tapAt(Offset(195, sheetTop / 2));
+    await tester.pumpAndSettle();
+    expect(find.byType(TsaiBottomSheet), findsNothing);
+  });
+
   testWidgets('clamps a full sheet to the available viewport', (tester) async {
     tester.view.physicalSize = const Size(390, 640);
     tester.view.devicePixelRatio = 1;
@@ -140,6 +195,25 @@ class _Launcher extends StatelessWidget {
           primaryAction: const TsaiButton(label: 'Confirm', onPressed: null),
         ),
         child: const Text('Open'),
+      ),
+    ),
+  );
+}
+
+class _HalfLauncher extends StatelessWidget {
+  const _HalfLauncher();
+
+  @override
+  Widget build(BuildContext context) => _TestApp(
+    child: Builder(
+      builder: (context) => TextButton(
+        onPressed: () => showTsaiBottomSheet<void>(
+          context: context,
+          title: 'Half sheet',
+          size: TsaiBottomSheetSize.half,
+          child: const SizedBox(height: 80),
+        ),
+        child: const Text('Open half sheet'),
       ),
     ),
   );
